@@ -8,9 +8,10 @@ export const addStudent = asyncHandler(async (req, res) => {
     dateOfBirth,
     nationality,
     gender,
-    dateOf,
+    dateOfAdmission,
     district,
     mobileNumber,
+    levelOfEducation,
     contactFullName,
     contactMobileNumber,
     contactEmail,
@@ -35,7 +36,7 @@ export const addStudent = asyncHandler(async (req, res) => {
     throw new Error(`This Student ${fullName} already exist`)
   }
 
-  const levelOfEducation = {
+  const languageSkills = {
     somali,
     arabic,
     english,
@@ -44,19 +45,21 @@ export const addStudent = asyncHandler(async (req, res) => {
 
   const createObj = await StudentModel.create({
     isActive,
+    fullName,
     placeOfBirth,
     dateOfBirth,
     nationality,
     gender,
-    dateOf,
+    dateOfAdmission,
     district,
     mobileNumber,
+    levelOfEducation,
     contactFullName,
     contactMobileNumber,
     contactEmail,
     contactRelationship,
     course,
-    levelOfEducation,
+    languageSkills,
     comment,
     createdBy,
   })
@@ -75,9 +78,10 @@ export const updateStudent = asyncHandler(async (req, res) => {
     dateOfBirth,
     nationality,
     gender,
-    dateOf,
+    dateOfAdmission,
     district,
     mobileNumber,
+    levelOfEducation,
     contactFullName,
     contactMobileNumber,
     contactEmail,
@@ -89,10 +93,10 @@ export const updateStudent = asyncHandler(async (req, res) => {
     kiswahili,
     comment,
   } = req.body
+
   const updatedBy = req.user.id
   const fullName = req.body.fullName.toLowerCase()
   const _id = req.params.id
-
   const obj = await StudentModel.findById(_id)
 
   if (obj) {
@@ -102,7 +106,7 @@ export const updateStudent = asyncHandler(async (req, res) => {
       mobileNumber: { $eq: mobileNumber },
     })
     if (exist.length === 0) {
-      const levelOfEducation = {
+      const languageSkills = {
         somali,
         arabic,
         english,
@@ -114,14 +118,16 @@ export const updateStudent = asyncHandler(async (req, res) => {
       obj.dateOfBirth = dateOfBirth
       obj.nationality = nationality
       obj.gender = gender
-      obj.dateOf = dateOf
+      obj.dateOfAdmission = dateOfAdmission
       obj.district = district
       obj.mobileNumber = mobileNumber
       obj.contactFullName = contactFullName
+      obj.fullName = fullName
       obj.contactMobileNumber = contactMobileNumber
-      obj.contactEmail = contactMobileEmail
+      obj.contactEmail = contactEmail
       obj.contactRelationship = contactRelationship
       obj.course = course
+      obj.languageSkills = languageSkills
       obj.levelOfEducation = levelOfEducation
       obj.comment = comment
       obj.updatedBy = updatedBy
