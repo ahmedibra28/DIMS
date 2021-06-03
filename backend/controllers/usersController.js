@@ -18,7 +18,7 @@ const logSession = asyncHandler(async (id) => {
 })
 
 export const logHistory = asyncHandler(async (req, res) => {
-  const logs = await LogonSession.find({})
+  const logs = await LogonSession.find({}).populate('user')
   res.status(200).json(logs)
 })
 
@@ -44,7 +44,7 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, admin, user } = req.body
+  const { name, email, password, admin, user, instructor } = req.body
   const userExist = await User.findOne({ email })
   if (userExist) {
     res.status(400)
@@ -54,7 +54,8 @@ export const registerUser = asyncHandler(async (req, res) => {
   const userRoles = []
   admin && userRoles.push('Admin')
   user && userRoles.push('User')
-  !admin && !user && userRoles.push('Admin')
+  instructor && userRoles.push('Instructor')
+  !admin && !user && !instructor && userRoles.push('Admin')
 
   const userCreate = await User.create({
     name,
@@ -164,6 +165,8 @@ export const updateUser = asyncHandler(async (req, res) => {
   const userRoles = []
   admin && userRoles.push('Admin')
   user && userRoles.push('User')
+  instructor && userRoles.push('Instructor')
+  !admin && !user && !instructor && userRoles.push('Admin')
 
   if (userExist) {
     userExist.name = req.body.name || userExist.name

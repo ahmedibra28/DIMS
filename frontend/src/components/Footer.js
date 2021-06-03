@@ -8,7 +8,7 @@ const Footer = () => {
           <div className='col text-center py-3'>
             Copyright &copy;{' '}
             <a href=' https://geeltech.com' target='blank'>
-              https://geeltech.com
+              Geel Tech
             </a>
           </div>
         </div>

@@ -17,7 +17,7 @@ const UserLogHistoryScreen = () => {
   const [search, setSearch] = useState('')
 
   return (
-    <>
+    <div>
       <h3 className=''>Users Log</h3>
 
       <input
@@ -44,52 +44,50 @@ const UserLogHistoryScreen = () => {
       ) : isError ? (
         <Message variant='danger'>{error}</Message>
       ) : (
-        <>
-          <div className='table-responsive'>
-            <table className='table table-sm hover bordered striped caption-top '>
-              <caption>{!isLoading && data.total} records were found</caption>
-              <thead>
-                <tr>
-                  <th>LOG ID</th>
-                  <th>NAME</th>
-                  <th>EMAIL</th>
-                  <th>LOGIN DATE</th>
-                  <th>LOGIN TIME</th>
-                </tr>
-              </thead>
-              <tbody>
-                {!isLoading &&
-                  data.data.map(
-                    (log) =>
-                      log.user &&
-                      log.user.email.includes(search.trim()) && (
-                        <tr key={log._id}>
-                          <td>{log._id}</td>
-                          <td>{log.user && log.user.name}</td>
-                          <td>
-                            <a href={`mailto:${log.user && log.user.email}`}>
-                              {log.user && log.user.email}
-                            </a>
-                          </td>
-                          <td>
-                            <Moment format='YYYY-MM-DD'>
-                              {moment(log.logDate)}
-                            </Moment>
-                          </td>
-                          <td>
-                            <Moment format='HH:mm:ss'>
-                              {moment(log.logDate)}
-                            </Moment>
-                          </td>
-                        </tr>
-                      )
-                  )}
-              </tbody>
-            </table>
-          </div>
-        </>
+        <div className='table-responsive'>
+          <table className='table table-sm hover bordered striped caption-top '>
+            <caption>{!isLoading && data.length} records were found</caption>
+            <thead>
+              <tr>
+                <th>LOG ID</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>LOGIN DATE</th>
+                <th>LOGIN TIME</th>
+              </tr>
+            </thead>
+            <tbody>
+              {!isLoading &&
+                data.map(
+                  (log) =>
+                    log.user &&
+                    log.user.email.includes(search.trim()) && (
+                      <tr key={log._id}>
+                        <td>{log._id}</td>
+                        <td>{log.user && log.user.name}</td>
+                        <td>
+                          <a href={`mailto:${log.user && log.user.email}`}>
+                            {log.user && log.user.email}
+                          </a>
+                        </td>
+                        <td>
+                          <Moment format='YYYY-MM-DD'>
+                            {moment(log.logDate)}
+                          </Moment>
+                        </td>
+                        <td>
+                          <Moment format='HH:mm:ss'>
+                            {moment(log.logDate)}
+                          </Moment>
+                        </td>
+                      </tr>
+                    )
+                )}
+            </tbody>
+          </table>
+        </div>
       )}
-    </>
+    </div>
   )
 }
 

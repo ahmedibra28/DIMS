@@ -12,6 +12,9 @@ import PrivateRoute from './PrivateRoute'
 import UserLogHistoryScreen from '../../screens/LogHistoryScreen'
 import ForgotPasswordScreen from '../../screens/ForgotPasswordScreen'
 import ResetPasswordScreen from '../../screens/ResetPasswordScreen'
+import StudentScreen from '../../screens/StudentScreen'
+import CourseTypeScreen from '../../screens/CourseTypeScreen'
+import CourseScreen from '../../screens/CourseScreen'
 
 const Routes = () => {
   return (
@@ -47,6 +50,21 @@ const Routes = () => {
           path='/admin/users/page/:pageNumber'
           role={['Admin']}
           component={UserListScreen}
+        />
+        <PrivateRoute
+          role={['Admin', 'User']}
+          path='/student'
+          component={StudentScreen}
+        />
+        <PrivateRoute
+          role={['Admin', 'User']}
+          path='/course-type'
+          component={CourseTypeScreen}
+        />
+        <PrivateRoute
+          role={['Admin', 'User']}
+          path='/course'
+          component={CourseScreen}
         />
 
         <Route component={NotFound} />
