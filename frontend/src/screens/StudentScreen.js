@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import Message from '../components/Message'
 import Loader from 'react-loader-spinner'
+import { Link } from 'react-router-dom'
 import {
   FaCheckCircle,
   FaEdit,
+  FaInfoCircle,
   FaPlus,
   FaTimesCircle,
   FaTrash,
@@ -102,32 +104,35 @@ const StudentScreen = () => {
   }
 
   const submitHandler = (data) => {
+    const formData = new FormData()
+    formData.append('picture', data.picture[0])
+    formData.append('isActive', data.isActive)
+    formData.append('fullName', data.fullName)
+    formData.append('placeOfBirth', data.placeOfBirth)
+    formData.append('dateOfBirth', data.dateOfBirth)
+    formData.append('nationality', data.nationality)
+    formData.append('gender', data.gender)
+    formData.append('dateOfAdmission', data.dateOfAdmission)
+    formData.append('mobileNumber', data.mobileNumber)
+    formData.append('district', data.district)
+    formData.append('levelOfEducation', data.levelOfEducation)
+    formData.append('contactFullName', data.contactFullName)
+    formData.append('contactMobileNumber', data.contactMobileNumber)
+    formData.append('contactEmail', data.contactEmail)
+    formData.append('contactRelationship', data.contactRelationship)
+    formData.append('course', data.course)
+    formData.append('arabic', data.arabic)
+    formData.append('somali', data.somali)
+    formData.append('english', data.english)
+    formData.append('kiswahili', data.kiswahili)
+    formData.append('comment', data.comment)
+
     edit
       ? updateStudentMutateAsync({
           _id: id,
-
-          isActive: data.isActive,
-          fullName: data.fullName,
-          placeOfBirth: data.placeOfBirth,
-          dateOfBirth: data.dateOfBirth,
-          nationality: data.nationality,
-          gender: data.gender,
-          dateOfAdmission: data.dateOfAdmission,
-          district: data.district,
-          mobileNumber: data.mobileNumber,
-          levelOfEducation: data.levelOfEducation,
-          contactFullName: data.contactFullName,
-          contactMobileNumber: data.contactMobileNumber,
-          contactEmail: data.contactEmail,
-          contactRelationship: data.contactRelationship,
-          course: data.course,
-          somali: data.somali,
-          arabic: data.arabic,
-          english: data.english,
-          kiswahili: data.kiswahili,
-          comment: data.comment,
+          formData,
         })
-      : addStudentMutateAsync(data)
+      : addStudentMutateAsync(formData)
   }
 
   const editHandler = (student) => {
@@ -601,7 +606,23 @@ const StudentScreen = () => {
                         )}
                       </div>
                     </div>
-                    <div className='col-12'>
+                    <div className='col-md-6 col-12'>
+                      <div className='mb-3'>
+                        <label htmlFor='picture'>Upload student picture</label>
+                        <input
+                          {...register('picture', {})}
+                          className='form-control'
+                          type='file'
+                          id='picture'
+                        />
+                        {errors.picture && (
+                          <span className='text-danger'>
+                            {errors.picture.message}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className='col-md-6 col-12'>
                       <div className='mb-3'>
                         <label htmlFor='comment'>Comment</label>
                         <textarea
@@ -741,6 +762,13 @@ const StudentScreen = () => {
                         >
                           <FaEdit className='mb-1' /> Edit
                         </button>
+
+                        <Link
+                          to={`/student/${student._id}`}
+                          className='btn btn-primary btn-sm border-0 mx-1'
+                        >
+                          <FaInfoCircle className='mb-1' /> Detail
+                        </Link>
 
                         <button
                           className='btn btn-danger btn-sm'

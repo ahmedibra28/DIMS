@@ -1,5 +1,8 @@
 import asyncHandler from 'express-async-handler'
 import StudentModel from '../models/studentModel.js'
+import fs from 'fs'
+import path from 'path'
+const __dirname = path.resolve()
 
 export const addStudent = asyncHandler(async (req, res) => {
   const {
@@ -25,6 +28,27 @@ export const addStudent = asyncHandler(async (req, res) => {
   } = req.body
   const createdBy = req.user.id
   const fullName = req.body.fullName.toLowerCase()
+  const picture = req.files && req.files.picture
+
+  const pictureFullName = picture && picture.name.split('.').shift()
+  const pictureExtension = picture && picture.name.split('.').pop()
+  const pictureName =
+    picture && `${pictureFullName}-${Date.now()}.${pictureExtension}`
+  const picturePath = `/uploads/studentPicture/${pictureName}`
+
+  const allowedExtensions = /(\.jpeg|\.jpg|\.png|\.gif|\.svg)$/i
+
+  if (picture) {
+    if (!allowedExtensions.exec(picture && pictureName)) {
+      res.status(400)
+      throw new Error('Invalid student picture type')
+    }
+  }
+
+  if (!picture) {
+    res.status(400)
+    throw new Error('Student picture is required')
+  }
 
   const exist = await StudentModel.findOne({
     fullName,
@@ -36,6 +60,19 @@ export const addStudent = asyncHandler(async (req, res) => {
     throw new Error(`This Student ${fullName} already exist`)
   }
 
+  picture &&
+    picture.mv(path.join(__dirname, picturePath), (err) => {
+      if (err) {
+        res.status(500)
+        throw new Error(err)
+      }
+    })
+
+  const pictureData = picture && {
+    pictureName,
+    picturePath,
+  }
+
   const languageSkills = {
     somali,
     arabic,
@@ -44,6 +81,7 @@ export const addStudent = asyncHandler(async (req, res) => {
   }
 
   const createObj = await StudentModel.create({
+    picture: picture && pictureData,
     isActive,
     fullName,
     placeOfBirth,
@@ -94,9 +132,30 @@ export const updateStudent = asyncHandler(async (req, res) => {
     comment,
   } = req.body
 
+  console.log(req.files)
+  console.log(req.body)
+
   const updatedBy = req.user.id
   const fullName = req.body.fullName.toLowerCase()
   const _id = req.params.id
+
+  const picture = req.files && req.files.picture
+
+  const pictureFullName = picture && picture.name.split('.').shift()
+  const pictureExtension = picture && picture.name.split('.').pop()
+  const pictureName =
+    picture && `${pictureFullName}-${Date.now()}.${pictureExtension}`
+  const picturePath = `/uploads/studentPicture/${pictureName}`
+
+  const allowedExtensions = /(\.jpeg|\.jpg|\.png|\.gif|\.svg)$/i
+
+  if (picture) {
+    if (!allowedExtensions.exec(picture && pictureName)) {
+      res.status(400)
+      throw new Error('Invalid student picture type')
+    }
+  }
+
   const obj = await StudentModel.findById(_id)
 
   if (obj) {
@@ -113,6 +172,37 @@ export const updateStudent = asyncHandler(async (req, res) => {
         kiswahili,
       }
 
+      if (req.files) {
+        obj.picture.picturePath &&
+          req.files &&
+          req.files.picture &&
+          fs.unlink(path.join(__dirname, obj.picture.picturePath), (err) => {
+            if (err) {
+              res.status(500)
+              throw new Error(err)
+            }
+          })
+      }
+
+      picture &&
+        picture.mv(path.join(__dirname, picturePath), (err) => {
+          if (err) {
+            res.status(500)
+            throw new Error(err)
+          }
+        })
+
+      const pictureData = picture && {
+        pictureName,
+        picturePath,
+      }
+
+      const oldPictureData = !picture && {
+        pictureName: obj.picture.pictureName,
+        picturePath: obj.picture.picturePath,
+      }
+
+      obj.picture = picture ? pictureData : oldPictureData
       obj.isActive = isActive
       obj.placeOfBirth = placeOfBirth
       obj.dateOfBirth = dateOfBirth
@@ -175,6 +265,12 @@ export const deleteStudent = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error('Student not found')
   } else {
+    fs.unlink(path.join(__dirname, obj.picture.picturePath), (err) => {
+      if (err) {
+        res.status(500)
+        throw new Error(err)
+      }
+    })
     await obj.remove()
     res.status(201).json({ status: 'success' })
   }

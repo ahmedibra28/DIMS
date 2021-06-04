@@ -15,6 +15,7 @@ import ResetPasswordScreen from '../../screens/ResetPasswordScreen'
 import StudentScreen from '../../screens/StudentScreen'
 import CourseTypeScreen from '../../screens/CourseTypeScreen'
 import CourseScreen from '../../screens/CourseScreen'
+import StudentDetailScreen from '../../screens/StudentDetailScreen'
 
 const Routes = () => {
   return (
@@ -54,6 +55,7 @@ const Routes = () => {
         <PrivateRoute
           role={['Admin', 'User']}
           path='/student'
+          exact
           component={StudentScreen}
         />
         <PrivateRoute
@@ -65,6 +67,11 @@ const Routes = () => {
           role={['Admin', 'User']}
           path='/course'
           component={CourseScreen}
+        />
+        <PrivateRoute
+          role={['Admin', 'User']}
+          path='/student/:id'
+          component={StudentDetailScreen}
         />
 
         <Route component={NotFound} />

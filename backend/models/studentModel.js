@@ -68,7 +68,16 @@ const studentScheme = mongoose.Schema(
       ref: 'Course',
       required: true,
     },
-
+    picture: {
+      pictureName: {
+        type: String,
+        required: true,
+      },
+      picturePath: {
+        type: String,
+        required: true,
+      },
+    },
     languageSkills: {
       somali: {
         type: String,

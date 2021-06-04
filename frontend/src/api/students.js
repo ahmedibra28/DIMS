@@ -41,7 +41,11 @@ export const addStudent = async (obj) => {
 
 export const updateStudent = async (obj) => {
   try {
-    const { data } = await axios.put(`/api/students/${obj._id}`, obj, config())
+    const { data } = await axios.put(
+      `/api/students/${obj._id}`,
+      obj.formData,
+      config()
+    )
     return data
   } catch (error) {
     throw error.response.data.message
