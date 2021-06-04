@@ -765,7 +765,7 @@ const StudentScreen = () => {
 
                         <Link
                           to={`/student/${student._id}`}
-                          className='btn btn-primary btn-sm border-0 mx-1'
+                          className='btn btn-success btn-sm border-0 mx-1'
                         >
                           <FaInfoCircle className='mb-1' /> Detail
                         </Link>
