@@ -19,13 +19,13 @@ export const addStudent = asyncHandler(async (req, res) => {
     contactMobileNumber,
     contactEmail,
     contactRelationship,
-    course,
     somali,
     arabic,
     english,
     kiswahili,
     comment,
   } = req.body
+  const course = req.body.course.split(',').filter((crs) => crs)
   const createdBy = req.user.id
   const fullName = req.body.fullName.toLowerCase()
   const picture = req.files && req.files.picture
@@ -124,7 +124,6 @@ export const updateStudent = asyncHandler(async (req, res) => {
     contactMobileNumber,
     contactEmail,
     contactRelationship,
-    course,
     somali,
     arabic,
     english,
@@ -132,8 +131,7 @@ export const updateStudent = asyncHandler(async (req, res) => {
     comment,
   } = req.body
 
-  console.log(req.files)
-  console.log(req.body)
+  const course = req.body.course.split(',').filter((crs) => crs)
 
   const updatedBy = req.user.id
   const fullName = req.body.fullName.toLowerCase()
@@ -237,7 +235,7 @@ export const updateStudent = asyncHandler(async (req, res) => {
 export const getStudent = asyncHandler(async (req, res) => {
   const obj = await StudentModel.find({})
     .sort({ createdAt: -1 })
-    .populate('course', 'name')
+    .populate('course')
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')
   res.status(201).json(obj)

@@ -42,6 +42,11 @@ const HeaderAuthorized = () => {
                   <FaLeanpub className='mb-1' /> Courses
                 </Link>
               </li>
+              <li className='nav-item'>
+                <Link to='/subject' className='nav-link'>
+                  <FaLeanpub className='mb-1' /> Subjects
+                </Link>
+              </li>
             </div>
 
             {userInfo && userInfo.roles.includes('Admin') && (

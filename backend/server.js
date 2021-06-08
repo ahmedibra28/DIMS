@@ -10,6 +10,7 @@ import userRoutes from './routes/userRoutes.js'
 import studentRoutes from './routes/studentRoutes.js'
 import courseTypeRoutes from './routes/courseTypeRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
+import subjectRoutes from './routes/subjectRoutes.js'
 
 dotenv.config()
 
@@ -28,6 +29,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/students', studentRoutes)
 app.use('/api/courseTypes', courseTypeRoutes)
 app.use('/api/courses', courseRoutes)
+app.use('/api/subjects', subjectRoutes)
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))

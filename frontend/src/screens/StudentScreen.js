@@ -140,7 +140,7 @@ const StudentScreen = () => {
     setEdit(true)
 
     setValue('isActive', student.isActive)
-    setValue('course', student.course && student.course._id)
+    setValue('course', student.course && student.course.map((crs) => crs._id))
     setValue('fullName', student.fullName)
     setValue('placeOfBirth', student.placeOfBirth)
     setValue('dateOfBirth', moment(student.dateOfBirth).format('YYYY-MM-DD'))
@@ -488,6 +488,7 @@ const StudentScreen = () => {
                       <div className='mb-3'>
                         <label htmlFor='course'>Interested course</label>
                         <select
+                          multiple
                           {...register('course', {
                             required: 'Interested course Type is required',
                           })}
@@ -740,8 +741,14 @@ const StudentScreen = () => {
                       <td>{student.fullName}</td>
                       <td>{student.mobileNumber}</td>
                       <td>
-                        {student.course.name.charAt(0).toUpperCase() +
-                          student.course.name.slice(1)}
+                        {student.course.map((crs, index) => (
+                          <span key={index + 1}>
+                            {index + 1}.{' '}
+                            {crs.name.charAt(0).toUpperCase() +
+                              crs.name.slice(1)}
+                            <br />
+                          </span>
+                        ))}
                       </td>
                       <td>{student.contactFullName}</td>
                       <td>{student.contactMobileNumber}</td>

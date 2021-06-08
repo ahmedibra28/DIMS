@@ -16,6 +16,7 @@ import StudentScreen from '../../screens/StudentScreen'
 import CourseTypeScreen from '../../screens/CourseTypeScreen'
 import CourseScreen from '../../screens/CourseScreen'
 import StudentDetailScreen from '../../screens/StudentDetailScreen'
+import SubjectScreen from '../../screens/SubjectScreen'
 
 const Routes = () => {
   return (
@@ -67,6 +68,11 @@ const Routes = () => {
           role={['Admin', 'User']}
           path='/course'
           component={CourseScreen}
+        />
+        <PrivateRoute
+          role={['Admin', 'User']}
+          path='/subject'
+          component={SubjectScreen}
         />
         <PrivateRoute
           role={['Admin', 'User']}

@@ -57,7 +57,16 @@ const StudentDetailScreen = () => {
                 <tbody>
                   <tr>
                     <td>{data.levelOfEducation}</td>
-                    <td>{data.course && data.course.name}</td>
+
+                    <td>
+                      {data.course.map((crs, index) => (
+                        <span key={index + 1}>
+                          {index + 1}.{' '}
+                          {crs.name.charAt(0).toUpperCase() + crs.name.slice(1)}
+                          <br />
+                        </span>
+                      ))}
+                    </td>
                     <td>
                       Somali - {data.languageSkills.somali} <br />
                       Arabic - {data.languageSkills.arabic} <br />
