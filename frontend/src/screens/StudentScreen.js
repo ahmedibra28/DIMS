@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Message from '../components/Message'
 import Loader from 'react-loader-spinner'
 import { Link } from 'react-router-dom'
@@ -24,8 +24,10 @@ import { confirmAlert } from 'react-confirm-alert'
 import { Confirm } from '../components/Confirm'
 import { useForm } from 'react-hook-form'
 import { getCourses } from '../api/courses'
+import Pagination from '../components/Pagination'
 
 const StudentScreen = () => {
+  const [page, setPage] = useState(1)
   const {
     register,
     handleSubmit,
@@ -43,7 +45,7 @@ const StudentScreen = () => {
 
   const { data, isLoading, isError, error } = useQuery(
     'students',
-    () => getStudents(),
+    () => getStudents(page),
     {
       retry: 0,
     }
@@ -164,8 +166,16 @@ const StudentScreen = () => {
     setValue('comment', student.comment)
   }
 
+  useEffect(() => {
+    const refetch = async () => {
+      await queryClient.prefetchQuery('students')
+    }
+    refetch()
+  }, [page, queryClient])
+
   return (
     <div className='container'>
+      <Pagination data={data} setPage={setPage} />
       <div
         className='modal fade'
         id='editStudentModal'
@@ -722,7 +732,7 @@ const StudentScreen = () => {
         <>
           <div className='table-responsive '>
             <table className='table table-sm hover bordered striped caption-top '>
-              <caption>{data && data.length} records were found</caption>
+              <caption>{data && data.total} records were found</caption>
               <thead>
                 <tr>
                   <th>FULL NAME</th>
@@ -736,7 +746,7 @@ const StudentScreen = () => {
               </thead>
               <tbody>
                 {data &&
-                  data.map((student) => (
+                  data.data.map((student) => (
                     <tr key={student._id}>
                       <td>{student.fullName}</td>
                       <td>{student.mobileNumber}</td>

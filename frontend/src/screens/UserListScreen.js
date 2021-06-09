@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Message from '../components/Message'
 import Loader from 'react-loader-spinner'
 import {
@@ -8,7 +8,7 @@ import {
   FaTimesCircle,
   FaTrash,
 } from 'react-icons/fa'
-
+import Pagination from '../components/Pagination'
 import { getUsers, updateUser, deleteUser, createUser } from '../api/users'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
@@ -19,6 +19,7 @@ import { Confirm } from '../components/Confirm'
 import { useForm } from 'react-hook-form'
 
 const UserListScreen = () => {
+  const [page, setPage] = useState(1)
   const {
     register,
     handleSubmit,
@@ -30,7 +31,6 @@ const UserListScreen = () => {
     defaultValues: {
       admin: false,
       user: false,
-      instructor: false,
     },
   })
 
@@ -38,7 +38,7 @@ const UserListScreen = () => {
 
   const { data, isLoading, isError, error } = useQuery(
     'users',
-    () => getUsers(),
+    () => getUsers(page),
     {
       retry: 0,
     }
@@ -103,7 +103,6 @@ const UserListScreen = () => {
           email: data.email,
           password: data.password,
           admin: data.admin,
-          instructor: data.instructor,
           user: data.user,
         })
       : createUserMutateAsync(data)
@@ -119,13 +118,21 @@ const UserListScreen = () => {
       user.roles.map(
         (role) =>
           (role === 'Admin' && setValue('admin', true)) ||
-          (role === 'Instructor' && setValue('instructor', true)) ||
           (role === 'User' && setValue('user', true))
       )
   }
 
+  useEffect(() => {
+    const refetch = async () => {
+      await queryClient.prefetchQuery('users')
+    }
+    refetch()
+  }, [page, queryClient])
+
   return (
     <div className='container'>
+      <Pagination data={data} setPage={setPage} />
+
       <div
         className='modal fade'
         id='editUserModal'
@@ -285,23 +292,6 @@ const UserListScreen = () => {
                         </label>
                       </div>
                     </div>
-                    <div className='col'>
-                      <div className='form-check'>
-                        <input
-                          className='form-check-input'
-                          type='checkbox'
-                          id='instructor'
-                          {...register('instructor')}
-                          checked={watch().instructor}
-                        />
-                        <label
-                          className='form-check-label'
-                          htmlFor='instructor'
-                        >
-                          Instructor
-                        </label>
-                      </div>
-                    </div>
                   </div>
 
                   <div className='modal-footer'>
@@ -362,64 +352,66 @@ const UserListScreen = () => {
       ) : isError ? (
         <Message variant='danger'>{error}</Message>
       ) : (
-        <div className='table-responsive '>
-          <table className='table table-sm hover bordered striped caption-top '>
-            <caption>{data && data.length} records were found</caption>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>EMAIL</th>
-                <th>ADMIN</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {data &&
-                data.map((user) => (
-                  <tr key={user._id}>
-                    <td>{user._id}</td>
-                    <td>{user.name}</td>
-                    <td>
-                      <a href={`mailto:${user.email}`}>{user.email}</a>
-                    </td>
-                    <td>
-                      {UnlockAccess(user && user.roles) ? (
-                        <FaCheckCircle className='text-success mb-1' />
-                      ) : (
-                        <FaTimesCircle className='text-danger mb-1' />
-                      )}
-                    </td>
-                    <td className='btn-group'>
-                      <button
-                        className='btn btn-primary btn-sm'
-                        onClick={() => editHandler(user)}
-                        data-bs-toggle='modal'
-                        data-bs-target='#editUserModal'
-                      >
-                        <FaEdit className='mb-1' /> Edit
-                      </button>
-
-                      <button
-                        className='btn btn-danger btn-sm ms-1'
-                        onClick={() => deleteHandler(user._id)}
-                        disabled={isLoadingDeleteUser}
-                      >
-                        {isLoadingDeleteUser ? (
-                          <span className='spinner-border spinner-border-sm' />
+        <>
+          <div className='table-responsive '>
+            <table className='table table-sm hover bordered striped caption-top '>
+              <caption>{data && data.total} records were found</caption>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>NAME</th>
+                  <th>EMAIL</th>
+                  <th>ADMIN</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {data &&
+                  data.data.map((user) => (
+                    <tr key={user._id}>
+                      <td>{user._id}</td>
+                      <td>{user.name}</td>
+                      <td>
+                        <a href={`mailto:${user.email}`}>{user.email}</a>
+                      </td>
+                      <td>
+                        {UnlockAccess(user && user.roles) ? (
+                          <FaCheckCircle className='text-success mb-1' />
                         ) : (
-                          <span>
-                            {' '}
-                            <FaTrash className='mb-1' /> Delete
-                          </span>
+                          <FaTimesCircle className='text-danger mb-1' />
                         )}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                      <td className='btn-group'>
+                        <button
+                          className='btn btn-primary btn-sm'
+                          onClick={() => editHandler(user)}
+                          data-bs-toggle='modal'
+                          data-bs-target='#editUserModal'
+                        >
+                          <FaEdit className='mb-1' /> Edit
+                        </button>
+
+                        <button
+                          className='btn btn-danger btn-sm'
+                          onClick={() => deleteHandler(user._id)}
+                          disabled={isLoadingDeleteUser}
+                        >
+                          {isLoadingDeleteUser ? (
+                            <span className='spinner-border spinner-border-sm' />
+                          ) : (
+                            <span>
+                              {' '}
+                              <FaTrash className='mb-1' /> Delete
+                            </span>
+                          )}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   )

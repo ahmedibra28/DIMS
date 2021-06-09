@@ -18,8 +18,32 @@ const logSession = asyncHandler(async (id) => {
 })
 
 export const logHistory = asyncHandler(async (req, res) => {
-  const logs = await LogonSession.find({}).populate('user')
-  res.status(200).json(logs)
+  let query = LogonSession.find()
+
+  const page = parseInt(req.query.page) || 1
+  const pageSize = parseInt(req.query.limit) || 50
+  const skip = (page - 1) * pageSize
+  const total = await LogonSession.countDocuments()
+
+  const pages = Math.ceil(total / pageSize)
+
+  query = query
+    .skip(skip)
+    .limit(pageSize)
+    .sort({ logDate: -1 })
+    .populate('user', ['name', 'email'])
+
+  const result = await query
+
+  res.status(200).json({
+    startIndex: skip + 1,
+    endIndex: skip + result.length,
+    count: result.length,
+    page,
+    pages,
+    total,
+    data: result,
+  })
 })
 
 export const authUser = asyncHandler(async (req, res) => {
@@ -44,7 +68,7 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, admin, user, instructor } = req.body
+  const { name, email, password, admin, user } = req.body
   const userExist = await User.findOne({ email })
   if (userExist) {
     res.status(400)
@@ -54,8 +78,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   const userRoles = []
   admin && userRoles.push('Admin')
   user && userRoles.push('User')
-  instructor && userRoles.push('Instructor')
-  !admin && !user && !instructor && userRoles.push('Admin')
+  !admin && !user && userRoles.push('Admin')
 
   const userCreate = await User.create({
     name,
@@ -63,8 +86,6 @@ export const registerUser = asyncHandler(async (req, res) => {
     password,
     roles: userRoles,
   })
-
-  console.log(userCreate)
 
   if (userCreate) {
     res.status(201).json({
@@ -121,8 +142,32 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 })
 
 export const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({})
-  res.status(200).json(users)
+  let query = User.find()
+
+  const page = parseInt(req.query.page) || 1
+  const pageSize = parseInt(req.query.limit) || 50
+  const skip = (page - 1) * pageSize
+  const total = await User.countDocuments()
+
+  const pages = Math.ceil(total / pageSize)
+
+  query = query
+    .skip(skip)
+    .limit(pageSize)
+    .sort({ createdAt: -1 })
+    .populate('user', ['name', 'email'])
+
+  const result = await query
+
+  res.status(200).json({
+    startIndex: skip + 1,
+    endIndex: skip + result.length,
+    count: result.length,
+    page,
+    pages,
+    total,
+    data: result,
+  })
 })
 
 export const deleteUser = asyncHandler(async (req, res) => {
@@ -165,8 +210,6 @@ export const updateUser = asyncHandler(async (req, res) => {
   const userRoles = []
   admin && userRoles.push('Admin')
   user && userRoles.push('User')
-  instructor && userRoles.push('Instructor')
-  !admin && !user && !instructor && userRoles.push('Admin')
 
   if (userExist) {
     userExist.name = req.body.name || userExist.name

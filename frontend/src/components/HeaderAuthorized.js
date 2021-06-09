@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import {
+  FaBook,
   FaCog,
   FaFileContract,
   FaLeanpub,
@@ -44,7 +45,7 @@ const HeaderAuthorized = () => {
               </li>
               <li className='nav-item'>
                 <Link to='/subject' className='nav-link'>
-                  <FaLeanpub className='mb-1' /> Subjects
+                  <FaBook className='mb-1' /> Subjects
                 </Link>
               </li>
             </div>

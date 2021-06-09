@@ -12,9 +12,9 @@ const config = () => {
   }
 }
 
-export const getStudents = async () => {
+export const getStudents = async (page) => {
   try {
-    const { data } = await axios.get(`/api/students`, config())
+    const { data } = await axios.get(`/api/students?page=${page}`, config())
     return data
   } catch (error) {
     throw error.response.data.message
