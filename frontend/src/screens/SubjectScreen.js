@@ -27,6 +27,7 @@ const SubjectScreen = () => {
     register,
     handleSubmit,
     watch,
+    getValues,
     setValue,
     reset,
     formState: { errors },
@@ -107,6 +108,7 @@ const SubjectScreen = () => {
           name: data.name,
           isActive: data.isActive,
           course: data.course,
+          semester: data.semester,
           theoryMarks: data.theoryMarks,
           practicalMarks: data.practicalMarks,
         })
@@ -121,6 +123,7 @@ const SubjectScreen = () => {
     setValue('course', subject.course && subject.course._id)
     setValue('theoryMarks', subject.theoryMarks)
     setValue('practicalMarks', subject.practicalMarks)
+    setValue('semester', subject.semester)
   }
 
   return (
@@ -206,6 +209,37 @@ const SubjectScreen = () => {
                       </span>
                     )}
                   </div>
+
+                  <div className='mb-3'>
+                    <label htmlFor='semester'>Semester</label>
+                    <select
+                      {...register('semester', {
+                        required: 'Semester is required',
+                      })}
+                      type='text'
+                      placeholder='Enter name'
+                      className='form-control'
+                    >
+                      <option value=''>-----------</option>
+                      {dataCourse &&
+                        dataCourse.map(
+                          (semester) =>
+                            semester.isActive &&
+                            semester._id === watch().course &&
+                            [...Array(semester.duration).keys()].map((sem) => (
+                              <option key={sem + 1} value={sem + 1}>
+                                {sem + 1}
+                              </option>
+                            ))
+                        )}
+                    </select>
+                    {errors.semester && (
+                      <span className='text-danger'>
+                        {errors.semester.message}
+                      </span>
+                    )}
+                  </div>
+
                   <div className='mb-3'>
                     <label htmlFor='name'>Name</label>
                     <input
@@ -244,12 +278,13 @@ const SubjectScreen = () => {
                         required: 'Practical Marks is required',
 
                         validate: (value) =>
-                          value + watch().theoryMarks > 100 ||
-                          'Maximum marks must be 100',
+                          Number(value) + Number(getValues('theoryMarks')) ===
+                            100 || 'Total marks should be equal to 100',
                       })}
-                      type='text'
+                      type='number'
                       placeholder='Enter practicalMarks'
                       className='form-control'
+                      step='.01'
                     />
                     {errors.practicalMarks && (
                       <span className='text-danger'>
@@ -342,6 +377,7 @@ const SubjectScreen = () => {
               <thead>
                 <tr>
                   <th>COURSE</th>
+                  <th>SEMESTER</th>
                   <th>SUBJECT</th>
                   <th>THEORY MARKS</th>
                   <th>PRACTICAL MARKS</th>
@@ -358,6 +394,7 @@ const SubjectScreen = () => {
                           subject.course.name.charAt(0).toUpperCase() +
                             subject.course.name.slice(1)}
                       </td>
+                      <td>Semester {subject.semester}</td>
                       <td>
                         {subject.name.charAt(0).toUpperCase() +
                           subject.name.slice(1)}

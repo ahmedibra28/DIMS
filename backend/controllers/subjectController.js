@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler'
 import SubjectModel from '../models/subjectModel.js'
 
 export const addSubject = asyncHandler(async (req, res) => {
-  const { isActive, course, theoryMarks, practicalMarks } = req.body
+  const { isActive, course, theoryMarks, practicalMarks, semester } = req.body
   const createdBy = req.user.id
   const name = req.body.name.toLowerCase()
 
@@ -22,6 +22,7 @@ export const addSubject = asyncHandler(async (req, res) => {
     course,
     theoryMarks,
     practicalMarks,
+    semester,
   })
   if (createObj) {
     res.status(201).json({ status: 'success' })
@@ -32,7 +33,7 @@ export const addSubject = asyncHandler(async (req, res) => {
 })
 
 export const updateSubject = asyncHandler(async (req, res) => {
-  const { isActive, course, theoryMarks, practicalMarks } = req.body
+  const { isActive, course, theoryMarks, practicalMarks, semester } = req.body
 
   const updatedBy = req.user.id
   const name = req.body.name.toLowerCase()
@@ -53,6 +54,7 @@ export const updateSubject = asyncHandler(async (req, res) => {
       obj.course = course
       obj.theoryMarks = theoryMarks
       obj.practicalMarks = practicalMarks
+      obj.semester = semester
 
       await obj.save()
       res.status(201).json({ status: 'success' })

@@ -16,6 +16,10 @@ const subjectScheme = mongoose.Schema(
       ref: 'Course',
       required: true,
     },
+    semester: {
+      type: Number,
+      required: true,
+    },
     name: {
       type: String,
       required: true,

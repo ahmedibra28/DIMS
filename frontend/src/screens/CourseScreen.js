@@ -230,10 +230,10 @@ const CourseScreen = () => {
                   </div>
 
                   <div className='mb-3'>
-                    <label htmlFor='duration'>Duration</label>
+                    <label htmlFor='duration'>No. of semester</label>
                     <input
                       {...register('duration', {
-                        required: 'Duration is required',
+                        required: 'No. of semester is required',
                       })}
                       type='number'
                       placeholder='Enter duration'
@@ -370,7 +370,7 @@ const CourseScreen = () => {
                 <tr>
                   <th>COURSE TYPE</th>
                   <th>NAME</th>
-                  <th>DURATION</th>
+                  <th>NO. OF SEMESTER</th>
                   <th>CERTIFICATION ISSUED</th>
                   <th>ENROLMENT REQUIREMENT</th>
                   <th>ACTIVE</th>
