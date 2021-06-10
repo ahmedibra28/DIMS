@@ -23,7 +23,6 @@ import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { confirmAlert } from 'react-confirm-alert'
 import { Confirm } from '../components/Confirm'
 import { useForm } from 'react-hook-form'
-import { getCourses } from '../api/courses'
 import Pagination from '../components/Pagination'
 
 const StudentScreen = () => {
@@ -50,9 +49,6 @@ const StudentScreen = () => {
       retry: 0,
     }
   )
-  const { data: dataCourse } = useQuery('courses', () => getCourses(), {
-    retry: 0,
-  })
 
   const {
     isLoading: isLoadingUpdateStudent,
@@ -114,7 +110,6 @@ const StudentScreen = () => {
     formData.append('dateOfBirth', data.dateOfBirth)
     formData.append('nationality', data.nationality)
     formData.append('gender', data.gender)
-    formData.append('dateOfAdmission', data.dateOfAdmission)
     formData.append('mobileNumber', data.mobileNumber)
     formData.append('district', data.district)
     formData.append('levelOfEducation', data.levelOfEducation)
@@ -122,7 +117,6 @@ const StudentScreen = () => {
     formData.append('contactMobileNumber', data.contactMobileNumber)
     formData.append('contactEmail', data.contactEmail)
     formData.append('contactRelationship', data.contactRelationship)
-    formData.append('course', data.course)
     formData.append('arabic', data.arabic)
     formData.append('somali', data.somali)
     formData.append('english', data.english)
@@ -142,16 +136,11 @@ const StudentScreen = () => {
     setEdit(true)
 
     setValue('isActive', student.isActive)
-    setValue('course', student.course && student.course.map((crs) => crs._id))
     setValue('fullName', student.fullName)
     setValue('placeOfBirth', student.placeOfBirth)
     setValue('dateOfBirth', moment(student.dateOfBirth).format('YYYY-MM-DD'))
     setValue('nationality', student.nationality)
     setValue('gender', student.gender)
-    setValue(
-      'dateOfAdmission',
-      moment(student.dateOfAdmission).format('YYYY-MM-DD')
-    )
     setValue('district', student.district)
     setValue('mobileNumber', student.mobileNumber)
     setValue('levelOfEducation', student.levelOfEducation)
@@ -329,20 +318,27 @@ const StudentScreen = () => {
                     </div>
                     <div className='col-md-6 col-12'>
                       <div className='mb-3'>
-                        <label htmlFor='dateOfAdmission'>
-                          Date of admission
+                        <label htmlFor='levelOfEducation'>
+                          Level of education
                         </label>
-                        <input
-                          {...register('dateOfAdmission', {
-                            required: 'Date of admission is required',
+                        <select
+                          {...register('levelOfEducation', {
+                            required: 'Level of education is required',
                           })}
-                          type='date'
-                          placeholder='Enter date of admission'
+                          type='text'
+                          placeholder='Enter level of education'
                           className='form-control'
-                        />
-                        {errors.dateOfAdmission && (
+                        >
+                          <option value=''>----------</option>
+                          <option value='Primary'>Primary</option>
+                          <option value='Secondary'>Secondary</option>
+                          <option value='Mid level colleges'>
+                            Mid level colleges
+                          </option>
+                        </select>
+                        {errors.levelOfEducation && (
                           <span className='text-danger'>
-                            {errors.dateOfAdmission.message}
+                            {errors.levelOfEducation.message}
                           </span>
                         )}
                       </div>
@@ -462,64 +458,6 @@ const StudentScreen = () => {
                         {errors.contactRelationship && (
                           <span className='text-danger'>
                             {errors.contactRelationship.message}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <h4 className='text-center'>Education Background</h4> <hr />
-                    <div className='col-md-6 col-12'>
-                      <div className='mb-3'>
-                        <label htmlFor='levelOfEducation'>
-                          Level of education
-                        </label>
-                        <select
-                          {...register('levelOfEducation', {
-                            required: 'Level of education is required',
-                          })}
-                          type='text'
-                          placeholder='Enter level of education'
-                          className='form-control'
-                        >
-                          <option value=''>----------</option>
-                          <option value='Primary'>Primary</option>
-                          <option value='Secondary'>Secondary</option>
-                          <option value='Mid level colleges'>
-                            Mid level colleges
-                          </option>
-                        </select>
-                        {errors.levelOfEducation && (
-                          <span className='text-danger'>
-                            {errors.levelOfEducation.message}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className='col-md-6 col-12'>
-                      <div className='mb-3'>
-                        <label htmlFor='course'>Interested course</label>
-                        <select
-                          multiple
-                          {...register('course', {
-                            required: 'Interested course Type is required',
-                          })}
-                          type='text'
-                          placeholder='Enter course'
-                          className='form-control'
-                        >
-                          <option value=''>-----------</option>
-                          {dataCourse &&
-                            dataCourse.map(
-                              (course) =>
-                                course.isActive && (
-                                  <option key={course._id} value={course._id}>
-                                    {course.name}
-                                  </option>
-                                )
-                            )}
-                        </select>
-                        {errors.course && (
-                          <span className='text-danger'>
-                            {errors.course.message}
                           </span>
                         )}
                       </div>
@@ -737,7 +675,6 @@ const StudentScreen = () => {
                 <tr>
                   <th>FULL NAME</th>
                   <th>MOBILE NUMBER</th>
-                  <th>COURSE</th>
                   <th>CONTACT FULL NAME</th>
                   <th>CONTACT MOBILE</th>
                   <th>ACTIVE</th>
@@ -750,16 +687,6 @@ const StudentScreen = () => {
                     <tr key={student._id}>
                       <td>{student.fullName}</td>
                       <td>{student.mobileNumber}</td>
-                      <td>
-                        {student.course.map((crs, index) => (
-                          <span key={index + 1}>
-                            {index + 1}.{' '}
-                            {crs.name.charAt(0).toUpperCase() +
-                              crs.name.slice(1)}
-                            <br />
-                          </span>
-                        ))}
-                      </td>
                       <td>{student.contactFullName}</td>
                       <td>{student.contactMobileNumber}</td>
 

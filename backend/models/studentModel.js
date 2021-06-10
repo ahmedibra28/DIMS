@@ -31,10 +31,6 @@ const studentScheme = mongoose.Schema(
       type: String,
       required: true,
     },
-    dateOfAdmission: {
-      type: Date,
-      required: true,
-    },
     district: {
       type: String,
       required: true,
@@ -63,13 +59,6 @@ const studentScheme = mongoose.Schema(
       type: String,
       required: true,
     },
-    course: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course',
-        required: true,
-      },
-    ],
     picture: {
       pictureName: {
         type: String,
@@ -98,7 +87,6 @@ const studentScheme = mongoose.Schema(
         required: true,
       },
     },
-
     comment: {
       type: String,
     },

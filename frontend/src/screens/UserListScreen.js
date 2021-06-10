@@ -132,7 +132,24 @@ const UserListScreen = () => {
   return (
     <div className='container'>
       <Pagination data={data} setPage={setPage} />
-
+      {isSuccessUpdateUser && (
+        <Message variant='success'>User has been updated successfully.</Message>
+      )}
+      {isErrorUpdateUser && (
+        <Message variant='danger'>{errorUpdateUser}</Message>
+      )}
+      {isSuccessCreateUser && (
+        <Message variant='success'>User has been Created successfully.</Message>
+      )}
+      {isErrorCreateUser && (
+        <Message variant='danger'>{errorCreateUser}</Message>
+      )}
+      {isSuccessDeleteUser && (
+        <Message variant='success'>User has been deleted successfully.</Message>
+      )}
+      {isErrorDeleteUser && (
+        <Message variant='danger'>{errorDeleteUser}</Message>
+      )}
       <div
         className='modal fade'
         id='editUserModal'
@@ -157,23 +174,6 @@ const UserListScreen = () => {
               ></button>
             </div>
             <div className='modal-body'>
-              {isSuccessUpdateUser && (
-                <Message variant='success'>
-                  User has been updated successfully.
-                </Message>
-              )}
-              {isErrorUpdateUser && (
-                <Message variant='danger'>{errorUpdateUser}</Message>
-              )}
-              {isSuccessCreateUser && (
-                <Message variant='success'>
-                  User has been Created successfully.
-                </Message>
-              )}
-              {isErrorCreateUser && (
-                <Message variant='danger'>{errorCreateUser}</Message>
-              )}
-
               {isLoading ? (
                 <div className='text-center'>
                   <Loader
@@ -333,12 +333,6 @@ const UserListScreen = () => {
         </button>
       </div>
 
-      {isSuccessDeleteUser && (
-        <Message variant='success'>User has been deleted successfully.</Message>
-      )}
-      {isErrorDeleteUser && (
-        <Message variant='danger'>{errorDeleteUser}</Message>
-      )}
       {isLoading ? (
         <div className='text-center'>
           <Loader

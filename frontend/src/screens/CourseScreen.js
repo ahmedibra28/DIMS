@@ -114,6 +114,7 @@ const CourseScreen = () => {
           duration: data.duration,
           enrolmentRequirement: data.enrolmentRequirement,
           certificationIssued: data.certificationIssued,
+          price: data.price,
         })
       : addCourseMutateAsync(data)
   }
@@ -127,6 +128,7 @@ const CourseScreen = () => {
     setValue('duration', course.duration)
     setValue('certificationIssued', course.certificationIssued)
     setValue('enrolmentRequirement', course.enrolmentRequirement)
+    setValue('price', course.price)
   }
 
   return (
@@ -226,6 +228,25 @@ const CourseScreen = () => {
                     />
                     {errors.name && (
                       <span className='text-danger'>{errors.name.message}</span>
+                    )}
+                  </div>
+
+                  <div className='mb-3'>
+                    <label htmlFor='price'>Price</label>
+                    <input
+                      {...register('price', {
+                        required: 'Price is required',
+                      })}
+                      type='number'
+                      placeholder='Enter price'
+                      className='form-control'
+                      step='.01'
+                      min='1'
+                    />
+                    {errors.price && (
+                      <span className='text-danger'>
+                        {errors.price.message}
+                      </span>
                     )}
                   </div>
 
@@ -370,6 +391,7 @@ const CourseScreen = () => {
                 <tr>
                   <th>COURSE TYPE</th>
                   <th>NAME</th>
+                  <th>PRICE</th>
                   <th>NO. OF SEMESTER</th>
                   <th>CERTIFICATION ISSUED</th>
                   <th>ENROLMENT REQUIREMENT</th>
@@ -390,6 +412,7 @@ const CourseScreen = () => {
                         {course.name.charAt(0).toUpperCase() +
                           course.name.slice(1)}
                       </td>
+                      <td>${course.price}.00</td>
                       <td>{course.duration}</td>
                       <td>{course.certificationIssued}</td>
                       <td>{course.enrolmentRequirement}</td>

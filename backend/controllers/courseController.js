@@ -8,6 +8,7 @@ export const addCourse = asyncHandler(async (req, res) => {
     duration,
     certificationIssued,
     enrolmentRequirement,
+    price,
   } = req.body
   const createdBy = req.user.id
   const name = req.body.name.toLowerCase()
@@ -29,6 +30,7 @@ export const addCourse = asyncHandler(async (req, res) => {
     duration,
     certificationIssued,
     enrolmentRequirement,
+    price,
   })
   if (createObj) {
     res.status(201).json({ status: 'success' })
@@ -45,6 +47,7 @@ export const updateCourse = asyncHandler(async (req, res) => {
     duration,
     certificationIssued,
     enrolmentRequirement,
+    price,
   } = req.body
 
   const updatedBy = req.user.id
@@ -67,6 +70,7 @@ export const updateCourse = asyncHandler(async (req, res) => {
       obj.duration = duration
       obj.certificationIssued = certificationIssued
       obj.enrolmentRequirement = enrolmentRequirement
+      obj.price = price
 
       await obj.save()
       res.status(201).json({ status: 'success' })

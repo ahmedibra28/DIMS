@@ -11,7 +11,6 @@ export const addStudent = asyncHandler(async (req, res) => {
     dateOfBirth,
     nationality,
     gender,
-    dateOfAdmission,
     district,
     mobileNumber,
     levelOfEducation,
@@ -25,7 +24,7 @@ export const addStudent = asyncHandler(async (req, res) => {
     kiswahili,
     comment,
   } = req.body
-  const course = req.body.course.split(',').filter((crs) => crs)
+
   const createdBy = req.user.id
   const fullName = req.body.fullName.toLowerCase()
   const picture = req.files && req.files.picture
@@ -88,7 +87,6 @@ export const addStudent = asyncHandler(async (req, res) => {
     dateOfBirth,
     nationality,
     gender,
-    dateOfAdmission,
     district,
     mobileNumber,
     levelOfEducation,
@@ -96,7 +94,6 @@ export const addStudent = asyncHandler(async (req, res) => {
     contactMobileNumber,
     contactEmail,
     contactRelationship,
-    course,
     languageSkills,
     comment,
     createdBy,
@@ -116,7 +113,6 @@ export const updateStudent = asyncHandler(async (req, res) => {
     dateOfBirth,
     nationality,
     gender,
-    dateOfAdmission,
     district,
     mobileNumber,
     levelOfEducation,
@@ -130,8 +126,6 @@ export const updateStudent = asyncHandler(async (req, res) => {
     kiswahili,
     comment,
   } = req.body
-
-  const course = req.body.course.split(',').filter((crs) => crs)
 
   const updatedBy = req.user.id
   const fullName = req.body.fullName.toLowerCase()
@@ -206,7 +200,6 @@ export const updateStudent = asyncHandler(async (req, res) => {
       obj.dateOfBirth = dateOfBirth
       obj.nationality = nationality
       obj.gender = gender
-      obj.dateOfAdmission = dateOfAdmission
       obj.district = district
       obj.mobileNumber = mobileNumber
       obj.contactFullName = contactFullName
@@ -214,7 +207,6 @@ export const updateStudent = asyncHandler(async (req, res) => {
       obj.contactMobileNumber = contactMobileNumber
       obj.contactEmail = contactEmail
       obj.contactRelationship = contactRelationship
-      obj.course = course
       obj.languageSkills = languageSkills
       obj.levelOfEducation = levelOfEducation
       obj.comment = comment
@@ -247,7 +239,6 @@ export const getStudent = asyncHandler(async (req, res) => {
     .limit(pageSize)
     .sort({ logDate: -1 })
     .sort({ createdAt: -1 })
-    .populate('course')
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')
 
@@ -268,7 +259,6 @@ export const getStudentDetails = asyncHandler(async (req, res) => {
   const _id = req.params.id
   const obj = await StudentModel.findById(_id)
     .sort({ createdAt: -1 })
-    .populate('course', 'name')
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')
   if (obj) {

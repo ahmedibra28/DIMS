@@ -1,28 +1,175 @@
-import React from 'react'
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { getStudentDetail } from '../api/students'
-import { useQuery } from 'react-query'
+import {
+  addAssignToCourse,
+  deleteAssignToCourse,
+  getAssignToCourses,
+  updateAssignToCourse,
+} from '../api/assignToCourse'
 import Loader from 'react-loader-spinner'
 import Message from '../components/Message'
 import moment from 'moment'
 import {
   FaArrowAltCircleLeft,
+  FaBook,
   FaCheckCircle,
+  FaEdit,
   FaTimesCircle,
+  FaTrash,
 } from 'react-icons/fa'
+import AssignToCourseModalScreen from './AssignToCourseModalScreen'
+import { confirmAlert } from 'react-confirm-alert'
+import { Confirm } from '../components/Confirm'
+import { useForm } from 'react-hook-form'
+import { getCourses } from '../api/courses'
 
 const StudentDetailScreen = () => {
-  const { id } = useParams()
+  const { id: paramId } = useParams()
+  const [id, setId] = useState(null)
+  const [edit, setEdit] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {},
+  })
+
+  const queryClient = useQueryClient()
 
   const { data, error, isLoading, isError } = useQuery(
-    ['studentDetails', id],
-    async () => await getStudentDetail(id),
+    ['studentDetails', paramId],
+    async () => await getStudentDetail(paramId),
     { retry: 0 }
   )
 
+  const {
+    data: dataAssignToCourse,
+    isLoading: isLoadingGetAssignToCourse,
+    isError: isErrorGetAssignToCourse,
+    error: errorGetAssignToCourse,
+  } = useQuery(
+    ['assign-to-course', paramId],
+    async () => await getAssignToCourses(paramId),
+    { retry: 0 }
+  )
+
+  const {
+    isLoading: isLoadingUpdateAssignToCourse,
+    isError: isErrorUpdateAssignToCourse,
+    error: errorUpdateAssignToCourse,
+    isSuccess: isSuccessUpdateAssignToCourse,
+    mutateAsync: updateAssignToCourseMutateAsync,
+  } = useMutation(['updateAssignToCourse'], updateAssignToCourse, {
+    retry: 0,
+    onSuccess: () => {
+      reset()
+      queryClient.invalidateQueries(['assign-to-course'])
+    },
+  })
+
+  const {
+    isLoading: isLoadingDeleteAssignToCourse,
+    isError: isErrorDeleteAssignToCourse,
+    error: errorDeleteAssignToCourse,
+    isSuccess: isSuccessDeleteAssignToCourse,
+    mutateAsync: deleteAssignToCourseMutateAsync,
+  } = useMutation(['deleteAssignToCourse'], deleteAssignToCourse, {
+    retry: 0,
+    onSuccess: () => queryClient.invalidateQueries(['assign-to-course']),
+  })
+
+  const {
+    isLoading: isLoadingAddAssignToCourse,
+    isError: isErrorAddAssignToCourse,
+    error: errorAddAssignToCourse,
+    isSuccess: isSuccessAddAssignToCourse,
+    mutateAsync: addAssignToCourseMutateAsync,
+  } = useMutation(['addAssignToCourse'], addAssignToCourse, {
+    retry: 0,
+    onSuccess: () => {
+      reset()
+      queryClient.invalidateQueries(['assign-to-course'])
+    },
+  })
+
+  const { data: dataCourse } = useQuery('courses', () => getCourses(), {
+    retry: 0,
+  })
+
+  const deleteHandler = (id) => {
+    confirmAlert(Confirm(() => deleteAssignToCourseMutateAsync(id)))
+  }
+
+  const submitHandler = (data) => {
+    console.log(data)
+    edit
+      ? updateAssignToCourseMutateAsync({
+          _id: id,
+          shift: data.shift,
+          semester: data.semester,
+          dateOfAdmission: data.dateOfAdmission,
+          status: data.status,
+          course: data.course,
+          student: paramId,
+        })
+      : addAssignToCourseMutateAsync({ paramId, data })
+  }
+
+  const editHandler = (assign) => {
+    console.log(assign)
+    setId(assign._id)
+    setEdit(true)
+    setValue('course', assign.course._id)
+    setValue('semester', assign.semester)
+    setValue('shift', assign.shift)
+    setValue('dateOfAdmission', assign.dateOfAdmission)
+    setValue('status', assign.status)
+    setValue(
+      'dateOfAdmission',
+      moment(assign.dateOfAdmission).format('YYYY-MM-DD')
+    )
+  }
+
+  const formCleanHandler = () => {
+    setEdit(false)
+    reset()
+  }
+
   return (
     <div>
-      {isLoading ? (
+      {isSuccessUpdateAssignToCourse && (
+        <Message variant='success'>
+          Assigning course has been updated successfully.
+        </Message>
+      )}
+      {isErrorUpdateAssignToCourse && (
+        <Message variant='danger'>{errorUpdateAssignToCourse}</Message>
+      )}
+      {isSuccessAddAssignToCourse && (
+        <Message variant='success'>
+          Assigning course has been done successfully.
+        </Message>
+      )}
+      {isErrorAddAssignToCourse && (
+        <Message variant='danger'>{errorAddAssignToCourse}</Message>
+      )}
+      {isSuccessDeleteAssignToCourse && (
+        <Message variant='success'>
+          Assigned course has been deleted successfully.
+        </Message>
+      )}
+      {isErrorDeleteAssignToCourse && (
+        <Message variant='danger'>{errorDeleteAssignToCourse}</Message>
+      )}
+
+      {isLoading || isLoadingGetAssignToCourse ? (
         <div className='text-center'>
           <Loader
             type='ThreeDots'
@@ -32,58 +179,123 @@ const StudentDetailScreen = () => {
             timeout={3000} //3 secs
           />
         </div>
-      ) : isError ? (
-        <Message variant='danger'>{error}</Message>
+      ) : isError || isErrorGetAssignToCourse ? (
+        <Message variant='danger'>{error || errorGetAssignToCourse}</Message>
       ) : (
         <>
           <div className='row'>
-            <div className='col-md-7 col-12'>
+            <div className='col-md-9 col-12'>
               <p className='d-flex justify-content-between'>
                 <Link to='/student' className=''>
                   <FaArrowAltCircleLeft className='mb-1' /> Go Back
                 </Link>
-                <span className='fw-bold'>Background Education</span>{' '}
-              </p>{' '}
+                <span className='fw-bold text-primary'>
+                  Secondary Information
+                </span>
+                <button
+                  data-bs-toggle='modal'
+                  data-bs-target='#assignToCourseModal'
+                  className='btn btn-primary btn-sm'
+                >
+                  <FaBook className='mb-1' /> Assign To Course
+                </button>
+              </p>
               <hr />
-              <table className='table table-sm hover bordered striped caption-top '>
-                <thead>
-                  <tr>
-                    <th>LEVEL OF EDUCATION</th>
-                    <th>INTERESTED COURSE</th>
-                    <th>LANGUAGE</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{data.levelOfEducation}</td>
+              <div className='table-responsive'>
+                <table className='table table-sm hover bordered striped caption-top '>
+                  <thead>
+                    <tr>
+                      <th>LEVEL OF EDUCATION</th>
+                      <th>SOMALI</th>
+                      <th>ARABIC</th>
+                      <th>ENGLISH</th>
+                      <th>KISWAHILI</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{data.levelOfEducation}</td>
+                      <td>{data.languageSkills.somali}</td>
+                      <td>{data.languageSkills.arabic}</td>
+                      <td>{data.languageSkills.english}</td>
+                      <td>{data.languageSkills.kiswahili}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h6 className='fw-bold text-center mt-5 text-primary'>
+                Courses Information
+              </h6>
+              <div className='table-responsive'>
+                <table className='table table-sm hover bordered striped caption-top '>
+                  <thead>
+                    <tr>
+                      <th>ADMISSION DATE</th>
+                      <th>COURSE</th>
+                      <th>FEE</th>
+                      <th>SEMESTER</th>
+                      <th>SHIFT</th>
+                      <th>STATUS</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataAssignToCourse &&
+                      dataAssignToCourse.map((assign) => (
+                        <tr>
+                          <td>
+                            {moment(assign.dateOfAdmission).format(
+                              'YYYY-MM-DD'
+                            )}
+                          </td>
+                          <td>{assign.course.name}</td>
+                          <td>${assign.price}.00</td>
+                          <td>{assign.semester}</td>
+                          <td>{assign.shift}</td>
+                          <td
+                            className={`${
+                              assign.status === 'Graduated' &&
+                              'text-success fw-bold'
+                            }`}
+                          >
+                            {assign.status}
+                          </td>
+                          <td className='btn-group'>
+                            <button
+                              className='btn btn-primary btn-sm'
+                              onClick={() => editHandler(assign)}
+                              data-bs-toggle='modal'
+                              data-bs-target='#assignToCourseModal'
+                            >
+                              <FaEdit className='mb-1' /> Edit
+                            </button>
 
-                    <td>
-                      {data.course.map((crs, index) => (
-                        <span key={index + 1}>
-                          {index + 1}.{' '}
-                          {crs.name.charAt(0).toUpperCase() + crs.name.slice(1)}
-                          <br />
-                        </span>
+                            <button
+                              className='btn btn-danger btn-sm ms-1'
+                              onClick={() => deleteHandler(assign._id)}
+                              disabled={isLoadingDeleteAssignToCourse}
+                            >
+                              {isLoadingDeleteAssignToCourse ? (
+                                <span className='spinner-border spinner-border-sm ' />
+                              ) : (
+                                <span>
+                                  {' '}
+                                  <FaTrash className='mb-1' /> Delete
+                                </span>
+                              )}
+                            </button>
+                          </td>
+                        </tr>
                       ))}
-                    </td>
-                    <td>
-                      Somali - {data.languageSkills.somali} <br />
-                      Arabic - {data.languageSkills.arabic} <br />
-                      English - {data.languageSkills.english} <br />
-                      Kiswahili - {data.languageSkills.kiswahili}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan='3'>{data.comment}</td>
-                  </tr>
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
-            <div className='col-md-4 col-12 border-start border-info'>
+            <div className='col-md-3 col-12 border-start border-info'>
               <p className=''>
-                <span className='fw-bold'>Student Info </span>
+                <span className='fw-bold text-primary'>Student Info </span>
               </p>
               <hr />
               <p className=''>
@@ -134,6 +346,17 @@ const StudentDetailScreen = () => {
           </div>
         </>
       )}
+      <AssignToCourseModalScreen
+        submitHandler={submitHandler}
+        register={register}
+        handleSubmit={handleSubmit}
+        watch={watch}
+        errors={errors}
+        isLoadingUpdateAssignToCourse={isLoadingUpdateAssignToCourse}
+        isLoadingAddAssignToCourse={isLoadingAddAssignToCourse}
+        formCleanHandler={formCleanHandler}
+        dataCourse={dataCourse}
+      />
     </div>
   )
 }

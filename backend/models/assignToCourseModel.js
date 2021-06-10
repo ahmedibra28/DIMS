@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const courseScheme = mongoose.Schema(
+const assignToCourseScheme = mongoose.Schema(
   {
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -11,34 +11,35 @@ const courseScheme = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    courseType: {
+    student: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'CourseType',
+      ref: 'Student',
       required: true,
     },
-    name: {
-      type: String,
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course',
       required: true,
     },
     price: {
       type: Number,
       required: true,
     },
-    duration: {
+    semester: {
       type: Number,
       required: true,
     },
-    certificationIssued: {
+    shift: {
       type: String,
       required: true,
     },
-    enrolmentRequirement: {
-      type: String,
+    dateOfAdmission: {
+      type: Date,
       required: true,
     },
-    isActive: {
-      type: Boolean,
-      default: true,
+    status: {
+      type: String,
+      required: true,
     },
   },
   {
@@ -46,5 +47,8 @@ const courseScheme = mongoose.Schema(
   }
 )
 
-const CourseModel = mongoose.model('Course', courseScheme)
-export default CourseModel
+const AssignToCourseModel = mongoose.model(
+  'AssignToCorse',
+  assignToCourseScheme
+)
+export default AssignToCourseModel
