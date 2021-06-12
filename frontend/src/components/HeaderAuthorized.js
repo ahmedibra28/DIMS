@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import {
   FaBook,
+  FaChalkboardTeacher,
   FaCog,
   FaFileContract,
   FaLeanpub,
@@ -29,11 +30,6 @@ const HeaderAuthorized = () => {
           >
             <div>
               <li className='nav-item'>
-                <Link to='/student' className='nav-link'>
-                  <FaUserGraduate className='mb-1' /> Students
-                </Link>
-              </li>
-              <li className='nav-item'>
                 <Link to='/course-type' className='nav-link'>
                   <FaLeanpub className='mb-1' /> Course Type
                 </Link>
@@ -46,6 +42,16 @@ const HeaderAuthorized = () => {
               <li className='nav-item'>
                 <Link to='/subject' className='nav-link'>
                   <FaBook className='mb-1' /> Subjects
+                </Link>
+              </li>
+              <li className='nav-item'>
+                <Link to='/student' className='nav-link'>
+                  <FaUserGraduate className='mb-1' /> Students
+                </Link>
+              </li>
+              <li className='nav-item'>
+                <Link to='/instructor' className='nav-link'>
+                  <FaChalkboardTeacher className='mb-1' /> Instructor
                 </Link>
               </li>
             </div>

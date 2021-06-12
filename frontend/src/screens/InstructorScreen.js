@@ -13,11 +13,11 @@ import {
 import moment from 'moment'
 
 import {
-  getStudents,
-  updateStudent,
-  deleteStudent,
-  addStudent,
-} from '../api/students'
+  getInstructors,
+  updateInstructor,
+  deleteInstructor,
+  addInstructor,
+} from '../api/instructors'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 import { confirmAlert } from 'react-confirm-alert'
@@ -25,7 +25,7 @@ import { Confirm } from '../components/Confirm'
 import { useForm } from 'react-hook-form'
 import Pagination from '../components/Pagination'
 
-const StudentScreen = () => {
+const InstructorScreen = () => {
   const [page, setPage] = useState(1)
   const {
     register,
@@ -43,49 +43,49 @@ const StudentScreen = () => {
   const queryClient = useQueryClient()
 
   const { data, isLoading, isError, error } = useQuery(
-    'students',
-    () => getStudents(page),
+    'instructors',
+    () => getInstructors(page),
     {
       retry: 0,
     }
   )
 
   const {
-    isLoading: isLoadingUpdateStudent,
-    isError: isErrorUpdateStudent,
-    error: errorUpdateStudent,
-    isSuccess: isSuccessUpdateStudent,
-    mutateAsync: updateStudentMutateAsync,
-  } = useMutation(['updateStudent'], updateStudent, {
+    isLoading: isLoadingUpdateInstructor,
+    isError: isErrorUpdateInstructor,
+    error: errorUpdateInstructor,
+    isSuccess: isSuccessUpdateInstructor,
+    mutateAsync: updateInstructorMutateAsync,
+  } = useMutation(['updateInstructor'], updateInstructor, {
     retry: 0,
     onSuccess: () => {
       reset()
-      queryClient.invalidateQueries(['students'])
+      queryClient.invalidateQueries(['instructors'])
     },
   })
 
   const {
-    isLoading: isLoadingDeleteStudent,
-    isError: isErrorDeleteStudent,
-    error: errorDeleteStudent,
-    isSuccess: isSuccessDeleteStudent,
-    mutateAsync: deleteStudentMutateAsync,
-  } = useMutation(['deleteStudent'], deleteStudent, {
+    isLoading: isLoadingDeleteInstructor,
+    isError: isErrorDeleteInstructor,
+    error: errorDeleteInstructor,
+    isSuccess: isSuccessDeleteInstructor,
+    mutateAsync: deleteInstructorMutateAsync,
+  } = useMutation(['deleteInstructor'], deleteInstructor, {
     retry: 0,
-    onSuccess: () => queryClient.invalidateQueries(['students']),
+    onSuccess: () => queryClient.invalidateQueries(['instructors']),
   })
 
   const {
-    isLoading: isLoadingAddStudent,
-    isError: isErrorAddStudent,
-    error: errorAddStudent,
-    isSuccess: isSuccessAddStudent,
-    mutateAsync: addStudentMutateAsync,
-  } = useMutation(['addStudent'], addStudent, {
+    isLoading: isLoadingAddInstructor,
+    isError: isErrorAddInstructor,
+    error: errorAddInstructor,
+    isSuccess: isSuccessAddInstructor,
+    mutateAsync: addInstructorMutateAsync,
+  } = useMutation(['addInstructor'], addInstructor, {
     retry: 0,
     onSuccess: () => {
       reset()
-      queryClient.invalidateQueries(['students'])
+      queryClient.invalidateQueries(['instructors'])
     },
   })
 
@@ -98,7 +98,7 @@ const StudentScreen = () => {
   }
 
   const deleteHandler = (id) => {
-    confirmAlert(Confirm(() => deleteStudentMutateAsync(id)))
+    confirmAlert(Confirm(() => deleteInstructorMutateAsync(id)))
   }
 
   const submitHandler = (data) => {
@@ -112,52 +112,46 @@ const StudentScreen = () => {
     formData.append('gender', data.gender)
     formData.append('mobileNumber', data.mobileNumber)
     formData.append('district', data.district)
-    formData.append('levelOfEducation', data.levelOfEducation)
+    formData.append('qualification', data.qualification)
     formData.append('contactFullName', data.contactFullName)
     formData.append('contactMobileNumber', data.contactMobileNumber)
     formData.append('contactEmail', data.contactEmail)
     formData.append('contactRelationship', data.contactRelationship)
-    formData.append('arabic', data.arabic)
-    formData.append('somali', data.somali)
-    formData.append('english', data.english)
-    formData.append('kiswahili', data.kiswahili)
+    formData.append('experience', data.experience)
     formData.append('comment', data.comment)
 
     edit
-      ? updateStudentMutateAsync({
+      ? updateInstructorMutateAsync({
           _id: id,
           formData,
         })
-      : addStudentMutateAsync(formData)
+      : addInstructorMutateAsync(formData)
   }
 
-  const editHandler = (student) => {
-    setId(student._id)
+  const editHandler = (instructor) => {
+    setId(instructor._id)
     setEdit(true)
 
-    setValue('isActive', student.isActive)
-    setValue('fullName', student.fullName)
-    setValue('placeOfBirth', student.placeOfBirth)
-    setValue('dateOfBirth', moment(student.dateOfBirth).format('YYYY-MM-DD'))
-    setValue('nationality', student.nationality)
-    setValue('gender', student.gender)
-    setValue('district', student.district)
-    setValue('mobileNumber', student.mobileNumber)
-    setValue('levelOfEducation', student.levelOfEducation)
-    setValue('contactFullName', student.contactFullName)
-    setValue('contactMobileNumber', student.contactMobileNumber)
-    setValue('contactEmail', student.contactEmail)
-    setValue('contactRelationship', student.contactRelationship)
-    setValue('somali', student.languageSkills.somali)
-    setValue('english', student.languageSkills.english)
-    setValue('kiswahili', student.languageSkills.kiswahili)
-    setValue('arabic', student.languageSkills.arabic)
-    setValue('comment', student.comment)
+    setValue('isActive', instructor.isActive)
+    setValue('fullName', instructor.fullName)
+    setValue('placeOfBirth', instructor.placeOfBirth)
+    setValue('dateOfBirth', moment(instructor.dateOfBirth).format('YYYY-MM-DD'))
+    setValue('nationality', instructor.nationality)
+    setValue('gender', instructor.gender)
+    setValue('district', instructor.district)
+    setValue('mobileNumber', instructor.mobileNumber)
+    setValue('qualification', instructor.qualification)
+    setValue('contactFullName', instructor.contactFullName)
+    setValue('contactMobileNumber', instructor.contactMobileNumber)
+    setValue('contactEmail', instructor.contactEmail)
+    setValue('contactRelationship', instructor.contactRelationship)
+    setValue('experience', instructor.experience)
+    setValue('comment', instructor.comment)
   }
 
   useEffect(() => {
     const refetch = async () => {
-      await queryClient.prefetchQuery('students')
+      await queryClient.prefetchQuery('instructors')
     }
     refetch()
   }, [page, queryClient])
@@ -167,18 +161,18 @@ const StudentScreen = () => {
       <Pagination data={data} setPage={setPage} />
       <div
         className='modal fade'
-        id='editStudentModal'
+        id='editInstructorModal'
         data-bs-backdrop='static'
         data-bs-keyboard='false'
         tabIndex='-1'
-        aria-labelledby='editStudentModalLabel'
+        aria-labelledby='editInstructorModalLabel'
         aria-hidden='true'
       >
         <div className='modal-dialog modal-lg'>
           <div className='modal-content modal-background'>
             <div className='modal-header'>
-              <h3 className='modal-title ' id='editStudentModalLabel'>
-                {edit ? 'Edit Student' : 'Add Student'}
+              <h3 className='modal-title ' id='editInstructorModalLabel'>
+                {edit ? 'Edit Instructor' : 'Add Instructor'}
               </h3>
               <button
                 type='button'
@@ -189,21 +183,21 @@ const StudentScreen = () => {
               ></button>
             </div>
             <div className='modal-body'>
-              {isSuccessUpdateStudent && (
+              {isSuccessUpdateInstructor && (
                 <Message variant='success'>
-                  Student has been updated successfully.
+                  Instructor has been updated successfully.
                 </Message>
               )}
-              {isErrorUpdateStudent && (
-                <Message variant='danger'>{errorUpdateStudent}</Message>
+              {isErrorUpdateInstructor && (
+                <Message variant='danger'>{errorUpdateInstructor}</Message>
               )}
-              {isSuccessAddStudent && (
+              {isSuccessAddInstructor && (
                 <Message variant='success'>
-                  Student has been Created successfully.
+                  Instructor has been Created successfully.
                 </Message>
               )}
-              {isErrorAddStudent && (
-                <Message variant='danger'>{errorAddStudent}</Message>
+              {isErrorAddInstructor && (
+                <Message variant='danger'>{errorAddInstructor}</Message>
               )}
 
               {isLoading ? (
@@ -316,29 +310,39 @@ const StudentScreen = () => {
                         )}
                       </div>
                     </div>
-                    <div className='col-md-6 col-12'>
+                    <div className='col-md-3 col-12'>
                       <div className='mb-3'>
-                        <label htmlFor='levelOfEducation'>
-                          Level of education
-                        </label>
-                        <select
-                          {...register('levelOfEducation', {
-                            required: 'Level of education is required',
+                        <label htmlFor='qualification'>Qualification</label>
+                        <input
+                          {...register('qualification', {
+                            required: 'Qualification is required',
                           })}
                           type='text'
-                          placeholder='Enter level of education'
+                          placeholder='Enter qualification'
                           className='form-control'
-                        >
-                          <option value=''>----------</option>
-                          <option value='Primary'>Primary</option>
-                          <option value='Secondary'>Secondary</option>
-                          <option value='Mid level colleges'>
-                            Mid level colleges
-                          </option>
-                        </select>
-                        {errors.levelOfEducation && (
+                        />
+                        {errors.qualification && (
                           <span className='text-danger'>
-                            {errors.levelOfEducation.message}
+                            {errors.qualification.message}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className='col-md-3 col-12'>
+                      <div className='mb-3'>
+                        <label htmlFor='experience'>Experience</label>
+                        <input
+                          {...register('experience', {
+                            required: 'Experience is required',
+                          })}
+                          type='number'
+                          min='0'
+                          placeholder='Enter qualification'
+                          className='form-control'
+                        />
+                        {errors.experience && (
+                          <span className='text-danger'>
+                            {errors.experience.message}
                           </span>
                         )}
                       </div>
@@ -462,102 +466,11 @@ const StudentScreen = () => {
                         )}
                       </div>
                     </div>
-                    <h4 className='text-center'>Language Skills</h4> <hr />
-                    <div className='col-md-3 col-12'>
-                      <div className='mb-3'>
-                        <label htmlFor='somali'>Somali</label>
-                        <select
-                          {...register('somali', {
-                            required: 'Somali is required',
-                          })}
-                          type='text'
-                          placeholder='Enter somali'
-                          className='form-control'
-                        >
-                          <option value=''>----------</option>
-                          <option value='Fluent'>Fluent</option>
-                          <option value='Good'>Good</option>
-                          <option value='Fair'>Fair</option>
-                        </select>
-                        {errors.somali && (
-                          <span className='text-danger'>
-                            {errors.somali.message}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className='col-md-3 col-12'>
-                      <div className='mb-3'>
-                        <label htmlFor='arabic'>Arabic</label>
-                        <select
-                          {...register('arabic', {
-                            required: 'Arabic is required',
-                          })}
-                          type='text'
-                          placeholder='Enter arabic'
-                          className='form-control'
-                        >
-                          <option value=''>----------</option>
-                          <option value='Fluent'>Fluent</option>
-                          <option value='Good'>Good</option>
-                          <option value='Fair'>Fair</option>
-                        </select>
-                        {errors.arabic && (
-                          <span className='text-danger'>
-                            {errors.arabic.message}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className='col-md-3 col-12'>
-                      <div className='mb-3'>
-                        <label htmlFor='english'>English</label>
-                        <select
-                          {...register('english', {
-                            required: 'English is required',
-                          })}
-                          type='text'
-                          placeholder='Enter english'
-                          className='form-control'
-                        >
-                          <option value=''>----------</option>
-                          <option value='Fluent'>Fluent</option>
-                          <option value='Good'>Good</option>
-                          <option value='Fair'>Fair</option>
-                        </select>
-                        {errors.english && (
-                          <span className='text-danger'>
-                            {errors.english.message}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className='col-md-3 col-12'>
-                      <div className='mb-3'>
-                        <label htmlFor='kiswahili'>Kiswahili</label>
-                        <select
-                          {...register('kiswahili', {
-                            required: 'Kiswahili is required',
-                          })}
-                          type='text'
-                          placeholder='Enter kiswahili'
-                          className='form-control'
-                        >
-                          <option value=''>----------</option>
-                          <option value='Fluent'>Fluent</option>
-                          <option value='Good'>Good</option>
-                          <option value='Fair'>Fair</option>
-                        </select>
-                        {errors.kiswahili && (
-                          <span className='text-danger'>
-                            {errors.kiswahili.message}
-                          </span>
-                        )}
-                      </div>
-                    </div>
                     <div className='col-md-6 col-12'>
                       <div className='mb-3'>
-                        <label htmlFor='picture'>Upload student picture</label>
+                        <label htmlFor='picture'>
+                          Upload instructor picture
+                        </label>
                         <input
                           {...register('picture', {})}
                           className='form-control'
@@ -619,9 +532,11 @@ const StudentScreen = () => {
                     <button
                       type='submit'
                       className='btn btn-primary '
-                      disabled={isLoadingAddStudent || isLoadingUpdateStudent}
+                      disabled={
+                        isLoadingAddInstructor || isLoadingUpdateInstructor
+                      }
                     >
-                      {isLoadingAddStudent || isLoadingUpdateStudent ? (
+                      {isLoadingAddInstructor || isLoadingUpdateInstructor ? (
                         <span className='spinner-border spinner-border-sm' />
                       ) : (
                         'Submit'
@@ -636,23 +551,23 @@ const StudentScreen = () => {
       </div>
 
       <div className='d-flex justify-content-between align-items-center'>
-        <h3 className=''>Students</h3>
+        <h3 className=''>Instructors</h3>
         <button
           className='btn btn-primary '
           data-bs-toggle='modal'
-          data-bs-target='#editStudentModal'
+          data-bs-target='#editInstructorModal'
         >
           <FaPlus className='mb-1' />
         </button>
       </div>
 
-      {isSuccessDeleteStudent && (
+      {isSuccessDeleteInstructor && (
         <Message variant='success'>
-          Student has been deleted successfully.
+          Instructor has been deleted successfully.
         </Message>
       )}
-      {isErrorDeleteStudent && (
-        <Message variant='danger'>{errorDeleteStudent}</Message>
+      {isErrorDeleteInstructor && (
+        <Message variant='danger'>{errorDeleteInstructor}</Message>
       )}
       {isLoading ? (
         <div className='text-center'>
@@ -684,15 +599,15 @@ const StudentScreen = () => {
               </thead>
               <tbody>
                 {data &&
-                  data.data.map((student) => (
-                    <tr key={student._id}>
-                      <td>{student.fullName}</td>
-                      <td>{student.mobileNumber}</td>
-                      <td>{student.contactFullName}</td>
-                      <td>{student.contactMobileNumber}</td>
+                  data.data.map((instructor) => (
+                    <tr key={instructor._id}>
+                      <td>{instructor.fullName}</td>
+                      <td>{instructor.mobileNumber}</td>
+                      <td>{instructor.contactFullName}</td>
+                      <td>{instructor.contactMobileNumber}</td>
 
                       <td>
-                        {student.isActive ? (
+                        {instructor.isActive ? (
                           <FaCheckCircle className='text-success mb-1' />
                         ) : (
                           <FaTimesCircle className='text-danger mb-1' />
@@ -701,15 +616,15 @@ const StudentScreen = () => {
                       <td className='btn-group'>
                         <button
                           className='btn btn-primary btn-sm'
-                          onClick={() => editHandler(student)}
+                          onClick={() => editHandler(instructor)}
                           data-bs-toggle='modal'
-                          data-bs-target='#editStudentModal'
+                          data-bs-target='#editInstructorModal'
                         >
                           <FaEdit className='mb-1' /> Edit
                         </button>
 
                         <Link
-                          to={`/student/${student._id}`}
+                          to={`/instructor/${instructor._id}`}
                           className='btn btn-success btn-sm border-0 mx-1'
                         >
                           <FaInfoCircle className='mb-1' /> Detail
@@ -717,10 +632,10 @@ const StudentScreen = () => {
 
                         <button
                           className='btn btn-danger btn-sm'
-                          onClick={() => deleteHandler(student._id)}
-                          disabled={isLoadingDeleteStudent}
+                          onClick={() => deleteHandler(instructor._id)}
+                          disabled={isLoadingDeleteInstructor}
                         >
-                          {isLoadingDeleteStudent ? (
+                          {isLoadingDeleteInstructor ? (
                             <span className='spinner-border spinner-border-sm' />
                           ) : (
                             <span>
@@ -741,4 +656,4 @@ const StudentScreen = () => {
   )
 }
 
-export default StudentScreen
+export default InstructorScreen

@@ -391,7 +391,7 @@ const CourseScreen = () => {
                 <tr>
                   <th>COURSE TYPE</th>
                   <th>NAME</th>
-                  <th>PRICE</th>
+                  <th>FEE</th>
                   <th>NO. OF SEMESTER</th>
                   <th>CERTIFICATION ISSUED</th>
                   <th>ENROLMENT REQUIREMENT</th>

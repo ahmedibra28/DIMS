@@ -8,10 +8,12 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import connectDB from './config/db.js'
 import userRoutes from './routes/userRoutes.js'
 import studentRoutes from './routes/studentRoutes.js'
+import instructorRoutes from './routes/instructorRoutes.js'
 import courseTypeRoutes from './routes/courseTypeRoutes.js'
 import courseRoutes from './routes/courseRoutes.js'
 import subjectRoutes from './routes/subjectRoutes.js'
 import assignToCourseRoutes from './routes/assignToCourseRoutes.js'
+import assignToSubjectRoutes from './routes/assignToSubjectRoutes.js'
 
 dotenv.config()
 
@@ -28,10 +30,12 @@ app.use(express.json())
 
 app.use('/api/users', userRoutes)
 app.use('/api/students', studentRoutes)
+app.use('/api/instructors', instructorRoutes)
 app.use('/api/courseTypes', courseTypeRoutes)
 app.use('/api/courses', courseRoutes)
 app.use('/api/subjects', subjectRoutes)
 app.use('/api/assign-to-courses', assignToCourseRoutes)
+app.use('/api/assign-to-subjects', assignToSubjectRoutes)
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))

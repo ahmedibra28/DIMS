@@ -1,31 +1,32 @@
 import React from 'react'
 
-const AssignToCourseModalScreen = ({
+const AssignToSubjectModalScreen = ({
   submitHandler,
   register,
   handleSubmit,
   watch,
   errors,
-  isLoadingUpdateAssignToCourse,
-  isLoadingAddAssignToCourse,
+  isLoadingUpdateAssignToSubject,
+  isLoadingAddAssignToSubject,
   formCleanHandler,
+  dataSubject,
   dataCourse,
 }) => {
   return (
     <div
       className='modal fade'
-      id='assignToCourseModal'
+      id='assignToSubjectModal'
       data-bs-backdrop='static'
       data-bs-keyboard='false'
       tabIndex='-1'
-      aria-labelledby='assignToCourseModalLabel'
+      aria-labelledby='assignToSubjectModalLabel'
       aria-hidden='true'
     >
-      <div className='modal-dialog'>
+      <div className='modal-dialog modal-lg'>
         <div className='modal-content modal-background'>
           <div className='modal-header'>
-            <h5 className='modal-title' id='assignToCourseModalLabel'>
-              Assign To Course
+            <h5 className='modal-title' id='assignToSubjectModalLabel'>
+              Assign To Subject
             </h5>
             <button
               type='button'
@@ -38,12 +39,12 @@ const AssignToCourseModalScreen = ({
           <form onSubmit={handleSubmit(submitHandler)}>
             <div className='modal-body'>
               <div className='row'>
-                <div className='col-md-6 col-12'>
+                <div className='col-md-4 col-12'>
                   <div className='mb-3'>
-                    <label htmlFor='course'>Interested course</label>
+                    <label htmlFor='course'>Course</label>
                     <select
                       {...register('course', {
-                        required: 'Interested course Type is required',
+                        required: 'Course is required',
                       })}
                       type='text'
                       placeholder='Enter course'
@@ -67,7 +68,7 @@ const AssignToCourseModalScreen = ({
                     )}
                   </div>
                 </div>
-                <div className='col-md-6 col-12'>
+                <div className='col-md-4 col-12'>
                   <div className='mb-3'>
                     <label htmlFor='semester'>Semester</label>
                     <select
@@ -98,8 +99,39 @@ const AssignToCourseModalScreen = ({
                     )}
                   </div>
                 </div>
-
                 <div className='col-md-4 col-12'>
+                  <div className='mb-3'>
+                    <label htmlFor='subject'>Subject</label>
+                    <select
+                      {...register('subject', {
+                        required: 'Subject Type is required',
+                      })}
+                      type='text'
+                      placeholder='Enter subject'
+                      className='form-control'
+                    >
+                      <option value=''>-----------</option>
+                      {dataSubject &&
+                        dataSubject.map(
+                          (subject) =>
+                            subject.isActive &&
+                            subject.course._id === watch().course &&
+                            subject.semester === Number(watch().semester) && (
+                              <option key={subject._id} value={subject._id}>
+                                {subject.name}
+                              </option>
+                            )
+                        )}
+                    </select>
+                    {errors.subject && (
+                      <span className='text-danger'>
+                        {errors.subject.message}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className='col-md-6 col-12'>
                   <div className='mb-3'>
                     <label htmlFor='dateOfAdmission'>Date of admission</label>
                     <input
@@ -117,7 +149,7 @@ const AssignToCourseModalScreen = ({
                     )}
                   </div>
                 </div>
-                <div className='col-md-4 col-12'>
+                <div className='col-md-6 col-12'>
                   <div className='mb-3'>
                     <label htmlFor='shift'>Shift</label>
                     <select
@@ -140,7 +172,7 @@ const AssignToCourseModalScreen = ({
                   </div>
                 </div>
 
-                <div className='col-md-4 col-12'>
+                {/* <div className='col-md-4 col-12'>
                   <div className='mb-3'>
                     <label htmlFor='status'>Status</label>
                     <select
@@ -161,7 +193,7 @@ const AssignToCourseModalScreen = ({
                       </span>
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className='modal-footer'>
@@ -177,10 +209,11 @@ const AssignToCourseModalScreen = ({
                 type='submit'
                 className='btn btn-primary '
                 disabled={
-                  isLoadingAddAssignToCourse || isLoadingUpdateAssignToCourse
+                  isLoadingAddAssignToSubject || isLoadingUpdateAssignToSubject
                 }
               >
-                {isLoadingAddAssignToCourse || isLoadingUpdateAssignToCourse ? (
+                {isLoadingAddAssignToSubject ||
+                isLoadingUpdateAssignToSubject ? (
                   <span className='spinner-border spinner-border-sm' />
                 ) : (
                   'Submit'
@@ -194,4 +227,4 @@ const AssignToCourseModalScreen = ({
   )
 }
 
-export default AssignToCourseModalScreen
+export default AssignToSubjectModalScreen

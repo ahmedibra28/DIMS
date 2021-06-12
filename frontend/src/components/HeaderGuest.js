@@ -6,7 +6,7 @@ const HeaderGuest = () => {
     <nav className='navbar navbar-expand-sm navbar-light  shadow-lg'>
       <div className='container'>
         <Link className='navbar-brand' to='/'>
-          DarkPro <FaPlusCircle className='mb-1' />
+          DIMS <FaPlusCircle className='mb-1' />
         </Link>
         <button
           className='navbar-toggler'
