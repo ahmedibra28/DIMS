@@ -193,7 +193,7 @@ const InstructorDetailScreen = () => {
                   <FaArrowAltCircleLeft className='mb-1' /> Go Back
                 </Link>
                 <span className='fw-bold text-primary'>
-                  Secondary Information
+                  Subjects Information
                 </span>
                 <button
                   data-bs-toggle='modal'
@@ -204,31 +204,12 @@ const InstructorDetailScreen = () => {
                 </button>
               </p>
               <hr />
+
               <div className='table-responsive'>
                 <table className='table table-sm hover bordered striped caption-top '>
                   <thead>
                     <tr>
-                      <th>QUALIFICATION</th>
-                      <th>EXPERIENCE</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{data.qualification}</td>
-                      <td>{data.experience}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <h6 className='fw-bold text-center mt-5 text-primary'>
-                Subjects Information
-              </h6>
-              <div className='table-responsive'>
-                <table className='table table-sm hover bordered striped caption-top '>
-                  <thead>
-                    <tr>
-                      <th>ADMISSION DATE</th>
+                      <th>ASSIGNED DATE</th>
                       <th>COURSE</th>
                       <th>SEMESTER</th>
                       <th>SHIFT</th>
@@ -245,7 +226,7 @@ const InstructorDetailScreen = () => {
                             )}
                           </td>
                           <td>{assign.subject.name}</td>
-                          <td>{assign.semester}</td>
+                          <td>Semester {assign.semester} </td>
                           <td>{assign.shift}</td>
                           <td className='btn-group'>
                             <button
@@ -303,12 +284,17 @@ const InstructorDetailScreen = () => {
                 <br />
                 <span className='fw-bold'>Gender: </span> {data.gender}
                 <br />
-                <span className='fw-bold'>Admission Date-In: </span>
+                <span className='fw-bold'>Registered Date: </span>{' '}
                 {moment(data.createdAt).format('lll')} <br />
                 <span className='fw-bold'>District: </span> {data.district}
                 <br />
                 <span className='fw-bold'>Mobile Number: </span>{' '}
                 {data.mobileNumber}
+                <br />
+                <span className='fw-bold'>Qualification: </span>{' '}
+                {data.qualification}
+                <br />
+                <span className='fw-bold'>Experience: </span> {data.experience}
                 <br />
                 <span className='fw-bold'>Status: </span>{' '}
                 <span className='px-2 rounded-1 text-light'>
