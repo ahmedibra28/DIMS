@@ -227,7 +227,7 @@ export const updateStudent = asyncHandler(async (req, res) => {
 export const getStudent = asyncHandler(async (req, res) => {
   let query = StudentModel.find({})
 
-  const page = parseInt(pageNumber) || 1
+  const page = parseInt(req.params.page) || 1
   const pageSize = parseInt(req.query.limit) || 50
   const skip = (page - 1) * pageSize
   const total = await StudentModel.countDocuments()

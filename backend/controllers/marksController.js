@@ -2,6 +2,9 @@ import asyncHandler from 'express-async-handler'
 import MarksModel from '../models/marksModel.js'
 import InstructorModel from '../models/instructorModel.js'
 import AssignToSubjectModel from '../models/assignToSubjectModel.js'
+import AssignToCourseModel from '../models/assignToCourseModel.js'
+
+import SubjectModel from '../models/subjectModel.js'
 
 export const addMarks = asyncHandler(async (req, res) => {
   const {
@@ -132,4 +135,47 @@ export const getSubjectsByInstructor = asyncHandler(async (req, res) => {
     .populate('updatedBy', 'name')
 
   res.status(201).json(obj)
+})
+
+export const getStudentBySubjectInstructor = asyncHandler(async (req, res) => {
+  const subjectObj = await SubjectModel.findById(req.body.subject)
+
+  const assignToCourseObj = await AssignToCourseModel.find({
+    course: subjectObj.course,
+    semester: Number(req.body.semester),
+  })
+  console.log(Number(req.body.semester))
+
+  let query = AssignToCourseModel.find({
+    course: subjectObj.course,
+    semester: Number(req.body.semester),
+  })
+
+  const page = parseInt(req.params.page) || 1
+  const pageSize = parseInt(req.query.limit) || 50
+  const skip = (page - 1) * pageSize
+  const total = await AssignToCourseModel.countDocuments()
+
+  const pages = Math.ceil(total / pageSize)
+
+  query = query
+    .skip(skip)
+    .limit(pageSize)
+    .sort({ createdAt: -1 })
+    .populate('student')
+    .populate('course')
+    .populate('createdBy', 'name')
+    .populate('updatedBy', 'name')
+
+  const result = await query
+
+  res.status(200).json({
+    startIndex: skip + 1,
+    endIndex: skip + result.length,
+    count: result.length,
+    page,
+    pages,
+    total,
+    data: result,
+  })
 })

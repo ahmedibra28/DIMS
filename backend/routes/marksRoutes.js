@@ -5,6 +5,7 @@ import {
   updateMarks,
   deleteMarks,
   getSubjectsByInstructor,
+  getStudentBySubjectInstructor,
 } from '../controllers/marksController.js'
 import { admin, protect } from '../middleware/authMiddleware.js'
 
@@ -16,5 +17,7 @@ router
   .delete(protect, admin, deleteMarks)
   .put(protect, admin, updateMarks)
   .get(protect, getSubjectsByInstructor)
+
+router.route('/subject/student').post(protect, getStudentBySubjectInstructor)
 
 export default router

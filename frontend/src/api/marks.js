@@ -48,9 +48,22 @@ export const deleteMark = async (id) => {
   }
 }
 
-export const getSubjectByInstructor = async (id) => {
+export const getSubjectByInstructor = async (email) => {
   try {
-    const { data } = await axios.get(`/api/marks/${id}`, config())
+    const { data } = await axios.get(`/api/marks/${email}`, config())
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}
+
+export const getStudentBySubjectInstructor = async (obj) => {
+  try {
+    const { data } = await axios.post(
+      `/api/marks/subject/student`,
+      obj,
+      config()
+    )
     return data
   } catch (error) {
     throw error.response.data.message
