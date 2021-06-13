@@ -20,10 +20,11 @@ export const addInstructor = asyncHandler(async (req, res) => {
     contactRelationship,
     experience,
     comment,
+    fullName,
   } = req.body
 
   const createdBy = req.user.id
-  const fullName = req.body.fullName.toLowerCase()
+  const email = req.body.email.toLowerCase()
   const picture = req.files && req.files.picture
 
   const pictureFullName = picture && picture.name.split('.').shift()
@@ -47,7 +48,7 @@ export const addInstructor = asyncHandler(async (req, res) => {
   }
 
   const exist = await InstructorModel.findOne({
-    fullName,
+    email,
     mobileNumber: { $eq: mobileNumber },
   })
 
@@ -73,6 +74,7 @@ export const addInstructor = asyncHandler(async (req, res) => {
     picture: picture && pictureData,
     isActive,
     fullName,
+    email,
     placeOfBirth,
     dateOfBirth,
     nationality,
@@ -112,10 +114,11 @@ export const updateInstructor = asyncHandler(async (req, res) => {
     contactRelationship,
     experience,
     comment,
+    fullName,
   } = req.body
 
   const updatedBy = req.user.id
-  const fullName = req.body.fullName.toLowerCase()
+  const email = req.body.email.toLowerCase()
   const _id = req.params.id
 
   const picture = req.files && req.files.picture
@@ -140,7 +143,7 @@ export const updateInstructor = asyncHandler(async (req, res) => {
   if (obj) {
     const exist = await InstructorModel.find({
       _id: { $ne: _id },
-      fullName,
+      email,
       mobileNumber: { $eq: mobileNumber },
     })
     if (exist.length === 0) {
@@ -184,6 +187,7 @@ export const updateInstructor = asyncHandler(async (req, res) => {
       obj.mobileNumber = mobileNumber
       obj.contactFullName = contactFullName
       obj.fullName = fullName
+      obj.email = email
       obj.contactMobileNumber = contactMobileNumber
       obj.contactEmail = contactEmail
       obj.contactRelationship = contactRelationship
@@ -217,7 +221,6 @@ export const getInstructor = asyncHandler(async (req, res) => {
   query = query
     .skip(skip)
     .limit(pageSize)
-    .sort({ logDate: -1 })
     .sort({ createdAt: -1 })
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')

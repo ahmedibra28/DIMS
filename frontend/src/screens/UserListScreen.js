@@ -30,7 +30,8 @@ const UserListScreen = () => {
   } = useForm({
     defaultValues: {
       admin: false,
-      user: false,
+      student: false,
+      instructor: false,
     },
   })
 
@@ -103,7 +104,8 @@ const UserListScreen = () => {
           email: data.email,
           password: data.password,
           admin: data.admin,
-          user: data.user,
+          instructor: data.instructor,
+          student: data.student,
         })
       : createUserMutateAsync(data)
   }
@@ -118,7 +120,8 @@ const UserListScreen = () => {
       user.roles.map(
         (role) =>
           (role === 'Admin' && setValue('admin', true)) ||
-          (role === 'User' && setValue('user', true))
+          (role === 'Student' && setValue('student', true)) ||
+          (role === 'Instructor' && setValue('instructor', true))
       )
   }
 
@@ -283,12 +286,29 @@ const UserListScreen = () => {
                         <input
                           className='form-check-input'
                           type='checkbox'
-                          id='user'
-                          {...register('user')}
-                          checked={watch().user}
+                          id='instructor'
+                          {...register('instructor')}
+                          checked={watch().instructor}
                         />
-                        <label className='form-check-label' htmlFor='user'>
-                          User
+                        <label
+                          className='form-check-label'
+                          htmlFor='instructor'
+                        >
+                          Instructor
+                        </label>
+                      </div>
+                    </div>
+                    <div className='col'>
+                      <div className='form-check'>
+                        <input
+                          className='form-check-input'
+                          type='checkbox'
+                          id='student'
+                          {...register('student')}
+                          checked={watch().student}
+                        />
+                        <label className='form-check-label' htmlFor='student'>
+                          Student
                         </label>
                       </div>
                     </div>

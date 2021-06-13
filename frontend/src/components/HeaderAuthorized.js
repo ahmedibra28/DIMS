@@ -54,32 +54,33 @@ const HeaderAuthorized = () => {
                   <FaChalkboardTeacher className='mb-1' /> Instructor
                 </Link>
               </li>
+              <li className='nav-item'>
+                <Link to='/marks' className='nav-link'>
+                  <FaChalkboardTeacher className='mb-1' /> Enter Marks
+                </Link>
+              </li>
             </div>
 
-            {userInfo && userInfo.roles.includes('Admin') && (
-              <div style={{ marginBottom: '-3rem' }}>
-                <li className='nav-item dropdown'>
-                  <span
-                    className='nav-link dropdown-toggle'
-                    id='navbarDropdown'
-                    role='button'
-                    data-bs-toggle='dropdown'
-                    aria-expanded='false'
-                  >
-                    <FaUserCircle className='mb-1' />{' '}
-                    {userInfo && userInfo.name}
-                  </span>
-                  <ul
-                    className='dropdown-menu'
-                    aria-labelledby='navbarDropdown'
-                  >
-                    <li>
-                      <Link to='/profile' className='dropdown-item'>
-                        <FaUser className='mb-1' /> Profile
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
+            <div style={{ marginBottom: '-3rem' }}>
+              <li className='nav-item dropdown'>
+                <span
+                  className='nav-link dropdown-toggle'
+                  id='navbarDropdown'
+                  role='button'
+                  data-bs-toggle='dropdown'
+                  aria-expanded='false'
+                >
+                  <FaUserCircle className='mb-1' /> {userInfo && userInfo.name}
+                </span>
+                <ul className='dropdown-menu' aria-labelledby='navbarDropdown'>
+                  <li>
+                    <Link to='/profile' className='dropdown-item'>
+                      <FaUser className='mb-1' /> Profile
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              {userInfo && userInfo.roles.includes('Admin') && (
                 <li className='nav-item dropdown '>
                   <span
                     className='nav-link dropdown-toggle'
@@ -106,8 +107,8 @@ const HeaderAuthorized = () => {
                     </li>
                   </ul>
                 </li>
-              </div>
-            )}
+              )}
+            </div>
           </ul>
         </div>
       </nav>

@@ -68,7 +68,7 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, admin, user } = req.body
+  const { name, email, password, admin, student, instructor } = req.body
   const userExist = await User.findOne({ email })
   if (userExist) {
     res.status(400)
@@ -77,8 +77,9 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   const userRoles = []
   admin && userRoles.push('Admin')
-  user && userRoles.push('User')
-  !admin && !user && userRoles.push('Admin')
+  instructor && userRoles.push('Instructor')
+  student && userRoles.push('Student')
+  !admin && !instructor && !student && userRoles.push('Admin')
 
   const userCreate = await User.create({
     name,
@@ -200,7 +201,8 @@ export const getUserById = asyncHandler(async (req, res) => {
 export const updateUser = asyncHandler(async (req, res) => {
   const userExist = await User.findById(req.params.id)
   const admin = req.body.admin
-  const user = req.body.user
+  const instructor = req.body.instructor
+  const student = req.body.student
 
   if (req.params.id == req.user._id) {
     res.status(400)
@@ -209,7 +211,8 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   const userRoles = []
   admin && userRoles.push('Admin')
-  user && userRoles.push('User')
+  instructor && userRoles.push('Instructor')
+  student && userRoles.push('Student')
 
   if (userExist) {
     userExist.name = req.body.name || userExist.name

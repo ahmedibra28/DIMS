@@ -19,6 +19,7 @@ import StudentDetailScreen from '../../screens/StudentDetailScreen'
 import SubjectScreen from '../../screens/SubjectScreen'
 import InstructorScreen from '../../screens/InstructorScreen'
 import InstructorDetailScreen from '../../screens/InstructorDetailScreen'
+import MarksScreen from '../../screens/MarksScreen'
 
 const Routes = () => {
   return (
@@ -30,7 +31,7 @@ const Routes = () => {
         <Route path='/register' r component={RegisterScreen} />
 
         <PrivateRoute
-          role={['Admin', 'User']}
+          role={['Admin', 'User', 'Instructor']}
           path='/profile'
           component={ProfileScreen}
         />
@@ -91,6 +92,11 @@ const Routes = () => {
           role={['Admin', 'User']}
           path='/instructor/:id'
           component={InstructorDetailScreen}
+        />
+        <PrivateRoute
+          role={['Admin', 'Instructor']}
+          path='/marks'
+          component={MarksScreen}
         />
 
         <Route component={NotFound} />

@@ -243,7 +243,7 @@ const StudentDetailScreen = () => {
                   <tbody>
                     {dataAssignToCourse &&
                       dataAssignToCourse.map((assign) => (
-                        <tr>
+                        <tr key={assign._id}>
                           <td>
                             {moment(assign.dateOfAdmission).format(
                               'YYYY-MM-DD'

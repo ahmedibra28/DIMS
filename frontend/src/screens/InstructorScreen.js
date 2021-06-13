@@ -110,6 +110,7 @@ const InstructorScreen = () => {
     formData.append('dateOfBirth', data.dateOfBirth)
     formData.append('nationality', data.nationality)
     formData.append('gender', data.gender)
+    formData.append('email', data.email)
     formData.append('mobileNumber', data.mobileNumber)
     formData.append('district', data.district)
     formData.append('qualification', data.qualification)
@@ -138,6 +139,7 @@ const InstructorScreen = () => {
     setValue('dateOfBirth', moment(instructor.dateOfBirth).format('YYYY-MM-DD'))
     setValue('nationality', instructor.nationality)
     setValue('gender', instructor.gender)
+    setValue('email', instructor.email)
     setValue('district', instructor.district)
     setValue('mobileNumber', instructor.mobileNumber)
     setValue('qualification', instructor.qualification)
@@ -252,7 +254,7 @@ const InstructorScreen = () => {
                         )}
                       </div>
                     </div>
-                    <div className='col-md-6 col-12'>
+                    <div className='col-md-4 col-12'>
                       <div className='mb-3'>
                         <label htmlFor='dateOfBirth'>Date of birth</label>
                         <input
@@ -270,7 +272,7 @@ const InstructorScreen = () => {
                         )}
                       </div>
                     </div>
-                    <div className='col-md-6 col-12'>
+                    <div className='col-md-4 col-12'>
                       <div className='mb-3'>
                         <label htmlFor='nationality'>Nationality</label>
                         <input
@@ -288,7 +290,7 @@ const InstructorScreen = () => {
                         )}
                       </div>
                     </div>
-                    <div className='col-md-6 col-12'>
+                    <div className='col-md-4 col-12'>
                       <div className='mb-3'>
                         <label htmlFor='gender'>Gender</label>
                         <select
@@ -310,7 +312,25 @@ const InstructorScreen = () => {
                         )}
                       </div>
                     </div>
-                    <div className='col-md-3 col-12'>
+                    <div className='col-md-4 col-12'>
+                      <div className='mb-3'>
+                        <label htmlFor='email'>Email</label>
+                        <input
+                          {...register('email', {
+                            required: 'Email is required',
+                          })}
+                          type='email'
+                          placeholder='Enter contact email'
+                          className='form-control'
+                        />
+                        {errors.email && (
+                          <span className='text-danger'>
+                            {errors.email.message}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className='col-md-4 col-12'>
                       <div className='mb-3'>
                         <label htmlFor='qualification'>Qualification</label>
                         <input
@@ -328,7 +348,7 @@ const InstructorScreen = () => {
                         )}
                       </div>
                     </div>
-                    <div className='col-md-3 col-12'>
+                    <div className='col-md-4 col-12'>
                       <div className='mb-3'>
                         <label htmlFor='experience'>Experience</label>
                         <input

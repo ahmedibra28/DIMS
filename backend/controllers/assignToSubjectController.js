@@ -72,6 +72,7 @@ export const getAssignToSubject = asyncHandler(async (req, res) => {
     .populate('subject')
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')
+
   res.status(201).json(obj)
 })
 

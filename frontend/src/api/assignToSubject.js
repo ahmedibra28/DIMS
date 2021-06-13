@@ -12,10 +12,10 @@ const config = () => {
   }
 }
 
-export const getAssignToSubjects = async (student) => {
+export const getAssignToSubjects = async (instructor) => {
   try {
     const { data } = await axios.get(
-      `/api/assign-to-subjects/${student}`,
+      `/api/assign-to-subjects/${instructor}`,
       config()
     )
     return data

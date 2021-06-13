@@ -210,7 +210,7 @@ const InstructorDetailScreen = () => {
                   <thead>
                     <tr>
                       <th>ASSIGNED DATE</th>
-                      <th>COURSE</th>
+                      <th>SUBJECT</th>
                       <th>SEMESTER</th>
                       <th>SHIFT</th>
                       <th>ACTION</th>
@@ -283,6 +283,8 @@ const InstructorDetailScreen = () => {
                 {moment(data.dateOfBirth).format('lll')}
                 <br />
                 <span className='fw-bold'>Gender: </span> {data.gender}
+                <br />
+                <span className='fw-bold'>Email: </span> {data.email}
                 <br />
                 <span className='fw-bold'>Registered Date: </span>{' '}
                 {moment(data.createdAt).format('lll')} <br />
