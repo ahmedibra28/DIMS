@@ -21,7 +21,7 @@ const AssignToCourseModalScreen = ({
       aria-labelledby='assignToCourseModalLabel'
       aria-hidden='true'
     >
-      <div className='modal-dialog'>
+      <div className='modal-dialog modal-lg'>
         <div className='modal-content modal-background'>
           <div className='modal-header'>
             <h5 className='modal-title' id='assignToCourseModalLabel'>
