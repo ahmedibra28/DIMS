@@ -21,7 +21,6 @@ export const addMarks = asyncHandler(async (req, res) => {
   const instructorData = await AssignToSubjectModel.find({ subject, semester })
   const instructor = instructorData[0].instructor
 
-  console.log(instructorData)
   const exist = await MarksModel.findOne({
     course,
     subject,

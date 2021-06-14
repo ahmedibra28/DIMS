@@ -210,8 +210,6 @@ const StudentDetailScreen = () => {
           course,
           semester,
         })
-    console.log(data)
-    console.log(marks)
   }
 
   const editHandler = (assign) => {
@@ -369,7 +367,7 @@ const StudentDetailScreen = () => {
                           </td>
                           <td>{assign.course.name}</td>
                           <td>${assign.price}.00</td>
-                          <td>{assign.semester}</td>
+                          <td>Semester {assign.semester}</td>
                           <td>{assign.shift}</td>
                           <td
                             className={`${
@@ -442,9 +440,9 @@ const StudentDetailScreen = () => {
                       <thead>
                         <tr>
                           <th>EXAMINED DATE</th>
-                          <th>COURSE</th>
                           <th>SEMESTER</th>
-                          <th>STATUS</th>
+                          <th>SUBJECT</th>
+                          <th>MARKS</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -455,9 +453,13 @@ const StudentDetailScreen = () => {
                               <td>
                                 {moment(mark.createdAt).format('YYYY-MM-DD')}
                               </td>
-                              <td>{mark.course.name}</td>
-                              <td>{mark.semester}</td>
-                              <td>Passed</td>
+                              <td>Semester {mark.semester}</td>
+                              <td>{mark.subject.name}</td>
+                              <td>
+                                {Number(mark.theoryMarks) +
+                                  Number(mark.practicalMarks)}
+                                %
+                              </td>
                               <td className='btn-group'>
                                 <button
                                   className='btn btn-primary btn-sm'
@@ -556,7 +558,6 @@ const StudentDetailScreen = () => {
         isLoadingAddMark={isLoadingAddMark}
         marks={marks && marks}
         dataSubject={!isLoadingSubject && dataSubject}
-        dataMark={dataMark}
       />
       <AssignToCourseModalScreen
         submitHandler={submitHandler}
