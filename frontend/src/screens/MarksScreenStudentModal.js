@@ -40,6 +40,32 @@ const MarksScreenStudentModal = ({
             <form onSubmit={handleSubmit(submitHandler)}>
               <div className='modal-body'>
                 <div className='row'>
+                  <div className='col-md-2 col-12'>
+                    <div className='mb-3'>
+                      <label htmlFor='exam'>Exam</label>
+                      <select
+                        {...register('exam', {
+                          required: 'Exam is required',
+                        })}
+                        type='text'
+                        placeholder='Enter exam'
+                        className='form-control'
+                      >
+                        <option value=''>-----------</option>
+                        <option value='1'>1</option>
+                        <option value='2'>2</option>
+                        <option value='3'>3</option>
+                        <option value='4'>4</option>
+                        <option value='5'>5</option>
+                      </select>
+                      {errors.exam && (
+                        <span className='text-danger'>
+                          {errors.exam.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
                   <div className='col-md-4 col-12'>
                     <div className='mb-3'>
                       <label htmlFor='subject'>Subject</label>
@@ -73,7 +99,7 @@ const MarksScreenStudentModal = ({
                       )}
                     </div>
                   </div>
-                  <div className='col-md-4 col-6'>
+                  <div className='col-md-3 col-6'>
                     <div className='mb-3'>
                       <label htmlFor='theoryMarks'>Theory Marks</label>
                       <input
@@ -92,7 +118,7 @@ const MarksScreenStudentModal = ({
                       )}
                     </div>
                   </div>
-                  <div className='col-md-4 col-6'>
+                  <div className='col-md-3 col-6'>
                     <div className='mb-3'>
                       <label htmlFor='practicalMarks'>Practical Marks</label>
                       <input

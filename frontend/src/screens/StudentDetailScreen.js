@@ -16,24 +16,21 @@ import {
   FaBook,
   FaCheckCircle,
   FaEdit,
-  FaPlusCircle,
+  FaTable,
   FaTimesCircle,
   FaTrash,
 } from 'react-icons/fa'
 import AssignToCourseModalScreen from './AssignToCourseModalScreen'
-import MarksScreenStudentModal from './MarksScreenStudentModal'
 import { confirmAlert } from 'react-confirm-alert'
 import { Confirm } from '../components/Confirm'
 import { useForm } from 'react-hook-form'
 import { getCourses } from '../api/courses'
 import { getSubjects } from '../api/subjects'
-import { addMark, deleteMark, getMarks, updateMark } from '../api/marks'
 
 const StudentDetailScreen = () => {
   const { id: paramId } = useParams()
   const [id, setId] = useState(null)
   const [edit, setEdit] = useState(false)
-  const [marks, setMarks] = useState({})
 
   const {
     register,
@@ -44,28 +41,12 @@ const StudentDetailScreen = () => {
     formState: { errors },
   } = useForm()
 
-  const {
-    register: MarksRegister,
-    handleSubmit: MarksHandleSubmit,
-    watch: MarksWatch,
-    reset: MarksReset,
-    formState: { errors: MarksErrors },
-  } = useForm()
-
   const queryClient = useQueryClient()
 
   const { data, error, isLoading, isError } = useQuery(
     ['studentDetails', paramId],
     async () => await getStudentDetail(paramId),
     { retry: 0 }
-  )
-
-  const { data: dataSubject, isLoading: isLoadingSubject } = useQuery(
-    'subjects',
-    async () => await getSubjects(),
-    {
-      retry: 0,
-    }
   )
 
   const {
@@ -122,60 +103,8 @@ const StudentDetailScreen = () => {
     retry: 0,
   })
 
-  const {
-    data: dataMark,
-    isLoading: isLoadingGetMark,
-    isError: isErrorGetMark,
-    error: errorGetMark,
-  } = useQuery(['marks', paramId], async () => await getMarks(paramId), {
-    retry: 0,
-  })
-
-  const {
-    isLoading: isLoadingUpdateMark,
-    isError: isErrorUpdateMark,
-    error: errorUpdateMark,
-    isSuccess: isSuccessUpdateMark,
-    mutateAsync: updateMarkMutateAsync,
-  } = useMutation(['updateMark'], updateMark, {
-    retry: 0,
-    onSuccess: () => {
-      MarksReset()
-      queryClient.invalidateQueries(['marks'])
-    },
-  })
-
-  const {
-    isLoading: isLoadingDeleteMark,
-    isError: isErrorDeleteMark,
-    error: errorDeleteMark,
-    isSuccess: isSuccessDeleteMark,
-    mutateAsync: deleteMarkMutateAsync,
-  } = useMutation(['deleteMark'], deleteMark, {
-    retry: 0,
-    onSuccess: () => queryClient.invalidateQueries(['marks']),
-  })
-
-  const {
-    isLoading: isLoadingAddMark,
-    isError: isErrorAddMark,
-    error: errorAddMark,
-    isSuccess: isSuccessAddMark,
-    mutateAsync: addMarkMutateAsync,
-  } = useMutation(['addMark'], addMark, {
-    retry: 0,
-    onSuccess: () => {
-      MarksReset()
-      queryClient.invalidateQueries(['marks'])
-    },
-  })
-
   const deleteHandler = (id) => {
     confirmAlert(Confirm(() => deleteAssignToCourseMutateAsync(id)))
-  }
-
-  const deleteMarksHandler = (id) => {
-    confirmAlert(Confirm(() => deleteMarkMutateAsync(id)))
   }
 
   const submitHandler = (data) => {
@@ -190,26 +119,6 @@ const StudentDetailScreen = () => {
           student: paramId,
         })
       : addAssignToCourseMutateAsync({ paramId, data })
-  }
-
-  const submitMarksHandler = (data) => {
-    const semester = marks.semester
-    const course = marks.course._id
-    const student = marks.student._id
-    const { practicalMarks, theoryMarks, subject } = data
-
-    edit
-      ? updateMarkMutateAsync({
-          _id: id,
-        })
-      : addMarkMutateAsync({
-          practicalMarks,
-          theoryMarks,
-          subject,
-          student,
-          course,
-          semester,
-        })
   }
 
   const editHandler = (assign) => {
@@ -228,12 +137,6 @@ const StudentDetailScreen = () => {
 
   const formCleanHandler = () => {
     setEdit(false)
-    setMarks({})
-    reset()
-  }
-  const formCleanMarksHandler = () => {
-    setEdit(false)
-    setMarks({})
     reset()
   }
 
@@ -262,27 +165,6 @@ const StudentDetailScreen = () => {
       )}
       {isErrorDeleteAssignToCourse && (
         <Message variant='danger'>{errorDeleteAssignToCourse}</Message>
-      )}
-
-      {isSuccessUpdateMark && (
-        <Message variant='success'>
-          Marks has been updated successfully.
-        </Message>
-      )}
-      {isErrorUpdateMark && (
-        <Message variant='danger'>{errorUpdateMark}</Message>
-      )}
-      {isSuccessAddMark && (
-        <Message variant='success'>Marks has been done successfully.</Message>
-      )}
-      {isErrorAddMark && <Message variant='danger'>{errorAddMark}</Message>}
-      {isSuccessDeleteMark && (
-        <Message variant='success'>
-          Marks has been deleted successfully.
-        </Message>
-      )}
-      {isErrorDeleteMark && (
-        <Message variant='danger'>{errorDeleteMark}</Message>
       )}
 
       {isLoading || isLoadingGetAssignToCourse ? (
@@ -401,97 +283,18 @@ const StudentDetailScreen = () => {
                                 </span>
                               )}
                             </button>
-
-                            <button
+                            <Link
+                              to={`/student/mark-sheet/${paramId}/${assign.course._id}`}
                               className='btn btn-primary btn-sm'
-                              onClick={() => setMarks(assign)}
-                              data-bs-toggle='modal'
-                              data-bs-target='#marksModal'
                             >
-                              <FaPlusCircle className='mb-1' /> Add Marks
-                            </button>
+                              <FaTable className='mb-1' /> Mark Sheet
+                            </Link>
                           </td>
                         </tr>
                       ))}
                   </tbody>
                 </table>
               </div>
-
-              {isLoading || isLoadingGetMark ? (
-                <div className='text-center'>
-                  <Loader
-                    type='ThreeDots'
-                    color='#00BFFF'
-                    height={100}
-                    width={100}
-                    timeout={3000} //3 secs
-                  />
-                </div>
-              ) : isError || isErrorGetMark ? (
-                <Message variant='danger'>{error || errorGetMark}</Message>
-              ) : (
-                <>
-                  <h6 className='fw-bold text-center mt-5 text-primary'>
-                    Mark Sheets
-                  </h6>
-
-                  <div className='table-responsive'>
-                    <table className='table table-sm hover bordered striped caption-top '>
-                      <thead>
-                        <tr>
-                          <th>EXAMINED DATE</th>
-                          <th>SEMESTER</th>
-                          <th>SUBJECT</th>
-                          <th>MARKS</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {dataMark &&
-                          dataMark.map((mark) => (
-                            <tr key={mark._id}>
-                              <td>
-                                {moment(mark.createdAt).format('YYYY-MM-DD')}
-                              </td>
-                              <td>Semester {mark.semester}</td>
-                              <td>{mark.subject.name}</td>
-                              <td>
-                                {Number(mark.theoryMarks) +
-                                  Number(mark.practicalMarks)}
-                                %
-                              </td>
-                              <td className='btn-group'>
-                                <button
-                                  className='btn btn-primary btn-sm'
-                                  onClick={() => editHandler(mark)}
-                                  data-bs-toggle='modal'
-                                  data-bs-target='#marksModal'
-                                >
-                                  <FaEdit className='mb-1' /> Edit
-                                </button>
-
-                                <button
-                                  className='btn btn-danger btn-sm ms-1'
-                                  onClick={() => deleteMarksHandler(mark._id)}
-                                  disabled={isLoadingDeleteMark}
-                                >
-                                  {isLoadingDeleteMark ? (
-                                    <span className='spinner-border spinner-border-sm ' />
-                                  ) : (
-                                    <span>
-                                      {' '}
-                                      <FaTrash className='mb-1' /> Delete
-                                    </span>
-                                  )}
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </>
-              )}
             </div>
 
             <div className='col-md-3 col-12 border-start border-info'>
@@ -547,18 +350,7 @@ const StudentDetailScreen = () => {
           </div>
         </>
       )}
-      <MarksScreenStudentModal
-        submitHandler={submitMarksHandler}
-        register={MarksRegister}
-        handleSubmit={MarksHandleSubmit}
-        watch={MarksWatch}
-        errors={MarksErrors}
-        formCleanMarksHandler={formCleanMarksHandler}
-        isLoadingUpdateMark={isLoadingUpdateMark}
-        isLoadingAddMark={isLoadingAddMark}
-        marks={marks && marks}
-        dataSubject={!isLoadingSubject && dataSubject}
-      />
+
       <AssignToCourseModalScreen
         submitHandler={submitHandler}
         register={register}

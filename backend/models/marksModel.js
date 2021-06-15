@@ -35,6 +35,11 @@ const marksScheme = mongoose.Schema(
       ref: 'Instructor',
       required: true,
     },
+    exam: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
     theoryMarks: {
       type: Number,
       required: true,

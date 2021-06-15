@@ -1,6 +1,5 @@
 import asyncHandler from 'express-async-handler'
 import MarksModel from '../models/marksModel.js'
-import InstructorModel from '../models/instructorModel.js'
 import AssignToSubjectModel from '../models/assignToSubjectModel.js'
 import AssignToCourseModel from '../models/assignToCourseModel.js'
 
@@ -12,7 +11,7 @@ export const addMarks = asyncHandler(async (req, res) => {
     course,
     subject,
     student,
-
+    exam,
     theoryMarks,
     practicalMarks,
   } = req.body
@@ -24,6 +23,7 @@ export const addMarks = asyncHandler(async (req, res) => {
   const exist = await MarksModel.findOne({
     course,
     subject,
+    exam,
     semester,
     student,
   })
@@ -36,6 +36,7 @@ export const addMarks = asyncHandler(async (req, res) => {
     isActive,
     course,
     subject,
+    exam,
     semester,
     student,
     instructor,
@@ -56,6 +57,7 @@ export const updateMarks = asyncHandler(async (req, res) => {
     isActive,
     course,
     subject,
+    exam,
     semester,
     student,
     instructor,
@@ -73,6 +75,7 @@ export const updateMarks = asyncHandler(async (req, res) => {
       _id: { $ne: _id },
       course,
       subject,
+      exam,
       semester,
       student,
     })
@@ -81,6 +84,7 @@ export const updateMarks = asyncHandler(async (req, res) => {
       obj.course = course
       obj.subject = subject
       obj.semester = semester
+      obj.exam = exam
       obj.student = student
       obj.instructor = instructor
       obj.theoryMarks = theoryMarks
