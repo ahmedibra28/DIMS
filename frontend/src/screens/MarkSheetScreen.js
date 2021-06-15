@@ -134,6 +134,93 @@ const MarkSheetScreen = () => {
     reset()
   }
 
+  const markSheetExamOne =
+    dataMark && dataMark.filter((mark) => Number(mark.exam) === 1)
+  const markSheetExamTwo =
+    dataMark && dataMark.filter((mark) => Number(mark.exam) === 2)
+  const markSheetExamThree =
+    dataMark && dataMark.filter((mark) => Number(mark.exam) === 3)
+  const markSheetExamFive =
+    dataMark && dataMark.filter((mark) => Number(mark.exam) === 5)
+  const markSheetExamFour =
+    dataMark && dataMark.filter((mark) => Number(mark.exam) === 4)
+
+  const markSheetExamHeader = (markSheet) => {
+    return (
+      markSheet &&
+      markSheet[0] && (
+        <div key={markSheet[0]._id} className='mb-5 text-primary   bg-light'>
+          <div className='p-2'>
+            <div className=''>
+              <h4 className='fw-bold'>
+                EXAM:{' '}
+                <span className='text-decoration-underline'>
+                  {markSheet[0].exam}{' '}
+                </span>
+              </h4>
+              <div className='d-flex mx-auto text-primary fw-bold text-center bg-light p-2'>
+                <span className='col'>
+                  SEMESTER:{' '}
+                  <span className='text-decoration-underline'>
+                    {markSheet[0].semester}
+                  </span>
+                </span>
+                <span className='col'>
+                  EXAM DATE:{' '}
+                  <span className='text-decoration-underline'>
+                    {moment(markSheet[0].createdAt).format('lll')}
+                  </span>
+                </span>
+              </div>
+            </div>
+            <h6 className='text-primary fw-bold text-center bg-light p-2'>
+              STUDENT FULL NAME:{' '}
+              <span className='text-decoration-underline'>
+                {markSheet[0].student.fullName.toUpperCase()}
+              </span>
+            </h6>
+          </div>
+          <hr />
+          <div className='table-responsive bg-light'>
+            <table className='table table-sm hover bordered striped caption-top '>
+              <thead>
+                <tr>
+                  <th>SUBJECT</th>
+                  <th>THEORY MARKS</th>
+                  <th>PRACTICAL MARKS</th>
+                  <th>OBTAINED THEORY MARKS</th>
+                  <th>OBTAINED PRACTICAL MARKS</th>
+                  <th>GRADE</th>
+                  <th>REMARKS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {markSheet &&
+                  markSheet.map((mark) => (
+                    <tr key={mark._id}>
+                      <td>{mark.subject.name}</td>
+                      <td>{mark.subject.theoryMarks}</td>
+                      <td>{mark.subject.practicalMarks}</td>
+                      <td>{mark.theoryMarks}</td>
+                      <td>{mark.practicalMarks}</td>
+                      <td>A+</td>
+                      <td>Very Good</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          <div className='footer'>
+            <h6 className='text-primary fw-bold text-decoration text-center bg-light p-2'>
+              Percentage:{' '}
+              <span className='text-decoration-underline'> 80%</span>
+            </h6>
+          </div>
+        </div>
+      )
+    )
+  }
+
   return (
     <div>
       {isSuccessUpdateMark && (
@@ -183,77 +270,12 @@ const MarkSheetScreen = () => {
       ) : (
         <>
           <div className='mt-2'>
-            {dataMark &&
-              dataMark.map((mark) => (
-                <>
-                  <div className='text-primary  text-center bg-light p-2'>
-                    <h4 className='fw-bold'>
-                      EXAM:{' '}
-                      <span className='text-decoration-underline'>
-                        {mark.exam}{' '}
-                      </span>
-                    </h4>
-                    <div className='d-flex mx-auto text-primary fw-bold text-center bg-light p-2'>
-                      <span className='col'>
-                        SEMESTER:{' '}
-                        <span className='text-decoration-underline'>
-                          {mark.semester}
-                        </span>
-                      </span>
-                      <span className='col'>
-                        EXAM DATE:{' '}
-                        <span className='text-decoration-underline'>
-                          {moment(mark.createdAt).format('lll')}
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                  <h6 className='text-primary fw-bold text-center bg-light p-2'>
-                    STUDENT FULL NAME:{' '}
-                    <span className='text-decoration-underline'>
-                      {mark.student.fullName.toUpperCase()}
-                    </span>
-                  </h6>
-                </>
-              ))}
-
-            <div className='table-responsive bg-light'>
-              <table className='table table-sm hover bordered striped caption-top '>
-                <thead>
-                  <tr>
-                    <th>SUBJECT</th>
-                    <th>THEORY MARKS</th>
-                    <th>PRACTICAL MARKS</th>
-                    <th>OBTAINED THEORY MARKS</th>
-                    <th>OBTAINED PRACTICAL MARKS</th>
-                    <th>GRADE</th>
-                    <th>REMARKS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataMark &&
-                    dataMark.map((mark) => (
-                      <tr key={mark._id}>
-                        <td>{mark.subject.name}</td>
-                        <td>{mark.subject.theoryMarks}</td>
-                        <td>{mark.subject.practicalMarks}</td>
-                        <td>{mark.theoryMarks}</td>
-                        <td>{mark.practicalMarks}</td>
-                        <td>A+</td>
-                        <td>Very Good</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-            <div className='footer mb-5'>
-              <h6 className='text-primary fw-bold text-decoration text-center bg-light p-2'>
-                Percentage:{' '}
-                <span className='text-decoration-underline'> 80%</span>
-              </h6>
-            </div>
+            {markSheetExamHeader(markSheetExamOne)}
+            {markSheetExamHeader(markSheetExamTwo)}
+            {markSheetExamHeader(markSheetExamThree)}
+            {markSheetExamHeader(markSheetExamFour)}
+            {markSheetExamHeader(markSheetExamFive)}
           </div>
-          ))}
         </>
       )}
 
