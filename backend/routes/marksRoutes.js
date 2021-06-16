@@ -14,6 +14,7 @@ router
   .route('/:id')
   .delete(protect, admin, deleteMarks)
   .put(protect, admin, updateMarks)
-  .get(protect, getMarks)
+
+router.route('/:id/:semesterNo/:shift').get(protect, getMarks)
 
 export default router

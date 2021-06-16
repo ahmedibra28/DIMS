@@ -11,13 +11,18 @@ export const addMarks = asyncHandler(async (req, res) => {
     course,
     subject,
     student,
+    shift,
     exam,
     theoryMarks,
     practicalMarks,
   } = req.body
   const createdBy = req.user.id
   const semester = Number(req.body.semester)
-  const instructorData = await AssignToSubjectModel.find({ subject, semester })
+  const instructorData = await AssignToSubjectModel.find({
+    subject,
+    semester,
+    shift,
+  })
   const instructor = instructorData[0].instructor
 
   const exist = await MarksModel.findOne({
@@ -26,6 +31,7 @@ export const addMarks = asyncHandler(async (req, res) => {
     exam,
     semester,
     student,
+    shift,
   })
 
   if (exist) {
@@ -37,6 +43,7 @@ export const addMarks = asyncHandler(async (req, res) => {
     course,
     subject,
     exam,
+    shift,
     semester,
     student,
     instructor,
@@ -58,6 +65,7 @@ export const updateMarks = asyncHandler(async (req, res) => {
     course,
     subject,
     exam,
+    shift,
     semester,
     student,
     instructor,
@@ -78,6 +86,7 @@ export const updateMarks = asyncHandler(async (req, res) => {
       exam,
       semester,
       student,
+      shift,
     })
     if (exist.length === 0) {
       obj.isActive = isActive
@@ -85,6 +94,7 @@ export const updateMarks = asyncHandler(async (req, res) => {
       obj.subject = subject
       obj.semester = semester
       obj.exam = exam
+      obj.shift = shift
       obj.student = student
       obj.instructor = instructor
       obj.theoryMarks = theoryMarks
@@ -104,7 +114,13 @@ export const updateMarks = asyncHandler(async (req, res) => {
 })
 
 export const getMarks = asyncHandler(async (req, res) => {
-  const obj = await MarksModel.find({ student: req.params.id })
+  const semesterNo = Number(req.params.semesterNo)
+  const shift = req.params.shift
+  const obj = await MarksModel.find({
+    student: req.params.id,
+    semester: semesterNo,
+    shift,
+  })
     .sort({ createdAt: -1 })
     .populate('subject')
     .populate('course')

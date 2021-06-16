@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import AssignToCourseModel from '../models/assignToCourseModel.js'
 import CourseModel from '../models/courseModel.js'
+import MarksModel from '../models/marksModel.js'
 
 export const addAssignToCourse = asyncHandler(async (req, res) => {
   const { isActive, course, semester, shift, dateOfAdmission, status } =
@@ -99,10 +100,17 @@ export const getAssignToCourse = asyncHandler(async (req, res) => {
 export const deleteAssignToCourse = asyncHandler(async (req, res) => {
   const _id = req.params.id
   const obj = await AssignToCourseModel.findById(_id)
+
   if (!obj) {
     res.status(400)
     throw new Error('student course not found')
   } else {
+    await MarksModel.find({
+      course: obj.course,
+      semester: obj.semester,
+      shift: obj.shift,
+      student: obj.student,
+    }).deleteMany()
     await obj.remove()
     res.status(201).json({ status: 'success' })
   }

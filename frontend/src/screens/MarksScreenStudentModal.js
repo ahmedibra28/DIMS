@@ -9,10 +9,11 @@ const MarksScreenStudentModal = ({
   formCleanMarksHandler,
   isLoadingUpdateMark,
   isLoadingAddMark,
-  marks,
+  assignedCourseId,
   dataSubject,
+  semesterNo,
 }) => {
-  return marks ? (
+  return assignedCourseId ? (
     <div>
       <div
         className='modal fade'
@@ -79,13 +80,11 @@ const MarksScreenStudentModal = ({
                       >
                         <option value=''>-----------</option>
                         {dataSubject &&
-                          marks &&
-                          marks.course &&
                           dataSubject.map(
                             (subject) =>
                               subject.isActive &&
-                              marks.course._id === subject.course._id &&
-                              marks.semester === subject.semester && (
+                              assignedCourseId === subject.course._id &&
+                              Number(semesterNo) === subject.semester && (
                                 <option key={subject._id} value={subject._id}>
                                   {subject.name}
                                 </option>
@@ -126,8 +125,8 @@ const MarksScreenStudentModal = ({
                           required: 'Practical Marks is required',
 
                           validate: (value) =>
-                            Number(value) + Number(watch().theoryMarks) < 100 ||
-                            'Total marks should be equal to 100',
+                            Number(value) + Number(watch().theoryMarks) <=
+                              100 || 'Total marks should be equal to 100',
                         })}
                         type='number'
                         placeholder='Enter practicalMarks'

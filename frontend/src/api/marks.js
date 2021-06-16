@@ -12,9 +12,12 @@ const config = () => {
   }
 }
 
-export const getMarks = async (student) => {
+export const getMarks = async (obj) => {
   try {
-    const { data } = await axios.get(`/api/marks/${student}`, config())
+    const { data } = await axios.get(
+      `/api/marks/${obj.studentId}/${obj.semesterNo}/${obj.shift}`,
+      config()
+    )
     return data
   } catch (error) {
     throw error.response.data.message

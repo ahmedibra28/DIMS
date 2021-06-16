@@ -20,6 +20,10 @@ const marksScheme = mongoose.Schema(
       type: Number,
       required: true,
     },
+    shift: {
+      type: String,
+      required: true,
+    },
     subject: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Subject',

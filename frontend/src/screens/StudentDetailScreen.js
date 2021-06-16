@@ -25,7 +25,6 @@ import { confirmAlert } from 'react-confirm-alert'
 import { Confirm } from '../components/Confirm'
 import { useForm } from 'react-hook-form'
 import { getCourses } from '../api/courses'
-import { getSubjects } from '../api/subjects'
 
 const StudentDetailScreen = () => {
   const { id: paramId } = useParams()
@@ -284,7 +283,7 @@ const StudentDetailScreen = () => {
                               )}
                             </button>
                             <Link
-                              to={`/student/mark-sheet/${paramId}/${assign.course._id}`}
+                              to={`/student/mark-sheet/${paramId}/${assign.course._id}/${assign.semester}/${assign.shift}`}
                               className='btn btn-primary btn-sm'
                             >
                               <FaTable className='mb-1' /> Mark Sheet
