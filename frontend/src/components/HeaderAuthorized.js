@@ -5,6 +5,7 @@ import {
   FaCog,
   FaFileContract,
   FaLeanpub,
+  FaTable,
   FaUser,
   FaUserCircle,
   FaUserGraduate,
@@ -55,8 +56,8 @@ const HeaderAuthorized = () => {
                 </Link>
               </li>
               <li className='nav-item'>
-                <Link to='/marks' className='nav-link'>
-                  <FaChalkboardTeacher className='mb-1' /> Enter Marks
+                <Link to='/mark-sheet' className='nav-link'>
+                  <FaTable className='mb-1' /> Mark Sheet Report
                 </Link>
               </li>
             </div>

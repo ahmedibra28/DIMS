@@ -4,6 +4,7 @@ import {
   addAssignToCourse,
   updateAssignToCourse,
   deleteAssignToCourse,
+  upgradeSemester,
 } from '../controllers/assignToCourseController.js'
 import { admin, protect } from '../middleware/authMiddleware.js'
 
@@ -15,5 +16,7 @@ router
   .delete(protect, admin, deleteAssignToCourse)
   .put(protect, admin, updateAssignToCourse)
   .get(protect, getAssignToCourse)
+
+router.route('/upgrade-semester/:id').put(protect, admin, upgradeSemester)
 
 export default router

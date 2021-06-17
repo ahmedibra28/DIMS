@@ -4,14 +4,12 @@ import CourseModel from '../models/courseModel.js'
 import MarksModel from '../models/marksModel.js'
 
 export const addAssignToCourse = asyncHandler(async (req, res) => {
-  const { isActive, course, semester, shift, dateOfAdmission, status } =
-    req.body.data
+  const { course, semester, shift, dateOfAdmission } = req.body.data
   const student = req.body.paramId
   const createdBy = req.user.id
 
   const exist = await AssignToCourseModel.findOne({
     student,
-    semester,
     course: { $eq: course },
   })
 
@@ -22,13 +20,12 @@ export const addAssignToCourse = asyncHandler(async (req, res) => {
     throw new Error('Student has already taken the course')
   }
   const createObj = await AssignToCourseModel.create({
-    isActive,
     course,
     student,
     semester,
     shift,
     dateOfAdmission,
-    status,
+    isActive: true,
     createdBy,
     price: coursePrice.price,
   })
@@ -41,15 +38,7 @@ export const addAssignToCourse = asyncHandler(async (req, res) => {
 })
 
 export const updateAssignToCourse = asyncHandler(async (req, res) => {
-  const {
-    isActive,
-    course,
-    student,
-    semester,
-    shift,
-    dateOfAdmission,
-    status,
-  } = req.body
+  const { course, student, semester, shift, dateOfAdmission } = req.body
 
   const updatedBy = req.user.id
   const _id = req.params.id
@@ -61,18 +50,17 @@ export const updateAssignToCourse = asyncHandler(async (req, res) => {
     const exist = await AssignToCourseModel.find({
       _id: { $ne: _id },
       student,
-      semester,
       course: { $eq: course },
     })
     if (exist.length === 0) {
       obj.updatedBy = updatedBy
-      obj.isActive = isActive
+      obj.isActive = true
       obj.course = course
       obj.student = student
       obj.semester = semester
       obj.shift = shift
       obj.dateOfAdmission = dateOfAdmission
-      obj.status = status
+      obj.isActive = true
       obj.price = coursePrice.price
 
       await obj.save()
@@ -113,5 +101,47 @@ export const deleteAssignToCourse = asyncHandler(async (req, res) => {
     }).deleteMany()
     await obj.remove()
     res.status(201).json({ status: 'success' })
+  }
+})
+
+export const upgradeSemester = asyncHandler(async (req, res) => {
+  const _id = req.params.id
+
+  const obj = await AssignToCourseModel.findOne({
+    _id,
+    isActive: true,
+    isGraduated: false,
+  })
+
+  if (obj) {
+    const { course, student, semester, shift, price } = obj
+
+    const courseObj = await CourseModel.findById(course)
+
+    if (Number(courseObj.duration) === Number(obj.semester)) {
+      obj.isGraduated = true
+      obj.isActive = false
+      await obj.save()
+      res.status(201).json({ status: 'success' })
+    } else {
+      const createNewObj = await AssignToCourseModel.create({
+        course,
+        student,
+        semester: Number(semester) + 1,
+        shift,
+        dateOfAdmission: Date.now(),
+        isActive: true,
+        createdBy: req.user.id,
+        price,
+      })
+      if (createNewObj) {
+        obj.isActive = false
+        await obj.save()
+        res.status(201).json({ status: 'success' })
+      }
+    }
+  } else {
+    res.status(400)
+    throw new Error('Already passed this course')
   }
 })

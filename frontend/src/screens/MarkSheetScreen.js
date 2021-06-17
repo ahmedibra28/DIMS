@@ -14,7 +14,8 @@ import { getSubjects } from '../api/subjects'
 import MarksScreenStudentModal from './MarksScreenStudentModal'
 
 const MarkSheetScreen = () => {
-  const { studentId, assignedCourseId, semesterNo, shift } = useParams()
+  const { studentId, assignedCourseId, semesterNo, shift, semesterStatus } =
+    useParams()
 
   const [edit, setEdit] = useState(false)
   const [id, setId] = useState(null)
@@ -221,7 +222,7 @@ const MarkSheetScreen = () => {
                   <th>PRACTICAL MARKS</th>
                   <th>OBTAINED THEORY MARKS</th>
                   <th>OBTAINED PRACTICAL MARKS</th>
-                  <th>ACTION</th>
+                  {semesterStatus === 'true' && <th>ACTION</th>}
                 </tr>
               </thead>
               <tbody>
@@ -233,30 +234,32 @@ const MarkSheetScreen = () => {
                       <td>{mark.subject.practicalMarks}</td>
                       <td>{mark.theoryMarks}</td>
                       <td>{mark.practicalMarks}</td>
-                      <td className='btn-group'>
-                        <button
-                          className='btn btn-primary btn-sm'
-                          onClick={() => editHandler(mark)}
-                          data-bs-toggle='modal'
-                          data-bs-target='#marksModal'
-                        >
-                          <FaEdit className='mb-1' /> Edit
-                        </button>
+                      {semesterStatus === 'true' && (
+                        <td className='btn-group'>
+                          <button
+                            className='btn btn-primary btn-sm'
+                            onClick={() => editHandler(mark)}
+                            data-bs-toggle='modal'
+                            data-bs-target='#marksModal'
+                          >
+                            <FaEdit className='mb-1' /> Edit
+                          </button>
 
-                        <button
-                          className='btn btn-danger btn-sm mx-1'
-                          onClick={() => deleteHandler(mark._id)}
-                          disabled={isLoadingDeleteMark}
-                        >
-                          {isLoadingDeleteMark ? (
-                            <span className='spinner-border spinner-border-sm ' />
-                          ) : (
-                            <span>
-                              <FaTrash className='mb-1' /> Delete
-                            </span>
-                          )}
-                        </button>
-                      </td>
+                          <button
+                            className='btn btn-danger btn-sm mx-1'
+                            onClick={() => deleteHandler(mark._id)}
+                            disabled={isLoadingDeleteMark}
+                          >
+                            {isLoadingDeleteMark ? (
+                              <span className='spinner-border spinner-border-sm ' />
+                            ) : (
+                              <span>
+                                <FaTrash className='mb-1' /> Delete
+                              </span>
+                            )}
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))}
               </tbody>
@@ -307,13 +310,15 @@ const MarkSheetScreen = () => {
 
       <div className='d-flex justify-content-between align-items-center'>
         <h3 className=''>Student Mark Sheet</h3>
-        <button
-          className='btn btn-primary '
-          data-bs-toggle='modal'
-          data-bs-target='#marksModal'
-        >
-          <FaPlus className='mb-1' />
-        </button>
+        {semesterStatus === 'true' && (
+          <button
+            className='btn btn-primary '
+            data-bs-toggle='modal'
+            data-bs-target='#marksModal'
+          >
+            <FaPlus className='mb-1' />
+          </button>
+        )}
       </div>
 
       {isLoadingGetMark ? (

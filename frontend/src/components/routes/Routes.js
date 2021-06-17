@@ -99,7 +99,7 @@ const Routes = () => {
         <PrivateRoute
           exact
           role={['Admin', 'User']}
-          path='/student/mark-sheet/:studentId/:assignedCourseId/:semesterNo/:shift'
+          path='/student/mark-sheet/:studentId/:assignedCourseId/:semesterNo/:shift/:semesterStatus'
           component={MarkSheetScreen}
         />
 

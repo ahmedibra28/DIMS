@@ -7,6 +7,7 @@ import {
   deleteAssignToCourse,
   getAssignToCourses,
   updateAssignToCourse,
+  upgradeSemester,
 } from '../api/assignToCourse'
 import Loader from 'react-loader-spinner'
 import Message from '../components/Message'
@@ -16,6 +17,7 @@ import {
   FaBook,
   FaCheckCircle,
   FaEdit,
+  FaLevelUpAlt,
   FaTable,
   FaTimesCircle,
   FaTrash,
@@ -74,6 +76,22 @@ const StudentDetailScreen = () => {
   })
 
   const {
+    isLoading: isLoadingUpgradeSemester,
+    isError: isErrorUpgradeSemester,
+    error: errorUpgradeSemester,
+    isSuccess: isSuccessUpgradeSemester,
+    mutateAsync: upgradeSemesterMutateAsync,
+  } = useMutation(['upgradeSemester'], upgradeSemester, {
+    retry: 0,
+    onSuccess: () => {
+      reset()
+      queryClient.invalidateQueries(['assign-to-course'])
+    },
+  })
+
+  const upgradeSemesterHandler = (id) => upgradeSemesterMutateAsync(id)
+
+  const {
     isLoading: isLoadingDeleteAssignToCourse,
     isError: isErrorDeleteAssignToCourse,
     error: errorDeleteAssignToCourse,
@@ -113,7 +131,6 @@ const StudentDetailScreen = () => {
           shift: data.shift,
           semester: data.semester,
           dateOfAdmission: data.dateOfAdmission,
-          status: data.status,
           course: data.course,
           student: paramId,
         })
@@ -127,7 +144,6 @@ const StudentDetailScreen = () => {
     setValue('semester', assign.semester)
     setValue('shift', assign.shift)
     setValue('dateOfAdmission', assign.dateOfAdmission)
-    setValue('status', assign.status)
     setValue(
       'dateOfAdmission',
       moment(assign.dateOfAdmission).format('YYYY-MM-DD')
@@ -141,6 +157,14 @@ const StudentDetailScreen = () => {
 
   return (
     <div>
+      {isSuccessUpgradeSemester && (
+        <Message variant='success'>
+          Student has been upgraded successfully.
+        </Message>
+      )}
+      {isErrorUpgradeSemester && (
+        <Message variant='danger'>{errorUpgradeSemester}</Message>
+      )}
       {isSuccessUpdateAssignToCourse && (
         <Message variant='success'>
           Assigning course has been updated successfully.
@@ -230,7 +254,6 @@ const StudentDetailScreen = () => {
                     <tr>
                       <th>ADMISSION DATE</th>
                       <th>COURSE</th>
-                      <th>FEE</th>
                       <th>SEMESTER</th>
                       <th>SHIFT</th>
                       <th>STATUS</th>
@@ -247,47 +270,69 @@ const StudentDetailScreen = () => {
                             )}
                           </td>
                           <td>{assign.course.name}</td>
-                          <td>${assign.price}.00</td>
                           <td>Semester {assign.semester}</td>
                           <td>{assign.shift}</td>
                           <td
                             className={`${
-                              assign.status === 'Graduated' &&
-                              'text-success fw-bold'
+                              assign.isActive && 'text-success fw-bold'
                             }`}
                           >
-                            {assign.status}
+                            {assign.isActive || assign.isGraduated ? (
+                              <FaCheckCircle className='mb-1 text-success' />
+                            ) : (
+                              <FaCheckCircle className='mb-1 text-secondary' />
+                            )}
                           </td>
                           <td className='btn-group'>
-                            <button
-                              className='btn btn-primary btn-sm'
-                              onClick={() => editHandler(assign)}
-                              data-bs-toggle='modal'
-                              data-bs-target='#assignToCourseModal'
-                            >
-                              <FaEdit className='mb-1' /> Edit
-                            </button>
-
-                            <button
-                              className='btn btn-danger btn-sm mx-1'
-                              onClick={() => deleteHandler(assign._id)}
-                              disabled={isLoadingDeleteAssignToCourse}
-                            >
-                              {isLoadingDeleteAssignToCourse ? (
-                                <span className='spinner-border spinner-border-sm ' />
-                              ) : (
-                                <span>
-                                  {' '}
-                                  <FaTrash className='mb-1' /> Delete
-                                </span>
-                              )}
-                            </button>
                             <Link
-                              to={`/student/mark-sheet/${paramId}/${assign.course._id}/${assign.semester}/${assign.shift}`}
-                              className='btn btn-primary btn-sm'
+                              to={`/student/mark-sheet/${paramId}/${assign.course._id}/${assign.semester}/${assign.shift}/${assign.isActive}`}
+                              className='btn btn-primary btn-sm me-1'
                             >
                               <FaTable className='mb-1' /> Mark Sheet
                             </Link>
+                            {assign.isActive && !assign.isGraduated && (
+                              <>
+                                <button
+                                  className='btn btn-primary btn-sm'
+                                  onClick={() => editHandler(assign)}
+                                  data-bs-toggle='modal'
+                                  data-bs-target='#assignToCourseModal'
+                                >
+                                  <FaEdit className='mb-1' /> Edit
+                                </button>
+
+                                <button
+                                  className='btn btn-danger btn-sm ms-1'
+                                  onClick={() => deleteHandler(assign._id)}
+                                  disabled={isLoadingDeleteAssignToCourse}
+                                >
+                                  {isLoadingDeleteAssignToCourse ? (
+                                    <span className='spinner-border spinner-border-sm ' />
+                                  ) : (
+                                    <span>
+                                      {' '}
+                                      <FaTrash className='mb-1' /> Delete
+                                    </span>
+                                  )}
+                                </button>
+                                <button
+                                  className='btn btn-success btn-sm ms-1'
+                                  onClick={() =>
+                                    upgradeSemesterHandler(assign._id)
+                                  }
+                                  disabled={isLoadingUpgradeSemester}
+                                >
+                                  {isLoadingUpgradeSemester ? (
+                                    <span className='spinner-border spinner-border-sm ' />
+                                  ) : (
+                                    <span>
+                                      {' '}
+                                      <FaLevelUpAlt className='mb-1' /> Upgrade
+                                    </span>
+                                  )}
+                                </button>
+                              </>
+                            )}
                           </td>
                         </tr>
                       ))}

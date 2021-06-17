@@ -171,29 +171,6 @@ const AssignToSubjectModalScreen = ({
                     )}
                   </div>
                 </div>
-
-                {/* <div className='col-md-4 col-12'>
-                  <div className='mb-3'>
-                    <label htmlFor='status'>Status</label>
-                    <select
-                      {...register('status', {
-                        required: 'Status is required',
-                      })}
-                      type='text'
-                      placeholder='Enter date of admission'
-                      className='form-control'
-                    >
-                      <option value=''>-----------</option>
-                      <option value='In-progress'>In-progress</option>
-                      <option value='Graduated'>Graduated</option>
-                    </select>
-                    {errors.status && (
-                      <span className='text-danger'>
-                        {errors.status.message}
-                      </span>
-                    )}
-                  </div>
-                </div> */}
               </div>
             </div>
             <div className='modal-footer'>

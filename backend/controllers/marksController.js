@@ -147,31 +147,3 @@ export const deleteMarks = asyncHandler(async (req, res) => {
     res.status(201).json({ status: 'success' })
   }
 })
-
-export const getMatchedStudents = asyncHandler(async (req, res) => {
-  const { course, subject } = req.body
-  const semester = Number(req.body.semester)
-
-  // subject, course
-  const subjectObj = await SubjectModel.find({
-    _id: subject,
-    semester,
-    course,
-  }).sort({ createdAt: -1 })
-
-  const assignCourseObj = await AssignToCourseModel.find({
-    course,
-    semester,
-    status: 'In-progress',
-  })
-    .sort({ createdAt: -1 })
-    .populate('student')
-    .populate('course')
-    .populate('createdBy', 'name')
-    .populate('updatedBy', 'name')
-
-  res.status(201).json({
-    subjectModel: subjectObj,
-    assignCourseModel: assignCourseObj,
-  })
-})

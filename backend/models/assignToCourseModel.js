@@ -37,9 +37,13 @@ const assignToCourseScheme = mongoose.Schema(
       type: Date,
       required: true,
     },
-    status: {
-      type: String,
-      required: true,
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    isGraduated: {
+      type: Boolean,
+      default: false,
     },
   },
   {

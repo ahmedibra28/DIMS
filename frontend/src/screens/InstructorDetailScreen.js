@@ -119,7 +119,6 @@ const InstructorDetailScreen = () => {
           shift: data.shift,
           semester: data.semester,
           dateOfAdmission: data.dateOfAdmission,
-          status: data.status,
           subject: data.subject,
           instructor: paramId,
         })

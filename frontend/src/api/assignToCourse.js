@@ -57,3 +57,16 @@ export const deleteAssignToCourse = async (id) => {
     throw error.response.data.message
   }
 }
+
+export const upgradeSemester = async (id) => {
+  try {
+    const { data } = await axios.put(
+      `/api/assign-to-courses/upgrade-semester/${id}`,
+      {},
+      config()
+    )
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}

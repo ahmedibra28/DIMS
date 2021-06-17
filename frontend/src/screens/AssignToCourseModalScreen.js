@@ -99,7 +99,7 @@ const AssignToCourseModalScreen = ({
                   </div>
                 </div>
 
-                <div className='col-md-4 col-12'>
+                <div className='col-md-6 col-12'>
                   <div className='mb-3'>
                     <label htmlFor='dateOfAdmission'>Date of admission</label>
                     <input
@@ -117,7 +117,7 @@ const AssignToCourseModalScreen = ({
                     )}
                   </div>
                 </div>
-                <div className='col-md-4 col-12'>
+                <div className='col-md-6 col-12'>
                   <div className='mb-3'>
                     <label htmlFor='shift'>Shift</label>
                     <select
@@ -135,29 +135,6 @@ const AssignToCourseModalScreen = ({
                     {errors.shift && (
                       <span className='text-danger'>
                         {errors.shift.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className='col-md-4 col-12'>
-                  <div className='mb-3'>
-                    <label htmlFor='status'>Status</label>
-                    <select
-                      {...register('status', {
-                        required: 'Status is required',
-                      })}
-                      type='text'
-                      placeholder='Enter date of admission'
-                      className='form-control'
-                    >
-                      <option value=''>-----------</option>
-                      <option value='In-progress'>In-progress</option>
-                      <option value='Graduated'>Graduated</option>
-                    </select>
-                    {errors.status && (
-                      <span className='text-danger'>
-                        {errors.status.message}
                       </span>
                     )}
                   </div>
