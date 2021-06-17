@@ -9,6 +9,7 @@ import {
   FaPlus,
   FaTimesCircle,
   FaTrash,
+  FaPhoneAlt,
 } from 'react-icons/fa'
 import moment from 'moment'
 
@@ -637,6 +638,7 @@ const StudentScreen = () => {
 
       <div className='d-flex justify-content-between align-items-center'>
         <h3 className=''>Students</h3>
+        <caption>{data && data.total} records were found</caption>
         <button
           className='btn btn-primary '
           data-bs-toggle='modal'
@@ -668,72 +670,74 @@ const StudentScreen = () => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-          <div className='table-responsive '>
-            <table className='table table-sm hover bordered striped caption-top '>
-              <caption>{data && data.total} records were found</caption>
-              <thead>
-                <tr>
-                  <th>FULL NAME</th>
-                  <th>MOBILE NUMBER</th>
-                  <th>CONTACT FULL NAME</th>
-                  <th>CONTACT MOBILE</th>
-                  <th>STATUS</th>
-                  <th>ACTIVE</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {data &&
-                  data.data.map((student) => (
-                    <tr key={student._id}>
-                      <td>{student.fullName}</td>
-                      <td>{student.mobileNumber}</td>
-                      <td>{student.contactFullName}</td>
-                      <td>{student.contactMobileNumber}</td>
+          <div className='row g-3'>
+            {data &&
+              data.data.map((student) => (
+                <div className='col-md-3 col-sm-6 col-12'>
+                  <div className='card bg-transparent border-0 shadow-lg'>
+                    <Link to={`/student/${student._id}`} className='mx-auto'>
+                      <img
+                        src={student.picture.picturePath}
+                        alt={student.picture.pictureName}
+                        className='card-img-top img-fluid'
+                        style={{ width: 'auto', height: '260px' }}
+                      />
+                    </Link>
+                    <div className='card-body'>
+                      <Link to={`/student/${student._id}`}>
+                        <h6 className='card-title'>{student.fullName}</h6>
+                      </Link>
+                      <div className='card-text'>
+                        <address className='d-flex justify-content-between'>
+                          <span>
+                            <FaPhoneAlt className='mb-1 text-primary' />{' '}
+                            {student.mobileNumber}
+                          </span>
+                          <span>
+                            {student.isActive ? (
+                              <FaCheckCircle className='text-success mb-1' />
+                            ) : (
+                              <FaTimesCircle className='text-danger mb-1' />
+                            )}
+                          </span>
+                        </address>
+                        <p className='btn-group d-flex'>
+                          <button
+                            className='btn btn-primary btn-sm'
+                            onClick={() => editHandler(student)}
+                            data-bs-toggle='modal'
+                            data-bs-target='#editStudentModal'
+                          >
+                            <FaEdit className='mb-1' /> Edit
+                          </button>
 
-                      <td>
-                        {student.isActive ? (
-                          <FaCheckCircle className='text-success mb-1' />
-                        ) : (
-                          <FaTimesCircle className='text-danger mb-1' />
-                        )}
-                      </td>
-                      <td className='btn-group'>
-                        <button
-                          className='btn btn-primary btn-sm'
-                          onClick={() => editHandler(student)}
-                          data-bs-toggle='modal'
-                          data-bs-target='#editStudentModal'
-                        >
-                          <FaEdit className='mb-1' /> Edit
-                        </button>
+                          <Link
+                            to={`/student/${student._id}`}
+                            className='btn btn-success btn-sm border-0 mx-1'
+                          >
+                            <FaInfoCircle className='mb-1' /> Detail
+                          </Link>
 
-                        <Link
-                          to={`/student/${student._id}`}
-                          className='btn btn-success btn-sm border-0 mx-1'
-                        >
-                          <FaInfoCircle className='mb-1' /> Detail
-                        </Link>
-
-                        <button
-                          className='btn btn-danger btn-sm'
-                          onClick={() => deleteHandler(student._id)}
-                          disabled={isLoadingDeleteStudent}
-                        >
-                          {isLoadingDeleteStudent ? (
-                            <span className='spinner-border spinner-border-sm' />
-                          ) : (
-                            <span>
-                              {' '}
-                              <FaTrash className='mb-1' /> Delete
-                            </span>
-                          )}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+                          <button
+                            className='btn btn-danger btn-sm'
+                            onClick={() => deleteHandler(student._id)}
+                            disabled={isLoadingDeleteStudent}
+                          >
+                            {isLoadingDeleteStudent ? (
+                              <span className='spinner-border spinner-border-sm' />
+                            ) : (
+                              <span>
+                                {' '}
+                                <FaTrash className='mb-1' /> Delete
+                              </span>
+                            )}
+                          </button>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
         </>
       )}

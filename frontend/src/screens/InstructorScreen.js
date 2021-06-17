@@ -6,6 +6,7 @@ import {
   FaCheckCircle,
   FaEdit,
   FaInfoCircle,
+  FaPhoneAlt,
   FaPlus,
   FaTimesCircle,
   FaTrash,
@@ -572,6 +573,7 @@ const InstructorScreen = () => {
 
       <div className='d-flex justify-content-between align-items-center'>
         <h3 className=''>Instructors</h3>
+        <caption>{data && data.total} records were found</caption>
         <button
           className='btn btn-primary '
           data-bs-toggle='modal'
@@ -603,72 +605,77 @@ const InstructorScreen = () => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-          <div className='table-responsive '>
-            <table className='table table-sm hover bordered striped caption-top '>
-              <caption>{data && data.total} records were found</caption>
-              <thead>
-                <tr>
-                  <th>FULL NAME</th>
-                  <th>MOBILE NUMBER</th>
-                  <th>CONTACT FULL NAME</th>
-                  <th>CONTACT MOBILE</th>
-                  <th>STATUS</th>
-                  <th>ACTIVE</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {data &&
-                  data.data.map((instructor) => (
-                    <tr key={instructor._id}>
-                      <td>{instructor.fullName}</td>
-                      <td>{instructor.mobileNumber}</td>
-                      <td>{instructor.contactFullName}</td>
-                      <td>{instructor.contactMobileNumber}</td>
+          <div className='row g-3'>
+            {data &&
+              data.data.map((instructor) => (
+                <div className='col-md-3 col-sm-6 col-12'>
+                  <div className='card bg-transparent border-0 shadow-lg'>
+                    <Link
+                      to={`/instructor/${instructor._id}`}
+                      className='mx-auto'
+                    >
+                      <img
+                        src={instructor.picture.picturePath}
+                        alt={instructor.picture.pictureName}
+                        className='card-img-top img-fluid'
+                        style={{ width: 'auto', height: '260px' }}
+                      />
+                    </Link>
+                    <div className='card-body'>
+                      <Link to={`/instructor/${instructor._id}`}>
+                        <h6 className='card-title'>{instructor.fullName}</h6>
+                      </Link>
+                      <div className='card-text'>
+                        <address className='d-flex justify-content-between'>
+                          <span>
+                            <FaPhoneAlt className='mb-1 text-primary' />{' '}
+                            {instructor.mobileNumber}
+                          </span>
+                          <span>
+                            {instructor.isActive ? (
+                              <FaCheckCircle className='text-success mb-1' />
+                            ) : (
+                              <FaTimesCircle className='text-danger mb-1' />
+                            )}
+                          </span>
+                        </address>
+                        <p className='btn-group d-flex'>
+                          <button
+                            className='btn btn-primary btn-sm'
+                            onClick={() => editHandler(instructor)}
+                            data-bs-toggle='modal'
+                            data-bs-target='#editInstructorModal'
+                          >
+                            <FaEdit className='mb-1' /> Edit
+                          </button>
 
-                      <td>
-                        {instructor.isActive ? (
-                          <FaCheckCircle className='text-success mb-1' />
-                        ) : (
-                          <FaTimesCircle className='text-danger mb-1' />
-                        )}
-                      </td>
-                      <td className='btn-group'>
-                        <button
-                          className='btn btn-primary btn-sm'
-                          onClick={() => editHandler(instructor)}
-                          data-bs-toggle='modal'
-                          data-bs-target='#editInstructorModal'
-                        >
-                          <FaEdit className='mb-1' /> Edit
-                        </button>
+                          <Link
+                            to={`/instructor/${instructor._id}`}
+                            className='btn btn-success btn-sm border-0 mx-1'
+                          >
+                            <FaInfoCircle className='mb-1' /> Detail
+                          </Link>
 
-                        <Link
-                          to={`/instructor/${instructor._id}`}
-                          className='btn btn-success btn-sm border-0 mx-1'
-                        >
-                          <FaInfoCircle className='mb-1' /> Detail
-                        </Link>
-
-                        <button
-                          className='btn btn-danger btn-sm'
-                          onClick={() => deleteHandler(instructor._id)}
-                          disabled={isLoadingDeleteInstructor}
-                        >
-                          {isLoadingDeleteInstructor ? (
-                            <span className='spinner-border spinner-border-sm' />
-                          ) : (
-                            <span>
-                              {' '}
-                              <FaTrash className='mb-1' /> Delete
-                            </span>
-                          )}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+                          <button
+                            className='btn btn-danger btn-sm'
+                            onClick={() => deleteHandler(instructor._id)}
+                            disabled={isLoadingDeleteInstructor}
+                          >
+                            {isLoadingDeleteInstructor ? (
+                              <span className='spinner-border spinner-border-sm' />
+                            ) : (
+                              <span>
+                                {' '}
+                                <FaTrash className='mb-1' /> Delete
+                              </span>
+                            )}
+                          </button>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
         </>
       )}

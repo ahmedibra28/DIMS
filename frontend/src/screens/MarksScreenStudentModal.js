@@ -6,7 +6,7 @@ const MarksScreenStudentModal = ({
   handleSubmit,
   watch,
   errors,
-  formCleanMarksHandler,
+  formCleanHandler,
   isLoadingUpdateMark,
   isLoadingAddMark,
   assignedCourseId,
@@ -35,7 +35,7 @@ const MarksScreenStudentModal = ({
                 className='btn-close'
                 data-bs-dismiss='modal'
                 aria-label='Close'
-                onClick={formCleanMarksHandler}
+                onClick={formCleanHandler}
               ></button>
             </div>
             <form onSubmit={handleSubmit(submitHandler)}>
@@ -147,7 +147,7 @@ const MarksScreenStudentModal = ({
                   type='button'
                   className='btn btn-secondary'
                   data-bs-dismiss='modal'
-                  onClick={formCleanMarksHandler}
+                  onClick={formCleanHandler}
                 >
                   Close
                 </button>
