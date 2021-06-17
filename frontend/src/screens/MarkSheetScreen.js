@@ -100,6 +100,14 @@ const MarkSheetScreen = () => {
     edit
       ? updateMarkMutateAsync({
           _id: id,
+          practicalMarks,
+          theoryMarks,
+          subject,
+          student,
+          shift,
+          course,
+          exam,
+          semester,
         })
       : addMarkMutateAsync({
           practicalMarks,
@@ -113,19 +121,13 @@ const MarkSheetScreen = () => {
         })
   }
 
-  const editHandler = (assign) => {
-    setId(assign._id)
+  const editHandler = (marks) => {
+    setId(marks._id)
     setEdit(true)
-    setValue('course', assign.course._id)
-    setValue('exam', assign.exam)
-    setValue('semester', assign.semester)
-    setValue('shift', assign.shift)
-    setValue('dateOfAdmission', assign.dateOfAdmission)
-    setValue('status', assign.status)
-    setValue(
-      'dateOfAdmission',
-      moment(assign.dateOfAdmission).format('YYYY-MM-DD')
-    )
+    setValue('exam', marks.exam)
+    setValue('theoryMarks', marks.theoryMarks)
+    setValue('practicalMarks', marks.practicalMarks)
+    setValue('subject', marks.subject._id)
   }
 
   const formCleanHandler = () => {

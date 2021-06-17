@@ -23,6 +23,10 @@ export const addMarks = asyncHandler(async (req, res) => {
     semester,
     shift,
   })
+  if (!instructorData[0]) {
+    res.status(400)
+    throw new Error(`This subject did not assign to a instructor`)
+  }
   const instructor = instructorData[0].instructor
 
   const exist = await MarksModel.findOne({
@@ -60,21 +64,23 @@ export const addMarks = asyncHandler(async (req, res) => {
 })
 
 export const updateMarks = asyncHandler(async (req, res) => {
-  const {
-    isActive,
-    course,
-    subject,
-    exam,
-    shift,
-    semester,
-    student,
-    instructor,
-    theoryMarks,
-    practicalMarks,
-  } = req.body
+  const { course, subject, exam, shift, student, theoryMarks, practicalMarks } =
+    req.body
 
+  const semester = Number(req.body.semester)
   const updatedBy = req.user.id
   const _id = req.params.id
+
+  const instructorData = await AssignToSubjectModel.find({
+    subject,
+    semester,
+    shift,
+  })
+  if (!instructorData[0]) {
+    res.status(400)
+    throw new Error(`This subject did not assign to a instructor`)
+  }
+  const instructor = instructorData[0].instructor
 
   const obj = await MarksModel.findById(_id)
 
@@ -89,12 +95,11 @@ export const updateMarks = asyncHandler(async (req, res) => {
       shift,
     })
     if (exist.length === 0) {
-      obj.isActive = isActive
       obj.course = course
       obj.subject = subject
-      obj.semester = semester
       obj.exam = exam
       obj.shift = shift
+      obj.semester = semester
       obj.student = student
       obj.instructor = instructor
       obj.theoryMarks = theoryMarks
