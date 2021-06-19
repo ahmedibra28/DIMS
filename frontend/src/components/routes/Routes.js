@@ -20,6 +20,9 @@ import SubjectScreen from '../../screens/SubjectScreen'
 import InstructorScreen from '../../screens/InstructorScreen'
 import InstructorDetailScreen from '../../screens/InstructorDetailScreen'
 import MarkSheetScreen from '../../screens/MarkSheetScreen'
+import AttendanceScreen from '../../screens/AttendanceScreen'
+import AttendanceScreenReport from '../../screens/AttendanceScreenReport'
+import MarkSheetScreenReport from '../../screens/MarkSheetScreenReport'
 
 const Routes = () => {
   return (
@@ -101,6 +104,25 @@ const Routes = () => {
           role={['Admin', 'User']}
           path='/student/mark-sheet/:studentId/:assignedCourseId/:semesterNo/:shift/:semesterStatus'
           component={MarkSheetScreen}
+        />
+
+        <PrivateRoute
+          exact
+          role={['Admin', 'Instructor']}
+          path='/attendance'
+          component={AttendanceScreen}
+        />
+        <PrivateRoute
+          exact
+          role={['Admin']}
+          path='/attendance/report'
+          component={AttendanceScreenReport}
+        />
+        <PrivateRoute
+          exact
+          role={['Admin']}
+          path='/mark-sheet/report'
+          component={MarkSheetScreenReport}
         />
 
         <Route component={NotFound} />
