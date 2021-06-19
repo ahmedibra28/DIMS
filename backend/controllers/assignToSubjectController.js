@@ -2,12 +2,13 @@ import asyncHandler from 'express-async-handler'
 import AssignToSubjectModel from '../models/assignToSubjectModel.js'
 
 export const addAssignToSubject = asyncHandler(async (req, res) => {
-  const { subject, semester, shift, dateOfAdmission } = req.body.data
+  const { subject, semester, shift, dateOfAdmission, isActive } = req.body.data
   const instructor = req.body.paramId
   const createdBy = req.user.id
 
   const exist = await AssignToSubjectModel.findOne({
     shift,
+    isActive: true,
     subject: { $eq: subject },
   })
 
@@ -20,6 +21,7 @@ export const addAssignToSubject = asyncHandler(async (req, res) => {
     instructor,
     semester,
     shift,
+    isActive,
     dateOfAdmission,
     createdBy,
   })
@@ -32,7 +34,8 @@ export const addAssignToSubject = asyncHandler(async (req, res) => {
 })
 
 export const updateAssignToSubject = asyncHandler(async (req, res) => {
-  const { subject, semester, shift, dateOfAdmission, instructor } = req.body
+  const { subject, semester, shift, dateOfAdmission, instructor, isActive } =
+    req.body
 
   const updatedBy = req.user.id
   const _id = req.params.id
@@ -42,6 +45,7 @@ export const updateAssignToSubject = asyncHandler(async (req, res) => {
   if (obj) {
     const exist = await AssignToSubjectModel.find({
       _id: { $ne: _id },
+      isActive: true,
       shift,
       subject: { $eq: subject },
     })
@@ -51,6 +55,7 @@ export const updateAssignToSubject = asyncHandler(async (req, res) => {
       obj.instructor = instructor
       obj.semester = semester
       obj.shift = shift
+      obj.isActive = isActive
       obj.dateOfAdmission = dateOfAdmission
 
       await obj.save()

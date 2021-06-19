@@ -22,6 +22,7 @@ export const addMarks = asyncHandler(async (req, res) => {
     subject,
     semester,
     shift,
+    isActive: true,
   })
   if (!instructorData[0]) {
     res.status(400)
@@ -75,6 +76,7 @@ export const updateMarks = asyncHandler(async (req, res) => {
     subject,
     semester,
     shift,
+    isActive: true,
   })
   if (!instructorData[0]) {
     res.status(400)

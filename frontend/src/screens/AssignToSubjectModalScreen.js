@@ -171,6 +171,20 @@ const AssignToSubjectModalScreen = ({
                     )}
                   </div>
                 </div>
+                <div className='col-md-6 col-12'>
+                  <div className='form-check'>
+                    <input
+                      className='form-check-input'
+                      type='checkbox'
+                      id='isActive'
+                      {...register('isActive')}
+                      checked={watch().isActive}
+                    />
+                    <label className='form-check-label' htmlFor='isActive'>
+                      IsActive?
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
             <div className='modal-footer'>

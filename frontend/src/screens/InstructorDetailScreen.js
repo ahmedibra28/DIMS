@@ -39,7 +39,9 @@ const InstructorDetailScreen = () => {
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {},
+    defaultValues: {
+      isActive: true,
+    },
   })
 
   const queryClient = useQueryClient()
@@ -121,6 +123,7 @@ const InstructorDetailScreen = () => {
           dateOfAdmission: data.dateOfAdmission,
           subject: data.subject,
           instructor: paramId,
+          isActive: data.isActive,
         })
       : addAssignToSubjectMutateAsync({ paramId, data })
   }
@@ -137,6 +140,7 @@ const InstructorDetailScreen = () => {
       'dateOfAdmission',
       moment(assign.dateOfAdmission).format('YYYY-MM-DD')
     )
+    setValue('isActive', assign.isActive)
   }
 
   const formCleanHandler = () => {
@@ -212,6 +216,7 @@ const InstructorDetailScreen = () => {
                       <th>SUBJECT</th>
                       <th>SEMESTER</th>
                       <th>SHIFT</th>
+                      <th>ACTIVE</th>
                       <th>ACTION</th>
                     </tr>
                   </thead>
@@ -227,6 +232,13 @@ const InstructorDetailScreen = () => {
                           <td>{assign.subject.name}</td>
                           <td>Semester {assign.semester} </td>
                           <td>{assign.shift}</td>
+                          <td>
+                            {assign.isActive ? (
+                              <FaCheckCircle className='text-success mb-1' />
+                            ) : (
+                              <FaTimesCircle className='text-danger mb-1' />
+                            )}
+                          </td>
                           <td className='btn-group'>
                             <button
                               className='btn btn-primary btn-sm'
