@@ -573,7 +573,7 @@ const InstructorScreen = () => {
 
       <div className='d-flex justify-content-between align-items-center'>
         <h3 className=''>Instructors</h3>
-        <caption>{data && data.total} records were found</caption>
+        <span>{data && data.total} records were found</span>
         <button
           className='btn btn-primary '
           data-bs-toggle='modal'
@@ -608,7 +608,7 @@ const InstructorScreen = () => {
           <div className='row g-3'>
             {data &&
               data.data.map((instructor) => (
-                <div className='col-md-3 col-sm-6 col-12'>
+                <div key={instructor._id} className='col-md-3 col-sm-6 col-12'>
                   <div className='card bg-transparent border-0 shadow-lg'>
                     <Link
                       to={`/instructor/${instructor._id}`}

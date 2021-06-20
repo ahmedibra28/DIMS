@@ -21,14 +21,14 @@ export const getClassInfo = async (obj) => {
   }
 }
 
-// export const addAssignToCourse = async (obj) => {
-//   try {
-//     const { data } = await axios.post(`/api/assign-to-courses`, obj, config())
-//     return data
-//   } catch (error) {
-//     throw error.response.data.message
-//   }
-// }
+export const addAttendance = async (obj) => {
+  try {
+    const { data } = await axios.post(`/api/attendances/submit`, obj, config())
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}
 
 // export const updateAssignToCourse = async (obj) => {
 //   try {
