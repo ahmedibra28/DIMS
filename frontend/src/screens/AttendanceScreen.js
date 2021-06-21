@@ -84,6 +84,13 @@ const AttendanceScreen = () => {
   }
 
   const attendanceSubmit = () => {
+    const absentStudentsFilter =
+      dataGetAttendance &&
+      dataGetAttendance.filter(
+        (student) => !selected.includes(student.student._id)
+      )
+
+    const absentStudents = absentStudentsFilter.map((std) => std.student._id)
     const attendedStudents = selected
     const course = dataGetAttendance && dataGetAttendance[0].course._id
     const semester = dataGetAttendance && dataGetAttendance[0].semester
@@ -91,6 +98,7 @@ const AttendanceScreen = () => {
     const subject = watch().subject
 
     addAttendanceMutateAsync({
+      absentStudents,
       attendedStudents,
       course,
       semester,

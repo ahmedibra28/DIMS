@@ -49,7 +49,8 @@ export const getClassInfo = asyncHandler(async (req, res) => {
 })
 
 export const addAttendance = asyncHandler(async (req, res) => {
-  const { attendedStudents, course, semester, shift, subject } = req.body
+  const { attendedStudents, absentStudents, course, semester, shift, subject } =
+    req.body
 
   const instructorObj = await InstructorModel.findOne({
     email: req.user.email,
@@ -62,7 +63,14 @@ export const addAttendance = asyncHandler(async (req, res) => {
     let start = moment().startOf('day')
     let end = moment().endOf('day')
 
-    console.log(start, end)
+    let students = [
+      ...attendedStudents.map((x) => {
+        return { student: x, isPresent: true }
+      }),
+      ...absentStudents.map((x) => {
+        return { student: x, isPresent: false }
+      }),
+    ]
 
     const attendanceObj = await AttendanceModel.findOne({
       course,
@@ -79,7 +87,7 @@ export const addAttendance = asyncHandler(async (req, res) => {
     }
 
     const createObj = await AttendanceModel.create({
-      student: attendedStudents,
+      student: students,
       course,
       semester,
       shift,
@@ -122,12 +130,12 @@ export const getAttendanceReport = asyncHandler(async (req, res) => {
       semester,
       shift,
       instructor: instructorObj._id,
-      // createdAt: { $gte: start, $lt: end },
+      createdAt: { $gte: start, $lt: end },
     })
       .sort({ createdAt: -1 })
       .populate('instructor')
       .populate('course')
-      .populate('student')
+      .populate('student.student')
       .populate('subject')
 
     res.status(201).json(attendanceObj)

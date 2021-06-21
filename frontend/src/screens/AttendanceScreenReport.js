@@ -1,12 +1,11 @@
-import { FaCheckCircle } from 'react-icons/fa'
-import { addAttendance, getAttendanceReport } from '../api/attendances'
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
+import { getAttendanceReport } from '../api/attendances'
 import { useQuery, useMutation } from 'react-query'
 import { getSubjects } from '../api/subjects'
 import { getCourses } from '../api/courses'
 import { useForm } from 'react-hook-form'
 import Loader from 'react-loader-spinner'
 import Message from '../components/Message'
-import { FaPaperPlane } from 'react-icons/fa'
 import moment from 'moment'
 
 const AttendanceScreenReport = () => {
@@ -31,11 +30,6 @@ const AttendanceScreenReport = () => {
     retry: 0,
     onSuccess: () => {},
   })
-
-  // const studentData =
-  //   !isLoadingGetAttendance && dataGetAttendance && dataGetAttendance.student
-
-  console.log(dataGetAttendance && dataGetAttendance)
 
   const { data: dataSubject } = useQuery('subjects', () => getSubjects(), {
     retry: 0,
@@ -204,12 +198,14 @@ const AttendanceScreenReport = () => {
           <div className='table-responsive '>
             <table className='table table-sm hover bordered striped caption-top '>
               <caption>
-                {dataGetAttendance && dataGetAttendance.length} students were
-                found
+                {dataGetAttendance &&
+                  dataGetAttendance[0].student &&
+                  dataGetAttendance[0].student.length}{' '}
+                students were found
               </caption>
               <thead>
                 <tr>
-                  <th>STD ID</th>
+                  <th>PIC</th>
                   <th>NAME</th>
                   <th>SEMESTER</th>
                   <th>SUBJECT</th>
@@ -220,23 +216,31 @@ const AttendanceScreenReport = () => {
               <tbody>
                 {dataGetAttendance &&
                   dataGetAttendance.map((data) =>
-                    data.student.map((student, index) => (
+                    data.student.map((student) => (
                       <tr key={student._id}>
-                        {/* <td>{index + 1}</td> */}
-                        {console.log(student)}
                         <td>
                           <img
-                            src={student.picture.picturePath}
+                            src={
+                              student.student &&
+                              student.student.picture.picturePath
+                            }
                             className='img-fluid'
-                            style={{ width: '30px' }}
-                            alt={student.picture.pictureName}
+                            style={{ width: '25px' }}
+                            alt={
+                              student.student &&
+                              student.student.picture.pictureName
+                            }
                           />
                         </td>
-                        <td>{student.fullName}</td>
+                        <td>{student.student && student.student.fullName}</td>
                         <td>{data.semester}</td>
                         <td>{data.subject.name}</td>
                         <td>
-                          <FaCheckCircle className='text-success mb-1' />
+                          {student.isPresent ? (
+                            <FaCheckCircle className='text-success mb-1' />
+                          ) : (
+                            <FaTimesCircle className='text-danger mb-1' />
+                          )}
                         </td>
                         <td>{moment(data.createdAt).format('lll')}</td>
                       </tr>

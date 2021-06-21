@@ -23,9 +23,15 @@ const attendanceScheme = mongoose.Schema(
     },
     student: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Student',
-        required: true,
+        student: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Student',
+          required: true,
+        },
+        isPresent: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     instructor: {
