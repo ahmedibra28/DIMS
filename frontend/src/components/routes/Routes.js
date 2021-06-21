@@ -114,7 +114,7 @@ const Routes = () => {
         />
         <PrivateRoute
           exact
-          role={['Admin']}
+          role={['Admin', 'Instructor']}
           path='/attendance/report'
           component={AttendanceScreenReport}
         />

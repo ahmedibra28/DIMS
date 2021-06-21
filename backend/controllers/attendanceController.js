@@ -95,3 +95,44 @@ export const addAttendance = asyncHandler(async (req, res) => {
     }
   }
 })
+
+export const getAttendanceReport = asyncHandler(async (req, res) => {
+  const { course, semester, subject, shift } = req.body
+  const instructor = req.user.email
+
+  const instructorObj = await InstructorModel.findOne({
+    email: instructor,
+    isActive: true,
+  })
+
+  let start = moment().startOf('day')
+  let end = moment().endOf('day')
+
+  if (instructorObj) {
+    console.log({
+      course,
+      subject,
+      semester,
+      shift,
+      instructor: instructorObj._id,
+    })
+    const attendanceObj = await AttendanceModel.find({
+      course,
+      subject,
+      semester,
+      shift,
+      instructor: instructorObj._id,
+      // createdAt: { $gte: start, $lt: end },
+    })
+      .sort({ createdAt: -1 })
+      .populate('instructor')
+      .populate('course')
+      .populate('student')
+      .populate('subject')
+
+    res.status(201).json(attendanceObj)
+  } else {
+    res.status(400)
+    throw new Error('The attendance record you are looking for were not found')
+  }
+})
