@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 import { getAttendanceReport } from '../api/attendances'
 import { useQuery, useMutation } from 'react-query'
@@ -8,12 +9,29 @@ import Loader from 'react-loader-spinner'
 import Message from '../components/Message'
 import moment from 'moment'
 
+import 'react-date-range/dist/styles.css' // main style file
+import 'react-date-range/dist/theme/default.css' // theme css file
+import { DateRangePicker } from 'react-date-range'
+
 const AttendanceScreenReport = () => {
+  const [sDate, setSDate] = useState(new Date())
+  const [eDate, setEDate] = useState(new Date())
+
+  const handleSelect = (ranges) => {
+    setSDate(ranges.selection.startDate)
+    setEDate(ranges.selection.endDate)
+  }
+
+  const selectionRange = {
+    startDate: sDate,
+    endDate: eDate,
+    key: 'selection',
+  }
+
   const {
     register,
     handleSubmit,
     watch,
-    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {},
@@ -45,129 +63,146 @@ const AttendanceScreenReport = () => {
       subject: data.subject,
       semester: data.semester,
       shift: data.shift,
+      sDate,
+      eDate,
     })
   }
   return (
     <div>
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className='row'>
-          <div className='col-md-4 col-12'>
-            <div className='mb-3'>
-              <label htmlFor='course'>Course</label>
-              <select
-                {...register('course', {
-                  required: 'Course is required',
-                })}
-                type='text'
-                placeholder='Enter course'
-                className='form-control'
-              >
-                <option value=''>-----------</option>
-                {dataCourse &&
-                  dataCourse.map(
-                    (course) =>
-                      course.isActive && (
-                        <option key={course._id} value={course._id}>
-                          {course.name}
-                        </option>
-                      )
+          <div className='col-md-6 my-auto'>
+            <DateRangePicker
+              ranges={[selectionRange]}
+              onChange={handleSelect}
+              className='w-100'
+            />
+          </div>
+          <div className='col-md-6'>
+            <div className='row'>
+              <div className='col-md-12 col-12'>
+                <div className='mb-3'>
+                  <label htmlFor='course'>Course</label>
+                  <select
+                    {...register('course', {
+                      required: 'Course is required',
+                    })}
+                    type='text'
+                    placeholder='Enter course'
+                    className='form-control'
+                  >
+                    <option value=''>-----------</option>
+                    {dataCourse &&
+                      dataCourse.map(
+                        (course) =>
+                          course.isActive && (
+                            <option key={course._id} value={course._id}>
+                              {course.name}
+                            </option>
+                          )
+                      )}
+                  </select>
+                  {errors.course && (
+                    <span className='text-danger'>{errors.course.message}</span>
                   )}
-              </select>
-              {errors.course && (
-                <span className='text-danger'>{errors.course.message}</span>
-              )}
-            </div>
-          </div>
-          <div className='col-md-2 col-12'>
-            <div className='mb-3'>
-              <label htmlFor='semester'>Semester</label>
-              <select
-                {...register('semester', {
-                  required: 'Semester is required',
-                })}
-                type='text'
-                placeholder='Enter name'
-                className='form-control'
-              >
-                <option value=''>-----------</option>
-                {dataCourse &&
-                  dataCourse.map(
-                    (semester) =>
-                      semester.isActive &&
-                      semester._id === watch().course &&
-                      [...Array(semester.duration).keys()].map((sem) => (
-                        <option key={sem + 1} value={sem + 1}>
-                          {sem + 1}
-                        </option>
-                      ))
+                </div>
+              </div>
+              <div className='col-md-12 col-12'>
+                <div className='mb-3'>
+                  <label htmlFor='semester'>Semester</label>
+                  <select
+                    {...register('semester', {
+                      required: 'Semester is required',
+                    })}
+                    type='text'
+                    placeholder='Enter name'
+                    className='form-control'
+                  >
+                    <option value=''>-----------</option>
+                    {dataCourse &&
+                      dataCourse.map(
+                        (semester) =>
+                          semester.isActive &&
+                          semester._id === watch().course &&
+                          [...Array(semester.duration).keys()].map((sem) => (
+                            <option key={sem + 1} value={sem + 1}>
+                              {sem + 1}
+                            </option>
+                          ))
+                      )}
+                  </select>
+                  {errors.semester && (
+                    <span className='text-danger'>
+                      {errors.semester.message}
+                    </span>
                   )}
-              </select>
-              {errors.semester && (
-                <span className='text-danger'>{errors.semester.message}</span>
-              )}
-            </div>
-          </div>
-          <div className='col-md-3 col-12'>
-            <div className='mb-3'>
-              <label htmlFor='subject'>Subject</label>
-              <select
-                {...register('subject', {
-                  required: 'Subject Type is required',
-                })}
-                type='text'
-                placeholder='Enter subject'
-                className='form-control'
-              >
-                <option value=''>-----------</option>
-                {dataSubject &&
-                  dataSubject.map(
-                    (subject) =>
-                      subject.isActive &&
-                      subject.course._id === watch().course &&
-                      subject.semester === Number(watch().semester) && (
-                        <option key={subject._id} value={subject._id}>
-                          {subject.name}
-                        </option>
-                      )
+                </div>
+              </div>
+              <div className='col-md-12 col-12'>
+                <div className='mb-3'>
+                  <label htmlFor='subject'>Subject</label>
+                  <select
+                    {...register('subject', {
+                      required: 'Subject Type is required',
+                    })}
+                    type='text'
+                    placeholder='Enter subject'
+                    className='form-control'
+                  >
+                    <option value=''>-----------</option>
+                    {dataSubject &&
+                      dataSubject.map(
+                        (subject) =>
+                          subject.isActive &&
+                          subject.course._id === watch().course &&
+                          subject.semester === Number(watch().semester) && (
+                            <option key={subject._id} value={subject._id}>
+                              {subject.name}
+                            </option>
+                          )
+                      )}
+                  </select>
+                  {errors.subject && (
+                    <span className='text-danger'>
+                      {errors.subject.message}
+                    </span>
                   )}
-              </select>
-              {errors.subject && (
-                <span className='text-danger'>{errors.subject.message}</span>
-              )}
+                </div>
+              </div>
+              <div className='col-md-10 col-12'>
+                <div className='mb-3'>
+                  <label htmlFor='shift'>Shift</label>
+                  <select
+                    {...register('shift', {
+                      required: 'Shift is required',
+                    })}
+                    type='text'
+                    placeholder='Enter date of admission'
+                    className='form-control'
+                  >
+                    <option value=''>-----------</option>
+                    <option value='Morning'>Morning</option>
+                    <option value='Afternoon'>Afternoon</option>
+                  </select>
+                  {errors.shift && (
+                    <span className='text-danger'>{errors.shift.message}</span>
+                  )}
+                </div>
+              </div>
+              <div className='col-md-1 col-1 mt-3'>
+                <button
+                  type='submit'
+                  className='btn btn-primary mt-2 btn-lg'
+                  disabled={isLoadingGetAttendance}
+                >
+                  {isLoadingGetAttendance ? (
+                    <span className='spinner-border spinner-border-sm' />
+                  ) : (
+                    'Search'
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
-          <div className='col-md-2 col-12'>
-            <div className='mb-3'>
-              <label htmlFor='shift'>Shift</label>
-              <select
-                {...register('shift', {
-                  required: 'Shift is required',
-                })}
-                type='text'
-                placeholder='Enter date of admission'
-                className='form-control'
-              >
-                <option value=''>-----------</option>
-                <option value='Morning'>Morning</option>
-                <option value='Afternoon'>Afternoon</option>
-              </select>
-              {errors.shift && (
-                <span className='text-danger'>{errors.shift.message}</span>
-              )}
-            </div>
-          </div>
-          <div className='col-md-1 col-1 mt-3'>
-            <button
-              type='submit'
-              className='btn btn-primary mt-2 btn-lg'
-              disabled={isLoadingGetAttendance}
-            >
-              {isLoadingGetAttendance ? (
-                <span className='spinner-border spinner-border-sm' />
-              ) : (
-                'Search'
-              )}
-            </button>
           </div>
         </div>
       </form>
@@ -197,12 +232,12 @@ const AttendanceScreenReport = () => {
         <>
           <div className='table-responsive '>
             <table className='table table-sm hover bordered striped caption-top '>
-              <caption>
+              {/* <caption>
                 {dataGetAttendance &&
                   dataGetAttendance[0].student &&
                   dataGetAttendance[0].student.length}{' '}
                 students were found
-              </caption>
+              </caption> */}
               <thead>
                 <tr>
                   <th>PIC</th>

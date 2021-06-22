@@ -105,7 +105,8 @@ export const addAttendance = asyncHandler(async (req, res) => {
 })
 
 export const getAttendanceReport = asyncHandler(async (req, res) => {
-  const { course, semester, subject, shift } = req.body
+  const { course, semester, subject, shift, sDate, eDate } = req.body
+
   const instructor = req.user.email
 
   const instructorObj = await InstructorModel.findOne({
@@ -113,24 +114,17 @@ export const getAttendanceReport = asyncHandler(async (req, res) => {
     isActive: true,
   })
 
-  let start = moment().startOf('day')
-  let end = moment().endOf('day')
+  let endDate = moment(eDate)
+  endDate = endDate.endOf('day')
 
   if (instructorObj) {
-    console.log({
-      course,
-      subject,
-      semester,
-      shift,
-      instructor: instructorObj._id,
-    })
     const attendanceObj = await AttendanceModel.find({
       course,
       subject,
       semester,
       shift,
       instructor: instructorObj._id,
-      createdAt: { $gte: start, $lt: end },
+      createdAt: { $gte: sDate, $lt: endDate.format() },
     })
       .sort({ createdAt: -1 })
       .populate('instructor')
