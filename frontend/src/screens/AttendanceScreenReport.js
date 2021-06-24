@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
-import { getAttendanceReport } from '../api/attendances'
+import { getAttendanceReport } from '../api/reports'
 import { useQuery, useMutation } from 'react-query'
 import { getSubjects } from '../api/subjects'
 import { getCourses } from '../api/courses'

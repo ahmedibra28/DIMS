@@ -211,6 +211,12 @@ const MarkSheetScreen = () => {
                 {markSheet[0].student.fullName.toUpperCase()}
               </span>
             </h6>
+            <h6 className='text-primary fw-bold text-center bg-light p-2'>
+              STUDENT ID:{' '}
+              <span className='text-decoration-underline'>
+                {markSheet[0].student.studentIdNo}
+              </span>
+            </h6>
           </div>
           <hr />
           <div className='table-responsive bg-light'>

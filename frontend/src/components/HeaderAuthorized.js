@@ -57,11 +57,6 @@ const HeaderAuthorized = () => {
                 </Link>
               </li>
               <li className='nav-item'>
-                <Link to='/mark-sheet/report' className='nav-link'>
-                  <FaTable className='mb-1' /> Mark Sheet Report
-                </Link>
-              </li>
-              <li className='nav-item'>
                 <Link to='/attendance' className='nav-link'>
                   <FaClock className='mb-1' /> Attendance
                 </Link>
@@ -69,6 +64,11 @@ const HeaderAuthorized = () => {
               <li className='nav-item'>
                 <Link to='/attendance/report' className='nav-link'>
                   <FaClock className='mb-1' /> Attendance Report
+                </Link>
+              </li>
+              <li className='nav-item'>
+                <Link to='/mark-sheet/report' className='nav-link'>
+                  <FaTable className='mb-1' /> Mark Sheet Report
                 </Link>
               </li>
             </div>
