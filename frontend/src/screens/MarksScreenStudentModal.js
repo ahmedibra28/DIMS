@@ -123,10 +123,9 @@ const MarksScreenStudentModal = ({
                       <input
                         {...register('practicalMarks', {
                           required: 'Practical Marks is required',
-
-                          validate: (value) =>
-                            Number(value) + Number(watch().theoryMarks) <=
-                              100 || 'Total marks should be equal to 100',
+                          // validate: (value) =>
+                          //   Number(value) + Number(watch().theoryMarks) <=
+                          //     100 || 'Total marks should be equal to 100',
                         })}
                         type='number'
                         placeholder='Enter practicalMarks'

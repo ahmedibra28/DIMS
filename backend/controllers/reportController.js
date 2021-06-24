@@ -5,11 +5,16 @@ import AttendanceModel from '../models/attendanceModal.js'
 import StudentModel from '../models/studentModel.js'
 import MarksModel from '../models/marksModel.js'
 import AssignToCourseModel from '../models/assignToCourseModel.js'
+import User from '../models/userModel.js'
 
 export const getAttendanceReport = asyncHandler(async (req, res) => {
-  const { course, semester, subject, shift, sDate, eDate } = req.body
+  const { course, semester, subject, shift, student, sDate, eDate } = req.body
 
   const instructor = req.user.email
+
+  const user = await User.findOne({ email: instructor })
+
+  const isAdmin = user.roles.includes('Admin')
 
   const instructorObj = await InstructorModel.findOne({
     email: instructor,
@@ -22,22 +27,52 @@ export const getAttendanceReport = asyncHandler(async (req, res) => {
   let startDate = moment(sDate)
   startDate = startDate.startOf('day')
 
-  if (instructorObj) {
-    const attendanceObj = await AttendanceModel.find({
-      course,
-      subject,
-      semester,
-      shift,
-      instructor: instructorObj._id,
-      createdAt: { $gte: startDate.format(), $lt: endDate.format() },
+  if (instructorObj || isAdmin) {
+    const studentObj = await StudentModel.findOne({
+      studentIdNo: student,
+      isActive: true,
     })
-      .sort({ createdAt: -1 })
-      .populate('instructor')
-      .populate('course')
-      .populate('student.student')
-      .populate('subject')
 
-    res.status(201).json(attendanceObj)
+    const studentId = studentObj && studentObj._id
+
+    if (isAdmin) {
+      const attendanceObj = await AttendanceModel.find({
+        course,
+        subject,
+        semester,
+        shift,
+        createdAt: { $gte: startDate.format(), $lt: endDate.format() },
+      })
+        .sort({ createdAt: -1 })
+        .populate('instructor')
+        .populate('course')
+        .populate('student.student')
+        .populate('subject')
+
+      res.status(201).json({ attendanceObj, studentId })
+    } else {
+      const attendanceObj = await AttendanceModel.find({
+        course,
+        subject,
+        semester,
+        shift,
+        instructor: instructorObj._id,
+        createdAt: { $gte: startDate.format(), $lt: endDate.format() },
+      })
+        .sort({ createdAt: -1 })
+        .populate('instructor')
+        .populate('course')
+        .populate('student.student')
+        .populate('subject')
+
+      if (attendanceObj.length === 0) {
+        res.status(400)
+        throw new Error(
+          'The attendance record you are looking for were not found'
+        )
+      }
+      res.status(201).json({ attendanceObj, studentId })
+    }
   } else {
     res.status(400)
     throw new Error('The attendance record you are looking for were not found')
@@ -53,12 +88,12 @@ export const getCompleteMarkSheetReport = asyncHandler(async (req, res) => {
   })
 
   if (studentObj) {
-    const assignToCourseObj = await AssignToCourseModel.findOne({
-      course,
-      student: studentObj._id,
-      isActive: true,
-      isGraduated: false,
-    })
+    // const assignToCourseObj = await AssignToCourseModel.findOne({
+    //   course,
+    //   student: studentObj._id,
+    //   isActive: true,
+    //   isGraduated: false,
+    // })
 
     const obj = await MarksModel.find({
       student: studentObj._id,
@@ -71,8 +106,8 @@ export const getCompleteMarkSheetReport = asyncHandler(async (req, res) => {
       .populate('createdBy', 'name')
       .populate('updatedBy', 'name')
 
-    if (obj.length > 0 && assignToCourseObj) {
-      res.status(201).json({ obj, assignToCourseObj })
+    if (obj.length > 0) {
+      res.status(201).json(obj)
     } else {
       res.status(400)
       throw new Error('Student mark sheet were not found')

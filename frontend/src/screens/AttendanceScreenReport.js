@@ -42,12 +42,16 @@ const AttendanceScreenReport = () => {
     isError: isErrorGetAttendance,
     error: errorGetAttendance,
     isSuccess: isSuccessGetAttendance,
-    data: dataGetAttendance,
+    data: dataGetAttendanceAll,
     mutateAsync: getAttendanceMutateAsync,
   } = useMutation(['getAttendance'], getAttendanceReport, {
     retry: 0,
     onSuccess: () => {},
   })
+
+  const dataGetAttendance =
+    dataGetAttendanceAll && dataGetAttendanceAll.attendanceObj
+  const studentId = dataGetAttendanceAll && dataGetAttendanceAll.studentId
 
   const { data: dataSubject } = useQuery('subjects', () => getSubjects(), {
     retry: 0,
@@ -63,9 +67,36 @@ const AttendanceScreenReport = () => {
       subject: data.subject,
       semester: data.semester,
       shift: data.shift,
+      student: data.student,
       sDate,
       eDate,
     })
+  }
+
+  const filteredAttendance = (student, data) => {
+    return (
+      <tr key={student._id}>
+        <td>
+          <img
+            src={student.student && student.student.picture.picturePath}
+            className='img-fluid'
+            style={{ width: '25px' }}
+            alt={student.student && student.student.picture.pictureName}
+          />
+        </td>
+        <td>{student.student && student.student.fullName}</td>
+        <td>{data.semester}</td>
+        <td>{data.subject.name}</td>
+        <td>
+          {student.isPresent ? (
+            <FaCheckCircle className='text-success mb-1' />
+          ) : (
+            <FaTimesCircle className='text-danger mb-1' />
+          )}
+        </td>
+        <td>{moment(data.createdAt).format('lll')}</td>
+      </tr>
+    )
   }
   return (
     <div>
@@ -169,7 +200,7 @@ const AttendanceScreenReport = () => {
                   )}
                 </div>
               </div>
-              <div className='col-md-10 col-12'>
+              <div className='col-md-5 col-12'>
                 <div className='mb-3'>
                   <label htmlFor='shift'>Shift</label>
                   <select
@@ -186,6 +217,23 @@ const AttendanceScreenReport = () => {
                   </select>
                   {errors.shift && (
                     <span className='text-danger'>{errors.shift.message}</span>
+                  )}
+                </div>
+              </div>
+              <div className='col-md-5 col-12'>
+                <div className='mb-3'>
+                  <label htmlFor='student'>Student ID</label>
+                  <input
+                    {...register('student', {})}
+                    type='number'
+                    min='0'
+                    placeholder='Enter student ID'
+                    className='form-control'
+                  />
+                  {errors.student && (
+                    <span className='text-danger'>
+                      {errors.student.message}
+                    </span>
                   )}
                 </div>
               </div>
@@ -251,35 +299,12 @@ const AttendanceScreenReport = () => {
               <tbody>
                 {dataGetAttendance &&
                   dataGetAttendance.map((data) =>
-                    data.student.map((student) => (
-                      <tr key={student._id}>
-                        <td>
-                          <img
-                            src={
-                              student.student &&
-                              student.student.picture.picturePath
-                            }
-                            className='img-fluid'
-                            style={{ width: '25px' }}
-                            alt={
-                              student.student &&
-                              student.student.picture.pictureName
-                            }
-                          />
-                        </td>
-                        <td>{student.student && student.student.fullName}</td>
-                        <td>{data.semester}</td>
-                        <td>{data.subject.name}</td>
-                        <td>
-                          {student.isPresent ? (
-                            <FaCheckCircle className='text-success mb-1' />
-                          ) : (
-                            <FaTimesCircle className='text-danger mb-1' />
-                          )}
-                        </td>
-                        <td>{moment(data.createdAt).format('lll')}</td>
-                      </tr>
-                    ))
+                    data.student.map((student) =>
+                      studentId
+                        ? student.student._id === studentId &&
+                          filteredAttendance(student, data)
+                        : filteredAttendance(student, data)
+                    )
                   )}
               </tbody>
             </table>

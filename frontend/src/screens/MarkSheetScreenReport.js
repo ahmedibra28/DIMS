@@ -36,6 +36,55 @@ const MarkSheetScreenReport = () => {
     getMarkSheetReportMutateAsync(data)
   }
 
+  console.log(dataGetMarkSheetReport && dataGetMarkSheetReport)
+
+  // const noOfSemester =
+  //   dataGetMarkSheetReport && dataGetMarkSheetReport[0].course.duration
+
+  // console.log(noOfSemester)
+
+  const markSheetReport =
+    dataGetMarkSheetReport &&
+    dataGetMarkSheetReport.filter(
+      (mark) =>
+        dataGetMarkSheetReport &&
+        dataGetMarkSheetReport.map((c) =>
+          [...Array(c.duration).keys()].map(
+            (sem) => sem + 1 === Number(mark.semester)
+          )
+        )
+    )
+
+  const marks = (marks) => {
+    return (
+      <div className='col-md-6'>
+        <div className='table-responsive'>
+          <table className='table table-bordered border-primary'>
+            <thead>
+              <tr className='fw-bold text-center'>
+                Semester {marks && marks[0].semester}
+              </tr>
+              <tr>
+                <th>Course Name</th>
+                <th>Marks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {marks &&
+                marks.map((mark, index) => (
+                  <tr key={index}>
+                    <td>{mark.subject.name}</td>
+                    <td>{mark.theoryMarks + mark.practicalMarks}%</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+        <div className='col-md-6'></div>
+      </div>
+    )
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit(submitHandler)}>
@@ -123,8 +172,7 @@ const MarkSheetScreenReport = () => {
         <Message variant='danger'>{errorGetMarkSheetReport}</Message>
       ) : (
         dataGetMarkSheetReport &&
-        dataGetMarkSheetReport.obj &&
-        dataGetMarkSheetReport.obj.length > 0 && (
+        dataGetMarkSheetReport.length > 0 && (
           <>
             <div className='container'>
               <hr />
@@ -146,21 +194,18 @@ const MarkSheetScreenReport = () => {
                   </h4>
                   <h5 className='text-center mark-sheet-title-2 text-primary'>
                     {dataGetMarkSheetReport &&
-                      dataGetMarkSheetReport.obj &&
-                      dataGetMarkSheetReport.obj[0].course.name}
+                      dataGetMarkSheetReport[0].course.name}
                   </h5>
                 </div>
                 <div className='col-md-2'>
                   <img
                     src={
                       dataGetMarkSheetReport &&
-                      dataGetMarkSheetReport.obj &&
-                      dataGetMarkSheetReport.obj[0].student.picture.picturePath
+                      dataGetMarkSheetReport[0].student.picture.picturePath
                     }
                     alt={
                       dataGetMarkSheetReport &&
-                      dataGetMarkSheetReport.obj &&
-                      dataGetMarkSheetReport.obj[0].student.picture.pictureName
+                      dataGetMarkSheetReport[0].student.picture.pictureName
                     }
                     className='img-fluid'
                     style={{ width: '8rem' }}
@@ -177,15 +222,13 @@ const MarkSheetScreenReport = () => {
                       <th>Name</th>
                       <td>
                         {dataGetMarkSheetReport &&
-                          dataGetMarkSheetReport.obj &&
-                          dataGetMarkSheetReport.obj[0].student.fullName}
+                          dataGetMarkSheetReport[0].student.fullName}
                       </td>
                       <th>ID. No.</th>
                       <td>
                         {' '}
                         {dataGetMarkSheetReport &&
-                          dataGetMarkSheetReport.obj &&
-                          dataGetMarkSheetReport.obj[0].student.studentIdNo}
+                          dataGetMarkSheetReport[0].student.studentIdNo}
                       </td>
                     </tr>
                   </thead>
@@ -195,15 +238,13 @@ const MarkSheetScreenReport = () => {
                       <td>
                         {' '}
                         {dataGetMarkSheetReport &&
-                          dataGetMarkSheetReport.obj &&
-                          dataGetMarkSheetReport.obj[0].student.gender}
+                          dataGetMarkSheetReport[0].student.gender}
                       </td>
                       <th>Qualification</th>
                       <td>
                         {' '}
                         {dataGetMarkSheetReport &&
-                          dataGetMarkSheetReport.obj &&
-                          dataGetMarkSheetReport.obj[0].course.name}
+                          dataGetMarkSheetReport[0].course.name}
                       </td>
                     </tr>
                     <tr>
@@ -211,16 +252,14 @@ const MarkSheetScreenReport = () => {
                       <td>
                         {moment(
                           dataGetMarkSheetReport &&
-                            dataGetMarkSheetReport.assignToCourseObj &&
-                            dataGetMarkSheetReport.assignToCourseObj.createdAt
+                            dataGetMarkSheetReport[0].createdAt
                         ).format('lll')}
                       </td>
                       <th>Graduation Date</th>
                       <td>
                         {moment(
                           dataGetMarkSheetReport &&
-                            dataGetMarkSheetReport.assignToCourseObj &&
-                            dataGetMarkSheetReport.assignToCourseObj.updatedAt
+                            dataGetMarkSheetReport[0].createdAt
                         ).format('lll')}
                       </td>
                     </tr>
@@ -228,8 +267,7 @@ const MarkSheetScreenReport = () => {
                       <th>Transcript No.</th>
                       <td>
                         {dataGetMarkSheetReport &&
-                          dataGetMarkSheetReport.obj &&
-                          dataGetMarkSheetReport.obj[0]._id}
+                          dataGetMarkSheetReport[0]._id}
                       </td>
                       <th>Issue Date</th>
                       <td>{moment(new Date()).format('lll')}</td>
@@ -237,22 +275,9 @@ const MarkSheetScreenReport = () => {
                   </tbody>
                 </table>
               </div>
+
+              <div className='row'>{marks(markSheetReport)}</div>
             </div>
-
-            {/* {console.log(
-            dataGetMarkSheetReport &&
-              dataGetMarkSheetReport.obj &&
-              dataGetMarkSheetReport.obj,
-
-            dataGetMarkSheetReport &&
-              dataGetMarkSheetReport.assignToCourseObj &&
-              dataGetMarkSheetReport.assignToCourseObj
-          )}
-          {JSON.stringify(
-            dataGetMarkSheetReport &&
-              dataGetMarkSheetReport.obj &&
-              dataGetMarkSheetReport.obj
-          )} */}
           </>
         )
       )}
