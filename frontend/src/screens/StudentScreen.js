@@ -10,6 +10,7 @@ import {
   FaTimesCircle,
   FaTrash,
   FaPhoneAlt,
+  FaIdCard,
 } from 'react-icons/fa'
 import moment from 'moment'
 
@@ -686,6 +687,11 @@ const StudentScreen = () => {
                     <div className='card-body'>
                       <Link to={`/student/${student._id}`}>
                         <h6 className='card-title'>{student.fullName}</h6>
+                        <h6 className='card-title'>
+                          {' '}
+                          <FaIdCard className='mb-1 text-primary' />{' '}
+                          {student.studentIdNo}
+                        </h6>
                       </Link>
                       <div className='card-text'>
                         <address className='d-flex justify-content-between'>

@@ -287,6 +287,9 @@ const InstructorDetailScreen = () => {
                 {data.fullName.toUpperCase()}
               </p>
               <div>
+                <span className='fw-bold'>Instructor ID: </span>{' '}
+                {data.instructorIdNo}
+                <br />
                 <span className='fw-bold'>Place Of Birth: </span>{' '}
                 {data.placeOfBirth}
                 <br />

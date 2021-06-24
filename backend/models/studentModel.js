@@ -11,6 +11,11 @@ const studentScheme = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    studentIdNo: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     fullName: {
       type: String,
       required: true,

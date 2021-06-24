@@ -7,6 +7,7 @@ import {
   FaEdit,
   FaInfoCircle,
   FaPhoneAlt,
+  FaIdCard,
   FaPlus,
   FaTimesCircle,
   FaTrash,
@@ -624,6 +625,11 @@ const InstructorScreen = () => {
                     <div className='card-body'>
                       <Link to={`/instructor/${instructor._id}`}>
                         <h6 className='card-title'>{instructor.fullName}</h6>
+                        <h6 className='card-title'>
+                          {' '}
+                          <FaIdCard className='mb-1 text-primary' />{' '}
+                          {instructor.instructorIdNo}
+                        </h6>
                       </Link>
                       <div className='card-text'>
                         <address className='d-flex justify-content-between'>

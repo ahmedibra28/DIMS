@@ -11,7 +11,11 @@ const instructorScheme = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-
+    instructorIdNo: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     fullName: {
       type: String,
       required: true,
