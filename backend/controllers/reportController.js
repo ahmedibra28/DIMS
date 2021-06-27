@@ -107,7 +107,31 @@ export const getCompleteMarkSheetReport = asyncHandler(async (req, res) => {
       .populate('updatedBy', 'name')
 
     if (obj.length > 0) {
-      res.status(201).json(obj)
+      const filtered = (arr) => {
+        let seen = {},
+          order = []
+
+        arr.map((o) => {
+          let _id = o.subject._id
+          if (_id in seen) {
+            let theoryMarks = seen[_id].theoryMarks + o.theoryMarks
+            let practicalMarks = seen[_id].practicalMarks + o.practicalMarks
+            seen[_id] = o
+            seen[_id].theoryMarks = theoryMarks
+            seen[_id].practicalMarks = practicalMarks
+            order.push(order.splice(order.indexOf(_id), 1))
+          } else {
+            seen[_id] = o
+            order.push(_id)
+          }
+        })
+        return order.map((k) => {
+          return seen[k]
+        })
+      }
+      var unique = filtered(obj)
+
+      res.status(201).json(unique)
     } else {
       res.status(400)
       throw new Error('Student mark sheet were not found')

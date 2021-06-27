@@ -36,51 +36,37 @@ const MarkSheetScreenReport = () => {
     getMarkSheetReportMutateAsync(data)
   }
 
-  console.log(dataGetMarkSheetReport && dataGetMarkSheetReport)
-
-  // const noOfSemester =
-  //   dataGetMarkSheetReport && dataGetMarkSheetReport[0].course.duration
-
-  // console.log(noOfSemester)
-
-  const markSheetReport =
+  const duration =
     dataGetMarkSheetReport &&
-    dataGetMarkSheetReport.filter(
-      (mark) =>
-        dataGetMarkSheetReport &&
-        dataGetMarkSheetReport.map((c) =>
-          [...Array(c.duration).keys()].map(
-            (sem) => sem + 1 === Number(mark.semester)
-          )
-        )
-    )
+    dataGetMarkSheetReport.map((mark) => mark.course.duration)
 
-  const marks = (marks) => {
+  const marks = (obj) => {
+    const { marks, sms } = obj
+
+    const filteredMarks = marks && marks.filter((m) => m.semester === sms)
+
     return (
-      <div className='col-md-6'>
-        <div className='table-responsive'>
-          <table className='table table-bordered border-primary'>
-            <thead>
-              <tr className='fw-bold text-center'>
-                Semester {marks && marks[0].semester}
-              </tr>
-              <tr>
-                <th>Course Name</th>
-                <th>Marks</th>
-              </tr>
-            </thead>
-            <tbody>
-              {marks &&
-                marks.map((mark, index) => (
-                  <tr key={index}>
-                    <td>{mark.subject.name}</td>
-                    <td>{mark.theoryMarks + mark.practicalMarks}%</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-        <div className='col-md-6'></div>
+      <div className='table-responsive'>
+        <table className='table table-bordered border-primary'>
+          <thead>
+            <tr className='fw-bold text-center'>
+              <th colSpan='2'>Semester {sms}</th>
+            </tr>
+            <tr>
+              <th>Course Name</th>
+              <th>Marks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredMarks &&
+              filteredMarks.map((mark, index) => (
+                <tr key={index}>
+                  <td>{mark.subject.name}</td>
+                  <td>{mark.theoryMarks}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       </div>
     )
   }
@@ -276,7 +262,13 @@ const MarkSheetScreenReport = () => {
                 </table>
               </div>
 
-              <div className='row'>{marks(markSheetReport)}</div>
+              <div className='row'>
+                {[...Array(duration[0]).keys()].map((sms) => (
+                  <div key={sms + 1} className='col-md-6'>
+                    {marks({ marks: dataGetMarkSheetReport, sms: sms + 1 })}
+                  </div>
+                ))}
+              </div>
             </div>
           </>
         )

@@ -27,7 +27,7 @@ const SubjectScreen = () => {
     register,
     handleSubmit,
     watch,
-    getValues,
+    // getValues,
     setValue,
     reset,
     formState: { errors },

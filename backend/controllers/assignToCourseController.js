@@ -10,7 +10,8 @@ export const addAssignToCourse = asyncHandler(async (req, res) => {
 
   const exist = await AssignToCourseModel.findOne({
     student,
-    course: { $eq: course },
+    shift,
+    // course: { $eq: course },
   })
 
   const coursePrice = await CourseModel.findById(course)
@@ -50,8 +51,10 @@ export const updateAssignToCourse = asyncHandler(async (req, res) => {
     const exist = await AssignToCourseModel.find({
       _id: { $ne: _id },
       student,
-      course: { $eq: course },
+      shift,
+      // course: { $eq: course },
     })
+    console.log(exist)
     if (exist.length === 0) {
       obj.updatedBy = updatedBy
       obj.isActive = true
