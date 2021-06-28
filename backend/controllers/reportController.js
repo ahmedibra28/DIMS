@@ -1,4 +1,5 @@
 import asyncHandler from 'express-async-handler'
+import mongoose from 'mongoose'
 import InstructorModel from '../models/instructorModel.js'
 import moment from 'moment'
 import AttendanceModel from '../models/attendanceModal.js'
@@ -94,6 +95,51 @@ export const getCompleteMarkSheetReport = asyncHandler(async (req, res) => {
     //   isActive: true,
     //   isGraduated: false,
     // })
+
+    // const aggregateDataObj = await MarksModel.aggregate([
+    //   {
+    //     $match: {
+    //       student: studentObj._id,
+    //       course: mongoose.Types.ObjectId(course),
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: 'students',
+    //       localField: 'student',
+    //       foreignField: '_id',
+    //       as: 'student',
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: 'subjects',
+    //       localField: 'subject',
+    //       foreignField: '_id',
+    //       as: 'subject',
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: 'courses',
+    //       localField: 'course',
+    //       foreignField: '_id',
+    //       as: 'course',
+    //     },
+    //   },
+    //   {
+    //     $group: {
+    //       _id: {
+    //         subject: '$subject',
+    //         course: '$course',
+    //         student: '$student',
+    //         semester: '$semester',
+    //       },
+    //       totalTheoryMarks: { $sum: '$theoryMarks' },
+    //       totalPracticalMarks: { $sum: '$practicalMarks' },
+    //     },
+    //   },
+    // ])
 
     const obj = await MarksModel.find({
       student: studentObj._id,
