@@ -89,12 +89,17 @@ export const getCompleteMarkSheetReport = asyncHandler(async (req, res) => {
   })
 
   if (studentObj) {
-    // const assignToCourseObj = await AssignToCourseModel.findOne({
-    //   course,
-    //   student: studentObj._id,
-    //   isActive: true,
-    //   isGraduated: false,
-    // })
+    const assignToCourseObj = await AssignToCourseModel.findOne({
+      course,
+      student: studentObj._id,
+      isActive: false,
+      isGraduated: true,
+    })
+
+    const graduateStatus = {
+      isGraduated: assignToCourseObj ? true : false,
+      graduateDate: assignToCourseObj ? assignToCourseObj.updatedAt : false,
+    }
 
     // const aggregateDataObj = await MarksModel.aggregate([
     //   {
@@ -175,9 +180,9 @@ export const getCompleteMarkSheetReport = asyncHandler(async (req, res) => {
           return seen[k]
         })
       }
-      var unique = filtered(obj)
+      var markSheet = filtered(obj)
 
-      res.status(201).json(unique)
+      res.status(201).json({ markSheet, graduateStatus })
     } else {
       res.status(400)
       throw new Error('Student mark sheet were not found')

@@ -84,6 +84,7 @@ const AttendanceScreenReport = () => {
             alt={student.student && student.student.picture.pictureName}
           />
         </td>
+        <td>{student.student && student.student.studentIdNo}</td>
         <td>{student.student && student.student.fullName}</td>
         <td>{data.semester}</td>
         <td>{data.subject.name}</td>
@@ -288,7 +289,8 @@ const AttendanceScreenReport = () => {
               </caption> */}
               <thead>
                 <tr>
-                  <th>PIC</th>
+                  <th>PHOTO</th>
+                  <th>SID</th>
                   <th>NAME</th>
                   <th>SEMESTER</th>
                   <th>SUBJECT</th>

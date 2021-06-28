@@ -6,6 +6,7 @@ import Loader from 'react-loader-spinner'
 import Message from '../components/Message'
 import logo from '../logo.png'
 import moment from 'moment'
+import { FaTimesCircle } from 'react-icons/fa'
 
 const MarkSheetScreenReport = () => {
   const {
@@ -13,7 +14,7 @@ const MarkSheetScreenReport = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: {},
+    defaultValues: { student: 21475146 },
   })
 
   const {
@@ -21,12 +22,15 @@ const MarkSheetScreenReport = () => {
     isError: isErrorGetMarkSheetReport,
     error: errorGetMarkSheetReport,
     isSuccess: isSuccessGetMarkSheetReport,
-    data: dataGetMarkSheetReport,
+    data: obj,
     mutateAsync: getMarkSheetReportMutateAsync,
   } = useMutation(['getMarkSheetReport'], getCompleteMarkSheetReport, {
     retry: 0,
     onSuccess: () => {},
   })
+
+  const graduateStatus = obj && obj.graduateStatus
+  const dataGetMarkSheetReport = obj && obj.markSheet
 
   const { data: dataCourse } = useQuery('courses', () => getCourses(), {
     retry: 0,
@@ -44,17 +48,25 @@ const MarkSheetScreenReport = () => {
     const { marks, sms } = obj
 
     const filteredMarks = marks && marks.filter((m) => m.semester === sms)
+    const percentage = (mark) => {
+      const totalMarks = Number(mark.theoryMarks) + Number(mark.practicalMarks)
 
+      const constantMarks =
+        Number(mark.subject.theoryMarks) + Number(mark.subject.practicalMarks)
+
+      return ((100 * totalMarks) / constantMarks).toFixed(1)
+    }
     return (
-      <div className='table-responsive'>
+      <div className='table-responsives'>
         <table className='table table-bordered border-primary'>
           <thead>
-            <tr className='fw-bold text-center'>
-              <th colSpan='2'>Semester {sms}</th>
+            <tr className='fw-bold text-center '>
+              <th colSpan='3'>Semester {sms}</th>
             </tr>
-            <tr>
+            <tr className=''>
               <th>Course Name</th>
-              <th>Marks</th>
+              <th>Total Marks</th>
+              <th>Average Marks</th>
             </tr>
           </thead>
           <tbody>
@@ -62,7 +74,10 @@ const MarkSheetScreenReport = () => {
               filteredMarks.map((mark, index) => (
                 <tr key={index}>
                   <td>{mark.subject.name}</td>
-                  <td>{mark.theoryMarks}</td>
+                  <td>
+                    {Number(mark.theoryMarks) + Number(mark.practicalMarks)}
+                  </td>
+                  <td>{percentage(mark)}%</td>
                 </tr>
               ))}
           </tbody>
@@ -243,10 +258,13 @@ const MarkSheetScreenReport = () => {
                       </td>
                       <th>Graduation Date</th>
                       <td>
-                        {moment(
-                          dataGetMarkSheetReport &&
-                            dataGetMarkSheetReport[0].createdAt
-                        ).format('lll')}
+                        {graduateStatus && graduateStatus.isGraduated ? (
+                          moment(
+                            graduateStatus && graduateStatus.graduateDate
+                          ).format('lll')
+                        ) : (
+                          <FaTimesCircle className='text-danger mb-1' />
+                        )}
                       </td>
                     </tr>
                     <tr>

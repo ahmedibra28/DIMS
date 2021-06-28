@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler'
 import MarksModel from '../models/marksModel.js'
 import AssignToSubjectModel from '../models/assignToSubjectModel.js'
 import AssignToCourseModel from '../models/assignToCourseModel.js'
-
+import mongoose from 'mongoose'
 import SubjectModel from '../models/subjectModel.js'
 
 export const addMarks = asyncHandler(async (req, res) => {
@@ -123,8 +123,10 @@ export const updateMarks = asyncHandler(async (req, res) => {
 export const getMarks = asyncHandler(async (req, res) => {
   const semesterNo = Number(req.params.semesterNo)
   const shift = req.params.shift
+  const student = req.params.id
+
   const obj = await MarksModel.find({
-    student: req.params.id,
+    student,
     semester: semesterNo,
     shift,
   })
@@ -135,6 +137,8 @@ export const getMarks = asyncHandler(async (req, res) => {
     .populate('instructor')
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')
+
+  // console.log(obj)
   res.status(201).json(obj)
 })
 

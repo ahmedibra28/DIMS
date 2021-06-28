@@ -175,7 +175,7 @@ const MarkSheetScreen = () => {
     const percentage = () => {
       const originalSum = subjectTheoryMarks() + subjectPracticalMarks()
       const obtainedSum = theoryMarks() + practicalMarks()
-      return (100 * obtainedSum) / originalSum
+      return ((100 * obtainedSum) / originalSum).toFixed(1)
     }
 
     return (

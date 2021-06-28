@@ -54,7 +54,7 @@ export const updateAssignToCourse = asyncHandler(async (req, res) => {
       shift,
       // course: { $eq: course },
     })
-    console.log(exist)
+
     if (exist.length === 0) {
       obj.updatedBy = updatedBy
       obj.isActive = true
