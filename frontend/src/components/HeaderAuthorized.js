@@ -11,6 +11,7 @@ import {
   FaUserCircle,
   FaUserGraduate,
   FaUsers,
+  FaDollarSign,
 } from 'react-icons/fa'
 import logo from '../logo.png'
 
@@ -31,31 +32,40 @@ const HeaderAuthorized = () => {
             style={{ height: 'calc(100vh - 100px)' }}
           >
             <div>
-              <li className='nav-item'>
-                <Link to='/course-type' className='nav-link'>
-                  <FaLeanpub className='mb-1' /> Course Type
-                </Link>
-              </li>
-              <li className='nav-item'>
-                <Link to='/course' className='nav-link'>
-                  <FaLeanpub className='mb-1' /> Courses
-                </Link>
-              </li>
-              <li className='nav-item'>
-                <Link to='/subject' className='nav-link'>
-                  <FaBook className='mb-1' /> Subjects
-                </Link>
-              </li>
-              <li className='nav-item'>
-                <Link to='/student' className='nav-link'>
-                  <FaUserGraduate className='mb-1' /> Students
-                </Link>
-              </li>
-              <li className='nav-item'>
-                <Link to='/instructor' className='nav-link'>
-                  <FaChalkboardTeacher className='mb-1' /> Instructor
-                </Link>
-              </li>
+              {userInfo && userInfo.roles.includes('Admin') && (
+                <>
+                  <li className='nav-item'>
+                    <Link to='/course-type' className='nav-link'>
+                      <FaLeanpub className='mb-1' /> Course Type
+                    </Link>
+                  </li>
+                  <li className='nav-item'>
+                    <Link to='/course' className='nav-link'>
+                      <FaLeanpub className='mb-1' /> Courses
+                    </Link>
+                  </li>
+                  <li className='nav-item'>
+                    <Link to='/subject' className='nav-link'>
+                      <FaBook className='mb-1' /> Subjects
+                    </Link>
+                  </li>
+                  <li className='nav-item'>
+                    <Link to='/student' className='nav-link'>
+                      <FaUserGraduate className='mb-1' /> Students
+                    </Link>
+                  </li>
+                  <li className='nav-item'>
+                    <Link to='/instructor' className='nav-link'>
+                      <FaChalkboardTeacher className='mb-1' /> Instructor
+                    </Link>
+                  </li>
+                  <li className='nav-item'>
+                    <Link to='/fee' className='nav-link'>
+                      <FaDollarSign className='mb-1' /> Fee
+                    </Link>
+                  </li>
+                </>
+              )}
               <li className='nav-item'>
                 <Link to='/attendance' className='nav-link'>
                   <FaClock className='mb-1' /> Attendance
@@ -66,11 +76,15 @@ const HeaderAuthorized = () => {
                   <FaClock className='mb-1' /> Attendance Report
                 </Link>
               </li>
-              <li className='nav-item'>
-                <Link to='/mark-sheet/report' className='nav-link'>
-                  <FaTable className='mb-1' /> Mark Sheet Report
-                </Link>
-              </li>
+              {userInfo && userInfo.roles.includes('Admin') && (
+                <>
+                  <li className='nav-item'>
+                    <Link to='/mark-sheet/report' className='nav-link'>
+                      <FaTable className='mb-1' /> Mark Sheet Report
+                    </Link>
+                  </li>
+                </>
+              )}
             </div>
 
             <div style={{ marginBottom: '-3rem' }}>

@@ -17,6 +17,7 @@ import assignToSubjectRoutes from './routes/assignToSubjectRoutes.js'
 import marksRoutes from './routes/marksRoutes.js'
 import attendanceRoutes from './routes/attendanceRoutes.js'
 import reportRoutes from './routes/reportRoutes.js'
+import feeRoutes from './routes/feeRoutes.js'
 
 dotenv.config()
 
@@ -42,6 +43,7 @@ app.use('/api/assign-to-subjects', assignToSubjectRoutes)
 app.use('/api/marks', marksRoutes)
 app.use('/api/attendances', attendanceRoutes)
 app.use('/api/reports', reportRoutes)
+app.use('/api/fees', feeRoutes)
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))

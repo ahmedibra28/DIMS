@@ -22,11 +22,8 @@ export const getAttendanceReport = asyncHandler(async (req, res) => {
     isActive: true,
   })
 
-  let endDate = moment(eDate)
-  endDate = endDate.endOf('day')
-
-  let startDate = moment(sDate)
-  startDate = startDate.startOf('day')
+  const startDate = moment(sDate).clone().startOf('day').format()
+  const endDate = moment(eDate).clone().endOf('day').format()
 
   if (instructorObj || isAdmin) {
     const studentObj = await StudentModel.findOne({
@@ -42,7 +39,7 @@ export const getAttendanceReport = asyncHandler(async (req, res) => {
         subject,
         semester,
         shift,
-        createdAt: { $gte: startDate.format(), $lt: endDate.format() },
+        createdAt: { $gte: startDate, $lt: endDate },
       })
         .sort({ createdAt: -1 })
         .populate('instructor')
