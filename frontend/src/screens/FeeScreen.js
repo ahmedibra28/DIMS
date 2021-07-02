@@ -27,7 +27,7 @@ const FeeScreen = () => {
     isSuccess: isSuccessSearchStudentToPay,
     data: dataSearchStudentToPay,
     mutateAsync: searchStudentToPayMutateAsync,
-  } = useMutation(['searchStudentsToPay'], searchStudentToPay, {
+  } = useMutation('searchStudentsToPay', searchStudentToPay, {
     retry: 0,
     onSuccess: () => {},
   })
@@ -40,7 +40,6 @@ const FeeScreen = () => {
     mutateAsync: payMutateAsync,
   } = useMutation(['pay'], pay, {
     retry: 0,
-    onSuccess: () => {},
   })
 
   const { data: dataCourse } = useQuery('courses', () => getCourses(), {
@@ -56,17 +55,32 @@ const FeeScreen = () => {
     })
   }
 
+  const courseFromServer =
+    dataSearchStudentToPay && dataSearchStudentToPay.course
+  const paymentFromServer =
+    dataSearchStudentToPay && dataSearchStudentToPay.payment
+  const semesterFromServer =
+    dataSearchStudentToPay && dataSearchStudentToPay.semester
+  const shiftFromServer = dataSearchStudentToPay && dataSearchStudentToPay.shift
+
   const paymentHandler = (student) => {
     if (paymentDate) {
-      payMutateAsync({ student, paymentDate })
       setMessage(null)
+      payMutateAsync({
+        student,
+        semesterFromServer,
+        courseFromServer,
+        shiftFromServer,
+        paymentDate,
+      })
     } else {
-      setMessage('Please select payment date')
       setTimeout(() => {
         setMessage(null)
       }, 5000)
+      setMessage('Payment date is required')
     }
   }
+
   return (
     <div>
       {message && <Message variant='danger'>{message}</Message>}
@@ -133,27 +147,6 @@ const FeeScreen = () => {
               )}
             </div>
           </div>
-
-          <div className='col-md-2 col-12'>
-            <div className='mb-3'>
-              <label htmlFor='shift'>Shift</label>
-              <select
-                {...register('shift', {
-                  required: 'Shift is required',
-                })}
-                type='text'
-                placeholder='Enter date of admission'
-                className='form-control'
-              >
-                <option value=''>-----------</option>
-                <option value='Morning'>Morning</option>
-                <option value='Afternoon'>Afternoon</option>
-              </select>
-              {errors.shift && (
-                <span className='text-danger'>{errors.shift.message}</span>
-              )}
-            </div>
-          </div>
           <div className='col-md-3 col-12'>
             <div className='mb-3'>
               <label htmlFor='paymentDate'>Payment Date</label>
@@ -171,6 +164,26 @@ const FeeScreen = () => {
                 <span className='text-danger'>
                   {errors.paymentDate.message}
                 </span>
+              )}
+            </div>
+          </div>
+          <div className='col-md-2 col-12'>
+            <div className='mb-3'>
+              <label htmlFor='shift'>Shift</label>
+              <select
+                {...register('shift', {
+                  required: 'Shift is required',
+                })}
+                type='text'
+                placeholder='Enter shift'
+                className='form-control'
+              >
+                <option value=''>-----------</option>
+                <option value='Morning'>Morning</option>
+                <option value='Afternoon'>Afternoon</option>
+              </select>
+              {errors.shift && (
+                <span className='text-danger'>{errors.shift.message}</span>
               )}
             </div>
           </div>
@@ -216,7 +229,8 @@ const FeeScreen = () => {
           <div className='table-responsive '>
             <table className='table table-sm hover bordered striped caption-top '>
               <caption>
-                {dataSearchStudentToPay && dataSearchStudentToPay.length}{' '}
+                {dataSearchStudentToPay &&
+                  dataSearchStudentToPay.payment.length}{' '}
                 students were found
               </caption>
               <thead>
@@ -231,8 +245,8 @@ const FeeScreen = () => {
                 </tr>
               </thead>
               <tbody>
-                {dataSearchStudentToPay &&
-                  dataSearchStudentToPay.map((student) => (
+                {paymentFromServer &&
+                  paymentFromServer.map((student) => (
                     <tr key={student._id}>
                       <td>
                         <img
@@ -250,25 +264,27 @@ const FeeScreen = () => {
                       </td>
                       <td>{student.student && student.student.studentIdNo}</td>
                       <td>{student.student && student.student.fullName}</td>
-                      <td>{student.semester}</td>
-                      <td>{student.course && student.course.name}</td>
+                      <td>{semesterFromServer && semesterFromServer}</td>
+                      <td>{courseFromServer && courseFromServer.name}</td>
                       <td>
-                        ${student.course && student.course.price.toFixed(2)}
+                        ${courseFromServer && courseFromServer.price.toFixed(2)}
                       </td>
                       <td>
-                        <button
-                          disabled={isLoadingPay}
-                          onClick={() => paymentHandler(student)}
-                          className='btn btn-success btn-sm '
-                        >
-                          {isLoadingPay ? (
-                            <span className='spinner-border spinner-border-sm' />
-                          ) : (
-                            <>
-                              <FaDollarSign className='mb-1' /> Pay{' '}
-                            </>
-                          )}
-                        </button>
+                        {!student.isPaid && (
+                          <button
+                            disabled={isLoadingPay}
+                            onClick={() => paymentHandler(student)}
+                            className='btn btn-success btn-sm '
+                          >
+                            {isLoadingPay ? (
+                              <span className='spinner-border spinner-border-sm' />
+                            ) : (
+                              <>
+                                <FaDollarSign className='mb-1' /> Pay{' '}
+                              </>
+                            )}
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}

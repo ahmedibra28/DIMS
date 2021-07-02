@@ -40,7 +40,8 @@ const feeScheme = mongoose.Schema(
           default: 0.0,
         },
         paymentDate: {
-          type: Date,
+          type: String,
+          default: null,
         },
       },
     ],

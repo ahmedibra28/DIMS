@@ -29,3 +29,12 @@ export const pay = async (obj) => {
     throw error.response.data.message
   }
 }
+
+export const feeGeneration = async (obj) => {
+  try {
+    const { data } = await axios.post(`/api/fees/generate`, obj, config())
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}

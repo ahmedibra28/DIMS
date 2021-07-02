@@ -60,6 +60,11 @@ const HeaderAuthorized = () => {
                     </Link>
                   </li>
                   <li className='nav-item'>
+                    <Link to='/fee/generate' className='nav-link'>
+                      <FaDollarSign className='mb-1' /> Fee Generation
+                    </Link>
+                  </li>
+                  <li className='nav-item'>
                     <Link to='/fee' className='nav-link'>
                       <FaDollarSign className='mb-1' /> Fee
                     </Link>

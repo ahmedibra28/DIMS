@@ -24,6 +24,7 @@ import AttendanceScreen from '../../screens/AttendanceScreen'
 import AttendanceScreenReport from '../../screens/AttendanceScreenReport'
 import MarkSheetScreenReport from '../../screens/MarkSheetScreenReport'
 import FeeScreen from '../../screens/FeeScreen'
+import feeGenerationScreen from '../../screens/feeGenerationScreen'
 
 const Routes = () => {
   return (
@@ -130,6 +131,12 @@ const Routes = () => {
           role={['Admin']}
           path='/fee'
           component={FeeScreen}
+        />
+        <PrivateRoute
+          exact
+          role={['Admin']}
+          path='/fee/generate'
+          component={feeGenerationScreen}
         />
 
         <Route component={NotFound} />
