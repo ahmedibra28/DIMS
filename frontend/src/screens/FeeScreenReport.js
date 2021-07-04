@@ -1,19 +1,18 @@
 import { useState } from 'react'
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
-import { getAttendanceReport } from '../api/reports'
+import { getCompleteFeeReport } from '../api/reports'
 import { useQuery, useMutation } from 'react-query'
-import { getSubjects } from '../api/subjects'
 import { getCourses } from '../api/courses'
 import { useForm } from 'react-hook-form'
 import Loader from 'react-loader-spinner'
 import Message from '../components/Message'
-import moment from 'moment'
-
 import 'react-date-range/dist/styles.css' // main style file
 import 'react-date-range/dist/theme/default.css' // theme css file
 import { DateRangePicker } from 'react-date-range'
+import { FaRegCheckCircle, FaRegTimesCircle } from 'react-icons/fa'
 
-const AttendanceScreenReport = () => {
+const FeeScreenReport = () => {
+  const [message, setMessage] = useState(null)
+  const [studentIdNo, setStudentIdNo] = useState(null)
   const [sDate, setSDate] = useState(new Date())
   const [eDate, setEDate] = useState(new Date())
 
@@ -38,23 +37,15 @@ const AttendanceScreenReport = () => {
   })
 
   const {
-    isLoading: isLoadingGetAttendance,
-    isError: isErrorGetAttendance,
-    error: errorGetAttendance,
-    isSuccess: isSuccessGetAttendance,
-    data: dataGetAttendanceAll,
-    mutateAsync: getAttendanceMutateAsync,
-  } = useMutation(['getAttendance'], getAttendanceReport, {
+    isLoading: isLoadingFeeReport,
+    isError: isErrorFeeReport,
+    error: errorFeeReport,
+    isSuccess: isSuccessFeeReport,
+    data: dataFeeReport,
+    mutateAsync: getCompleteFeeReportMutateAsync,
+  } = useMutation('feeReport', getCompleteFeeReport, {
     retry: 0,
     onSuccess: () => {},
-  })
-
-  const dataGetAttendance =
-    dataGetAttendanceAll && dataGetAttendanceAll.attendanceObj
-  const studentId = dataGetAttendanceAll && dataGetAttendanceAll.studentId
-
-  const { data: dataSubject } = useQuery('subjects', () => getSubjects(), {
-    retry: 0,
   })
 
   const { data: dataCourse } = useQuery('courses', () => getCourses(), {
@@ -62,18 +53,24 @@ const AttendanceScreenReport = () => {
   })
 
   const submitHandler = (data) => {
-    getAttendanceMutateAsync({
-      course: data.course,
-      subject: data.subject,
-      semester: data.semester,
-      shift: data.shift,
-      student: data.student,
-      sDate,
-      eDate,
-    })
+    if (sDate) {
+      setMessage(null)
+      getCompleteFeeReportMutateAsync({
+        course: data.course,
+        semester: data.semester,
+        shift: data.shift,
+        sDate,
+        eDate,
+      })
+    } else {
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+      setMessage('Date is required')
+    }
   }
 
-  const filteredAttendance = (student, data) => {
+  const filteredFee = (student, data) => {
     return (
       <tr key={student._id}>
         <td>
@@ -87,20 +84,23 @@ const AttendanceScreenReport = () => {
         <td>{student.student && student.student.studentIdNo}</td>
         <td>{student.student && student.student.fullName}</td>
         <td>{data.semester}</td>
-        <td>{data.subject.name}</td>
+        <td>{data.course && data.course.name}</td>
+        <td>${data.course && data.course.price.toFixed(2)}</td>
+        <td>{student.paymentDate.slice(0, 10)}</td>
         <td>
-          {student.isPresent ? (
-            <FaCheckCircle className='text-success mb-1' />
+          {student.isPaid ? (
+            <FaRegCheckCircle className='text-success mb-1' />
           ) : (
-            <FaTimesCircle className='text-danger mb-1' />
+            <FaRegTimesCircle className='text-danger mb-1' />
           )}
         </td>
-        <td>{moment(data.createdAt).format('lll')}</td>
       </tr>
     )
   }
+
   return (
     <div>
+      {message && <Message variant='danger'>{message}</Message>}
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className='row'>
           <div className='col-md-6 my-auto'>
@@ -110,7 +110,7 @@ const AttendanceScreenReport = () => {
               className='w-100'
             />
           </div>
-          <div className='col-md-6'>
+          <div className='col-md-6 my-auto'>
             <div className='row'>
               <div className='col-md-12 col-12'>
                 <div className='mb-3'>
@@ -170,38 +170,8 @@ const AttendanceScreenReport = () => {
                   )}
                 </div>
               </div>
+
               <div className='col-md-12 col-12'>
-                <div className='mb-3'>
-                  <label htmlFor='subject'>Subject</label>
-                  <select
-                    {...register('subject', {
-                      required: 'Subject Type is required',
-                    })}
-                    type='text'
-                    placeholder='Enter subject'
-                    className='form-control'
-                  >
-                    <option value=''>-----------</option>
-                    {dataSubject &&
-                      dataSubject.map(
-                        (subject) =>
-                          subject.isActive &&
-                          subject.course._id === watch().course &&
-                          subject.semester === Number(watch().semester) && (
-                            <option key={subject._id} value={subject._id}>
-                              {subject.name}
-                            </option>
-                          )
-                      )}
-                  </select>
-                  {errors.subject && (
-                    <span className='text-danger'>
-                      {errors.subject.message}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className='col-md-5 col-12'>
                 <div className='mb-3'>
                   <label htmlFor='shift'>Shift</label>
                   <select
@@ -209,7 +179,7 @@ const AttendanceScreenReport = () => {
                       required: 'Shift is required',
                     })}
                     type='text'
-                    placeholder='Enter date of admission'
+                    placeholder='Enter shift'
                     className='form-control'
                   >
                     <option value=''>-----------</option>
@@ -221,7 +191,7 @@ const AttendanceScreenReport = () => {
                   )}
                 </div>
               </div>
-              <div className='col-md-5 col-12'>
+              <div className='col-md-10 col-12'>
                 <div className='mb-3'>
                   <label htmlFor='student'>Student ID</label>
                   <input
@@ -230,6 +200,7 @@ const AttendanceScreenReport = () => {
                     min='0'
                     placeholder='Enter student ID'
                     className='form-control'
+                    onChange={(e) => setStudentIdNo(e.target.value)}
                   />
                   {errors.student && (
                     <span className='text-danger'>
@@ -238,13 +209,13 @@ const AttendanceScreenReport = () => {
                   )}
                 </div>
               </div>
-              <div className='col-md-1 col-1 mt-3'>
+              <div className='col-md-2 col-2 mt-3'>
                 <button
                   type='submit'
-                  className='btn btn-primary mt-2 btn-lg'
-                  disabled={isLoadingGetAttendance}
+                  className='btn btn-primary float-end mt-2 btn-lg'
+                  disabled={isLoadingFeeReport}
                 >
-                  {isLoadingGetAttendance ? (
+                  {isLoadingFeeReport ? (
                     <span className='spinner-border spinner-border-sm' />
                   ) : (
                     'Search'
@@ -255,17 +226,15 @@ const AttendanceScreenReport = () => {
           </div>
         </div>
       </form>
+      <hr />
 
-      {isErrorGetAttendance && (
-        <Message variant='danger'>{errorGetAttendance}</Message>
-      )}
-      {isSuccessGetAttendance && (
+      {isErrorFeeReport && <Message variant='danger'>{errorFeeReport}</Message>}
+      {isSuccessFeeReport && (
         <Message variant='success'>
           Student attendance data found successfully
         </Message>
       )}
-
-      {isLoadingGetAttendance ? (
+      {isLoadingFeeReport ? (
         <div className='text-center'>
           <Loader
             type='ThreeDots'
@@ -275,11 +244,11 @@ const AttendanceScreenReport = () => {
             timeout={3000} //3 secs
           />
         </div>
-      ) : isErrorGetAttendance ? (
-        <Message variant='danger'>{errorGetAttendance}</Message>
+      ) : isErrorFeeReport ? (
+        <Message variant='danger'>{errorFeeReport}</Message>
       ) : (
         <>
-          {dataGetAttendance && (
+          {dataFeeReport && (
             <div className='table-responsive '>
               <table className='table table-sm hover bordered striped caption-top '>
                 <thead>
@@ -288,19 +257,20 @@ const AttendanceScreenReport = () => {
                     <th>SID</th>
                     <th>NAME</th>
                     <th>SEMESTER</th>
-                    <th>SUBJECT</th>
-                    <th>ATTENDED?</th>
-                    <th>ATTENDED DATE</th>
+                    <th>COURSE</th>
+                    <th>FEE</th>
+                    <th>PAYMENT DATE</th>
+                    <th>P. STATUS</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {dataGetAttendance &&
-                    dataGetAttendance.map((data) =>
-                      data.student.map((student) =>
-                        studentId
-                          ? student.student._id === studentId &&
-                            filteredAttendance(student, data)
-                          : filteredAttendance(student, data)
+                  {dataFeeReport &&
+                    dataFeeReport.map((data) =>
+                      data.payment.map((student) =>
+                        studentIdNo
+                          ? student.student.studentIdNo ===
+                              Number(studentIdNo) && filteredFee(student, data)
+                          : filteredFee(student, data)
                       )
                     )}
                 </tbody>
@@ -313,4 +283,4 @@ const AttendanceScreenReport = () => {
   )
 }
 
-export default AttendanceScreenReport
+export default FeeScreenReport

@@ -226,71 +226,77 @@ const FeeScreen = () => {
         <Message variant='danger'>{errorSearchStudentToPay}</Message>
       ) : (
         <>
-          <div className='table-responsive '>
-            <table className='table table-sm hover bordered striped caption-top '>
-              <caption>
-                {dataSearchStudentToPay &&
-                  dataSearchStudentToPay.payment.length}{' '}
-                students were found
-              </caption>
-              <thead>
-                <tr>
-                  <th>PHOTO</th>
-                  <th>SID</th>
-                  <th>NAME</th>
-                  <th>SEMESTER</th>
-                  <th>COURSE</th>
-                  <th>FEE</th>
-                  <th>ACTION</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paymentFromServer &&
-                  paymentFromServer.map((student) => (
-                    <tr key={student._id}>
-                      <td>
-                        <img
-                          src={
-                            student.student &&
-                            student.student.picture.picturePath
-                          }
-                          className='img-fluid'
-                          style={{ width: '25px' }}
-                          alt={
-                            student.student &&
-                            student.student.picture.pictureName
-                          }
-                        />
-                      </td>
-                      <td>{student.student && student.student.studentIdNo}</td>
-                      <td>{student.student && student.student.fullName}</td>
-                      <td>{semesterFromServer && semesterFromServer}</td>
-                      <td>{courseFromServer && courseFromServer.name}</td>
-                      <td>
-                        ${courseFromServer && courseFromServer.price.toFixed(2)}
-                      </td>
-                      <td>
-                        {!student.isPaid && (
-                          <button
-                            disabled={isLoadingPay}
-                            onClick={() => paymentHandler(student)}
-                            className='btn btn-success btn-sm '
-                          >
-                            {isLoadingPay ? (
-                              <span className='spinner-border spinner-border-sm' />
-                            ) : (
-                              <>
-                                <FaDollarSign className='mb-1' /> Pay{' '}
-                              </>
-                            )}
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+          {dataSearchStudentToPay && (
+            <div className='table-responsive '>
+              <table className='table table-sm hover bordered striped caption-top '>
+                <caption>
+                  {dataSearchStudentToPay &&
+                    dataSearchStudentToPay.payment.length}{' '}
+                  students were found
+                </caption>
+                <thead>
+                  <tr>
+                    <th>PHOTO</th>
+                    <th>SID</th>
+                    <th>NAME</th>
+                    <th>SEMESTER</th>
+                    <th>COURSE</th>
+                    <th>FEE</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paymentFromServer &&
+                    paymentFromServer.map((student) => (
+                      <tr key={student._id}>
+                        <td>
+                          <img
+                            src={
+                              student.student &&
+                              student.student.picture.picturePath
+                            }
+                            className='img-fluid'
+                            style={{ width: '25px' }}
+                            alt={
+                              student.student &&
+                              student.student.picture.pictureName
+                            }
+                          />
+                        </td>
+                        <td>
+                          {student.student && student.student.studentIdNo}
+                        </td>
+                        <td>{student.student && student.student.fullName}</td>
+                        <td>{semesterFromServer && semesterFromServer}</td>
+                        <td>{courseFromServer && courseFromServer.name}</td>
+                        <td>
+                          $
+                          {courseFromServer &&
+                            courseFromServer.price.toFixed(2)}
+                        </td>
+                        <td>
+                          {!student.isPaid && (
+                            <button
+                              disabled={isLoadingPay}
+                              onClick={() => paymentHandler(student)}
+                              className='btn btn-success btn-sm '
+                            >
+                              {isLoadingPay ? (
+                                <span className='spinner-border spinner-border-sm' />
+                              ) : (
+                                <>
+                                  <FaDollarSign className='mb-1' /> Pay{' '}
+                                </>
+                              )}
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </>
       )}
     </div>

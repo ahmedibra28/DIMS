@@ -12,6 +12,7 @@ import {
   FaUserGraduate,
   FaUsers,
   FaDollarSign,
+  FaChartBar,
 } from 'react-icons/fa'
 import logo from '../logo.png'
 
@@ -76,19 +77,39 @@ const HeaderAuthorized = () => {
                   <FaClock className='mb-1' /> Attendance
                 </Link>
               </li>
-              <li className='nav-item'>
-                <Link to='/attendance/report' className='nav-link'>
-                  <FaClock className='mb-1' /> Attendance Report
-                </Link>
-              </li>
+
               {userInfo && userInfo.roles.includes('Admin') && (
-                <>
-                  <li className='nav-item'>
-                    <Link to='/mark-sheet/report' className='nav-link'>
-                      <FaTable className='mb-1' /> Mark Sheet Report
-                    </Link>
-                  </li>
-                </>
+                <li className='nav-item dropdown '>
+                  <span
+                    className='nav-link dropdown-toggle'
+                    id='navbarDropdown'
+                    role='button'
+                    data-bs-toggle='dropdown'
+                    aria-expanded='false'
+                  >
+                    <FaChartBar className='mb-1' /> Reports
+                  </span>
+                  <ul
+                    className='dropdown-menu'
+                    aria-labelledby='navbarDropdown'
+                  >
+                    <li className='nav-item'>
+                      <Link to='/fee/report' className='dropdown-item'>
+                        <FaDollarSign className='mb-1' /> Fee Report
+                      </Link>
+                    </li>
+                    <li className='nav-item'>
+                      <Link to='/attendance/report' className='dropdown-item'>
+                        <FaClock className='mb-1' /> Attendance Report
+                      </Link>
+                    </li>
+                    <li className='nav-item'>
+                      <Link to='/mark-sheet/report' className='dropdown-item'>
+                        <FaTable className='mb-1' /> Mark Sheet Report
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
               )}
             </div>
 

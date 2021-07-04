@@ -29,3 +29,12 @@ export const getCompleteMarkSheetReport = async (obj) => {
     throw error.response.data.message
   }
 }
+
+export const getCompleteFeeReport = async (obj) => {
+  try {
+    const { data } = await axios.post(`/api/reports/fee`, obj, config())
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}

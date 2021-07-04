@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler'
-import mongoose from 'mongoose'
 import InstructorModel from '../models/instructorModel.js'
+import FeeModel from '../models/feeModel.js'
 import moment from 'moment'
 import AttendanceModel from '../models/attendanceModal.js'
 import StudentModel from '../models/studentModel.js'
@@ -188,4 +188,27 @@ export const getCompleteMarkSheetReport = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error('Student record were not found')
   }
+})
+
+export const getCompleteFeeReport = asyncHandler(async (req, res) => {
+  const { course, shift, sDate, eDate } = req.body
+  const semester = Number(req.body.semester)
+  const startDate = moment(sDate).clone().startOf('month').format()
+  const endDate = moment(eDate).clone().endOf('month').format()
+
+  const fee = await FeeModel.find({
+    semester,
+    shift,
+    course,
+    createdAt: { $gte: startDate, $lt: endDate },
+  })
+    .populate('payment.student')
+    .populate('course')
+    .populate('createdBy', 'name')
+    .populate('updatedBy', 'name')
+  if (!fee) {
+    res.status(400)
+    throw new Error(`The is no student fee report were found`)
+  }
+  res.status(200).json(fee)
 })

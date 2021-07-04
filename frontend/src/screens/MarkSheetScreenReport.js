@@ -14,7 +14,7 @@ const MarkSheetScreenReport = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: { student: 21475146 },
+    defaultValues: {},
   })
 
   const {
