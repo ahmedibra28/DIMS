@@ -170,3 +170,20 @@ export const feeGeneration = asyncHandler(async (req, res) => {
     }
   }
 })
+
+export const getFees = asyncHandler(async (req, res) => {
+  const runningMonth = moment().subtract(0, 'months').format()
+  const sixMonthsAgo = moment().subtract(6, 'months').format()
+  const startOfMonth = moment(sixMonthsAgo).clone().startOf('month').format()
+  const endOfMonth = moment(runningMonth).clone().endOf('month').format()
+
+  const fee = await FeeModel.find({
+    createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+  })
+    .populate('payment.student')
+    .populate('course')
+    .populate('createdBy', 'name')
+    .populate('updatedBy', 'name')
+
+  res.status(200).json(fee)
+})

@@ -138,7 +138,6 @@ export const getMarks = asyncHandler(async (req, res) => {
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')
 
-  // console.log(obj)
   res.status(201).json(obj)
 })
 

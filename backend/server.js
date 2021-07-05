@@ -18,6 +18,7 @@ import marksRoutes from './routes/marksRoutes.js'
 import attendanceRoutes from './routes/attendanceRoutes.js'
 import reportRoutes from './routes/reportRoutes.js'
 import feeRoutes from './routes/feeRoutes.js'
+import noticeRoutes from './routes/noticeRoutes.js'
 
 dotenv.config()
 
@@ -44,6 +45,7 @@ app.use('/api/marks', marksRoutes)
 app.use('/api/attendances', attendanceRoutes)
 app.use('/api/reports', reportRoutes)
 app.use('/api/fees', feeRoutes)
+app.use('/api/notices', noticeRoutes)
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))

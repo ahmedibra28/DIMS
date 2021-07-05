@@ -26,15 +26,16 @@ import MarkSheetScreenReport from '../../screens/MarkSheetScreenReport'
 import FeeScreen from '../../screens/FeeScreen'
 import FeeGenerationScreen from '../../screens/FeeGenerationScreen'
 import FeeScreenReport from '../../screens/FeeScreenReport'
+import NoticeScreen from '../../screens/NoticeScreen'
 
 const Routes = () => {
   return (
     <section className='mx-auto mt-5'>
       <Switch>
-        <Route exact path='/' component={HomeScreen} />
+        <PrivateRoute exact path='/' component={HomeScreen} role={['Admin']} />
         <Route path='/forgotpassword' component={ForgotPasswordScreen} />
         <Route path='/login' component={LoginScreen} />
-        <Route path='/register' r component={RegisterScreen} />
+        <Route path='/register' component={RegisterScreen} />
 
         <PrivateRoute
           role={['Admin', 'User', 'Instructor']}
@@ -144,6 +145,13 @@ const Routes = () => {
           role={['Admin']}
           path='/fee/generate'
           component={FeeGenerationScreen}
+        />
+
+        <PrivateRoute
+          exact
+          role={['Admin']}
+          path='/notice'
+          component={NoticeScreen}
         />
 
         <Route component={NotFound} />

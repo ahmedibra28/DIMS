@@ -12,36 +12,36 @@ const config = () => {
   }
 }
 
-export const searchStudentToPay = async (obj) => {
+export const getNotices = async () => {
   try {
-    const { data } = await axios.post(`/api/fees/student`, obj, config())
+    const { data } = await axios.get(`/api/notices`, config())
     return data
   } catch (error) {
     throw error.response.data.message
   }
 }
 
-export const pay = async (obj) => {
+export const addNotice = async (obj) => {
   try {
-    const { data } = await axios.post(`/api/fees/pay`, obj, config())
+    const { data } = await axios.post(`/api/notices`, obj, config())
     return data
   } catch (error) {
     throw error.response.data.message
   }
 }
 
-export const feeGeneration = async (obj) => {
+export const updateNotice = async (obj) => {
   try {
-    const { data } = await axios.post(`/api/fees/generate`, obj, config())
+    const { data } = await axios.put(`/api/notices/${obj._id}`, obj, config())
     return data
   } catch (error) {
     throw error.response.data.message
   }
 }
 
-export const getFees = async () => {
+export const deleteNotice = async (id) => {
   try {
-    const { data } = await axios.get(`/api/fees`, config())
+    const { data } = await axios.delete(`/api/notices/${id}`, config())
     return data
   } catch (error) {
     throw error.response.data.message

@@ -13,6 +13,7 @@ import {
   FaUsers,
   FaDollarSign,
   FaChartBar,
+  FaBullhorn,
 } from 'react-icons/fa'
 import logo from '../logo.png'
 
@@ -35,6 +36,11 @@ const HeaderAuthorized = () => {
             <div>
               {userInfo && userInfo.roles.includes('Admin') && (
                 <>
+                  <li className='nav-item'>
+                    <Link to='/notice' className='nav-link'>
+                      <FaBullhorn className='mb-1' /> Notice
+                    </Link>
+                  </li>
                   <li className='nav-item'>
                     <Link to='/course-type' className='nav-link'>
                       <FaLeanpub className='mb-1' /> Course Type
