@@ -689,8 +689,8 @@ const StudentScreen = () => {
                         <h6 className='card-title'>{student.fullName}</h6>
                         <h6 className='card-title'>
                           {' '}
-                          <FaIdCard className='mb-1 text-primary' />{' '}
-                          {student.studentIdNo}
+                          <FaIdCard className='mb-1 text-primary' />
+                          Roll No. {student.rollNo}
                         </h6>
                       </Link>
                       <div className='card-text'>

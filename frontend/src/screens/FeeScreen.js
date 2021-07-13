@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { FaDollarSign } from 'react-icons/fa'
 import { pay, searchStudentToPay } from '../api/fees'
 import { useQuery, useMutation } from 'react-query'
@@ -263,9 +263,7 @@ const FeeScreen = () => {
                             }
                           />
                         </td>
-                        <td>
-                          {student.student && student.student.studentIdNo}
-                        </td>
+                        <td>{student.student && student.student.rollNo}</td>
                         <td>{student.student && student.student.fullName}</td>
                         <td>{semesterFromServer && semesterFromServer}</td>
                         <td>{courseFromServer && courseFromServer.name}</td>

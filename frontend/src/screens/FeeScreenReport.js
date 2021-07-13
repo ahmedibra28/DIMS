@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import { useReactToPrint } from 'react-to-print'
 import { getCompleteFeeReport } from '../api/reports'
 import { useQuery, useMutation } from 'react-query'
 import { getCourses } from '../api/courses'
@@ -8,13 +9,21 @@ import Message from '../components/Message'
 import 'react-date-range/dist/styles.css' // main style file
 import 'react-date-range/dist/theme/default.css' // theme css file
 import { DateRangePicker } from 'react-date-range'
-import { FaRegCheckCircle, FaRegTimesCircle } from 'react-icons/fa'
+import { FaPrint, FaRegCheckCircle, FaRegTimesCircle } from 'react-icons/fa'
+import InvoicePrintScreen from './InvoicePrintScreen'
 
 const FeeScreenReport = () => {
   const [message, setMessage] = useState(null)
-  const [studentIdNo, setStudentIdNo] = useState(null)
+  const [rollNo, setRollNo] = useState(null)
   const [sDate, setSDate] = useState(new Date())
   const [eDate, setEDate] = useState(new Date())
+  const [stdPaymentInfo, setStdPaymentInfo] = useState(null)
+
+  const componentRef = useRef()
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: 'Report',
+  })
 
   const handleSelect = (ranges) => {
     setSDate(ranges.selection.startDate)
@@ -81,7 +90,7 @@ const FeeScreenReport = () => {
             alt={student.student && student.student.picture.pictureName}
           />
         </td>
-        <td>{student.student && student.student.studentIdNo}</td>
+        <td>{student.student && student.student.rollNo}</td>
         <td>{student.student && student.student.fullName}</td>
         <td>{data.semester}</td>
         <td>{data.course && data.course.name}</td>
@@ -93,6 +102,20 @@ const FeeScreenReport = () => {
           ) : (
             <FaRegTimesCircle className='text-danger mb-1' />
           )}
+        </td>
+        <td>
+          <button
+            className='btn btn-success btn-sm'
+            onClick={() => {
+              setStdPaymentInfo({ student, data })
+              handlePrint()
+            }}
+            // data-bs-toggle='modal'
+            // data-bs-target='#invoicePrint'
+            // onClick={handlePrint}
+          >
+            <FaPrint className='mb-1' />
+          </button>
         </td>
       </tr>
     )
@@ -193,14 +216,14 @@ const FeeScreenReport = () => {
               </div>
               <div className='col-md-10 col-12'>
                 <div className='mb-3'>
-                  <label htmlFor='student'>Student ID</label>
+                  <label htmlFor='student'>Student Roll No</label>
                   <input
                     {...register('student', {})}
-                    type='number'
+                    type='text'
                     min='0'
-                    placeholder='Enter student ID'
+                    placeholder='Enter student roll no'
                     className='form-control'
-                    onChange={(e) => setStudentIdNo(e.target.value)}
+                    onChange={(e) => setRollNo(e.target.value)}
                   />
                   {errors.student && (
                     <span className='text-danger'>
@@ -249,34 +272,83 @@ const FeeScreenReport = () => {
       ) : (
         <>
           {dataFeeReport && (
-            <div className='table-responsive '>
-              <table className='table table-sm hover bordered striped caption-top '>
-                <thead>
-                  <tr>
-                    <th>PHOTO</th>
-                    <th>SID</th>
-                    <th>NAME</th>
-                    <th>SEMESTER</th>
-                    <th>COURSE</th>
-                    <th>FEE</th>
-                    <th>PAYMENT DATE</th>
-                    <th>P. STATUS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataFeeReport &&
-                    dataFeeReport.map((data) =>
-                      data.payment.map((student) =>
-                        studentIdNo
-                          ? student.student.studentIdNo ===
-                              Number(studentIdNo) && filteredFee(student, data)
-                          : filteredFee(student, data)
-                      )
-                    )}
-                </tbody>
-              </table>
-            </div>
+            <>
+              <div className='table-responsive '>
+                <table className='table table-sm hover bordered striped caption-top '>
+                  <thead>
+                    <tr>
+                      <th>PHOTO</th>
+                      <th>SID</th>
+                      <th>NAME</th>
+                      <th>SEMESTER</th>
+                      <th>COURSE</th>
+                      <th>FEE</th>
+                      <th>PAYMENT DATE</th>
+                      <th>P. STATUS</th>
+                      <th>INVOICE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataFeeReport &&
+                      dataFeeReport.map((data) =>
+                        data.payment.map((student) =>
+                          rollNo
+                            ? student.student.rollNo === rollNo &&
+                              filteredFee(student, data)
+                            : filteredFee(student, data)
+                        )
+                      )}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
+          <div
+            className='modal fade'
+            id='invoicePrint'
+            data-bs-backdrop='static'
+            data-bs-keyboard='false'
+            tabindex='-1'
+            aria-labelledby='invoicePrint'
+            aria-hidden='true'
+          >
+            <div className='modal-dialog'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='invoicePrint'>
+                    Modal title
+                  </h5>
+                  <button
+                    type='button'
+                    className='btn-close'
+                    data-bs-dismiss='modal'
+                    aria-label='Close'
+                  ></button>
+                </div>
+                <div ref={componentRef}>
+                  <InvoicePrintScreen stdPaymentInfo={stdPaymentInfo} />
+                </div>
+                <div className='modal-footer'>
+                  <button
+                    type='button'
+                    className='btn btn-secondary'
+                    data-bs-dismiss='modal'
+                  >
+                    Close
+                  </button>
+
+                  <button
+                    onClick={handlePrint}
+                    type='submit'
+                    className='btn btn-success '
+                  >
+                    <FaPrint className='mb-1' />
+                    Print
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </>
       )}
     </div>

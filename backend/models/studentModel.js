@@ -11,10 +11,9 @@ const studentScheme = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    studentIdNo: {
-      type: Number,
+    rollNo: {
+      type: String,
       required: true,
-      default: 0,
     },
     fullName: {
       type: String,

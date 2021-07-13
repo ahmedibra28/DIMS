@@ -29,13 +29,7 @@ export const addStudent = asyncHandler(async (req, res) => {
   const fullName = req.body.fullName.toLowerCase()
   const picture = req.files && req.files.picture
 
-  let date = new Date()
-  const studentIdNo =
-    date.getFullYear() *
-    (date.getMonth() + 1) *
-    date.getHours() *
-    date.getMinutes() *
-    date.getSeconds()
+  const rollNo = `STD${(await StudentModel.countDocuments()) + 1}`
 
   const pictureFullName = picture && picture.name.split('.').shift()
   const pictureExtension = picture && picture.name.split('.').pop()
@@ -89,7 +83,7 @@ export const addStudent = asyncHandler(async (req, res) => {
 
   const createObj = await StudentModel.create({
     picture: picture && pictureData,
-    studentIdNo,
+    rollNo,
     isActive,
     fullName,
     placeOfBirth,

@@ -27,7 +27,7 @@ export const getAttendanceReport = asyncHandler(async (req, res) => {
 
   if (instructorObj || isAdmin) {
     const studentObj = await StudentModel.findOne({
-      studentIdNo: student,
+      rollNo: student,
       isActive: true,
     })
 
@@ -81,7 +81,7 @@ export const getCompleteMarkSheetReport = asyncHandler(async (req, res) => {
   const { student, course } = req.body
 
   const studentObj = await StudentModel.findOne({
-    studentIdNo: student,
+    rollNo: student,
     isActive: true,
   })
 

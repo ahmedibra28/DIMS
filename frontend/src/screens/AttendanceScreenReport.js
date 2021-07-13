@@ -84,7 +84,7 @@ const AttendanceScreenReport = () => {
             alt={student.student && student.student.picture.pictureName}
           />
         </td>
-        <td>{student.student && student.student.studentIdNo}</td>
+        <td>{student.student && student.student.rollNo}</td>
         <td>{student.student && student.student.fullName}</td>
         <td>{data.semester}</td>
         <td>{data.subject.name}</td>
@@ -223,12 +223,12 @@ const AttendanceScreenReport = () => {
               </div>
               <div className='col-md-5 col-12'>
                 <div className='mb-3'>
-                  <label htmlFor='student'>Student ID</label>
+                  <label htmlFor='student'>Student Roll No</label>
                   <input
                     {...register('student', {})}
-                    type='number'
+                    type='text'
                     min='0'
-                    placeholder='Enter student ID'
+                    placeholder='Enter student roll no'
                     className='form-control'
                   />
                   {errors.student && (

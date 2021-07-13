@@ -92,14 +92,14 @@ const MarkSheetScreenReport = () => {
         <div className='row '>
           <div className='col-md-4 col-12'>
             <div className='mb-3'>
-              <label htmlFor='student'>Student ID</label>
+              <label htmlFor='student'>Student Roll No</label>
               <input
                 {...register('student', {
-                  required: 'Student ID is required',
+                  required: 'Student Roll No is required',
                 })}
-                type='number'
+                type='text'
                 min='0'
-                placeholder='Enter student ID'
+                placeholder='Enter student roll no'
                 className='form-control'
               />
               {errors.student && (
@@ -229,7 +229,7 @@ const MarkSheetScreenReport = () => {
                       <td>
                         {' '}
                         {dataGetMarkSheetReport &&
-                          dataGetMarkSheetReport[0].student.studentIdNo}
+                          dataGetMarkSheetReport[0].student.rollNo}
                       </td>
                     </tr>
                   </thead>

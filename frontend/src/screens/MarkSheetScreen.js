@@ -214,7 +214,7 @@ const MarkSheetScreen = () => {
             <h6 className='text-primary fw-bold text-center bg-light p-2'>
               STUDENT ID:{' '}
               <span className='text-decoration-underline'>
-                {markSheet[0].student.studentIdNo}
+                {markSheet[0].student.rollNo}
               </span>
             </h6>
           </div>

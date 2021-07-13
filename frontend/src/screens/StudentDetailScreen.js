@@ -357,7 +357,7 @@ const StudentDetailScreen = () => {
                 {data.fullName.toUpperCase()}
               </p>
               <div>
-                <span className='fw-bold'>Student ID: </span> {data.studentIdNo}
+                <span className='fw-bold'>Student Roll No: </span> {data.rollNo}
                 <br />
                 <span className='fw-bold'>Place Of Birth: </span>{' '}
                 {data.placeOfBirth}

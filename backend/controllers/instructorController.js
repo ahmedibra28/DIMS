@@ -27,13 +27,7 @@ export const addInstructor = asyncHandler(async (req, res) => {
   const email = req.body.email.toLowerCase()
   const picture = req.files && req.files.picture
 
-  let date = new Date()
-  const instructorIdNo =
-    date.getFullYear() *
-    (date.getMonth() + 1) *
-    date.getHours() *
-    date.getMinutes() *
-    date.getSeconds()
+  const instructorIdNo = (await InstructorModel.countDocuments()) + 1
 
   const pictureFullName = picture && picture.name.split('.').shift()
   const pictureExtension = picture && picture.name.split('.').pop()
