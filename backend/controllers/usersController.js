@@ -1,6 +1,8 @@
 import crypto from 'crypto'
 import asyncHandler from 'express-async-handler'
 import User from '../models/userModel.js'
+import StudentModel from '../models/studentModel.js'
+import InstructorModel from '../models/instructorModel.js'
 import LogonSession from '../models/userLogonSessionModel.js'
 import { generateToken } from '../utils/generateToken.js'
 import { sendEmail } from '../utils/sendEmail.js'
@@ -298,5 +300,17 @@ export const resetPassword = asyncHandler(async (req, res) => {
     await user.save()
 
     res.status(201).json('Password Updated Successfully')
+  }
+})
+
+export const getStudentsAndInstructors = asyncHandler(async (req, res) => {
+  const students = await StudentModel.find({})
+  const instructors = await InstructorModel.find({})
+
+  if (students && instructors) {
+    res.status(201).json({ students, instructors })
+  } else {
+    res.status(500)
+    throw new Error('Internal Server Error')
   }
 })

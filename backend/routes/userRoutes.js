@@ -11,6 +11,7 @@ import {
   logHistory,
   forgotPassword,
   resetPassword,
+  getStudentsAndInstructors,
 } from '../controllers/usersController.js'
 import { admin, protect } from '../middleware/authMiddleware.js'
 
@@ -27,6 +28,11 @@ router
   .route('/profile')
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile)
+
+router
+  .route('/students-and-instructors')
+  .get(protect, getStudentsAndInstructors)
+
 router
   .route('/:id')
   .delete(protect, admin, deleteUser)
