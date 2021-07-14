@@ -17,9 +17,17 @@ const userScheme = mongoose.Schema(
       type: String,
       required: true,
     },
-    roles: {
-      type: [String],
-      require: true,
+    group: {
+      type: String,
+      required: true,
+    },
+    student: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Student',
+    },
+    instructor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Instructor',
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,

@@ -34,7 +34,7 @@ const HeaderAuthorized = () => {
             style={{ height: 'calc(100vh - 100px)' }}
           >
             <div>
-              {userInfo && userInfo.roles.includes('Admin') && (
+              {userInfo && userInfo.group === 'admin' && (
                 <>
                   <li className='nav-item'>
                     <Link to='/notice' className='nav-link'>
@@ -84,7 +84,7 @@ const HeaderAuthorized = () => {
                 </Link>
               </li>
 
-              {userInfo && userInfo.roles.includes('Admin') && (
+              {userInfo && userInfo.group === 'admin' && (
                 <li className='nav-item dropdown '>
                   <span
                     className='nav-link dropdown-toggle'
@@ -138,7 +138,7 @@ const HeaderAuthorized = () => {
                   </li>
                 </ul>
               </li>
-              {userInfo && userInfo.roles.includes('Admin') && (
+              {userInfo && userInfo.group === 'admin' && (
                 <li className='nav-item dropdown '>
                   <span
                     className='nav-link dropdown-toggle'
@@ -153,6 +153,11 @@ const HeaderAuthorized = () => {
                     className='dropdown-menu '
                     aria-labelledby='navbarDropdown'
                   >
+                    <li>
+                      <Link to='/admin/users/groups' className='dropdown-item'>
+                        <FaUsers className='mb-1' /> Groups
+                      </Link>
+                    </li>
                     <li>
                       <Link to='/admin/users' className='dropdown-item'>
                         <FaUsers className='mb-1' /> Users

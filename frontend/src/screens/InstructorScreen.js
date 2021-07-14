@@ -162,7 +162,6 @@ const InstructorScreen = () => {
 
   return (
     <div className='container'>
-      <Pagination data={data} setPage={setPage} />
       <div
         className='modal fade'
         id='editInstructorModal'
@@ -573,8 +572,6 @@ const InstructorScreen = () => {
       </div>
 
       <div className='d-flex justify-content-between align-items-center'>
-        <h3 className=''>Instructors</h3>
-        <span>{data && data.total} records were found</span>
         <button
           className='btn btn-primary '
           data-bs-toggle='modal'
@@ -582,6 +579,11 @@ const InstructorScreen = () => {
         >
           <FaPlus className='mb-1' />
         </button>
+        <span>
+          <h3 className='text-center'>Instructors</h3>
+          <span>{data && data.total} records were found</span>
+        </span>
+        <Pagination data={data} setPage={setPage} />
       </div>
 
       {isSuccessDeleteInstructor && (

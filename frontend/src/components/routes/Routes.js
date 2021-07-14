@@ -27,18 +27,19 @@ import FeeScreen from '../../screens/FeeScreen'
 import FeeGenerationScreen from '../../screens/FeeGenerationScreen'
 import FeeScreenReport from '../../screens/FeeScreenReport'
 import NoticeScreen from '../../screens/NoticeScreen'
+import GroupScreen from '../../screens/GroupScreen'
 
 const Routes = () => {
   return (
-    <section className='mx-auto mt-5'>
+    <section className='mx-auto mt-2'>
       <Switch>
-        <PrivateRoute exact path='/' component={HomeScreen} role={['Admin']} />
+        <PrivateRoute exact path='/' component={HomeScreen} role={['admin']} />
         <Route path='/forgotpassword' component={ForgotPasswordScreen} />
         <Route path='/login' component={LoginScreen} />
         <Route path='/register' component={RegisterScreen} />
 
         <PrivateRoute
-          role={['Admin', 'User', 'Instructor']}
+          role={['admin', 'user', 'instructor']}
           path='/profile'
           component={ProfileScreen}
         />
@@ -49,107 +50,113 @@ const Routes = () => {
         />
         <PrivateRoute
           path='/admin/users/logs'
-          role={['Admin']}
+          role={['admin']}
           component={UserLogHistoryScreen}
         />
         <PrivateRoute
           exact
           path='/admin/users'
-          role={['Admin']}
+          role={['admin']}
           component={UserListScreen}
         />
         <PrivateRoute
           path='/admin/users/page/:pageNumber'
-          role={['Admin']}
+          role={['admin']}
           component={UserListScreen}
         />
         <PrivateRoute
-          role={['Admin', 'User']}
+          role={['admin', 'user']}
           path='/student'
           exact
           component={StudentScreen}
         />
         <PrivateRoute
-          role={['Admin', 'User']}
+          role={['admin']}
+          path='/admin/users/groups'
+          exact
+          component={GroupScreen}
+        />
+        <PrivateRoute
+          role={['admin', 'user']}
           path='/instructor'
           exact
           component={InstructorScreen}
         />
         <PrivateRoute
-          role={['Admin', 'User']}
+          role={['admin', 'user']}
           path='/course-type'
           component={CourseTypeScreen}
         />
         <PrivateRoute
-          role={['Admin', 'User']}
+          role={['admin', 'user']}
           path='/course'
           component={CourseScreen}
         />
         <PrivateRoute
-          role={['Admin', 'User']}
+          role={['admin', 'user']}
           path='/subject'
           component={SubjectScreen}
         />
         <PrivateRoute
           exact
-          role={['Admin', 'User']}
+          role={['admin', 'user']}
           path='/student/:id'
           component={StudentDetailScreen}
         />
         <PrivateRoute
           exact
-          role={['Admin', 'User']}
+          role={['admin', 'user']}
           path='/instructor/:id'
           component={InstructorDetailScreen}
         />
 
         <PrivateRoute
           exact
-          role={['Admin', 'User']}
+          role={['admin', 'user']}
           path='/student/mark-sheet/:studentId/:assignedCourseId/:semesterNo/:shift/:semesterStatus'
           component={MarkSheetScreen}
         />
 
         <PrivateRoute
           exact
-          role={['Admin', 'Instructor']}
+          role={['admin', 'instructor']}
           path='/attendance'
           component={AttendanceScreen}
         />
         <PrivateRoute
           exact
-          role={['Admin', 'Instructor']}
+          role={['admin', 'instructor']}
           path='/attendance/report'
           component={AttendanceScreenReport}
         />
         <PrivateRoute
           exact
-          role={['Admin']}
+          role={['admin']}
           path='/mark-sheet/report'
           component={MarkSheetScreenReport}
         />
         <PrivateRoute
           exact
-          role={['Admin']}
+          role={['admin']}
           path='/fee/report'
           component={FeeScreenReport}
         />
         <PrivateRoute
           exact
-          role={['Admin']}
+          role={['admin']}
           path='/fee'
           component={FeeScreen}
         />
         <PrivateRoute
           exact
-          role={['Admin']}
+          role={['admin']}
           path='/fee/generate'
           component={FeeGenerationScreen}
         />
 
         <PrivateRoute
           exact
-          role={['Admin']}
+          role={['admin']}
           path='/notice'
           component={NoticeScreen}
         />

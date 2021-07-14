@@ -299,11 +299,11 @@ const NoticeScreen = () => {
                     </span>
                   </h5>
                   <p className='card-text'>{notice.description}</p>
-                  <p class='card-text'>
-                    <small class='text-muted'>
+                  <p className='card-text'>
+                    <small className='text-muted'>
                       {moment(notice.createdAt).fromNow()}
                     </small>
-                    <div className='btn-group float-end'>
+                    <span className='btn-group float-end'>
                       <button
                         className='btn btn-primary btn-sm me-1'
                         onClick={() => editHandler(notice)}
@@ -326,7 +326,7 @@ const NoticeScreen = () => {
                           </span>
                         )}
                       </button>
-                    </div>
+                    </span>
                   </p>
                 </div>
               </div>

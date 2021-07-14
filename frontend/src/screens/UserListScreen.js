@@ -17,7 +17,7 @@ import {
   getStudentsAndInstructors,
 } from '../api/users'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
-
+import { getGroups } from '../api/groups'
 import { UnlockAccess } from '../components/UnlockAccess'
 
 import { confirmAlert } from 'react-confirm-alert'
@@ -34,11 +34,7 @@ const UserListScreen = () => {
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      admin: false,
-      student: false,
-      instructor: false,
-    },
+    defaultValues: {},
   })
 
   const queryClient = useQueryClient()
@@ -50,7 +46,7 @@ const UserListScreen = () => {
       retry: 0,
     }
   )
-
+  const { data: groupData } = useQuery('groups', () => getGroups())
   const { data: dataSI } = useQuery(
     'students-and-instructors',
     () => getStudentsAndInstructors(),
@@ -58,8 +54,6 @@ const UserListScreen = () => {
       retry: 0,
     }
   )
-
-  console.log(dataSI && dataSI)
 
   const students = dataSI && dataSI.students
   const instructors = dataSI && dataSI.instructors
@@ -122,7 +116,7 @@ const UserListScreen = () => {
           name: data.name,
           email: data.email,
           password: data.password,
-          admin: data.admin,
+          group: data.group,
           instructor: data.instructor,
           student: data.student,
         })
@@ -134,14 +128,9 @@ const UserListScreen = () => {
     setEdit(true)
     setValue('name', user.name)
     setValue('email', user.email)
-
-    user &&
-      user.roles.map(
-        (role) =>
-          (role === 'Admin' && setValue('admin', true)) ||
-          (role === 'Student' && setValue('student', true)) ||
-          (role === 'Instructor' && setValue('instructor', true))
-      )
+    setValue('group', user.group)
+    setValue('student', user.student)
+    setValue('instructor', user.instructor)
   }
 
   useEffect(() => {
@@ -153,7 +142,6 @@ const UserListScreen = () => {
 
   return (
     <div className='container'>
-      <Pagination data={data} setPage={setPage} />
       {isSuccessUpdateUser && (
         <Message variant='success'>User has been updated successfully.</Message>
       )}
@@ -285,59 +273,42 @@ const UserListScreen = () => {
                     )}
                   </div>
 
-                  <div className='row'>
-                    <div className='col'>
-                      <div className='form-check'>
-                        <input
-                          className='form-check-input'
-                          type='checkbox'
-                          id='admin'
-                          {...register('admin')}
-                          checked={watch().admin}
-                        />
-                        <label className='form-check-label' htmlFor='admin'>
-                          Admin
-                        </label>
-                      </div>
-                    </div>
-                    <div className='col'>
-                      <div className='form-check'>
-                        <input
-                          className='form-check-input'
-                          type='checkbox'
-                          id='instructor'
-                          {...register('instructor')}
-                          checked={watch().instructor}
-                        />
-                        <label
-                          className='form-check-label'
-                          htmlFor='instructor'
-                        >
-                          Instructor
-                        </label>
-                      </div>
-                    </div>
-                    <div className='col'>
-                      <div className='form-check'>
-                        <input
-                          className='form-check-input'
-                          type='checkbox'
-                          id='student'
-                          {...register('student')}
-                          checked={watch().student}
-                        />
-                        <label className='form-check-label' htmlFor='student'>
-                          Student
-                        </label>
-                      </div>
-                    </div>
+                  <div className='mb-3'>
+                    <label htmlFor='group'>Group</label>
+                    <select
+                      {...register('group', { required: 'Group is required' })}
+                      type='text'
+                      placeholder='Enter group'
+                      className='form-control'
+                      autoFocus
+                    >
+                      <option value=''>-------</option>
+                      {groupData &&
+                        groupData.map((group) => (
+                          <option key={group._id} value={group.name}>
+                            {group.name}
+                          </option>
+                        ))}
+                    </select>
+                    {errors.group && (
+                      <span className='text-danger'>
+                        {errors.group.message}
+                      </span>
+                    )}
                   </div>
-                  {watch().student && (
+
+                  {watch().group === 'student' && (
                     <div className='my-3'>
                       <label htmlFor='studentDataList' className='form-label'>
                         Student
                       </label>
                       <input
+                        {...register(
+                          'student',
+                          watch().group === 'student' && {
+                            required: 'Student is required',
+                          }
+                        )}
                         className='form-control'
                         list='studentDatalistOptions'
                         id='studentDataList'
@@ -351,17 +322,28 @@ const UserListScreen = () => {
                             </option>
                           ))}
                       </datalist>
+                      {errors.student && (
+                        <span className='text-danger'>
+                          {errors.student.message}
+                        </span>
+                      )}
                     </div>
                   )}
-                  {watch().instructor && (
+                  {watch().group === 'instructor' && (
                     <div className='my-3'>
                       <label htmlFor='studentDataList' className='form-label'>
                         Instructors
                       </label>
                       <input
+                        {...register(
+                          'instructor',
+                          watch().group === 'instructor' && {
+                            required: 'Instructor is required',
+                          }
+                        )}
                         className='form-control'
                         list='instructorDatalistOptions'
-                        id='studentDataList'
+                        id='instructorDataList'
                         placeholder='Type to search...'
                       />
                       <datalist id='instructorDatalistOptions'>
@@ -373,6 +355,11 @@ const UserListScreen = () => {
                             </option>
                           ))}
                       </datalist>
+                      {errors.instructor && (
+                        <span className='text-danger'>
+                          {errors.instructor.message}
+                        </span>
+                      )}
                     </div>
                   )}
 
@@ -405,7 +392,6 @@ const UserListScreen = () => {
       </div>
 
       <div className='d-flex justify-content-between align-items-center'>
-        <h3 className=''>Users</h3>
         <button
           className='btn btn-primary '
           data-bs-toggle='modal'
@@ -413,6 +399,8 @@ const UserListScreen = () => {
         >
           <FaPlus className='mb-1' />
         </button>
+        <h3 className=''>Users</h3>
+        <Pagination data={data} setPage={setPage} />
       </div>
 
       {isLoading ? (
@@ -437,7 +425,7 @@ const UserListScreen = () => {
                   <th>ID</th>
                   <th>NAME</th>
                   <th>EMAIL</th>
-                  <th>ADMIN</th>
+                  <th>GROUP</th>
                   <th></th>
                 </tr>
               </thead>
@@ -451,7 +439,7 @@ const UserListScreen = () => {
                         <a href={`mailto:${user.email}`}>{user.email}</a>
                       </td>
                       <td>
-                        {UnlockAccess(user && user.roles) ? (
+                        {UnlockAccess(user && user.group) ? (
                           <FaCheckCircle className='text-success mb-1' />
                         ) : (
                           <FaTimesCircle className='text-danger mb-1' />

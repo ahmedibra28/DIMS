@@ -1,12 +1,12 @@
 import crypto from 'crypto'
 import asyncHandler from 'express-async-handler'
 import User from '../models/userModel.js'
-import StudentModel from '../models/studentModel.js'
-import InstructorModel from '../models/instructorModel.js'
 import LogonSession from '../models/userLogonSessionModel.js'
 import { generateToken } from '../utils/generateToken.js'
 import { sendEmail } from '../utils/sendEmail.js'
 import { forgotMessage } from '../utils/forgotEmailTemplate.js'
+import StudentModel from '../models/studentModel.js'
+import InstructorModel from '../models/instructorModel.js'
 
 const logSession = asyncHandler(async (id) => {
   const user = id
@@ -60,7 +60,9 @@ export const authUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      roles: user.roles,
+      group: user.group,
+      student: user.student,
+      instructor: user.instructor,
       token: generateToken(user._id),
     })
   } else {
@@ -70,24 +72,20 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, admin, student, instructor } = req.body
+  const { name, email, password, group, student, instructor } = req.body
   const userExist = await User.findOne({ email })
   if (userExist) {
     res.status(400)
     throw new Error('User already exist')
   }
 
-  const userRoles = []
-  admin && userRoles.push('Admin')
-  instructor && userRoles.push('Instructor')
-  student && userRoles.push('Student')
-  !admin && !instructor && !student && userRoles.push('Admin')
-
   const userCreate = await User.create({
     name,
     email,
     password,
-    roles: userRoles,
+    group,
+    student,
+    instructor,
   })
 
   if (userCreate) {
@@ -95,7 +93,9 @@ export const registerUser = asyncHandler(async (req, res) => {
       _id: userCreate._id,
       name: userCreate.name,
       email: userCreate.email,
-      roles: userCreate.roles,
+      group: userCreate.group,
+      student: userCreate.student,
+      instructor: userCreate.instructor,
       token: generateToken(userCreate._id),
     })
   } else {
@@ -111,7 +111,9 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      roles: user.roles,
+      group: user.group,
+      student: user.student,
+      instructor: user.instructor,
     })
   } else {
     res.status(404)
@@ -124,6 +126,8 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
   if (user) {
     user.name = req.body.name || user.name
+    user.student = req.body.student || user.student
+    user.instructor = req.body.instructor || user.instructor
     user.email = req.body.email.toLowerCase() || user.email
     if (req.body.password) {
       user.password = req.body.password
@@ -135,7 +139,9 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
-      roles: updatedUser.roles,
+      group: updatedUser.group,
+      student: updatedUser.student,
+      instructor: updatedUser.instructor,
       token: generateToken(updatedUser._id),
     })
   } else {
@@ -202,24 +208,18 @@ export const getUserById = asyncHandler(async (req, res) => {
 
 export const updateUser = asyncHandler(async (req, res) => {
   const userExist = await User.findById(req.params.id)
-  const admin = req.body.admin
-  const instructor = req.body.instructor
-  const student = req.body.student
 
   if (req.params.id == req.user._id) {
     res.status(400)
     throw new Error("You can't edit your own user in the admin area.")
   }
 
-  const userRoles = []
-  admin && userRoles.push('Admin')
-  instructor && userRoles.push('Instructor')
-  student && userRoles.push('Student')
-
   if (userExist) {
     userExist.name = req.body.name || userExist.name
+    userExist.student = req.body.student || userExist.student
+    userExist.instructor = req.body.instructor || userExist.instructor
+    userExist.group = req.body.group || userExist.group
     userExist.email = req.body.email.toLowerCase() || userExist.email
-    userExist.roles = userRoles || userExist.roles
     if (req.body.password) {
       userExist.password = req.body.password
     }
@@ -229,8 +229,10 @@ export const updateUser = asyncHandler(async (req, res) => {
     res.json({
       _id: updatedUser._id,
       name: updatedUser.name,
+      group: updatedUser.group,
       email: updatedUser.email,
-      roles: updatedUser.roles,
+      student: updatedUser.student,
+      instructor: updatedUser.instructor,
     })
   } else {
     res.status(404)
