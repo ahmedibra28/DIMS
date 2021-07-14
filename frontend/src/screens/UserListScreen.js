@@ -9,7 +9,13 @@ import {
   FaTrash,
 } from 'react-icons/fa'
 import Pagination from '../components/Pagination'
-import { getUsers, updateUser, deleteUser, createUser } from '../api/users'
+import {
+  getUsers,
+  updateUser,
+  deleteUser,
+  createUser,
+  getStudentsAndInstructors,
+} from '../api/users'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 import { UnlockAccess } from '../components/UnlockAccess'
@@ -44,6 +50,19 @@ const UserListScreen = () => {
       retry: 0,
     }
   )
+
+  const { data: dataSI } = useQuery(
+    'students-and-instructors',
+    () => getStudentsAndInstructors(),
+    {
+      retry: 0,
+    }
+  )
+
+  console.log(dataSI && dataSI)
+
+  const students = dataSI && dataSI.students
+  const instructors = dataSI && dataSI.instructors
 
   const {
     isLoading: isLoadingUpdateUser,
@@ -313,6 +332,49 @@ const UserListScreen = () => {
                       </div>
                     </div>
                   </div>
+                  {watch().student && (
+                    <div className='my-3'>
+                      <label htmlFor='studentDataList' className='form-label'>
+                        Student
+                      </label>
+                      <input
+                        className='form-control'
+                        list='studentDatalistOptions'
+                        id='studentDataList'
+                        placeholder='Type to search...'
+                      />
+                      <datalist id='studentDatalistOptions'>
+                        {students &&
+                          students.map((student) => (
+                            <option key={student._id} value={student._id}>
+                              {student.rollNo} - {student.fullName}
+                            </option>
+                          ))}
+                      </datalist>
+                    </div>
+                  )}
+                  {watch().instructor && (
+                    <div className='my-3'>
+                      <label htmlFor='studentDataList' className='form-label'>
+                        Instructors
+                      </label>
+                      <input
+                        className='form-control'
+                        list='instructorDatalistOptions'
+                        id='studentDataList'
+                        placeholder='Type to search...'
+                      />
+                      <datalist id='instructorDatalistOptions'>
+                        {instructors &&
+                          instructors.map((instructor) => (
+                            <option key={instructor._id} value={instructor._id}>
+                              {instructor.instructorIdNo} -{' '}
+                              {instructor.fullName}
+                            </option>
+                          ))}
+                      </datalist>
+                    </div>
+                  )}
 
                   <div className='modal-footer'>
                     <button

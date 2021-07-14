@@ -116,3 +116,15 @@ export const resetPassword = async (info) => {
     throw error.response.data.message
   }
 }
+
+export const getStudentsAndInstructors = async () => {
+  try {
+    const { data } = await axios.get(
+      `/api/users/students-and-instructors`,
+      config()
+    )
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}
