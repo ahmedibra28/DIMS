@@ -15,7 +15,7 @@ export const getAttendanceReport = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email: instructor })
 
-  const isAdmin = user.roles.includes('Admin')
+  const isAdmin = user.group === 'admin'
 
   const instructorObj = await InstructorModel.findOne({
     email: instructor,
