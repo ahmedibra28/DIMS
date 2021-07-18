@@ -108,10 +108,10 @@ const FeeScreenReport = () => {
             className='btn btn-success btn-sm'
             onClick={() => {
               setStdPaymentInfo({ student, data })
-              handlePrint()
+              // handlePrint()
             }}
-            // data-bs-toggle='modal'
-            // data-bs-target='#invoicePrint'
+            data-bs-toggle='modal'
+            data-bs-target='#invoicePrint'
             // onClick={handlePrint}
           >
             <FaPrint className='mb-1' />
@@ -312,11 +312,11 @@ const FeeScreenReport = () => {
             aria-labelledby='invoicePrint'
             aria-hidden='true'
           >
-            <div className='modal-dialog'>
+            <div className='modal-dialog modal-lg'>
               <div className='modal-content'>
                 <div className='modal-header'>
                   <h5 className='modal-title' id='invoicePrint'>
-                    Modal title
+                    Fee Invoice
                   </h5>
                   <button
                     type='button'
