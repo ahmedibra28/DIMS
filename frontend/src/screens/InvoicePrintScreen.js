@@ -1,35 +1,56 @@
 import logo from '../logo.png'
+import moment from 'moment'
+import { FaTimesCircle } from 'react-icons/fa'
 
-const InvoicePrintScreen = (stdPaymentInfo) => {
+const InvoicePrintScreen = ({ stdPaymentInfo }) => {
+  const { student, data } = stdPaymentInfo !== null && stdPaymentInfo
+
   if (stdPaymentInfo) {
     return (
       <div className='modal-body'>
-        {' '}
-        {/* {JSON.stringify(stdPaymentInfo)}{' '} */}
         <div className='container'>
           <div className='img-box text-center'>
             <img src={logo} alt='logo' className='img-fluid' width='120' />
+            <br />
+            {!student.isPaid && (
+              <span className='badge rounded-pill bg-danger p-2 mt-3'>
+                PAYMENT FEE UNPAID
+              </span>
+            )}
           </div>
           <div className='d-flex justify-content-between'>
             <span className='text-primary fw-bold fs-4'>INVOICE</span>
-            <span className='text-primary'>Invoice No: 0751</span>
+            <span className='text-primary'>
+              Invoice No:{' '}
+              {student.paymentDate.slice(0, 10).replaceAll('-', '') +
+                student.student.rollNo}
+            </span>
           </div>
           <div className='border border-1 border-primary rounded-3 p-3'>
             <div className='row'>
               <div className='col text-start'>
-                STUDENT NAME: Abdi Ali Abdirahman
+                STUDENT NAME: {student.student.fullName}
               </div>
-              <div className='col text-end'>DATE: Tue 20th Oct, 2021</div>
+              <div className='col text-end'>
+                DATE:{' '}
+                {student.isPaid ? (
+                  moment(student.paymentDate).format('llll')
+                ) : (
+                  <FaTimesCircle className='text-danger mb-1' />
+                )}
+              </div>
             </div>
 
             <div className='row'>
-              <div className='col text-start'>STUDENT ID: STD7</div>
-              <div className='col text-center'>Course: Midwifery</div>
-              <div className='col text-end'>Shift: Morning</div>
+              <div className='col text-start'>
+                STUDENT ID: {student.student.rollNo}
+              </div>
+              <div className='col text-center'>Course: {data.course.name}</div>
+              <div className='col text-end'>Shift: {data.shift}</div>
             </div>
           </div>
 
-          <table class='table mt-3'>
+          <table className='table mt-3'>
             <thead>
               <tr className='bg-primary text-light'>
                 <th scope='col'>#</th>
@@ -40,14 +61,26 @@ const InvoicePrintScreen = (stdPaymentInfo) => {
             <tbody>
               <tr>
                 <th scope='row'>1</th>
-                <td>Midwifery</td>
-                <td>$12.00</td>
+                <td>{data.course.name}</td>
+                <td>
+                  {student.isPaid ? (
+                    `$${student.paidFeeAmount.toFixed(2)}`
+                  ) : (
+                    <FaTimesCircle className='text-danger mb-1' />
+                  )}
+                </td>
               </tr>
               <tr className='bg-primary text-light'>
-                <td colspan='2 ' className='text-center'>
+                <td colSpan='2 ' className='text-center'>
                   TOTAL
                 </td>
-                <td>$12.00</td>
+                <td>
+                  {student.isPaid ? (
+                    `$${student.paidFeeAmount.toFixed(2)}`
+                  ) : (
+                    <FaTimesCircle className='text-danger mb-1' />
+                  )}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -61,11 +94,14 @@ const InvoicePrintScreen = (stdPaymentInfo) => {
               <span className='fw-bold'>Main Campus:</span> <br />
               <address>
                 <span>Noorein St., Alanley, Beled-Hawa, Somalia</span> <br />
-                <span>
-                  Tel: +252 (0) 699 484 972, +252 (0) 616 422 553
-                </span>{' '}
+                <span>Tel: +252 (0) 699 484 972, +252 (0) 616 422 553</span>
                 <br />
-                <span>Email: info@samtec.so</span>
+                <span>
+                  Email:{' '}
+                  <a href='mailto:info@samtec.so' target='blank'>
+                    info@samtec.so
+                  </a>
+                </span>
               </address>
             </div>
             <div className='col-6'>
@@ -77,7 +113,14 @@ const InvoicePrintScreen = (stdPaymentInfo) => {
               </address>
             </div>
             <div className='col-12 text-center my-3 bg-primary text-light p-3'>
-              https://www.samtec.so
+              <a
+                href='https://www.samtec.so'
+                target='blank'
+                className='text-light'
+              >
+                {' '}
+                https://www.samtec.so
+              </a>
             </div>
           </div>
         </div>

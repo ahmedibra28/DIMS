@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { FaDollarSign } from 'react-icons/fa'
 import { pay, searchStudentToPay } from '../api/fees'
 import { useQuery, useMutation } from 'react-query'

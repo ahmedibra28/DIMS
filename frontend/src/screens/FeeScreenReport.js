@@ -253,9 +253,7 @@ const FeeScreenReport = () => {
 
       {isErrorFeeReport && <Message variant='danger'>{errorFeeReport}</Message>}
       {isSuccessFeeReport && (
-        <Message variant='success'>
-          Student attendance data found successfully
-        </Message>
+        <Message variant='success'>Student fee data found successfully</Message>
       )}
       {isLoadingFeeReport ? (
         <div className='text-center'>
