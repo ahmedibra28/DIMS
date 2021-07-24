@@ -28,26 +28,105 @@ import FeeGenerationScreen from '../../screens/FeeGenerationScreen'
 import FeeScreenReport from '../../screens/FeeScreenReport'
 import NoticeScreen from '../../screens/NoticeScreen'
 import GroupScreen from '../../screens/GroupScreen'
+import RouteScreen from '../../screens/RouteScreen'
+import { getGroups } from '../../api/groups'
+import { useQuery } from 'react-query'
 
 const Routes = () => {
+  const { data: groupData, isLoading } = useQuery('groups', () => getGroups(), {
+    retry: 0,
+  })
+
+  let group = localStorage.getItem('userInfo')
+    ? JSON.parse(localStorage.getItem('userInfo')).group
+    : null
+
+  const switchRoutes = (component) => {
+    switch (component) {
+      case 'ProfileScreen':
+        return ProfileScreen
+      case 'HomeScreen':
+        return HomeScreen
+      case 'UserListScreen':
+        return UserListScreen
+      case 'UserLogHistoryScreen':
+        return UserLogHistoryScreen
+      case 'GroupScreen':
+        return GroupScreen
+      case 'RouteScreen':
+        return RouteScreen
+      case 'StudentScreen':
+        return StudentScreen
+      case 'CourseTypeScreen':
+        return CourseTypeScreen
+      case 'CourseScreen':
+        return CourseScreen
+      case 'StudentDetailScreen':
+        return StudentDetailScreen
+      case 'SubjectScreen':
+        return SubjectScreen
+      case 'InstructorScreen':
+        return InstructorScreen
+      case 'MarkSheetScreen':
+        return MarkSheetScreen
+      case 'AttendanceScreen':
+        return AttendanceScreen
+      case 'InstructorDetailScreen':
+        return InstructorDetailScreen
+      case 'AttendanceScreenReport':
+        return AttendanceScreenReport
+      case 'MarkSheetScreenReport':
+        return MarkSheetScreenReport
+      case 'FeeScreen':
+        return FeeScreen
+      case 'FeeGenerationScreen':
+        return FeeGenerationScreen
+      case 'FeeScreenReport':
+        return FeeScreenReport
+      case 'NoticeScreen':
+        return NoticeScreen
+      default:
+        return NotFound
+    }
+  }
+
   return (
     <section className='mx-auto mt-2'>
-      <Switch>
-        <PrivateRoute exact path='/' component={HomeScreen} role={['admin']} />
-        <Route path='/forgotpassword' component={ForgotPasswordScreen} />
-        <Route path='/login' component={LoginScreen} />
-        <Route path='/register' component={RegisterScreen} />
+      {isLoading ? (
+        'Loading...'
+      ) : (
+        <Switch>
+          {groupData &&
+            groupData.map(
+              (route) =>
+                route.name === group &&
+                route.isActive &&
+                route.route.map((r) => (
+                  <PrivateRoute
+                    exact
+                    path={r.path}
+                    component={switchRoutes(r.component)}
+                    role={[route.name]}
+                  />
+                ))
+            )}
 
+          <Route path='/forgotpassword' component={ForgotPasswordScreen} />
+          <Route path='/login' component={LoginScreen} />
+          <Route path='/register' component={RegisterScreen} />
+          <Route
+            path='/resetpassword/:resetToken'
+            component={ResetPasswordScreen}
+          />
+          <Route component={NotFound} />
+
+          {/* <PrivateRoute exact path='/' component={HomeScreen} role={['admin']} />
         <PrivateRoute
           role={['admin', 'user', 'instructor']}
           path='/profile'
           component={ProfileScreen}
         />
 
-        <Route
-          path='/resetpassword/:resetToken'
-          component={ResetPasswordScreen}
-        />
         <PrivateRoute
           path='/admin/users/logs'
           role={['admin']}
@@ -60,11 +139,6 @@ const Routes = () => {
           component={UserListScreen}
         />
         <PrivateRoute
-          path='/admin/users/page/:pageNumber'
-          role={['admin']}
-          component={UserListScreen}
-        />
-        <PrivateRoute
           role={['admin', 'user']}
           path='/student'
           exact
@@ -72,9 +146,15 @@ const Routes = () => {
         />
         <PrivateRoute
           role={['admin']}
-          path='/admin/users/groups'
+          path='/admin/groups'
           exact
           component={GroupScreen}
+        />
+        <PrivateRoute
+          role={['admin']}
+          path='/admin/routes'
+          exact
+          component={RouteScreen}
         />
         <PrivateRoute
           role={['admin', 'user']}
@@ -159,10 +239,9 @@ const Routes = () => {
           role={['admin']}
           path='/notice'
           component={NoticeScreen}
-        />
-
-        <Route component={NotFound} />
-      </Switch>
+        /> */}
+        </Switch>
+      )}
     </section>
   )
 }

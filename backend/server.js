@@ -20,6 +20,7 @@ import reportRoutes from './routes/reportRoutes.js'
 import feeRoutes from './routes/feeRoutes.js'
 import noticeRoutes from './routes/noticeRoutes.js'
 import groupRoutes from './routes/groupRoutes.js'
+import routeRoutes from './routes/routeRoutes.js'
 
 dotenv.config()
 
@@ -48,6 +49,7 @@ app.use('/api/reports', reportRoutes)
 app.use('/api/fees', feeRoutes)
 app.use('/api/notices', noticeRoutes)
 app.use('/api/groups', groupRoutes)
+app.use('/api/routes', routeRoutes)
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
