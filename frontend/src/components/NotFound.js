@@ -1,6 +1,3 @@
-import { FaExclamationCircle } from 'react-icons/fa'
-import Loader from 'react-loader-spinner'
-
 const NotFound = () => {
   return (
     <div
