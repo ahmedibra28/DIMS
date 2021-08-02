@@ -4,23 +4,23 @@ import dotenv from 'dotenv'
 import colors from 'colors'
 import fileUpload from 'express-fileupload'
 import morgan from 'morgan'
-import { notFound, errorHandler } from './middleware/errorMiddleware.js'
+import { notFound, errorHandler } from './api/middleware/errorMiddleware.js'
 import connectDB from './config/db.js'
-import userRoutes from './routes/userRoutes.js'
-import studentRoutes from './routes/studentRoutes.js'
-import instructorRoutes from './routes/instructorRoutes.js'
-import courseTypeRoutes from './routes/courseTypeRoutes.js'
-import courseRoutes from './routes/courseRoutes.js'
-import subjectRoutes from './routes/subjectRoutes.js'
-import assignToCourseRoutes from './routes/assignToCourseRoutes.js'
-import assignToSubjectRoutes from './routes/assignToSubjectRoutes.js'
-import marksRoutes from './routes/marksRoutes.js'
-import attendanceRoutes from './routes/attendanceRoutes.js'
-import reportRoutes from './routes/reportRoutes.js'
-import feeRoutes from './routes/feeRoutes.js'
-import noticeRoutes from './routes/noticeRoutes.js'
-import groupRoutes from './routes/groupRoutes.js'
-import routeRoutes from './routes/routeRoutes.js'
+import userRoutes from './api/routes/userRoutes.js'
+import studentRoutes from './api/routes/studentRoutes.js'
+import instructorRoutes from './api/routes/instructorRoutes.js'
+import courseTypeRoutes from './api/routes/courseTypeRoutes.js'
+import courseRoutes from './api/routes/courseRoutes.js'
+import subjectRoutes from './api/routes/subjectRoutes.js'
+import assignToCourseRoutes from './api/routes/assignToCourseRoutes.js'
+import assignToSubjectRoutes from './api/routes/assignToSubjectRoutes.js'
+import marksRoutes from './api/routes/marksRoutes.js'
+import attendanceRoutes from './api/routes/attendanceRoutes.js'
+import reportRoutes from './api/routes/reportRoutes.js'
+import feeRoutes from './api/routes/feeRoutes.js'
+import noticeRoutes from './api/routes/noticeRoutes.js'
+import groupRoutes from './api/routes/groupRoutes.js'
+import routeRoutes from './api/routes/routeRoutes.js'
 
 dotenv.config()
 
@@ -58,7 +58,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/build')))
 
   app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+    res.sendFile(path.resolve(__dirname, '../frontend', 'build', 'index.html'))
   )
 } else {
   app.get('/', (req, res) => {
