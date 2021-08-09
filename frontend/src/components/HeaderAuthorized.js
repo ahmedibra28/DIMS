@@ -248,7 +248,9 @@ const HeaderAuthorized = () => {
                       ))
                   )}
 
-                {['admin', 'finance'].includes(userInfo && userInfo.group) && (
+                {['admin', 'finance', 'instructor'].includes(
+                  userInfo && userInfo.group
+                ) && (
                   <li className='nav-item dropdown '>
                     <span
                       className='nav-link dropdown-toggle'

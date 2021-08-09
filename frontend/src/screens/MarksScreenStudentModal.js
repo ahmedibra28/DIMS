@@ -4,13 +4,13 @@ const MarksScreenStudentModal = ({
   submitHandler,
   register,
   handleSubmit,
-  watch,
   errors,
   formCleanHandler,
   isLoadingUpdateMark,
   isLoadingAddMark,
   assignedCourseId,
   dataSubject,
+  dataCourse,
   semesterNo,
 }) => {
   return assignedCourseId ? (
@@ -53,11 +53,16 @@ const MarksScreenStudentModal = ({
                         className='form-control'
                       >
                         <option value=''>-----------</option>
-                        <option value='1'>1</option>
-                        <option value='2'>2</option>
-                        <option value='3'>3</option>
-                        <option value='4'>4</option>
-                        <option value='5'>5</option>
+                        {dataCourse &&
+                          dataCourse.map(
+                            (course) =>
+                              course._id === assignedCourseId &&
+                              [...Array(course.noExam).keys()].map((exam) => (
+                                <option key={exam + 1} value={exam + 1}>
+                                  {exam + 1}
+                                </option>
+                              ))
+                          )}
                       </select>
                       {errors.exam && (
                         <span className='text-danger'>

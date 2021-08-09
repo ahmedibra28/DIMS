@@ -48,6 +48,7 @@ const MarkSheetScreenReport = () => {
     const { marks, sms } = obj
 
     const filteredMarks = marks && marks.filter((m) => m.semester === sms)
+
     const percentage = (mark) => {
       const totalMarks = Number(mark.theoryMarks) + Number(mark.practicalMarks)
 
@@ -56,6 +57,41 @@ const MarkSheetScreenReport = () => {
 
       return ((100 * totalMarks) / constantMarks).toFixed(1)
     }
+
+    const grandTotalPercentage = () => {
+      const totalObtained =
+        filteredMarks &&
+        filteredMarks.reduce(
+          (acc, cur) =>
+            Number(acc) + Number(cur.theoryMarks) + Number(cur.practicalMarks),
+          0
+        )
+
+      const totalMarks =
+        filteredMarks &&
+        filteredMarks.reduce(
+          (acc, cur) =>
+            Number(acc) +
+            Number(cur.subject.theoryMarks) +
+            Number(cur.subject.practicalMarks),
+          0
+        )
+
+      return ((100 * totalObtained) / totalMarks).toFixed(1)
+    }
+
+    const grandTotal = () => {
+      const grand =
+        filteredMarks &&
+        filteredMarks.reduce(
+          (acc, cur) =>
+            Number(acc) + Number(cur.theoryMarks) + Number(cur.practicalMarks),
+          0
+        )
+
+      return grand
+    }
+
     return (
       <div className='table-responsives'>
         <table className='table table-bordered border-primary'>
@@ -81,6 +117,13 @@ const MarkSheetScreenReport = () => {
                 </tr>
               ))}
           </tbody>
+          <tfoot>
+            <tr>
+              <th>Total:</th>
+              <th>{grandTotal()}</th>
+              <th>{grandTotalPercentage()}%</th>
+            </tr>
+          </tfoot>
         </table>
       </div>
     )

@@ -228,33 +228,63 @@ export const updateStudent = asyncHandler(async (req, res) => {
 })
 
 export const getStudent = asyncHandler(async (req, res) => {
-  let query = StudentModel.find({})
+  if (req.user.student) {
+    let query = StudentModel.find({ _id: req.user.student })
 
-  const page = parseInt(req.params.page) || 1
-  const pageSize = parseInt(req.query.limit) || 50
-  const skip = (page - 1) * pageSize
-  const total = await StudentModel.countDocuments()
+    const page = parseInt(req.params.page) || 1
+    const pageSize = parseInt(req.query.limit) || 50
+    const skip = (page - 1) * pageSize
+    const total = await StudentModel.countDocuments({ _id: req.user.student })
 
-  const pages = Math.ceil(total / pageSize)
+    const pages = Math.ceil(total / pageSize)
 
-  query = query
-    .skip(skip)
-    .limit(pageSize)
-    .sort({ createdAt: -1 })
-    .populate('createdBy', 'name')
-    .populate('updatedBy', 'name')
+    query = query
+      .skip(skip)
+      .limit(pageSize)
+      .sort({ createdAt: -1 })
+      .populate('createdBy', 'name')
+      .populate('updatedBy', 'name')
 
-  const result = await query
+    const result = await query
 
-  res.status(200).json({
-    startIndex: skip + 1,
-    endIndex: skip + result.length,
-    count: result.length,
-    page,
-    pages,
-    total,
-    data: result,
-  })
+    res.status(200).json({
+      startIndex: skip + 1,
+      endIndex: skip + result.length,
+      count: result.length,
+      page,
+      pages,
+      total,
+      data: result,
+    })
+  } else {
+    let query = StudentModel.find({})
+
+    const page = parseInt(req.params.page) || 1
+    const pageSize = parseInt(req.query.limit) || 50
+    const skip = (page - 1) * pageSize
+    const total = await StudentModel.countDocuments()
+
+    const pages = Math.ceil(total / pageSize)
+
+    query = query
+      .skip(skip)
+      .limit(pageSize)
+      .sort({ createdAt: -1 })
+      .populate('createdBy', 'name')
+      .populate('updatedBy', 'name')
+
+    const result = await query
+
+    res.status(200).json({
+      startIndex: skip + 1,
+      endIndex: skip + result.length,
+      count: result.length,
+      page,
+      pages,
+      total,
+      data: result,
+    })
+  }
 })
 
 export const getStudentDetails = asyncHandler(async (req, res) => {

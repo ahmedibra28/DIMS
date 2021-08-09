@@ -15,7 +15,6 @@ const AttendanceScreen = () => {
     register,
     handleSubmit,
     watch,
-    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {},
@@ -59,9 +58,7 @@ const AttendanceScreen = () => {
     mutateAsync: addAttendanceMutateAsync,
   } = useMutation(['addAttendance'], addAttendance, {
     retry: 0,
-    onSuccess: () => {
-      reset()
-    },
+    onSuccess: () => {},
   })
 
   const submitHandler = (data) => {

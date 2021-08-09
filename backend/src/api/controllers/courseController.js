@@ -6,6 +6,7 @@ export const addCourse = asyncHandler(async (req, res) => {
     isActive,
     courseType,
     duration,
+    noExam,
     certificationIssued,
     enrolmentRequirement,
     price,
@@ -28,6 +29,7 @@ export const addCourse = asyncHandler(async (req, res) => {
     createdBy,
     courseType,
     duration,
+    noExam,
     certificationIssued,
     enrolmentRequirement,
     price,
@@ -45,6 +47,7 @@ export const updateCourse = asyncHandler(async (req, res) => {
     isActive,
     courseType,
     duration,
+    noExam,
     certificationIssued,
     enrolmentRequirement,
     price,
@@ -68,6 +71,7 @@ export const updateCourse = asyncHandler(async (req, res) => {
       obj.updatedBy = updatedBy
       obj.courseType = courseType
       obj.duration = duration
+      obj.noExam = noExam
       obj.certificationIssued = certificationIssued
       obj.enrolmentRequirement = enrolmentRequirement
       obj.price = price

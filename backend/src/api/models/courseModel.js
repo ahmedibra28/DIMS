@@ -28,6 +28,10 @@ const courseScheme = mongoose.Schema(
       type: Number,
       required: true,
     },
+    noExam: {
+      type: Number,
+      required: true,
+    },
     certificationIssued: {
       type: String,
       required: true,

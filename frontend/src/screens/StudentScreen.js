@@ -26,6 +26,7 @@ import { confirmAlert } from 'react-confirm-alert'
 import { Confirm } from '../components/Confirm'
 import { useForm } from 'react-hook-form'
 import Pagination from '../components/Pagination'
+import { UnlockAccess } from '../components/UnlockAccess'
 
 const StudentScreen = () => {
   const [page, setPage] = useState(1)
@@ -637,13 +638,15 @@ const StudentScreen = () => {
       </div>
 
       <div className='d-flex justify-content-between align-items-center'>
-        <button
-          className='btn btn-primary '
-          data-bs-toggle='modal'
-          data-bs-target='#editStudentModal'
-        >
-          <FaPlus className='mb-1' />
-        </button>
+        {!UnlockAccess('student') && (
+          <button
+            className='btn btn-primary '
+            data-bs-toggle='modal'
+            data-bs-target='#editStudentModal'
+          >
+            <FaPlus className='mb-1' />
+          </button>
+        )}
         <span>
           <h3 className='text-center'>Students</h3>
           <span>{data && data.total} records were found</span>
@@ -709,38 +712,40 @@ const StudentScreen = () => {
                             )}
                           </span>
                         </address>
-                        <p className='btn-group d-flex'>
-                          <button
-                            className='btn btn-primary btn-sm'
-                            onClick={() => editHandler(student)}
-                            data-bs-toggle='modal'
-                            data-bs-target='#editStudentModal'
-                          >
-                            <FaEdit className='mb-1' /> Edit
-                          </button>
+                        {!UnlockAccess('student') && (
+                          <p className='btn-group d-flex'>
+                            <button
+                              className='btn btn-primary btn-sm'
+                              onClick={() => editHandler(student)}
+                              data-bs-toggle='modal'
+                              data-bs-target='#editStudentModal'
+                            >
+                              <FaEdit className='mb-1' /> Edit
+                            </button>
 
-                          <Link
-                            to={`/student/${student._id}`}
-                            className='btn btn-success btn-sm border-0 mx-1'
-                          >
-                            <FaInfoCircle className='mb-1' /> Detail
-                          </Link>
+                            <Link
+                              to={`/student/${student._id}`}
+                              className='btn btn-success btn-sm border-0 mx-1'
+                            >
+                              <FaInfoCircle className='mb-1' /> Detail
+                            </Link>
 
-                          <button
-                            className='btn btn-danger btn-sm'
-                            onClick={() => deleteHandler(student._id)}
-                            disabled={isLoadingDeleteStudent}
-                          >
-                            {isLoadingDeleteStudent ? (
-                              <span className='spinner-border spinner-border-sm' />
-                            ) : (
-                              <span>
-                                {' '}
-                                <FaTrash className='mb-1' /> Delete
-                              </span>
-                            )}
-                          </button>
-                        </p>
+                            <button
+                              className='btn btn-danger btn-sm'
+                              onClick={() => deleteHandler(student._id)}
+                              disabled={isLoadingDeleteStudent}
+                            >
+                              {isLoadingDeleteStudent ? (
+                                <span className='spinner-border spinner-border-sm' />
+                              ) : (
+                                <span>
+                                  {' '}
+                                  <FaTrash className='mb-1' /> Delete
+                                </span>
+                              )}
+                            </button>
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>

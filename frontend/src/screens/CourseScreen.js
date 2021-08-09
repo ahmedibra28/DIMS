@@ -112,6 +112,7 @@ const CourseScreen = () => {
           isActive: data.isActive,
           courseType: data.courseType,
           duration: data.duration,
+          noExam: data.noExam,
           enrolmentRequirement: data.enrolmentRequirement,
           certificationIssued: data.certificationIssued,
           price: data.price,
@@ -126,6 +127,7 @@ const CourseScreen = () => {
     setValue('isActive', course.isActive)
     setValue('courseType', course.courseType && course.courseType._id)
     setValue('duration', course.duration)
+    setValue('noExam', course.noExam)
     setValue('certificationIssued', course.certificationIssued)
     setValue('enrolmentRequirement', course.enrolmentRequirement)
     setValue('price', course.price)
@@ -269,6 +271,24 @@ const CourseScreen = () => {
                   </div>
 
                   <div className='mb-3'>
+                    <label htmlFor='noExam'>No. of semester</label>
+                    <input
+                      {...register('noExam', {
+                        required: 'No. of exam is required',
+                      })}
+                      type='number'
+                      placeholder='Enter no. of exam'
+                      className='form-control'
+                      step='.01'
+                    />
+                    {errors.noExam && (
+                      <span className='text-danger'>
+                        {errors.noExam.message}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className='mb-3'>
                     <label htmlFor='certificationIssued'>
                       Certification Issued
                     </label>
@@ -393,6 +413,7 @@ const CourseScreen = () => {
                   <th>NAME</th>
                   <th>FEE</th>
                   <th>NO. OF SEMESTER</th>
+                  <th>NO. OF EXAM</th>
                   <th>CERTIFICATION ISSUED</th>
                   <th>ENROLMENT REQUIREMENT</th>
                   <th>ACTIVE</th>
@@ -414,6 +435,7 @@ const CourseScreen = () => {
                       </td>
                       <td>${course.price}.00</td>
                       <td>{course.duration}</td>
+                      <td>{course.noExam}</td>
                       <td>{course.certificationIssued}</td>
                       <td>{course.enrolmentRequirement}</td>
                       <td>

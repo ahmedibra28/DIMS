@@ -11,7 +11,9 @@ import { Confirm } from '../components/Confirm'
 import { useForm } from 'react-hook-form'
 import { addMark, deleteMark, getMarks, updateMark } from '../api/marks'
 import { getSubjects } from '../api/subjects'
+import { getCourses } from '../api/courses'
 import MarksScreenStudentModal from './MarksScreenStudentModal'
+import { UnlockAccess } from '../components/UnlockAccess'
 
 const MarkSheetScreen = () => {
   const { studentId, assignedCourseId, semesterNo, shift, semesterStatus } =
@@ -32,6 +34,14 @@ const MarkSheetScreen = () => {
   const { data: dataSubject, isLoading: isLoadingSubject } = useQuery(
     'subjects',
     async () => await getSubjects(),
+    {
+      retry: 0,
+    }
+  )
+
+  const { data: dataCourse, isLoading: isLoadingCourse } = useQuery(
+    'courses',
+    async () => await getCourses(),
     {
       retry: 0,
     }
@@ -181,7 +191,7 @@ const MarkSheetScreen = () => {
     return (
       markSheet &&
       markSheet[0] && (
-        <div key={markSheet[0]._id} className='mb-5 text-primary   bg-light'>
+        <div key={markSheet[0]._id} className='mb-5 text-primary shadow-lg p-2'>
           <div className='p-2'>
             <div className=''>
               <h4 className='fw-bold'>
@@ -190,7 +200,7 @@ const MarkSheetScreen = () => {
                   {markSheet[0].exam}{' '}
                 </span>
               </h4>
-              <div className='d-flex mx-auto text-primary fw-bold text-center bg-light p-2'>
+              <div className='d-flex mx-auto text-primary fw-bold text-center  p-2'>
                 <span className='col'>
                   SEMESTER:{' '}
                   <span className='text-decoration-underline'>
@@ -205,13 +215,13 @@ const MarkSheetScreen = () => {
                 </span>
               </div>
             </div>
-            <h6 className='text-primary fw-bold text-center bg-light p-2'>
+            <h6 className='text-primary fw-bold text-center  p-2'>
               STUDENT FULL NAME:{' '}
               <span className='text-decoration-underline'>
                 {markSheet[0].student.fullName.toUpperCase()}
               </span>
             </h6>
-            <h6 className='text-primary fw-bold text-center bg-light p-2'>
+            <h6 className='text-primary fw-bold text-center  p-2'>
               STUDENT ID:{' '}
               <span className='text-decoration-underline'>
                 {markSheet[0].student.rollNo}
@@ -219,7 +229,7 @@ const MarkSheetScreen = () => {
             </h6>
           </div>
           <hr />
-          <div className='table-responsive bg-light'>
+          <div className='table-responsive '>
             <table className='table table-sm hover bordered striped caption-top '>
               <thead>
                 <tr>
@@ -228,7 +238,9 @@ const MarkSheetScreen = () => {
                   <th>PRACTICAL MARKS</th>
                   <th>OBTAINED THEORY MARKS</th>
                   <th>OBTAINED PRACTICAL MARKS</th>
-                  {semesterStatus === 'true' && <th>ACTION</th>}
+                  {semesterStatus === 'true' && !UnlockAccess('student') && (
+                    <th>ACTION</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -240,7 +252,7 @@ const MarkSheetScreen = () => {
                       <td>{mark.subject.practicalMarks}</td>
                       <td>{mark.theoryMarks}</td>
                       <td>{mark.practicalMarks}</td>
-                      {semesterStatus === 'true' && (
+                      {semesterStatus === 'true' && !UnlockAccess('student') && (
                         <td className='btn-group'>
                           <button
                             className='btn btn-primary btn-sm'
@@ -281,7 +293,7 @@ const MarkSheetScreen = () => {
             </table>
           </div>
           <div className='footer'>
-            <h6 className='text-primary fw-bold text-decoration text-center bg-light p-2'>
+            <h6 className='text-primary fw-bold text-decoration text-center  p-2'>
               Percentage:{' '}
               <span className='text-decoration-underline'>{percentage()}%</span>
             </h6>
@@ -316,7 +328,7 @@ const MarkSheetScreen = () => {
 
       <div className='d-flex justify-content-between align-items-center'>
         <h3 className=''>Student Mark Sheet</h3>
-        {semesterStatus === 'true' && (
+        {semesterStatus === 'true' && !UnlockAccess('student') && (
           <button
             className='btn btn-primary '
             data-bs-toggle='modal'
@@ -362,6 +374,7 @@ const MarkSheetScreen = () => {
         isLoadingAddMark={isLoadingAddMark}
         assignedCourseId={assignedCourseId}
         dataSubject={!isLoadingSubject && dataSubject}
+        dataCourse={!isLoadingCourse && dataCourse}
         semesterNo={semesterNo}
       />
     </div>

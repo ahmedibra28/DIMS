@@ -11,14 +11,10 @@ import User from '../models/userModel.js'
 export const getAttendanceReport = asyncHandler(async (req, res) => {
   const { course, semester, subject, shift, student, sDate, eDate } = req.body
 
-  const instructor = req.user.email
-
-  const user = await User.findOne({ email: instructor })
-
-  const isAdmin = user.group === 'admin'
+  const isAdmin = req.user.group === 'admin'
 
   const instructorObj = await InstructorModel.findOne({
-    email: instructor,
+    _id: req.user.instructor,
     isActive: true,
   })
 
@@ -48,14 +44,16 @@ export const getAttendanceReport = asyncHandler(async (req, res) => {
         .populate('subject')
 
       res.status(201).json({ attendanceObj, studentId })
-    } else {
+    }
+
+    if (req.user.instructor) {
       const attendanceObj = await AttendanceModel.find({
         course,
         subject,
         semester,
         shift,
-        instructor: instructorObj._id,
-        createdAt: { $gte: startDate.format(), $lt: endDate.format() },
+        instructor: req.user.instructor,
+        createdAt: { $gte: startDate, $lt: endDate },
       })
         .sort({ createdAt: -1 })
         .populate('instructor')

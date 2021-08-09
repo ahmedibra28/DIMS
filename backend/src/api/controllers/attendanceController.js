@@ -7,14 +7,14 @@ import moment from 'moment'
 
 export const getClassInfo = asyncHandler(async (req, res) => {
   const { course, semester, subject, shift } = req.body
-  const instructor = req.user.email
+  const instructor = req.user.instructor
 
   const instructorObj = await InstructorModel.findOne({
-    email: instructor,
+    _id: instructor,
     isActive: true,
   })
   if (instructorObj) {
-    const instructor = instructorObj._id
+    const instructor = req.user.instructor
     const assignToSubjectObj = await AssignToSubject.findOne({
       instructor,
       isActive: true,
@@ -40,11 +40,11 @@ export const getClassInfo = asyncHandler(async (req, res) => {
       res.status(201).json(assignToCourseObj)
     } else {
       res.status(400)
-      throw new Error('Instructor does not belong the subject')
+      throw new Error('You are not the instructor of the course you selected')
     }
   } else {
     res.status(400)
-    throw new Error('Instructor not found')
+    throw new Error('You are not the instructor of the course you selected')
   }
 })
 

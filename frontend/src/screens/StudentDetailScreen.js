@@ -27,6 +27,7 @@ import { confirmAlert } from 'react-confirm-alert'
 import { Confirm } from '../components/Confirm'
 import { useForm } from 'react-hook-form'
 import { getCourses } from '../api/courses'
+import { UnlockAccess } from '../components/UnlockAccess'
 
 const StudentDetailScreen = () => {
   const { id: paramId } = useParams()
@@ -213,13 +214,15 @@ const StudentDetailScreen = () => {
                 <span className='fw-bold text-primary'>
                   Secondary Information
                 </span>
-                <button
-                  data-bs-toggle='modal'
-                  data-bs-target='#assignToCourseModal'
-                  className='btn btn-primary btn-sm'
-                >
-                  <FaBook className='mb-1' /> Assign To Course
-                </button>
+                {!UnlockAccess('student') && (
+                  <button
+                    data-bs-toggle='modal'
+                    data-bs-target='#assignToCourseModal'
+                    className='btn btn-primary btn-sm'
+                  >
+                    <FaBook className='mb-1' /> Assign To Course
+                  </button>
+                )}
               </p>
               <hr />
               <div className='table-responsive'>
@@ -292,45 +295,50 @@ const StudentDetailScreen = () => {
                             </Link>
                             {assign.isActive && !assign.isGraduated && (
                               <>
-                                <button
-                                  className='btn btn-primary btn-sm'
-                                  onClick={() => editHandler(assign)}
-                                  data-bs-toggle='modal'
-                                  data-bs-target='#assignToCourseModal'
-                                >
-                                  <FaEdit className='mb-1' /> Edit
-                                </button>
+                                {!UnlockAccess('student') && (
+                                  <>
+                                    <button
+                                      className='btn btn-primary btn-sm'
+                                      onClick={() => editHandler(assign)}
+                                      data-bs-toggle='modal'
+                                      data-bs-target='#assignToCourseModal'
+                                    >
+                                      <FaEdit className='mb-1' /> Edit
+                                    </button>
 
-                                <button
-                                  className='btn btn-danger btn-sm ms-1'
-                                  onClick={() => deleteHandler(assign._id)}
-                                  disabled={isLoadingDeleteAssignToCourse}
-                                >
-                                  {isLoadingDeleteAssignToCourse ? (
-                                    <span className='spinner-border spinner-border-sm ' />
-                                  ) : (
-                                    <span>
-                                      {' '}
-                                      <FaTrash className='mb-1' /> Delete
-                                    </span>
-                                  )}
-                                </button>
-                                <button
-                                  className='btn btn-success btn-sm ms-1'
-                                  onClick={() =>
-                                    upgradeSemesterHandler(assign._id)
-                                  }
-                                  disabled={isLoadingUpgradeSemester}
-                                >
-                                  {isLoadingUpgradeSemester ? (
-                                    <span className='spinner-border spinner-border-sm ' />
-                                  ) : (
-                                    <span>
-                                      {' '}
-                                      <FaLevelUpAlt className='mb-1' /> Upgrade
-                                    </span>
-                                  )}
-                                </button>
+                                    <button
+                                      className='btn btn-danger btn-sm ms-1'
+                                      onClick={() => deleteHandler(assign._id)}
+                                      disabled={isLoadingDeleteAssignToCourse}
+                                    >
+                                      {isLoadingDeleteAssignToCourse ? (
+                                        <span className='spinner-border spinner-border-sm ' />
+                                      ) : (
+                                        <span>
+                                          {' '}
+                                          <FaTrash className='mb-1' /> Delete
+                                        </span>
+                                      )}
+                                    </button>
+                                    <button
+                                      className='btn btn-success btn-sm ms-1'
+                                      onClick={() =>
+                                        upgradeSemesterHandler(assign._id)
+                                      }
+                                      disabled={isLoadingUpgradeSemester}
+                                    >
+                                      {isLoadingUpgradeSemester ? (
+                                        <span className='spinner-border spinner-border-sm ' />
+                                      ) : (
+                                        <span>
+                                          {' '}
+                                          <FaLevelUpAlt className='mb-1' />{' '}
+                                          Upgrade
+                                        </span>
+                                      )}
+                                    </button>
+                                  </>
+                                )}
                               </>
                             )}
                           </td>
