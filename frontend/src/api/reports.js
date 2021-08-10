@@ -38,3 +38,21 @@ export const getCompleteFeeReport = async (obj) => {
     throw error.response.data.message
   }
 }
+
+export const getSSIReport = async () => {
+  try {
+    const { data } = await axios.get(`/api/reports/counts`, config())
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}
+
+export const getSingleStudentFeeReport = async () => {
+  try {
+    const { data } = await axios.get(`/api/reports/student`, config())
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}

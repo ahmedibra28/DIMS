@@ -47,3 +47,12 @@ export const getFees = async () => {
     throw error.response.data.message
   }
 }
+
+// export const digitalPay = async (obj) => {
+//   try {
+//     const { data } = await axios.post(`/api/fees/digital-pay`, obj, config())
+//     return data
+//   } catch (error) {
+//     throw error.response.data.message
+//   }
+// }

@@ -88,7 +88,6 @@ const FeeScreen = () => {
         <Message variant='success'>Payment has been done successfully.</Message>
       )}
       {isErrorPay && <Message variant='danger'>{errorPay}</Message>}
-      {isErrorPay && <Message variant='danger'>{errorPay}</Message>}
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className='row'>
           <div className='col-md-4 col-12'>

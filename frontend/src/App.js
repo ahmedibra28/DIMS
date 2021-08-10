@@ -11,45 +11,8 @@ import { useMutation, useQuery } from 'react-query'
 
 import HeaderGuest from './components/HeaderGuest'
 import HeaderAuthorized from './components/HeaderAuthorized'
-import axios from 'axios'
-import { v4 as uuidv4 } from 'uuid'
 
 const App = () => {
-  const requestObj = {
-    schemaVersion: '1.0',
-    requestId: uuidv4(),
-    timestamp: Date.now(),
-    channelName: 'WEB',
-    serviceName: 'API_PURCHASE',
-    serviceParams: {
-      merchantUid: process.env.REACT_APP_MERCHANT_U_ID,
-      apiUserId: process.env.REACT_APP_API_USER_ID,
-      apiKey: process.env.REACT_APP_API_KEY,
-      paymentMethod: 'mwallet_account',
-      payerInfo: {
-        accountNo: '252615301507',
-      },
-      transactionInfo: {
-        referenceId: uuidv4(),
-        invoiceId: uuidv4(),
-        amount: 1,
-        currency: 'USD',
-        description: 'test',
-      },
-    },
-  }
-
-  const EVC = () => {
-    const basicRequest = async () => {
-      const { data } = await axios.post(
-        `https://sandbox.safarifoneict.com/asm`,
-        requestObj
-      )
-      console.log(data)
-    }
-    basicRequest()
-  }
-
   const { mutateAsync } = useMutation(logout, () => {})
   useQuery('userInfo', () => {})
 
@@ -119,9 +82,6 @@ const App = () => {
             className={`${!userInfo ? 'container' : 'container'}`}
             id='mainContainer'
           >
-            {/* <button onClick={() => EVC()} className='btn btn-primary btn-sm'>
-              Send Request
-            </button> */}
             <Route component={Routes} />
           </div>
           <Footer />

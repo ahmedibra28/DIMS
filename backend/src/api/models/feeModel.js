@@ -39,6 +39,10 @@ const feeScheme = mongoose.Schema(
           type: Number,
           default: 0.0,
         },
+        paymentMethod: {
+          type: String,
+          default: 'on_cash',
+        },
         paymentDate: {
           type: String,
           default: null,

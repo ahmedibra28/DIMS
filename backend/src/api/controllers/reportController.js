@@ -6,7 +6,7 @@ import AttendanceModel from '../models/attendanceModal.js'
 import StudentModel from '../models/studentModel.js'
 import MarksModel from '../models/marksModel.js'
 import AssignToCourseModel from '../models/assignToCourseModel.js'
-import User from '../models/userModel.js'
+import courseTypeModel from '../models/courseTypeModel.js'
 
 export const getAttendanceReport = asyncHandler(async (req, res) => {
   const { course, semester, subject, shift, student, sDate, eDate } = req.body
@@ -208,5 +208,25 @@ export const getCompleteFeeReport = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error(`The is no student fee report were found`)
   }
+  res.status(200).json(fee)
+})
+
+export const getSSIReport = asyncHandler(async (req, res) => {
+  const students = await StudentModel.countDocuments()
+  const courseTypes = await courseTypeModel.countDocuments()
+  const instructors = await InstructorModel.countDocuments()
+
+  res.status(200).json({ students, instructors, courseTypes })
+})
+
+export const getSingleStudentFeeReport = asyncHandler(async (req, res) => {
+  const student = req.user.student
+
+  const fee = await FeeModel.find({ 'payment.student': student })
+    .populate('payment.student')
+    .populate('course')
+    .populate('createdBy', 'name')
+    .populate('updatedBy', 'name')
+
   res.status(200).json(fee)
 })

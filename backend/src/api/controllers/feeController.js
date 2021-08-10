@@ -37,6 +37,9 @@ export const Pay = asyncHandler(async (req, res) => {
   const paymentDate = moment(req.body.paymentDate).format()
   const startOfMonth = moment(paymentDate).clone().startOf('month').format()
   const endOfMonth = moment(paymentDate).clone().endOf('month').format()
+  const paymentMethod = req.body.paymentMethod
+    ? req.body.paymentMethod
+    : 'on_cash'
 
   const fee = await FeeModel.findOne({
     semester,
@@ -71,6 +74,7 @@ export const Pay = asyncHandler(async (req, res) => {
         isPaid: true,
         paidFeeAmount: price,
         paymentDate,
+        paymentMethod,
       }
 
       let students = fee.payment.filter((std) => std.student != student)
@@ -125,6 +129,7 @@ export const feeGeneration = asyncHandler(async (req, res) => {
           isPaid: false,
           paidFeeAmount: courseData && courseData[0].price,
           paymentDate,
+          paymentMethod,
         }
       })
 
@@ -152,6 +157,7 @@ export const feeGeneration = asyncHandler(async (req, res) => {
           isPaid: false,
           paidFeeAmount: courseData && courseData[0].price,
           paymentDate,
+          paymentMethod,
         }
       })
       const createObj = await FeeModel.create({
