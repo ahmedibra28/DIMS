@@ -1,7 +1,5 @@
 import { useState, useRef } from 'react'
 import { getSingleStudentFeeReport } from '../api/reports'
-import { v4 as uuidv4 } from 'uuid'
-import axios from 'axios'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import {
   FaDollarSign,
@@ -17,8 +15,7 @@ import { pay } from '../api/fees'
 
 const StudentDashboard = () => {
   const [stdPaymentInfo, setStdPaymentInfo] = useState(null)
-  const [message, setMessage] = useState({})
-  const [paymentProcess, setPaymentProcess] = useState(false)
+
   const {
     data: studentData,
     isLoading: isLoadingStudent,
@@ -50,88 +47,22 @@ const StudentDashboard = () => {
     retry: 0,
     onSuccess: () => {
       queryClient.invalidateQueries(['student'])
-      setMessage({})
     },
   })
 
   const paymentHandler = (student, studentDataRef) => {
-    // const courseFromServer = data && data.course
-    // const semesterFromServer = data && data.semester
-    // const shiftFromServer = data && data.shift
+    const courseFromServer = studentDataRef && studentDataRef.course
+    const semesterFromServer = studentDataRef && studentDataRef.semester
+    const shiftFromServer = studentDataRef && studentDataRef.shift
 
-    // payMutateAsync({
-    //   student,
-    //   paymentMethod: 'mwallet_account',
-    //   semesterFromServer,
-    //   courseFromServer,
-    //   shiftFromServer,
-    //   paymentDate: student.paymentDate,
-    // })
-
-    const coursePrice = studentDataRef.course.price
-    const basicRequest = async () => {
-      setPaymentProcess(true)
-      const { data } = await axios.post(`https://api.waafi.com/asm`, {
-        schemaVersion: '1.0',
-        requestId: uuidv4(),
-        timestamp: Date.now(),
-        channelName: 'WEB',
-        serviceName: 'API_PURCHASE',
-        serviceParams: {
-          merchantUid: process.env.REACT_APP_MERCHANT_U_ID,
-          apiUserId: process.env.REACT_APP_API_USER_ID,
-          apiKey: process.env.REACT_APP_API_KEY,
-          paymentMethod: 'mwallet_account',
-          payerInfo: {
-            accountNo: `252${student.student.mobileNumber}`,
-          },
-          transactionInfo: {
-            referenceId: uuidv4(),
-            invoiceId:
-              student.paymentDate.slice(0, 10).replaceAll('-', '') +
-              student.student.rollNo +
-              '-' +
-              uuidv4().slice(1, 3),
-            amount: coursePrice,
-            currency: 'USD',
-            description: 'fee tuition',
-          },
-        },
-      })
-
-      // 5206 => payment has been cancelled
-      // 2001 => payment has been done successfully
-
-      setPaymentProcess(false)
-
-      if (Number(data.responseCode) === 2001) {
-        setMessage({
-          variant: 'success',
-          message: 'Payment has been done successfully',
-        })
-        const courseFromServer = studentDataRef && studentDataRef.course
-        const semesterFromServer = studentDataRef && studentDataRef.semester
-        const shiftFromServer = studentDataRef && studentDataRef.shift
-
-        payMutateAsync({
-          student,
-          paymentMethod: 'mwallet_account',
-          semesterFromServer,
-          courseFromServer,
-          shiftFromServer,
-          paymentDate: student.paymentDate,
-        })
-      } else {
-        setMessage({
-          variant: 'danger',
-          message: 'Payer has cancelled the payment',
-        })
-        setTimeout(() => {
-          setMessage({})
-        }, 5000)
-      }
-    }
-    basicRequest()
+    payMutateAsync({
+      student,
+      paymentMethod: 'mwallet_account',
+      semesterFromServer,
+      courseFromServer,
+      shiftFromServer,
+      paymentDate: student.paymentDate,
+    })
   }
 
   const filteredFee = (student, data) => {
@@ -165,7 +96,7 @@ const StudentDashboard = () => {
               onClick={() => paymentHandler(student, data)}
               className='btn btn-success btn-sm '
             >
-              {isLoadingPay || paymentProcess ? (
+              {isLoadingPay ? (
                 <span className='spinner-border spinner-border-sm' />
               ) : (
                 <>
@@ -198,11 +129,6 @@ const StudentDashboard = () => {
   return (
     <div>
       <h3 className='text-center'>Payment History</h3> <hr />
-      {message && message.variant && message.message && (
-        <Message variant={message && message.variant && message.variant}>
-          {message && message.message && message.message}
-        </Message>
-      )}
       {isSuccessPay && (
         <Message variant='success'>Payment has been done successfully.</Message>
       )}
