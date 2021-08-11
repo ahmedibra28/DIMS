@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import Message from '../components/Message'
 import Loader from 'react-loader-spinner'
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa'
+import {
+  FaCheck,
+  FaCheckCircle,
+  FaEdit,
+  FaPlus,
+  FaTimesCircle,
+  FaTrash,
+} from 'react-icons/fa'
 import Pagination from '../components/Pagination'
 import {
   getUsers,
@@ -27,7 +34,9 @@ const UserListScreen = () => {
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {},
+    defaultValues: {
+      isActive: true,
+    },
   })
 
   const queryClient = useQueryClient()
@@ -112,6 +121,7 @@ const UserListScreen = () => {
           group: data.group,
           instructor: data.instructor,
           student: data.student,
+          isActive: data.isActive,
         })
       : createUserMutateAsync(data)
   }
@@ -124,6 +134,7 @@ const UserListScreen = () => {
     setValue('group', user.group)
     setValue('student', user.student)
     setValue('instructor', user.instructor)
+    setValue('isActive', user.isActive)
   }
 
   useEffect(() => {
@@ -356,6 +367,23 @@ const UserListScreen = () => {
                     </div>
                   )}
 
+                  <div className='row'>
+                    <div className='col'>
+                      <div className='form-check'>
+                        <input
+                          className='form-check-input'
+                          type='checkbox'
+                          id='isActive'
+                          {...register('isActive')}
+                          checked={watch().isActive}
+                        />
+                        <label className='form-check-label' htmlFor='isActive'>
+                          is Active?
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className='modal-footer'>
                     <button
                       type='button'
@@ -419,6 +447,7 @@ const UserListScreen = () => {
                   <th>NAME</th>
                   <th>EMAIL</th>
                   <th>GROUP</th>
+                  <th>STATUS</th>
                   <th></th>
                 </tr>
               </thead>
@@ -432,6 +461,13 @@ const UserListScreen = () => {
                         <a href={`mailto:${user.email}`}>{user.email}</a>
                       </td>
                       <td>{user.group}</td>
+                      <td>
+                        {user.isActive ? (
+                          <FaCheckCircle className='mb-1 text-success' />
+                        ) : (
+                          <FaTimesCircle className='mb-1 text-danger' />
+                        )}
+                      </td>
                       <td className='btn-group'>
                         <button
                           className='btn btn-primary btn-sm'

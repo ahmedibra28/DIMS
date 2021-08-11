@@ -54,6 +54,12 @@ export const authUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email })
   if (user && (await user.matchPassword(password))) {
+    if (!user.isActive) {
+      res.status(401)
+      throw new Error(
+        'User has been blocked. Please contact your system administrator!'
+      )
+    }
     logSession(user._id)
 
     return res.json({
@@ -72,7 +78,8 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, group, student, instructor } = req.body
+  const { name, email, password, group, student, instructor, isActive } =
+    req.body
   const userExist = await User.findOne({ email })
   if (userExist) {
     res.status(400)
@@ -86,6 +93,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     group,
     student,
     instructor,
+    isActive,
   })
 
   if (userCreate) {
@@ -96,6 +104,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       group: userCreate.group,
       student: userCreate.student,
       instructor: userCreate.instructor,
+      isActive: userCreate.isActive,
       token: generateToken(userCreate._id),
     })
   } else {
@@ -113,6 +122,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       email: user.email,
       group: user.group,
       student: user.student,
+      isActive: user.isActive,
       instructor: user.instructor,
     })
   } else {
@@ -126,6 +136,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
   if (user) {
     user.name = req.body.name || user.name
+    user.isActive = req.body.isActive || user.isActive
     user.student = req.body.student || user.student
     user.instructor = req.body.instructor || user.instructor
     user.email = req.body.email.toLowerCase() || user.email
@@ -139,6 +150,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      isActive: updatedUser.isActive,
       group: updatedUser.group,
       student: updatedUser.student,
       instructor: updatedUser.instructor,
@@ -214,12 +226,17 @@ export const updateUser = asyncHandler(async (req, res) => {
     throw new Error("You can't edit your own user in the admin area.")
   }
 
+  console.log(req.body)
+
+  const { isActive, name, student, instructor, group, email } = req.body
+
   if (userExist) {
-    userExist.name = req.body.name || userExist.name
-    userExist.student = req.body.student || userExist.student
-    userExist.instructor = req.body.instructor || userExist.instructor
-    userExist.group = req.body.group || userExist.group
-    userExist.email = req.body.email.toLowerCase() || userExist.email
+    userExist.name = name ? name : userExist.name
+    userExist.isActive = isActive
+    userExist.student = student ? student : userExist.student
+    userExist.instructor = instructor ? instructor : userExist.instructor
+    userExist.group = group ? group : userExist.group
+    userExist.email = email ? email.toLowerCase() : userExist.email
     if (req.body.password) {
       userExist.password = req.body.password
     }
@@ -231,6 +248,7 @@ export const updateUser = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       group: updatedUser.group,
       email: updatedUser.email,
+      isActive: updatedUser.isActive,
       student: updatedUser.student,
       instructor: updatedUser.instructor,
     })
@@ -248,6 +266,13 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   if (!user) {
     res.status(404)
     throw new Error('No email could not be sent')
+  }
+
+  if (!user.isActive) {
+    res.status(401)
+    throw new Error(
+      'User has been blocked. Please contact your system administrator!'
+    )
   }
 
   const resetToken = user.getResetPasswordToken()

@@ -31,6 +31,9 @@ const InvoicePrintScreen = ({ stdPaymentInfo }) => {
               <div className='col text-start'>
                 STUDENT NAME: {student.student.fullName}
               </div>
+              <div className='col text-center'>
+                PAYMENT METHOD: {student.paymentMethod}
+              </div>
               <div className='col text-end'>
                 DATE:{' '}
                 {student.isPaid ? (
@@ -45,8 +48,8 @@ const InvoicePrintScreen = ({ stdPaymentInfo }) => {
               <div className='col text-start'>
                 STUDENT ID: {student.student.rollNo}
               </div>
-              <div className='col text-center'>Course: {data.course.name}</div>
-              <div className='col text-end'>Shift: {data.shift}</div>
+              <div className='col text-center'>COURSE: {data.course.name}</div>
+              <div className='col text-end'>SHIFT: {data.shift}</div>
             </div>
           </div>
 

@@ -27,6 +27,7 @@ import { Confirm } from '../components/Confirm'
 import { useForm } from 'react-hook-form'
 import Pagination from '../components/Pagination'
 import { UnlockAccess } from '../components/UnlockAccess'
+import { getNotices } from '../api/notices'
 
 const StudentScreen = () => {
   const [page, setPage] = useState(1)
@@ -52,6 +53,15 @@ const StudentScreen = () => {
       retry: 0,
     }
   )
+
+  const {
+    data: noticeData,
+    isLoading: isLoadingNotice,
+    isError: isErrorNotice,
+    error: errorNotice,
+  } = useQuery('notices', () => getNotices(), {
+    retry: 0,
+  })
 
   const {
     isLoading: isLoadingUpdateStudent,
@@ -676,82 +686,173 @@ const StudentScreen = () => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-          <div className='row g-3'>
-            {data &&
-              data.data.map((student) => (
-                <div key={student._id} className='col-md-3 col-sm-6 col-12'>
-                  <div className='card bg-transparent border-0 shadow-lg'>
-                    <Link to={`/student/${student._id}`} className='mx-auto'>
-                      <img
-                        src={student.picture.picturePath}
-                        alt={student.picture.pictureName}
-                        className='card-img-top img-fluid'
-                        style={{ width: 'auto', height: '260px' }}
-                      />
-                    </Link>
-                    <div className='card-body'>
-                      <Link to={`/student/${student._id}`}>
-                        <h6 className='card-title'>{student.fullName}</h6>
-                        <h6 className='card-title'>
-                          {' '}
-                          <FaIdCard className='mb-1 text-primary' />
-                          Roll No. {student.rollNo}
-                        </h6>
+          {UnlockAccess('student') ? (
+            <div className='row'>
+              {data &&
+                data.data.map((student) => (
+                  <div key={student._id} className='col-md-3 col-12'>
+                    <div className='card bg-transparent border-0 shadow-lg'>
+                      <Link to={`/student/${student._id}`} className='mx-auto'>
+                        <img
+                          src={student.picture.picturePath}
+                          alt={student.picture.pictureName}
+                          className='card-img-top img-fluid'
+                          style={{ width: 'auto', height: '260px' }}
+                        />
                       </Link>
-                      <div className='card-text'>
-                        <address className='d-flex justify-content-between'>
-                          <span>
-                            <FaPhoneAlt className='mb-1 text-primary' />{' '}
-                            {student.mobileNumber}
-                          </span>
-                          <span>
-                            {student.isActive ? (
-                              <FaCheckCircle className='text-success mb-1' />
-                            ) : (
-                              <FaTimesCircle className='text-danger mb-1' />
-                            )}
-                          </span>
-                        </address>
-                        {!UnlockAccess('student') && (
-                          <p className='btn-group d-flex'>
-                            <button
-                              className='btn btn-primary btn-sm'
-                              onClick={() => editHandler(student)}
-                              data-bs-toggle='modal'
-                              data-bs-target='#editStudentModal'
-                            >
-                              <FaEdit className='mb-1' /> Edit
-                            </button>
-
-                            <Link
-                              to={`/student/${student._id}`}
-                              className='btn btn-success btn-sm border-0 mx-1'
-                            >
-                              <FaInfoCircle className='mb-1' /> Detail
-                            </Link>
-
-                            <button
-                              className='btn btn-danger btn-sm'
-                              onClick={() => deleteHandler(student._id)}
-                              disabled={isLoadingDeleteStudent}
-                            >
-                              {isLoadingDeleteStudent ? (
-                                <span className='spinner-border spinner-border-sm' />
+                      <div className='card-body'>
+                        <Link to={`/student/${student._id}`}>
+                          <h6 className='card-title'>{student.fullName}</h6>
+                          <h6 className='card-title'>
+                            {' '}
+                            <FaIdCard className='mb-1 text-primary' />
+                            Roll No. {student.rollNo}
+                          </h6>
+                        </Link>
+                        <div className='card-text'>
+                          <address className='d-flex justify-content-between'>
+                            <span>
+                              <FaPhoneAlt className='mb-1 text-primary' />{' '}
+                              {student.mobileNumber}
+                            </span>
+                            <span>
+                              {student.isActive ? (
+                                <FaCheckCircle className='text-success mb-1' />
                               ) : (
-                                <span>
-                                  {' '}
-                                  <FaTrash className='mb-1' /> Delete
-                                </span>
+                                <FaTimesCircle className='text-danger mb-1' />
                               )}
-                            </button>
-                          </p>
-                        )}
+                            </span>
+                          </address>
+                        </div>
                       </div>
                     </div>
                   </div>
+                ))}
+
+              <div className='col-md-5 col-12 shadow text-center mx-auto'>
+                <div className='card bg-transparent border-0'>
+                  <div className='card-body'>
+                    <h4 className='card-title font-monospace text-center'>
+                      Notice Board
+                    </h4>
+                    <hr />
+                    {isLoadingNotice ? (
+                      <div className='text-center'>
+                        <Loader
+                          type='ThreeDots'
+                          color='#00BFFF'
+                          height={100}
+                          width={100}
+                          timeout={3000} //3 secs
+                        />
+                      </div>
+                    ) : isErrorNotice ? (
+                      <Message variant='danger'>{errorNotice}</Message>
+                    ) : (
+                      noticeData &&
+                      noticeData.map(
+                        (notice) =>
+                          notice.isActive && (
+                            <div key={notice._id} className='card-text'>
+                              <p className='badge rounded-pill bg-primary'>
+                                {moment(notice.createdAt).format('llll')}
+                              </p>
+                              <p>
+                                <span className='fw-bold'>{notice.title}</span>{' '}
+                                <br />
+                                <span>{notice.description}</span>
+                                <br />
+                                <span className='text-muted'>
+                                  {notice.createdBy.name} -{' '}
+                                  {moment(notice.createdAt).fromNow()}
+                                </span>
+                              </p>
+                            </div>
+                          )
+                      )
+                    )}
+                  </div>
                 </div>
-              ))}
-          </div>
+              </div>
+            </div>
+          ) : (
+            <div className='row g-3'>
+              {data &&
+                data.data.map((student) => (
+                  <div key={student._id} className='col-md-3 col-sm-6 col-12'>
+                    <div className='card bg-transparent border-0 shadow-lg'>
+                      <Link to={`/student/${student._id}`} className='mx-auto'>
+                        <img
+                          src={student.picture.picturePath}
+                          alt={student.picture.pictureName}
+                          className='card-img-top img-fluid'
+                          style={{ width: 'auto', height: '260px' }}
+                        />
+                      </Link>
+                      <div className='card-body'>
+                        <Link to={`/student/${student._id}`}>
+                          <h6 className='card-title'>{student.fullName}</h6>
+                          <h6 className='card-title'>
+                            {' '}
+                            <FaIdCard className='mb-1 text-primary' />
+                            Roll No. {student.rollNo}
+                          </h6>
+                        </Link>
+                        <div className='card-text'>
+                          <address className='d-flex justify-content-between'>
+                            <span>
+                              <FaPhoneAlt className='mb-1 text-primary' />{' '}
+                              {student.mobileNumber}
+                            </span>
+                            <span>
+                              {student.isActive ? (
+                                <FaCheckCircle className='text-success mb-1' />
+                              ) : (
+                                <FaTimesCircle className='text-danger mb-1' />
+                              )}
+                            </span>
+                          </address>
+                          {!UnlockAccess('student') && (
+                            <p className='btn-group d-flex'>
+                              <button
+                                className='btn btn-primary btn-sm'
+                                onClick={() => editHandler(student)}
+                                data-bs-toggle='modal'
+                                data-bs-target='#editStudentModal'
+                              >
+                                <FaEdit className='mb-1' /> Edit
+                              </button>
+
+                              <Link
+                                to={`/student/${student._id}`}
+                                className='btn btn-success btn-sm border-0 mx-1'
+                              >
+                                <FaInfoCircle className='mb-1' /> Detail
+                              </Link>
+
+                              <button
+                                className='btn btn-danger btn-sm'
+                                onClick={() => deleteHandler(student._id)}
+                                disabled={isLoadingDeleteStudent}
+                              >
+                                {isLoadingDeleteStudent ? (
+                                  <span className='spinner-border spinner-border-sm' />
+                                ) : (
+                                  <span>
+                                    {' '}
+                                    <FaTrash className='mb-1' /> Delete
+                                  </span>
+                                )}
+                              </button>
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          )}
         </>
       )}
     </div>

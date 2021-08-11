@@ -231,22 +231,25 @@ const AdminDashboard = () => {
               <Message variant='danger'>{errorNotice}</Message>
             ) : (
               noticeData &&
-              noticeData.map((notice) => (
-                <div key={notice._id} className='card-text'>
-                  <p className='badge rounded-pill bg-primary'>
-                    {moment(notice.createdAt).format('llll')}
-                  </p>
-                  <p>
-                    <span className='fw-bold'>{notice.title}</span> <br />
-                    <span>{notice.description}</span>
-                    <br />
-                    <span className='text-muted'>
-                      {notice.createdBy.name} -{' '}
-                      {moment(notice.createdAt).fromNow()}
-                    </span>
-                  </p>
-                </div>
-              ))
+              noticeData.map(
+                (notice) =>
+                  notice.isActive && (
+                    <div key={notice._id} className='card-text'>
+                      <p className='badge rounded-pill bg-primary'>
+                        {moment(notice.createdAt).format('llll')}
+                      </p>
+                      <p>
+                        <span className='fw-bold'>{notice.title}</span> <br />
+                        <span>{notice.description}</span>
+                        <br />
+                        <span className='text-muted'>
+                          {notice.createdBy.name} -{' '}
+                          {moment(notice.createdAt).fromNow()}
+                        </span>
+                      </p>
+                    </div>
+                  )
+              )
             )}
           </div>
         </div>
