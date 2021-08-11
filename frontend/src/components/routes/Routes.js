@@ -111,10 +111,15 @@ const Routes = () => {
                 ))
             )}
 
-          <Route path='/forgotpassword' component={ForgotPasswordScreen} />
-          <Route path='/login' component={LoginScreen} />
-          <Route path='/register' component={RegisterScreen} />
           <Route
+            exact
+            path='/forgotpassword'
+            component={ForgotPasswordScreen}
+          />
+          <Route exact path='/login' component={LoginScreen} />
+          <Route exact path='/register' component={RegisterScreen} />
+          <Route
+            exact
             path='/resetpassword/:resetToken'
             component={ResetPasswordScreen}
           />

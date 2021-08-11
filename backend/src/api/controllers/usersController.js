@@ -226,8 +226,6 @@ export const updateUser = asyncHandler(async (req, res) => {
     throw new Error("You can't edit your own user in the admin area.")
   }
 
-  console.log(req.body)
-
   const { isActive, name, student, instructor, group, email } = req.body
 
   if (userExist) {

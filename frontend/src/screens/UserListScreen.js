@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import Message from '../components/Message'
 import Loader from 'react-loader-spinner'
 import {
-  FaCheck,
   FaCheckCircle,
   FaEdit,
   FaPlus,
