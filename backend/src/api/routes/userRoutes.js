@@ -1,4 +1,5 @@
 import express from 'express'
+import { seeds } from '../controllers/seedsController.js'
 import {
   authUser,
   registerUser,
@@ -11,7 +12,6 @@ import {
   logHistory,
   forgotPassword,
   resetPassword,
-  getStudentsAndInstructors,
 } from '../controllers/usersController.js'
 import { admin, protect } from '../middleware/authMiddleware.js'
 
@@ -29,10 +29,7 @@ router
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile)
 
-router
-  .route('/students-and-instructors')
-  .get(protect, getStudentsAndInstructors)
-
+router.route('/insert/seeds').get(seeds)
 router
   .route('/:id')
   .delete(protect, admin, deleteUser)
