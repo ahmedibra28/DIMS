@@ -144,6 +144,7 @@ export const feeGeneration = asyncHandler(async (req, res) => {
   const { course, shift } = req.body
   const semester = Number(req.body.semester)
   let paymentDate = moment(new Date()).format()
+  const paymentMethod = 'on_cash'
 
   const courseData = await AssignToCourseModel.find({
     course,
