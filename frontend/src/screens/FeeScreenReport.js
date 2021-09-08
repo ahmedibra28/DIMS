@@ -18,6 +18,7 @@ const FeeScreenReport = () => {
   const [sDate, setSDate] = useState(new Date())
   const [eDate, setEDate] = useState(new Date())
   const [stdPaymentInfo, setStdPaymentInfo] = useState(null)
+  const [option, setOption] = useState('')
 
   const componentRef = useRef()
   const handlePrint = useReactToPrint({
@@ -95,7 +96,7 @@ const FeeScreenReport = () => {
         <td>{data.semester}</td>
         <td>{data.course && data.course.name}</td>
         <td>${data.course && data.course.price.toFixed(2)}</td>
-        <td>{student.paymentDate.slice(0, 10)}</td>
+        {/* <td>{student.paymentDate.slice(0, 10)}</td> */}
         <td>
           {student.isPaid ? (
             <FaRegCheckCircle className='text-success mb-1' />
@@ -214,7 +215,7 @@ const FeeScreenReport = () => {
                   )}
                 </div>
               </div>
-              <div className='col-md-10 col-12'>
+              <div className='col-md-5 col-6'>
                 <div className='mb-3'>
                   <label htmlFor='student'>Student Roll No</label>
                   <input
@@ -229,6 +230,26 @@ const FeeScreenReport = () => {
                     <span className='text-danger'>
                       {errors.student.message}
                     </span>
+                  )}
+                </div>
+              </div>
+              <div className='col-md-5 col-6'>
+                <div className='mb-3'>
+                  <label htmlFor='option'>Option</label>
+                  <select
+                    type='text'
+                    {...register('option', { required: 'Option is required' })}
+                    onChange={(e) => setOption(e.target.value)}
+                    value={option}
+                    placeholder='Enter option'
+                    className='form-control'
+                  >
+                    <option value=''>-----------</option>
+                    <option value='true'>Paid</option>
+                    <option value='false'>Un-paid</option>
+                  </select>
+                  {errors.option && (
+                    <span className='text-danger'>{errors.option.message}</span>
                   )}
                 </div>
               </div>
@@ -290,10 +311,11 @@ const FeeScreenReport = () => {
                     {dataFeeReport &&
                       dataFeeReport.map((data) =>
                         data.payment.map((student) =>
-                          rollNo
+                          student.isPaid.toString() === option && rollNo
                             ? student.student.rollNo === rollNo &&
                               filteredFee(student, data)
-                            : filteredFee(student, data)
+                            : student.isPaid.toString() === option &&
+                              filteredFee(student, data)
                         )
                       )}
                   </tbody>

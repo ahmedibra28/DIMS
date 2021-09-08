@@ -16,6 +16,7 @@ import { DateRangePicker } from 'react-date-range'
 const AttendanceScreenReport = () => {
   const [sDate, setSDate] = useState(new Date())
   const [eDate, setEDate] = useState(new Date())
+  const [option, setOption] = useState('')
 
   const handleSelect = (ranges) => {
     setSDate(ranges.selection.startDate)
@@ -170,7 +171,7 @@ const AttendanceScreenReport = () => {
                   )}
                 </div>
               </div>
-              <div className='col-md-12 col-12'>
+              <div className='col-md-7 col-12'>
                 <div className='mb-3'>
                   <label htmlFor='subject'>Subject</label>
                   <select
@@ -201,6 +202,27 @@ const AttendanceScreenReport = () => {
                   )}
                 </div>
               </div>
+              <div className='col-md-5 col-6'>
+                <div className='mb-3'>
+                  <label htmlFor='option'>Option</label>
+                  <select
+                    type='text'
+                    {...register('option', { required: 'Option is required' })}
+                    onChange={(e) => setOption(e.target.value)}
+                    value={option}
+                    placeholder='Enter option'
+                    className='form-control'
+                  >
+                    <option value=''>-----------</option>
+                    <option value='true'>Present</option>
+                    <option value='false'>Absent</option>
+                  </select>
+                  {errors.option && (
+                    <span className='text-danger'>{errors.option.message}</span>
+                  )}
+                </div>
+              </div>
+
               <div className='col-md-5 col-12'>
                 <div className='mb-3'>
                   <label htmlFor='shift'>Shift</label>
@@ -297,10 +319,11 @@ const AttendanceScreenReport = () => {
                   {dataGetAttendance &&
                     dataGetAttendance.map((data) =>
                       data.student.map((student) =>
-                        studentId
+                        student.isPresent.toString() === option && studentId
                           ? student.student._id === studentId &&
                             filteredAttendance(student, data)
-                          : filteredAttendance(student, data)
+                          : student.isPresent.toString() === option &&
+                            filteredAttendance(student, data)
                       )
                     )}
                 </tbody>

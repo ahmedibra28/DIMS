@@ -87,7 +87,7 @@ const LoginScreen = ({ history }) => {
       </div>
       <div className='row '>
         <div className='col'>
-          New Customer?
+          New Member?
           <Link to='/register'> Register</Link>
         </div>
       </div>
