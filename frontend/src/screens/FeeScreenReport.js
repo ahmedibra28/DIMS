@@ -96,7 +96,7 @@ const FeeScreenReport = () => {
         <td>{data.semester}</td>
         <td>{data.course && data.course.name}</td>
         <td>${data.course && data.course.price.toFixed(2)}</td>
-        {/* <td>{student.paymentDate.slice(0, 10)}</td> */}
+        <td>{student.paymentDate.slice(0, 10)}</td>
         <td>
           {student.isPaid ? (
             <FaRegCheckCircle className='text-success mb-1' />

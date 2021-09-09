@@ -11,6 +11,7 @@ import { FaTimesCircle } from 'react-icons/fa'
 const MarkSheetScreenReport = () => {
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -150,7 +151,7 @@ const MarkSheetScreenReport = () => {
               )}
             </div>
           </div>
-          <div className='col-md-6 col-12'>
+          <div className='col-md-4 col-12'>
             <div className='mb-3'>
               <label htmlFor='course'>Course</label>
               <select
@@ -177,6 +178,36 @@ const MarkSheetScreenReport = () => {
               )}
             </div>
           </div>
+
+          <div className='col-md-2 col-12'>
+            <div className='mb-3'>
+              <label htmlFor='semester'>Semester</label>
+              <select
+                {...register('semester', {
+                  required: 'Semester is required',
+                })}
+                type='text'
+                placeholder='Enter semester'
+                className='form-control'
+              >
+                <option value=''>-----------</option>
+                {dataCourse &&
+                  dataCourse.map(
+                    (course) =>
+                      course._id === watch().course &&
+                      [...Array(course.duration).keys()].map((semester) => (
+                        <option key={semester + 1} value={semester + 1}>
+                          {semester + 1} Semester
+                        </option>
+                      ))
+                  )}
+              </select>
+              {errors.exam && (
+                <span className='text-danger'>{errors.exam.message}</span>
+              )}
+            </div>
+          </div>
+
           <div className='col-md-1 col-1 mt-3'>
             <button
               type='submit'
@@ -322,15 +353,24 @@ const MarkSheetScreenReport = () => {
                   </tbody>
                 </table>
               </div>
-
-              <div className='row'>
-                {[...Array(duration[0]).keys()].map((sms) => (
-                  <div key={sms + 1} className='col-md-6'>
-                    {marks({ marks: dataGetMarkSheetReport, sms: sms + 1 })}
-                  </div>
-                ))}
-              </div>
+              {Number(watch().semester) === 0 ? (
+                <div className='row'>
+                  {[...Array(duration[0]).keys()].map((sms) => (
+                    <div key={sms + 1} className='col-md-6'>
+                      {marks({ marks: dataGetMarkSheetReport, sms: sms + 1 })}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className='row'>
+                  {marks({
+                    marks: dataGetMarkSheetReport,
+                    sms: Number(watch().semester),
+                  })}
+                </div>
+              )}
             </div>
+            {/* {console.log(dataGetMarkSheetReport)} */}
           </>
         )
       )}
