@@ -21,6 +21,7 @@ import feeRoutes from './api/routes/feeRoutes.js'
 import noticeRoutes from './api/routes/noticeRoutes.js'
 import groupRoutes from './api/routes/groupRoutes.js'
 import routeRoutes from './api/routes/routeRoutes.js'
+import ticketRoutes from './api/routes/ticketRoutes.js'
 
 dotenv.config()
 
@@ -50,6 +51,7 @@ app.use('/api/fees', feeRoutes)
 app.use('/api/notices', noticeRoutes)
 app.use('/api/groups', groupRoutes)
 app.use('/api/routes', routeRoutes)
+app.use('/api/tickets', ticketRoutes)
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))

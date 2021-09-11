@@ -296,7 +296,6 @@ const AttendanceScreen = () => {
                       <th>STD ID</th>
                       <th>NAME</th>
                       <th>SEMESTER</th>
-                      <th>SUBJECT</th>
                       <th>ATTENDED?</th>
                     </tr>
                   </thead>
@@ -306,7 +305,6 @@ const AttendanceScreen = () => {
                         <tr key={student._id}>
                           <td>{index + 1}</td>
                           <td>{student.student.fullName}</td>
-                          <td>{student.semester}</td>
                           <td>{student.semester}</td>
                           <td>
                             <input
