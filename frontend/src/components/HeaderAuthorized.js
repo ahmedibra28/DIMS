@@ -15,6 +15,7 @@ import {
   FaChartBar,
   FaBullhorn,
   FaRoute,
+  FaClipboardCheck,
 } from 'react-icons/fa'
 import logo from '../logo.png'
 import { getGroups } from '../api/groups'
@@ -103,6 +104,22 @@ const HeaderAuthorized = () => {
           <li className='nav-item'>
             <Link to={path} className='nav-link'>
               <FaClock className='mb-1' /> {name}
+            </Link>
+          </li>
+        )
+      case 'Ticket Activation':
+        return (
+          <li className='nav-item'>
+            <Link to={path} className='nav-link'>
+              <FaClipboardCheck className='mb-1' /> {name}
+            </Link>
+          </li>
+        )
+      case 'Ticket':
+        return (
+          <li className='nav-item'>
+            <Link to={path} className='nav-link'>
+              <FaClipboardCheck className='mb-1' /> {name}
             </Link>
           </li>
         )

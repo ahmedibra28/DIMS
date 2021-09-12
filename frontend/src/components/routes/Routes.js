@@ -29,6 +29,8 @@ import FeeScreenReport from '../../screens/FeeScreenReport'
 import NoticeScreen from '../../screens/NoticeScreen'
 import GroupScreen from '../../screens/GroupScreen'
 import RouteScreen from '../../screens/RouteScreen'
+import TicketActivationScreen from '../../screens/TicketActivationScreen'
+import TicketScreen from '../../screens/TicketScreen'
 import { getGroups } from '../../api/groups'
 import { useQuery } from 'react-query'
 
@@ -85,6 +87,10 @@ const Routes = () => {
         return FeeScreenReport
       case 'NoticeScreen':
         return NoticeScreen
+      case 'TicketActivationScreen':
+        return TicketActivationScreen
+      case 'TicketScreen':
+        return TicketScreen
       default:
         return NotFound
     }

@@ -70,11 +70,12 @@ export const deleteTicket = asyncHandler(async (req, res) => {
 
 // Ticket Activation
 export const addTicketActivation = asyncHandler(async (req, res) => {
-  const { course, subject, shift, semester, isActive } = req.body
+  const { course, shift, semester, isActive } = req.body
+
+  console.log(req.body)
 
   const exist = await TicketActivationModel.find({
     course,
-    subject,
     shift,
     semester,
   })
@@ -82,16 +83,15 @@ export const addTicketActivation = asyncHandler(async (req, res) => {
   if (exist.length === 0) {
     const createObj = await TicketActivationModel.create({
       course,
-      subject,
       shift,
       semester,
       isActive,
     })
     if (createObj) {
-      const ticket = await TicketModel.findOne({ course })
-      if (ticket) {
-        await ticket.remove()
-      }
+      // const ticket = await TicketModel.findOne({ course })
+      // if (ticket) {
+      // await ticket.remove()
+      // }
       res.status(201).json({ status: 'success' })
     } else {
       res.status(400)
@@ -99,16 +99,14 @@ export const addTicketActivation = asyncHandler(async (req, res) => {
     }
   } else {
     res.status(400)
-    throw new Error('Subject ticket already exist, please update')
+    throw new Error('Course ticket already exist, please update')
   }
 })
 
 export const updateTicketActivation = asyncHandler(async (req, res) => {
   const { isActive } = req.body
 
-  const obj = await TicketActivationModel.findOne({
-    _id: req.params.id,
-  })
+  const obj = await TicketActivationModel.findById(req.params.id)
 
   if (obj) {
     obj.isActive = isActive
