@@ -1,6 +1,8 @@
 import asyncHandler from 'express-async-handler'
 import TicketModel from '../models/ticketModel.js'
 import TicketActivationModel from '../models/ticketActivationModel.js'
+import AssignToCourseModel from '../models/assignToCourseModel.js'
+import FeeModel from '../models/feeModel.js'
 
 export const addTicket = asyncHandler(async (req, res) => {
   const { ticket, course, description, isActive } = req.body
@@ -48,11 +50,31 @@ export const updateTicket = asyncHandler(async (req, res) => {
   }
 })
 
-export const getTicket = asyncHandler(async (req, res) => {
-  const obj = await TicketModel.find({})
+export const getStudentTicket = asyncHandler(async (req, res) => {
+  const student = req.params.student
+
+  const checkIfNot = await FeeModel.find({
+    'payment.student': '60c6fffaf6deb877000028c1',
+    'payment.isPaid': false,
+  })
+  // const check =
+  //   checkIfNot &&
+  //   checkIfNot.payment.filter(
+  //     (std) => std.student == student && std.isPaid == false
+  //   )
+  // console.log(check && check)
+  console.log(checkIfNot && checkIfNot.map((c) => c.payment))
+  // console.log(fee && fee)
+
+  const obj = await AssignToCourseModel.findOne({
+    student,
+    isActive: true,
+    isGraduated: false,
+  })
     .sort({ createdAt: -1 })
-    .populate('createdBy', 'name')
-    .populate('updatedBy', 'name')
+    .populate('course', 'name')
+    .populate('student')
+
   res.status(201).json(obj)
 })
 
@@ -88,10 +110,6 @@ export const addTicketActivation = asyncHandler(async (req, res) => {
       isActive,
     })
     if (createObj) {
-      // const ticket = await TicketModel.findOne({ course })
-      // if (ticket) {
-      // await ticket.remove()
-      // }
       res.status(201).json({ status: 'success' })
     } else {
       res.status(400)

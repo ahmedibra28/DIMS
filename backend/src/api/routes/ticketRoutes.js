@@ -4,6 +4,7 @@ import {
   addTicketActivation,
   updateTicketActivation,
   deleteTicketActivation,
+  getStudentTicket,
 } from '../controllers/ticketController.js'
 import { admin, protect } from '../middleware/authMiddleware.js'
 
@@ -13,6 +14,7 @@ router
   .route('/activate')
   .get(protect, getTicketActivation)
   .post(protect, addTicketActivation)
+router.route('/:student').get(protect, getStudentTicket)
 router
   .route('/activate/:id')
   .delete(protect, admin, deleteTicketActivation)

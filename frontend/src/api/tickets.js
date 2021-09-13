@@ -51,3 +51,12 @@ export const deleteTicketActivation = async (id) => {
     throw error.response.data.message
   }
 }
+
+export const getStudentTicket = async (student) => {
+  try {
+    const { data } = await axios.get(`/api/tickets/${student}`, config())
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}
