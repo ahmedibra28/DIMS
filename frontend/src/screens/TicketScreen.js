@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+import { useReactToPrint } from 'react-to-print'
 import { FaPrint } from 'react-icons/fa'
 import Message from '../components/Message'
 import Loader from 'react-loader-spinner'
@@ -18,6 +20,12 @@ const TicketScreen = () => {
     }
   )
 
+  const componentRef = useRef()
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: 'Clearance',
+  })
+
   return (
     <div>
       {isLoading ? (
@@ -34,7 +42,7 @@ const TicketScreen = () => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <div className='row'>
-          <div className='col-8 mx-auto'>
+          <div className='col-8 mx-auto' ref={componentRef}>
             <div className='row shadow p-3'>
               <div className='col-6'>
                 <img
@@ -71,11 +79,16 @@ const TicketScreen = () => {
                 >
                   {data.student.mobileNumber}
                 </h4>
-                <button className='btn btn-primary mt-2 form-control shadow'>
-                  <FaPrint className='mb-1' /> Print
-                </button>
               </div>
             </div>
+          </div>
+          <div className='col-8 mx-auto'>
+            <button
+              onClick={handlePrint}
+              className='btn btn-primary mt-2 form-control shadow'
+            >
+              <FaPrint className='mb-1' /> Print
+            </button>
           </div>
         </div>
       )}
