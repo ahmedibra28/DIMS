@@ -3,6 +3,7 @@ import Message from '../components/Message'
 import Loader from 'react-loader-spinner'
 import { getStudentTicket } from '../api/tickets'
 import { useQuery } from 'react-query'
+import QRCode from 'react-qr-code'
 
 const TicketScreen = () => {
   const student = localStorage.getItem('userInfo')
@@ -32,28 +33,50 @@ const TicketScreen = () => {
       ) : isError ? (
         <Message variant='danger'>{error}</Message>
       ) : (
-        <div className='text-center'>
-          <div className='card w-50 text-center mx-auto shadow'>
-            <div className='card-img-top'>
-              <img
-                src='https://www.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market_full/generator/dist/generator/assets/images/websiteQRCode_noFrame.png'
-                alt='qr code'
-                className='img-fluid w-50'
-              />
-            </div>
-
-            <div className='card-body'>
-              <h4 className='card-title fw-bold font-monospace'>
-                {data.student.rollNo.toUpperCase()}
-              </h4>
-              <h4 className='card-title fw-bold font-monospace'>
-                {data.student.fullName.toUpperCase()}
-              </h4>
+        <div className='row'>
+          <div className='col-8 mx-auto'>
+            <div className='row shadow p-3'>
+              <div className='col-6'>
+                <img
+                  src={
+                    data.student &&
+                    data.student.picture &&
+                    data.student.picture.picturePath
+                  }
+                  alt={
+                    data.student &&
+                    data.student.picture &&
+                    data.student.picture.pictureName
+                  }
+                  className='img-fluid'
+                />
+              </div>
+              <div className='col-6'>
+                <QRCode
+                  fgColor='#005aab'
+                  value={`http://localhost:3006/clearance/${data.student._id}`}
+                />
+              </div>
+              <div className='col-12 text-center'>
+                <hr />
+                <h4 className='card-title fw-bold font-monospace'>
+                  {data.student.rollNo.toUpperCase()}
+                </h4>
+                <h4 className='card-title fw-bold font-monospace'>
+                  {data.student.fullName.toUpperCase()}
+                </h4>
+                <h4
+                  className='card-title fw-lighter font-monospace'
+                  style={{ letterSpacing: '1rem' }}
+                >
+                  {data.student.mobileNumber}
+                </h4>
+                <button className='btn btn-primary mt-2 form-control shadow'>
+                  <FaPrint className='mb-1' /> Print
+                </button>
+              </div>
             </div>
           </div>
-          <button className='btn btn-primary mt-2 form-control w-50 shadow'>
-            <FaPrint className='mb-1' /> Print
-          </button>
         </div>
       )}
     </div>

@@ -32,6 +32,7 @@ import RouteScreen from '../../screens/RouteScreen'
 import TicketScreen from '../../screens/TicketScreen'
 import { getGroups } from '../../api/groups'
 import { useQuery } from 'react-query'
+import ClearanceScreen from '../../screens/ClearanceScreen'
 
 const Routes = () => {
   const { data: groupData, isLoading } = useQuery('groups', () => getGroups(), {
@@ -88,6 +89,8 @@ const Routes = () => {
         return NoticeScreen
       case 'TicketScreen':
         return TicketScreen
+      case 'ClearanceScreen':
+        return ClearanceScreen
       default:
         return NotFound
     }
@@ -120,6 +123,7 @@ const Routes = () => {
             component={ForgotPasswordScreen}
           />
           <Route exact path='/login' component={LoginScreen} />
+          {/* <Route exact path='/clearance/:student' component={ClearanceScreen} /> */}
           <Route exact path='/register' component={RegisterScreen} />
           <Route
             exact
