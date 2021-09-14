@@ -47,7 +47,6 @@ const FinanceDashboard = () => {
     return months.reverse()
   }
 
-  // Fee
   const month = (index, isPaid) => {
     const mth = []
     feeData &&
@@ -57,8 +56,7 @@ const FinanceDashboard = () => {
             moment(f.createdAt).format('MMMM YYYY') ===
             lastSixMonths().reverse()[index]
         )
-        .map((p) => p.payment)
-        .map((m) => m && m.map((m) => mth.push(m)))
+        .map((m) => mth.push(m))
 
     return mth.reduce(
       (acc, curr) =>

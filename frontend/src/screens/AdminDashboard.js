@@ -57,8 +57,7 @@ const AdminDashboard = () => {
             moment(f.createdAt).format('MMMM YYYY') ===
             lastSixMonths().reverse()[index]
         )
-        .map((p) => p.payment)
-        .map((m) => m && m.map((m) => mth.push(m)))
+        .map((m) => mth.push(m))
 
     return mth.reduce(
       (acc, curr) =>

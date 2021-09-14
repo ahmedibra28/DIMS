@@ -3,9 +3,9 @@ import moment from 'moment'
 import { FaTimesCircle } from 'react-icons/fa'
 
 const InvoicePrintScreen = ({ stdPaymentInfo }) => {
-  const { student, data } = stdPaymentInfo !== null && stdPaymentInfo
+  const student = stdPaymentInfo !== null && stdPaymentInfo
 
-  if (stdPaymentInfo) {
+  if (student) {
     return (
       <div className='modal-body'>
         <div className='container'>
@@ -22,8 +22,9 @@ const InvoicePrintScreen = ({ stdPaymentInfo }) => {
             <span className='text-primary fw-bold fs-4'>INVOICE</span>
             <span className='text-primary'>
               Invoice No:{' '}
-              {student.paymentDate.slice(0, 10).replaceAll('-', '') +
-                student.student.rollNo}
+              {student.paymentDate &&
+                student.paymentDate.slice(0, 10).replaceAll('-', '') +
+                  student.student.rollNo}
             </span>
           </div>
           <div className='border border-1 border-primary rounded-3 p-3'>
@@ -48,8 +49,10 @@ const InvoicePrintScreen = ({ stdPaymentInfo }) => {
               <div className='col text-start'>
                 STUDENT ID: {student.student.rollNo}
               </div>
-              <div className='col text-center'>COURSE: {data.course.name}</div>
-              <div className='col text-end'>SHIFT: {data.shift}</div>
+              <div className='col text-center'>
+                COURSE: {student.course && student.course.name}
+              </div>
+              <div className='col text-end'>SHIFT: {student.shift}</div>
             </div>
           </div>
 
@@ -64,7 +67,7 @@ const InvoicePrintScreen = ({ stdPaymentInfo }) => {
             <tbody>
               <tr>
                 <th scope='row'>1</th>
-                <td>{data.course.name}</td>
+                <td>{student.course && student.course.name}</td>
                 <td>
                   {student.isPaid ? (
                     `$${student.paidFeeAmount.toFixed(2)}`

@@ -55,24 +55,10 @@ const FeeScreen = () => {
     })
   }
 
-  const courseFromServer =
-    dataSearchStudentToPay && dataSearchStudentToPay.course
-  const paymentFromServer =
-    dataSearchStudentToPay && dataSearchStudentToPay.payment
-  const semesterFromServer =
-    dataSearchStudentToPay && dataSearchStudentToPay.semester
-  const shiftFromServer = dataSearchStudentToPay && dataSearchStudentToPay.shift
-
   const paymentHandler = (student) => {
     if (paymentDate) {
       setMessage(null)
-      payMutateAsync({
-        student,
-        semesterFromServer,
-        courseFromServer,
-        shiftFromServer,
-        paymentDate,
-      })
+      payMutateAsync(student)
     } else {
       setTimeout(() => {
         setMessage(null)
@@ -229,8 +215,7 @@ const FeeScreen = () => {
             <div className='table-responsive '>
               <table className='table table-sm hover bordered striped caption-top '>
                 <caption>
-                  {dataSearchStudentToPay &&
-                    dataSearchStudentToPay.payment.length}{' '}
+                  {dataSearchStudentToPay && dataSearchStudentToPay.length}{' '}
                   students were found
                 </caption>
                 <thead>
@@ -245,8 +230,8 @@ const FeeScreen = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {paymentFromServer &&
-                    paymentFromServer.map((student) => (
+                  {dataSearchStudentToPay &&
+                    dataSearchStudentToPay.map((student) => (
                       <tr key={student._id}>
                         <td>
                           <img
@@ -264,13 +249,9 @@ const FeeScreen = () => {
                         </td>
                         <td>{student.student && student.student.rollNo}</td>
                         <td>{student.student && student.student.fullName}</td>
-                        <td>{semesterFromServer && semesterFromServer}</td>
-                        <td>{courseFromServer && courseFromServer.name}</td>
-                        <td>
-                          $
-                          {courseFromServer &&
-                            courseFromServer.price.toFixed(2)}
-                        </td>
+                        <td>{student.semester}</td>
+                        <td>{student.course && student.course.name}</td>
+                        <td>${student && student.course.price.toFixed(2)}</td>
                         <td>
                           {!student.isPaid && (
                             <button

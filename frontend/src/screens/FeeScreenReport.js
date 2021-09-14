@@ -18,6 +18,7 @@ const FeeScreenReport = () => {
   const [sDate, setSDate] = useState(new Date())
   const [eDate, setEDate] = useState(new Date())
   const [stdPaymentInfo, setStdPaymentInfo] = useState(null)
+
   const [option, setOption] = useState('')
 
   const componentRef = useRef()
@@ -80,7 +81,7 @@ const FeeScreenReport = () => {
     }
   }
 
-  const filteredFee = (student, data) => {
+  const filteredFee = (student) => {
     return (
       <tr key={student._id}>
         <td>
@@ -93,9 +94,9 @@ const FeeScreenReport = () => {
         </td>
         <td>{student.student && student.student.rollNo}</td>
         <td>{student.student && student.student.fullName}</td>
-        <td>{data.semester}</td>
-        <td>{data.course && data.course.name}</td>
-        <td>${data.course && data.course.price.toFixed(2)}</td>
+        <td>{student.semester}</td>
+        <td>{student.course && student.course.name}</td>
+        <td>${student.course && student.course.price.toFixed(2)}</td>
         <td>{student.paymentDate.slice(0, 10)}</td>
         <td>
           {student.isPaid ? (
@@ -108,7 +109,7 @@ const FeeScreenReport = () => {
           <button
             className='btn btn-success btn-sm'
             onClick={() => {
-              setStdPaymentInfo({ student, data })
+              setStdPaymentInfo(student)
               // handlePrint()
             }}
             data-bs-toggle='modal'
@@ -309,14 +310,12 @@ const FeeScreenReport = () => {
                   </thead>
                   <tbody>
                     {dataFeeReport &&
-                      dataFeeReport.map((data) =>
-                        data.payment.map((student) =>
-                          student.isPaid.toString() === option && rollNo
-                            ? student.student.rollNo === rollNo &&
-                              filteredFee(student, data)
-                            : student.isPaid.toString() === option &&
-                              filteredFee(student, data)
-                        )
+                      dataFeeReport.map((student) =>
+                        student.isPaid.toString() === option && rollNo
+                          ? student.student.rollNo === rollNo &&
+                            filteredFee(student)
+                          : student.isPaid.toString() === option &&
+                            filteredFee(student)
                       )}
                   </tbody>
                 </table>

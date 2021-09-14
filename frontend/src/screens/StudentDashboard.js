@@ -50,37 +50,42 @@ const StudentDashboard = () => {
     },
   })
 
-  const paymentHandler = (student, studentDataRef) => {
-    const courseFromServer = studentDataRef && studentDataRef.course
-    const semesterFromServer = studentDataRef && studentDataRef.semester
-    const shiftFromServer = studentDataRef && studentDataRef.shift
-
+  const paymentHandler = (student) => {
     payMutateAsync({
-      student,
+      shift: student.shift,
+      course: student.course,
+      price: student.course,
+      semester: student.semester,
+      student: student.student,
       paymentMethod: 'mwallet_account',
-      semesterFromServer,
-      courseFromServer,
-      shiftFromServer,
-      paymentDate: student.paymentDate,
+      paymentDate: new Date(),
     })
   }
 
-  const filteredFee = (student, data) => {
+  const filteredFee = (student) => {
     return (
       <tr key={student._id}>
         <td>
           <img
-            src={student.student && student.student.picture.picturePath}
+            src={
+              student.student &&
+              student.student.picture &&
+              student.student.picture.picturePath
+            }
             className='img-fluid'
             style={{ width: '25px' }}
-            alt={student.student && student.student.picture.pictureName}
+            alt={
+              student.student &&
+              student.student.picture &&
+              student.student.picture.pictureName
+            }
           />
         </td>
         <td>{student.student && student.student.rollNo}</td>
         <td>{student.student && student.student.fullName}</td>
-        <td>{data.semester}</td>
-        <td>{data.course && data.course.name}</td>
-        <td>${data.course && data.course.price.toFixed(2)}</td>
+        <td>{student.semester}</td>
+        <td>{student.course && student.course.name}</td>
+        <td>${student.course && student.course.price.toFixed(2)}</td>
         <td>{student.paymentDate.slice(0, 10)}</td>
         <td>
           {student.isPaid ? (
@@ -93,7 +98,7 @@ const StudentDashboard = () => {
           {!student.isPaid && (
             <button
               disabled={isLoadingPay}
-              onClick={() => paymentHandler(student, data)}
+              onClick={() => paymentHandler(student)}
               className='btn btn-success btn-sm '
             >
               {isLoadingPay ? (
@@ -111,7 +116,7 @@ const StudentDashboard = () => {
             <button
               className='btn btn-primary btn-sm'
               onClick={() => {
-                setStdPaymentInfo({ student, data })
+                setStdPaymentInfo(student)
                 // handlePrint()
               }}
               data-bs-toggle='modal'
@@ -167,12 +172,10 @@ const StudentDashboard = () => {
                   </thead>
                   <tbody>
                     {studentData &&
-                      studentData.map((data) =>
-                        data.payment.map(
-                          (student) =>
-                            student.student._id === studentId &&
-                            filteredFee(student, data)
-                        )
+                      studentData.map(
+                        (student) =>
+                          student.student._id === studentId &&
+                          filteredFee(student)
                       )}
                   </tbody>
                 </table>

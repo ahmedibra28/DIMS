@@ -13,14 +13,16 @@ export const searchStudentToPay = asyncHandler(async (req, res) => {
   const startOfMonth = moment(paymentNewDate).clone().startOf('month').format()
   const endOfMonth = moment(paymentNewDate).clone().endOf('month').format()
 
-  const fee = await FeeModel.findOne({
+  const fee = await FeeModel.find({
     semester,
     shift,
     course,
+    isPaid: false,
     createdAt: { $gte: startOfMonth, $lt: endOfMonth },
   })
     .populate('payment.student')
     .populate('course')
+    .populate('student')
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')
   if (!fee) {
@@ -31,111 +33,96 @@ export const searchStudentToPay = asyncHandler(async (req, res) => {
 })
 
 export const Pay = asyncHandler(async (req, res) => {
-  const course = req.body.courseFromServer._id
-  const price = req.body.courseFromServer.price
-  const shift = req.body.shiftFromServer
-  const semester = Number(req.body.semesterFromServer)
-  const student = req.body.student.student._id
-  const mobileNumber = req.body.student.student.mobileNumber
-  const rollNo = req.body.student.student.rollNo
+  const { shift } = req.body
+  const course = req.body.course._id
+  const price = req.body.course.price
+  const semester = Number(req.body.semester)
+  const student = req.body.student._id
+  const mobileNumber = req.body.student.mobileNumber
+  const rollNo = req.body.student.rollNo
   const paymentDate = moment(req.body.paymentDate).format()
+  const paymentMethod = req.body.paymentMethod
+
   const startOfMonth = moment(paymentDate).clone().startOf('month').format()
   const endOfMonth = moment(paymentDate).clone().endOf('month').format()
-  const paymentMethod = req.body.paymentMethod
-    ? req.body.paymentMethod
-    : 'on_cash'
 
   const fee = await FeeModel.findOne({
+    student,
+    isPaid: false,
     semester,
     shift,
     course,
     createdAt: { $gte: startOfMonth, $lt: endOfMonth },
   })
 
-  if (fee) {
-    const checkIfNot = await FeeModel.findOne({
-      semester,
-      shift,
-      course,
-      'payment.student': student,
-      createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-    })
+  if (!fee) {
+    res.status(400)
+    throw new Error(
+      `${moment(paymentDate).format('MMM')} payment is already paid`
+    )
+  } else {
+    await fee.save()
 
-    const check =
-      checkIfNot &&
-      checkIfNot.payment.filter(
-        (std) => std.student == student && std.isPaid == true
-      )
-
-    if (check.length > 0) {
-      res.status(400)
-      throw new Error(
-        `${moment(paymentDate).format('MMM')} payment is already paid`
-      )
-    } else {
-      const payment = {
-        student,
-        isPaid: true,
-        paidFeeAmount: price,
-        paymentDate,
-        paymentMethod,
-      }
-
-      let students = fee.payment.filter((std) => std.student != student)
-      students.unshift(payment)
-      fee.payment = students
-
-      // Mobile Payment
-      if (paymentMethod === 'mwallet_account') {
-        const paymentObject = {
-          schemaVersion: '1.0',
-          requestId: uuidv4(),
-          timestamp: Date.now(),
-          channelName: 'WEB',
-          serviceName: 'API_PURCHASE',
-          serviceParams: {
-            merchantUid: process.env.MERCHANT_U_ID,
-            apiUserId: process.env.API_USER_ID,
-            apiKey: process.env.API_KEY,
-            paymentMethod: 'mwallet_account',
-            payerInfo: {
-              accountNo: `252${mobileNumber}`,
-            },
-            transactionInfo: {
-              referenceId: uuidv4(),
-              invoiceId:
-                req.body.student.paymentDate.slice(0, 10).replace(/-/g, '') +
-                rollNo +
-                '-' +
-                uuidv4().slice(1, 3),
-              amount: price,
-              currency: 'USD',
-              description: 'fee tuition',
-            },
+    // Mobile Payment
+    if (paymentMethod === 'mwallet_account') {
+      const paymentObject = {
+        schemaVersion: '1.0',
+        requestId: uuidv4(),
+        timestamp: Date.now(),
+        channelName: 'WEB',
+        serviceName: 'API_PURCHASE',
+        serviceParams: {
+          merchantUid: process.env.MERCHANT_U_ID,
+          apiUserId: process.env.API_USER_ID,
+          apiKey: process.env.API_KEY,
+          paymentMethod: 'mwallet_account',
+          payerInfo: {
+            accountNo: `252${mobileNumber}`,
           },
-        }
-
-        const { data } = await axios.post(
-          `https://api.waafi.com/asm`,
-          paymentObject
-        )
-
-        // 5206 => payment has been cancelled
-        // 2001 => payment has been done successfully
-        if (Number(data.responseCode) === 2001) {
-          const updateObj = await fee.save()
-          if (updateObj) res.status(201).json({ status: 'success' })
-        }
-        if (Number(data.responseCode) !== 2001) {
-          res.status(401)
-          throw new Error('Payment has been cancelled')
-        }
+          transactionInfo: {
+            referenceId: uuidv4(),
+            invoiceId:
+              req.body.paymentDate.slice(0, 10).replace(/-/g, '') +
+              rollNo +
+              '-' +
+              uuidv4().slice(1, 3),
+            amount: price,
+            currency: 'USD',
+            description: 'fee tuition',
+          },
+        },
       }
 
-      if (paymentMethod === 'on_cash') {
+      const { data } = await axios.post(
+        `https://api.waafi.com/asm`,
+        paymentObject
+      )
+
+      // 5206 => payment has been cancelled
+      // 2001 => payment has been done successfully
+      if (Number(data.responseCode) === 2001) {
+        fee.isPaid = true
+        fee.paidFeeAmount = price
+        fee.paymentDate = paymentDate
+        fee.paymentMethod = paymentMethod
+
         const updateObj = await fee.save()
         if (updateObj) res.status(201).json({ status: 'success' })
       }
+      if (Number(data.responseCode) !== 2001) {
+        res.status(401)
+        throw new Error('Payment has been cancelled')
+      }
+    }
+
+    if (paymentMethod === 'on_cash') {
+      fee.isPaid = true
+      fee.paidFeeAmount = price
+      fee.paymentDate = paymentDate
+      fee.paymentMethod = paymentMethod
+
+      const updateObj = await fee.save()
+      if (updateObj) res.status(201).json({ status: 'success' })
     }
   }
 })
@@ -163,63 +150,60 @@ export const feeGeneration = asyncHandler(async (req, res) => {
     const startOfMonth = moment(new Date()).clone().startOf('month').format()
     const endOfMonth = moment(new Date()).clone().endOf('month').format()
 
-    const fee = await FeeModel.findOne({
+    const fee = await FeeModel.find({
       semester,
       shift,
       course,
       createdAt: { $gte: startOfMonth, $lt: endOfMonth },
     })
 
-    if (fee) {
-      const paidStudents = fee.payment.map((student) => student.student)
+    if (fee.length > 0) {
+      const paidStudents = fee.map((student) => student.student.toString())
 
       const unPaidStudents = allStudents.filter(
-        (val) => !paidStudents.includes(val)
+        (s) => !paidStudents.includes(s.toString())
       )
 
-      const payment = unPaidStudents.map((std) => {
-        return {
-          student: std,
-          isPaid: false,
-          paidFeeAmount: courseData && courseData[0].price,
-          paymentDate,
-          paymentMethod,
-        }
-      })
-
       if (unPaidStudents.length > 0) {
-        payment.map((payment) => {
-          fee.payment.unshift(payment)
+        const createObj = unPaidStudents.map(async (std) => {
+          await FeeModel.create({
+            student: std,
+            isPaid: false,
+            paidFeeAmount: courseData && courseData[0].price,
+            paymentDate,
+            paymentMethod,
+            semester,
+            shift,
+            course,
+            createdBy: req.user._id,
+          })
         })
-        const updateObj = await fee.save()
-        if (updateObj) {
+        if (createObj) {
           res.status(201).json({ status: 'success' })
         } else {
           res.status(400)
           throw new Error('Invalid payment')
         }
-      } else {
+      }
+      if (unPaidStudents.length === 0) {
         res.status(400)
         throw new Error('There is no new fee collection to generate')
       }
     }
 
-    if (!fee) {
-      const payment = allStudents.map((std) => {
-        return {
+    if (fee.length === 0) {
+      const createObj = allStudents.map(async (std) => {
+        await FeeModel.create({
           student: std,
           isPaid: false,
           paidFeeAmount: courseData && courseData[0].price,
           paymentDate,
           paymentMethod,
-        }
-      })
-      const createObj = await FeeModel.create({
-        semester,
-        shift,
-        course,
-        payment,
-        createdBy: req.user._id,
+          semester,
+          shift,
+          course,
+          createdBy: req.user._id,
+        })
       })
       if (createObj) {
         res.status(201).json({ status: 'success' })
@@ -240,7 +224,7 @@ export const getFees = asyncHandler(async (req, res) => {
   const fee = await FeeModel.find({
     createdAt: { $gte: startOfMonth, $lt: endOfMonth },
   })
-    .populate('payment.student')
+    .populate('student')
     .populate('course')
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')

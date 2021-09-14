@@ -107,22 +107,14 @@ const HeaderAuthorized = () => {
             </Link>
           </li>
         )
-      case 'Ticket Activation':
-        return (
-          <li className='nav-item'>
-            <Link to={path} className='nav-link'>
-              <FaClipboardCheck className='mb-1' /> {name}
-            </Link>
-          </li>
-        )
       case 'Ticket':
-        return (
+        return ['student'].includes(userInfo && userInfo.group) ? (
           <li className='nav-item'>
             <Link to={path} className='nav-link'>
               <FaClipboardCheck className='mb-1' /> {name}
             </Link>
           </li>
-        )
+        ) : null
       default:
         return null
     }

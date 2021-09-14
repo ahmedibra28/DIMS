@@ -200,7 +200,7 @@ export const getCompleteFeeReport = asyncHandler(async (req, res) => {
     course,
     createdAt: { $gte: startDate, $lt: endDate },
   })
-    .populate('payment.student')
+    .populate('student')
     .populate('course')
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')
@@ -222,8 +222,8 @@ export const getSSIReport = asyncHandler(async (req, res) => {
 export const getSingleStudentFeeReport = asyncHandler(async (req, res) => {
   const student = req.user.student
 
-  const fee = await FeeModel.find({ 'payment.student': student })
-    .populate('payment.student')
+  const fee = await FeeModel.find({ student })
+    .populate('student')
     .populate('course')
     .populate('createdBy', 'name')
     .populate('updatedBy', 'name')

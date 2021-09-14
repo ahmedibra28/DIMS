@@ -24,31 +24,26 @@ const feeScheme = mongoose.Schema(
       type: String,
       required: true,
     },
-    payment: [
-      {
-        student: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Student',
-          required: true,
-        },
-        isPaid: {
-          type: Boolean,
-          default: false,
-        },
-        paidFeeAmount: {
-          type: Number,
-          default: 0.0,
-        },
-        paymentMethod: {
-          type: String,
-          default: 'on_cash',
-        },
-        paymentDate: {
-          type: String,
-          default: null,
-        },
-      },
-    ],
+    student: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Student',
+      required: true,
+    },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
+    paidFeeAmount: {
+      type: Number,
+      default: 0.0,
+    },
+    paymentMethod: {
+      type: String,
+      default: 'on_cash',
+    },
+    paymentDate: {
+      type: Date,
+    },
     isActive: {
       type: Boolean,
       default: true,
