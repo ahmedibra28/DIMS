@@ -20,3 +20,15 @@ export const getStudentTicket = async (student) => {
     throw error.response.data.message
   }
 }
+
+export const studentClearance = async (student) => {
+  try {
+    const { data } = await axios.get(
+      `/api/tickets/clearance/${student}`,
+      config()
+    )
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}

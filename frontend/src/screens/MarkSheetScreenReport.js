@@ -370,7 +370,6 @@ const MarkSheetScreenReport = () => {
                 </div>
               )}
             </div>
-            {/* {console.log(dataGetMarkSheetReport)} */}
           </>
         )
       )}

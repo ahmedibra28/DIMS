@@ -56,7 +56,7 @@ const TicketScreen = () => {
                     data.student.picture &&
                     data.student.picture.pictureName
                   }
-                  className='img-fluid'
+                  className='img-fluid card-img-top'
                 />
               </div>
               <div className='col-6'>
