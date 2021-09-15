@@ -67,37 +67,41 @@ const AssignToCourseModalScreen = ({
                     )}
                   </div>
                 </div>
-                <div className='col-md-6 col-12'>
-                  <div className='mb-3'>
-                    <label htmlFor='semester'>Semester</label>
-                    <select
-                      {...register('semester', {
-                        required: 'Semester is required',
-                      })}
-                      type='text'
-                      placeholder='Enter name'
-                      className='form-control'
-                    >
-                      <option value=''>-----------</option>
-                      {dataCourse &&
-                        dataCourse.map(
-                          (semester) =>
-                            semester.isActive &&
-                            semester._id === watch().course &&
-                            [...Array(semester.duration).keys()].map((sem) => (
-                              <option key={sem + 1} value={sem + 1}>
-                                {sem + 1}
-                              </option>
-                            ))
-                        )}
-                    </select>
-                    {errors.semester && (
-                      <span className='text-danger'>
-                        {errors.semester.message}
-                      </span>
-                    )}
+                {watch().course && (
+                  <div className='col-md-6 col-12'>
+                    <div className='mb-3'>
+                      <label htmlFor='semester'>Semester</label>
+                      <select
+                        {...register('semester', {
+                          required: 'Semester is required',
+                        })}
+                        type='text'
+                        placeholder='Enter name'
+                        className='form-control'
+                      >
+                        <option value=''>-----------</option>
+                        {dataCourse &&
+                          dataCourse.map(
+                            (semester) =>
+                              semester.isActive &&
+                              semester._id === watch().course &&
+                              [...Array(semester.duration).keys()].map(
+                                (sem) => (
+                                  <option key={sem + 1} value={sem + 1}>
+                                    {sem + 1}
+                                  </option>
+                                )
+                              )
+                          )}
+                      </select>
+                      {errors.semester && (
+                        <span className='text-danger'>
+                          {errors.semester.message}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className='col-md-6 col-12'>
                   <div className='mb-3'>
