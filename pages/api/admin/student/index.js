@@ -15,7 +15,7 @@ handler.get(async (req, res) => {
   if (req.user.student) {
     let query = Student.find({ _id: req.user.student })
 
-    const page = parseInt(req.params.page) || 1
+    const page = parseInt(req.query.page) || 1
     const pageSize = parseInt(req.query.limit) || 50
     const skip = (page - 1) * pageSize
     const total = await Student.countDocuments({ _id: req.user.student })
@@ -38,7 +38,7 @@ handler.get(async (req, res) => {
   } else {
     let query = Student.find({})
 
-    const page = parseInt(req.params.page) || 1
+    const page = parseInt(req.query.page) || 1
     const pageSize = parseInt(req.query.limit) || 50
     const skip = (page - 1) * pageSize
     const total = await Student.countDocuments()
@@ -84,6 +84,13 @@ handler.post(async (req, res) => {
     comment,
   } = req.body
 
+  const languageSkills = {
+    somali,
+    arabic,
+    english,
+    kiswahili,
+  }
+
   const fullName = req.body.fullName.toLowerCase()
   const picture = req.files && req.files.picture
 
@@ -115,10 +122,8 @@ handler.post(async (req, res) => {
         contactMobileNumber,
         contactEmail,
         contactRelationship,
-        somali,
-        arabic,
-        english,
-        kiswahili,
+        fullName,
+        languageSkills,
         comment,
         picture: {
           pictureName: profile.fullFileName,
@@ -139,6 +144,7 @@ handler.post(async (req, res) => {
       placeOfBirth,
       dateOfBirth,
       nationality,
+      fullName,
       gender,
       district,
       mobileNumber,
@@ -147,10 +153,7 @@ handler.post(async (req, res) => {
       contactMobileNumber,
       contactEmail,
       contactRelationship,
-      somali,
-      arabic,
-      english,
-      kiswahili,
+      languageSkills,
       comment,
     })
 

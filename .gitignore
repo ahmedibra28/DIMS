@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/.pnp
+# /.pnp
 .pnp.js
 
 # testing
@@ -33,3 +33,7 @@ yarn-error.log*
 # vercel
 .vercel
 .env
+
+# public
+/public/instructor/*
+/public/student/*

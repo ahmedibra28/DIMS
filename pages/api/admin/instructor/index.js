@@ -15,7 +15,7 @@ handler.get(async (req, res) => {
   if (req.user.instructor) {
     let query = Instructor.find({ _id: req.user.instructor })
 
-    const page = parseInt(req.params.page) || 1
+    const page = parseInt(req.query.page) || 1
     const pageSize = parseInt(req.query.limit) || 50
     const skip = (page - 1) * pageSize
     const total = await Instructor.countDocuments({ _id: req.user.instructor })
@@ -38,7 +38,7 @@ handler.get(async (req, res) => {
   } else {
     let query = Instructor.find({})
 
-    const page = parseInt(req.params.page) || 1
+    const page = parseInt(req.query.page) || 1
     const pageSize = parseInt(req.query.limit) || 50
     const skip = (page - 1) * pageSize
     const total = await Instructor.countDocuments()
@@ -82,7 +82,7 @@ handler.post(async (req, res) => {
     fullName,
   } = req.body
 
-  const email = req.body.fullName.toLowerCase()
+  const email = req.body.email.toLowerCase()
   const picture = req.files && req.files.picture
 
   const instructorIdNo = (await Instructor.countDocuments()) + 1

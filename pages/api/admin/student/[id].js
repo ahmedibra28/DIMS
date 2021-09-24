@@ -33,7 +33,7 @@ handler.put(async (req, res) => {
     comment,
   } = req.body
 
-  const fullName = req.body.name.toLowerCase()
+  const fullName = req.body.fullName.toLowerCase()
   const _id = req.query.id
   const picture = req.files && req.files.picture
 

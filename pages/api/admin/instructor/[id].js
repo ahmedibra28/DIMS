@@ -13,6 +13,7 @@ handler.use(isAuth, isAdmin)
 
 handler.put(async (req, res) => {
   await dbConnect()
+
   const {
     isActive,
     placeOfBirth,
@@ -31,7 +32,7 @@ handler.put(async (req, res) => {
     fullName,
   } = req.body
 
-  const email = req.body.name.toLowerCase()
+  const email = req.body.email.toLowerCase()
   const _id = req.query.id
   const picture = req.files && req.files.picture
 
