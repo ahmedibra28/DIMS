@@ -29,7 +29,6 @@ import { confirmAlert } from 'react-confirm-alert'
 import { Confirm } from '../../components/Confirm'
 import { useForm } from 'react-hook-form'
 import {
-  dynamicInputSelect,
   inputCheckBox,
   inputDate,
   inputEmail,
@@ -37,6 +36,7 @@ import {
   inputNumber,
   inputText,
   inputTextArea,
+  staticInputSelect,
 } from '../../utils/dynamicForm'
 import moment from 'moment'
 
@@ -293,25 +293,22 @@ const Students = () => {
                       })}
                     </div>
                     <div className='col-md-6 col-12'>
-                      {dynamicInputSelect({
+                      {staticInputSelect({
                         register,
                         errors,
-                        data: [
-                          { _id: 1, name: 'Male' },
-                          { _id: 2, name: 'Female' },
-                        ],
-                        name: 'gender',
+                        data: [{ name: 'Male' }, { name: 'Female' }],
                         label: 'Gender',
+                        name: 'gender',
                       })}
                     </div>
                     <div className='col-md-6 col-12'>
-                      {dynamicInputSelect({
+                      {staticInputSelect({
                         register,
                         errors,
                         data: [
-                          { _id: 1, name: 'Primary' },
-                          { _id: 2, name: 'Secondary' },
-                          { _id: 3, name: 'Mid level colleges' },
+                          { name: 'Primary' },
+                          { name: 'Secondary' },
+                          { name: 'Mid level colleges' },
                         ],
                         name: 'levelOfEducation',
                         label: 'Level Of Education',
@@ -372,52 +369,52 @@ const Students = () => {
                     </div>
                     <h4 className='text-center'>Language Skills</h4> <hr />
                     <div className='col-md-3 col-12'>
-                      {dynamicInputSelect({
+                      {staticInputSelect({
                         register,
                         errors,
                         data: [
-                          { _id: 1, name: 'Fluent' },
-                          { _id: 2, name: 'Good' },
-                          { _id: 3, name: 'Fair' },
+                          { name: 'Fluent' },
+                          { name: 'Good' },
+                          { name: 'Fair' },
                         ],
                         name: 'somali',
                         label: 'Somali',
                       })}
                     </div>
                     <div className='col-md-3 col-12'>
-                      {dynamicInputSelect({
+                      {staticInputSelect({
                         register,
                         errors,
                         data: [
-                          { _id: 1, name: 'Fluent' },
-                          { _id: 2, name: 'Good' },
-                          { _id: 3, name: 'Fair' },
+                          { name: 'Fluent' },
+                          { name: 'Good' },
+                          { name: 'Fair' },
                         ],
                         name: 'arabic',
                         label: 'Arabic',
                       })}
                     </div>
                     <div className='col-md-3 col-12'>
-                      {dynamicInputSelect({
+                      {staticInputSelect({
                         register,
                         errors,
                         data: [
-                          { _id: 1, name: 'Fluent' },
-                          { _id: 2, name: 'Good' },
-                          { _id: 3, name: 'Fair' },
+                          { name: 'Fluent' },
+                          { name: 'Good' },
+                          { name: 'Fair' },
                         ],
                         name: 'english',
                         label: 'English',
                       })}
                     </div>
                     <div className='col-md-3 col-12'>
-                      {dynamicInputSelect({
+                      {staticInputSelect({
                         register,
                         errors,
                         data: [
-                          { _id: 1, name: 'Fluent' },
-                          { _id: 2, name: 'Good' },
-                          { _id: 3, name: 'Fair' },
+                          { name: 'Fluent' },
+                          { name: 'Good' },
+                          { name: 'Fair' },
                         ],
                         name: 'kiswahili',
                         label: 'Kiswahili',
@@ -543,7 +540,7 @@ const Students = () => {
                           <h6 className='card-title'>
                             {' '}
                             <FaIdCard className='mb-1 text-primary' />{' '}
-                            {student.studentIdNo}
+                            {student.rollNo}
                           </h6>
                         </a>
                       </Link>

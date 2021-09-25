@@ -28,6 +28,7 @@ import { getCourses } from '../../api/course'
 import { getCourseTypes } from '../../api/courseType'
 import {
   dynamicInputSelect,
+  dynamicInputSelectNumber,
   inputCheckBox,
   inputNumber,
   inputText,
@@ -127,8 +128,12 @@ const Subject = () => {
       ? updateMutateAsync({
           _id: id,
           name: data.name,
-          course: data.course,
           isActive: data.isActive,
+          course: data.course,
+          courseType: data.courseType,
+          semester: data.semester,
+          theoryMarks: data.theoryMarks,
+          practicalMarks: data.practicalMarks,
         })
       : addMutateAsync(data)
   }
@@ -143,6 +148,11 @@ const Subject = () => {
     setValue('theoryMarks', subject.theoryMarks)
     setValue('practicalMarks', subject.practicalMarks)
     setValue('semester', subject.semester)
+  }
+
+  const durationValue = () => {
+    const d = courseData && courseData.filter((c) => c._id === watch().course)
+    return d && d[0] && d[0].duration
   }
 
   return (
@@ -240,12 +250,14 @@ const Subject = () => {
                         })}
                     </div>
                     <div className='col-md-6 col-12'>
-                      {inputNumber({
-                        register,
-                        label: 'Semester',
-                        errors,
-                        name: 'semester',
-                      })}
+                      {watch().courseType &&
+                        dynamicInputSelectNumber({
+                          register,
+                          errors,
+                          data: durationValue(),
+                          name: 'semester',
+                          label: 'Semester',
+                        })}
                     </div>
                     <div className='col-md-6 col-12'>
                       {inputNumber({

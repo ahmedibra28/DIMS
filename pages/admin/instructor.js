@@ -29,7 +29,6 @@ import { confirmAlert } from 'react-confirm-alert'
 import { Confirm } from '../../components/Confirm'
 import { useForm } from 'react-hook-form'
 import {
-  dynamicInputSelect,
   inputCheckBox,
   inputDate,
   inputEmail,
@@ -37,6 +36,7 @@ import {
   inputNumber,
   inputText,
   inputTextArea,
+  staticInputSelect,
 } from '../../utils/dynamicForm'
 import moment from 'moment'
 
@@ -289,13 +289,10 @@ const Instructors = () => {
                       })}
                     </div>
                     <div className='col-md-4 col-12'>
-                      {dynamicInputSelect({
+                      {staticInputSelect({
                         register,
                         errors,
-                        data: [
-                          { _id: 1, name: 'Male' },
-                          { _id: 2, name: 'Female' },
-                        ],
+                        data: [{ name: 'Male' }, { name: 'Female' }],
                         name: 'gender',
                         label: 'Gender',
                       })}

@@ -121,8 +121,13 @@ const Course = () => {
       ? updateMutateAsync({
           _id: id,
           name: data.name,
-          courseType: data.courseType,
           isActive: data.isActive,
+          courseType: data.courseType,
+          duration: data.duration,
+          exam: data.exam,
+          enrolmentRequirement: data.enrolmentRequirement,
+          certificationIssued: data.certificationIssued,
+          price: data.price,
         })
       : addMutateAsync(data)
   }

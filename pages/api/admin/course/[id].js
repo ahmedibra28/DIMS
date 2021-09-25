@@ -17,6 +17,7 @@ handler.put(async (req, res) => {
     certificationIssued,
     enrolmentRequirement,
   } = req.body
+
   const exam = !Array.isArray(req.body.exam)
     ? req.body.exam.split(',')
     : req.body.exam
