@@ -372,7 +372,7 @@ const Course = () => {
                         )}
                       </td>
 
-                      <td className='btn-course'>
+                      <td className='btn-group'>
                         <button
                           className='btn btn-primary btn-sm'
                           onClick={() => editHandler(course)}

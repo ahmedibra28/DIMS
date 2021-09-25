@@ -276,7 +276,7 @@ const CourseType = () => {
                       </td>
                       <td>{moment(courseType.createdAt).format('llll')}</td>
 
-                      <td className='btn-courseType'>
+                      <td className='btn-group'>
                         <button
                           className='btn btn-primary btn-sm'
                           onClick={() => editHandler(courseType)}

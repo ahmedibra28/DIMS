@@ -350,8 +350,8 @@ const Subject = () => {
                   <th>COURSE</th>
                   <th>SUBJECT</th>
                   <th>SEMESTER</th>
-                  <th>THEORY MARKS</th>
-                  <th>PRACTICAL MARKS</th>
+                  <th>THEORY M.</th>
+                  <th>PRACTICAL M.</th>
                   <th>ACTIVE</th>
                   <th>ACTIONS</th>
                 </tr>

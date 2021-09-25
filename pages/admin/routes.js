@@ -275,7 +275,7 @@ const Route = () => {
                         )}
                       </td>
 
-                      <td className='btn-route'>
+                      <td className='btn-group'>
                         <button
                           className='btn btn-primary btn-sm'
                           onClick={() => editHandler(route)}
