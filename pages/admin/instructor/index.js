@@ -3,8 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
-import withAuth from '../../HOC/withAuth'
-import Message from '../../components/Message'
+import withAuth from '../../../HOC/withAuth'
+import Message from '../../../components/Message'
 import Loader from 'react-loader-spinner'
 import {
   FaCheckCircle,
@@ -16,17 +16,17 @@ import {
   FaTimesCircle,
   FaTrash,
 } from 'react-icons/fa'
-import Pagination from '../../components/Pagination'
+import Pagination from '../../../components/Pagination'
 import {
   getInstructors,
   updateInstructor,
   deleteInstructor,
   addInstructor,
-} from '../../api/instructor'
+} from '../../../api/instructor'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 import { confirmAlert } from 'react-confirm-alert'
-import { Confirm } from '../../components/Confirm'
+import { Confirm } from '../../../components/Confirm'
 import { useForm } from 'react-hook-form'
 import {
   inputCheckBox,
@@ -37,7 +37,7 @@ import {
   inputText,
   inputTextArea,
   staticInputSelect,
-} from '../../utils/dynamicForm'
+} from '../../../utils/dynamicForm'
 import moment from 'moment'
 
 const Instructors = () => {
@@ -475,7 +475,7 @@ const Instructors = () => {
               data.data.map((instructor) => (
                 <div key={instructor._id} className='col-md-3 col-sm-6 col-12'>
                   <div className='card bg-transparent border-0 shadow-lg'>
-                    <Link href={`/instructor/${instructor._id}`}>
+                    <Link href={`/admin/instructor/${instructor._id}`}>
                       <a className='mx-auto link-primary'>
                         <Image
                           width='260'
@@ -488,7 +488,7 @@ const Instructors = () => {
                       </a>
                     </Link>
                     <div className='card-body'>
-                      <Link href={`/instructor/${instructor._id}`}>
+                      <Link href={`/admin/instructor/${instructor._id}`}>
                         <a className='link-primary'>
                           <h6 className='card-title'>{instructor.fullName}</h6>
                           <h6 className='card-title'>
@@ -522,7 +522,7 @@ const Instructors = () => {
                             <FaEdit className='mb-1' /> Edit
                           </button>
 
-                          <Link href={`/instructor/${instructor._id}`}>
+                          <Link href={`/admin/instructor/${instructor._id}`}>
                             <a className='btn btn-success btn-sm border-0 mx-1'>
                               <FaInfoCircle className='mb-1' /> Detail{' '}
                             </a>

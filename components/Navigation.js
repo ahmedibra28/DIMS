@@ -8,7 +8,6 @@ import {
   FaSignInAlt,
   FaUserPlus,
   FaPowerOff,
-  FaBars,
 } from 'react-icons/fa'
 import { logout } from '../api/users'
 import { useMutation } from 'react-query'

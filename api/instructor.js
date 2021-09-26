@@ -12,3 +12,6 @@ export const updateInstructor = async (obj) =>
 
 export const deleteInstructor = async (id) =>
   await dynamicAPI('delete', `${url}/${id}`, {})
+
+export const getInstructor = async (_id) =>
+  await dynamicAPI('get', `${url}/${_id}`, {})

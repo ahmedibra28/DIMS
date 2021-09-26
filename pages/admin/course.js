@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import withAuth from '../../HOC/withAuth'
 import Message from '../../components/Message'
 import Loader from 'react-loader-spinner'
-import moment from 'moment'
 import {
   FaCheckCircle,
   FaEdit,
