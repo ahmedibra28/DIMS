@@ -12,3 +12,6 @@ export const updateStudent = async (obj) =>
 
 export const deleteStudent = async (id) =>
   await dynamicAPI('delete', `${url}/${id}`, {})
+
+export const getStudent = async (_id) =>
+  await dynamicAPI('get', `${url}/${_id}`, {})

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
@@ -199,11 +199,6 @@ const AssignSubject = () => {
     setValue('isActive', assign.isActive)
   }
 
-  // return (
-  //   <div>
-  //     {instructorId && <div>Hello {instructorId && instructorId}</div>}{' '}
-  //   </div>
-  // )
   return (
     <div className='container'>
       <Head>
@@ -361,7 +356,7 @@ const AssignSubject = () => {
         </div>
       </div>
 
-      {isLoading && isLoadingInstructor ? (
+      {isLoading || isLoadingInstructor ? (
         <div className='text-center'>
           <Loader
             type='ThreeDots'

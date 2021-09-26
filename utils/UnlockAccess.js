@@ -11,5 +11,6 @@ export const UnlockAccess = (roles) => {
 export const Access = {
   admin: ['admin'],
   user: ['user'],
+  student: ['student'],
   adminUser: ['admin', 'user'],
 }

@@ -4,10 +4,19 @@ import { isAdmin, isAuth } from '../../../../utils/auth'
 import fileUpload from 'express-fileupload'
 import { upload, deleteFile } from '../../../../utils/fileManager'
 import Student from '../../../../models/Student'
+import AssignCourse from '../../../../models/AssignCourse'
 export const config = { api: { bodyParser: false } }
 
 const handler = nc()
 handler.use(fileUpload())
+
+handler.use(isAuth)
+handler.get(async (req, res) => {
+  await dbConnect()
+
+  const student = await Student.findById(req.query.id)
+  res.send(student)
+})
 
 handler.use(isAuth, isAdmin)
 
@@ -127,6 +136,7 @@ handler.delete(async (req, res) => {
         pathName: obj.picture.picturePath,
       })
     }
+    await AssignCourse.deleteMany({ student: _id })
     await obj.remove()
 
     res.json({ status: 'success' })

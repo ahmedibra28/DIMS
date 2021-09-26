@@ -3,8 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
-import withAuth from '../../HOC/withAuth'
-import Message from '../../components/Message'
+import withAuth from '../../../HOC/withAuth'
+import Message from '../../../components/Message'
 import Loader from 'react-loader-spinner'
 import {
   FaCheckCircle,
@@ -16,17 +16,17 @@ import {
   FaTimesCircle,
   FaTrash,
 } from 'react-icons/fa'
-import Pagination from '../../components/Pagination'
+import Pagination from '../../../components/Pagination'
 import {
   getStudents,
   updateStudent,
   deleteStudent,
   addStudent,
-} from '../../api/student'
+} from '../../../api/student'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 import { confirmAlert } from 'react-confirm-alert'
-import { Confirm } from '../../components/Confirm'
+import { Confirm } from '../../../components/Confirm'
 import { useForm } from 'react-hook-form'
 import {
   inputCheckBox,
@@ -37,7 +37,7 @@ import {
   inputText,
   inputTextArea,
   staticInputSelect,
-} from '../../utils/dynamicForm'
+} from '../../../utils/dynamicForm'
 import moment from 'moment'
 
 const Students = () => {
@@ -521,7 +521,7 @@ const Students = () => {
               data.data.map((student) => (
                 <div key={student._id} className='col-md-3 col-sm-6 col-12'>
                   <div className='card bg-transparent border-0 shadow-lg'>
-                    <Link href={`/student/${student._id}`}>
+                    <Link href={`/admin/student/${student._id}`}>
                       <a className='mx-auto link-primary'>
                         <Image
                           width='260'
@@ -534,7 +534,7 @@ const Students = () => {
                       </a>
                     </Link>
                     <div className='card-body'>
-                      <Link href={`/student/${student._id}`}>
+                      <Link href={`/admin/student/${student._id}`}>
                         <a className='link-primary'>
                           <h6 className='card-title'>{student.fullName}</h6>
                           <h6 className='card-title'>
@@ -568,7 +568,7 @@ const Students = () => {
                             <FaEdit className='mb-1' /> Edit
                           </button>
 
-                          <Link href={`/student/${student._id}`}>
+                          <Link href={`/admin/student/${student._id}`}>
                             <a className='btn btn-success btn-sm border-0 mx-1'>
                               <FaInfoCircle className='mb-1' /> Detail{' '}
                             </a>
