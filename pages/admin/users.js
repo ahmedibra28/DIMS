@@ -4,10 +4,18 @@ import dynamic from 'next/dynamic'
 import withAuth from '../../HOC/withAuth'
 import Message from '../../components/Message'
 import Loader from 'react-loader-spinner'
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa'
+import {
+  FaCheckCircle,
+  FaEdit,
+  FaPlus,
+  FaTimesCircle,
+  FaTrash,
+} from 'react-icons/fa'
 import Pagination from '../../components/Pagination'
 import { getUsers, updateUser, deleteUser, createUser } from '../../api/users'
 import { getGroups } from '../../api/groups'
+import { getAllStudents } from '../../api/student'
+import { getAllInstructors } from '../../api/instructor'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 import { confirmAlert } from 'react-confirm-alert'
@@ -15,6 +23,8 @@ import { Confirm } from '../../components/Confirm'
 import { useForm } from 'react-hook-form'
 import {
   dynamicInputSelect,
+  InputAutoCompleteSelect,
+  inputCheckBox,
   inputEmail,
   inputPassword,
   inputText,
@@ -30,7 +40,9 @@ const Users = () => {
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {},
+    defaultValues: {
+      isActive: true,
+    },
   })
 
   const queryClient = useQueryClient()
@@ -44,6 +56,10 @@ const Users = () => {
   )
 
   const { data: groupData } = useQuery('groups', () => getGroups())
+  const { data: studentData } = useQuery('all-students', () => getAllStudents())
+  const { data: instructorData } = useQuery('all-instructors', () =>
+    getAllInstructors()
+  )
 
   const {
     isLoading: isLoadingUpdate,
@@ -106,6 +122,9 @@ const Users = () => {
           email: data.email,
           password: data.password,
           group: data.group,
+          isActive: data.isActive,
+          instructor: data.instructor,
+          student: data.student,
         })
       : addMutateAsync(data)
   }
@@ -116,6 +135,9 @@ const Users = () => {
     setValue('name', user.name)
     setValue('email', user.email)
     setValue('group', user.group)
+    setValue('isActive', user.isActive)
+    setValue('instructor', user.instructor)
+    setValue('student', user.student)
   }
 
   useEffect(() => {
@@ -217,6 +239,36 @@ const Users = () => {
                     label: 'Group',
                   })}
 
+                  {watch().group === 'student' &&
+                    InputAutoCompleteSelect({
+                      register,
+                      label: 'Student',
+                      errors,
+                      name: 'student',
+                      data: studentData && studentData,
+                    })}
+
+                  {watch().group === 'instructor' &&
+                    InputAutoCompleteSelect({
+                      register,
+                      label: 'Instructor',
+                      errors,
+                      name: 'instructor',
+                      data: instructorData && instructorData,
+                    })}
+
+                  <div className='row'>
+                    <div className='col'>
+                      {inputCheckBox({
+                        register,
+                        errors,
+                        label: 'isActive',
+                        name: 'isActive',
+                        isRequired: false,
+                      })}
+                    </div>
+                  </div>
+
                   <div className='modal-footer'>
                     <button
                       type='button'
@@ -280,6 +332,7 @@ const Users = () => {
                   <th>NAME</th>
                   <th>EMAIL</th>
                   <th>GROUP</th>
+                  <th>ACTIVE</th>
                   <th></th>
                 </tr>
               </thead>
@@ -293,6 +346,13 @@ const Users = () => {
                         <a href={`mailto:${user.email}`}>{user.email}</a>
                       </td>
                       <td>{user.group}</td>
+                      <td>
+                        {user.isActive ? (
+                          <FaCheckCircle className='text-success mb-1' />
+                        ) : (
+                          <FaTimesCircle className='text-danger mb-1' />
+                        )}
+                      </td>
                       <td className='btn-group'>
                         <button
                           className='btn btn-primary btn-sm'

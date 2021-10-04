@@ -14,6 +14,9 @@ handler.post(async (req, res) => {
 
   const user = await User.findOne({ email })
   if (user && (await user.matchPassword(password))) {
+    if (!user.isActive) {
+      return res.status(404).send('User has been blocked!')
+    }
     await UserLogon.create({
       user: user._id,
     })
@@ -23,6 +26,9 @@ handler.post(async (req, res) => {
       name: user.name,
       email: user.email,
       group: user.group,
+      student: user.student,
+      instructor: user.instructor,
+      isActive: user.isActive,
       token: generateToken(user._id),
     })
   } else {

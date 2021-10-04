@@ -21,6 +21,11 @@ handler.put(async (req, res) => {
     userExist.name = req.body.name || userExist.name
     userExist.group = req.body.group || userExist.group
     userExist.email = req.body.email.toLowerCase() || userExist.email
+    userExist.isActive = req.body.isActive || userExist.isActive
+    userExist.student = req.body.student ? req.body.student : userExist.student
+    userExist.instructor = req.body.instructor
+      ? req.body.instructor
+      : userExist.instructor
     if (req.body.password) {
       userExist.password = req.body.password
     }
@@ -32,6 +37,9 @@ handler.put(async (req, res) => {
       name: updatedUser.name,
       group: updatedUser.group,
       email: updatedUser.email,
+      isActive: updatedUser.isActive,
+      student: updatedUser.student,
+      instructor: updatedUser.instructor,
     })
   } else {
     return res.status(404).send('User not found')

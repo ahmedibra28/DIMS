@@ -137,7 +137,7 @@ export const dynamicInputSelect = (args) => {
         <option value=''>-------</option>
         {data &&
           data.map((d) => (
-            <option key={d._id} value={d._id}>
+            <option key={d._id} value={name === 'group' ? d.name : d._id}>
               {d.name}
             </option>
           ))}
@@ -301,7 +301,11 @@ export const InputAutoCompleteSelect = (args) => {
         {data &&
           data.map((d) => (
             <option key={d._id} value={d._id}>
-              {d.name}
+              {name === 'student'
+                ? d.rollNo
+                : name === 'instructor'
+                ? d.fullName
+                : d.name}
             </option>
           ))}
       </datalist>
