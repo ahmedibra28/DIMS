@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import withAuth from '../../HOC/withAuth'
 import Message from '../../components/Message'
 import Loader from 'react-loader-spinner'
-import moment from 'moment'
 import {
   FaCheckCircle,
   FaEdit,
@@ -14,19 +13,23 @@ import {
 } from 'react-icons/fa'
 
 import {
-  getCourseTypes,
-  updateCourseType,
-  deleteCourseType,
-  addCourseType,
-} from '../../api/courseType'
+  getNotices,
+  addNotice,
+  deleteNotice,
+  updateNotice,
+} from '../../api/notice'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 import { confirmAlert } from 'react-confirm-alert'
 import { Confirm } from '../../components/Confirm'
 import { useForm } from 'react-hook-form'
-import { inputCheckBox, inputText } from '../../utils/dynamicForm'
+import {
+  inputCheckBox,
+  inputText,
+  inputTextArea,
+} from '../../utils/dynamicForm'
 
-const CourseType = () => {
+const Notice = () => {
   const {
     register,
     handleSubmit,
@@ -39,11 +42,14 @@ const CourseType = () => {
     },
   })
 
+  const [id, setId] = useState(null)
+  const [edit, setEdit] = useState(false)
+
   const queryClient = useQueryClient()
 
   const { data, isLoading, isError, error } = useQuery(
-    'courseTypes',
-    () => getCourseTypes(),
+    'notices',
+    () => getNotices(),
     {
       retry: 0,
     }
@@ -55,12 +61,12 @@ const CourseType = () => {
     error: errorUpdate,
     isSuccess: isSuccessUpdate,
     mutateAsync: updateMutateAsync,
-  } = useMutation(updateCourseType, {
+  } = useMutation(['update'], updateNotice, {
     retry: 0,
     onSuccess: () => {
       reset()
       setEdit(false)
-      queryClient.invalidateQueries(['courseTypes'])
+      queryClient.invalidateQueries(['notices'])
     },
   })
 
@@ -70,9 +76,9 @@ const CourseType = () => {
     error: errorDelete,
     isSuccess: isSuccessDelete,
     mutateAsync: deleteMutateAsync,
-  } = useMutation(deleteCourseType, {
+  } = useMutation(['delete'], deleteNotice, {
     retry: 0,
-    onSuccess: () => queryClient.invalidateQueries(['courseTypes']),
+    onSuccess: () => queryClient.invalidateQueries(['notices']),
   })
 
   const {
@@ -81,17 +87,14 @@ const CourseType = () => {
     error: errorAdd,
     isSuccess: isSuccessAdd,
     mutateAsync: addMutateAsync,
-  } = useMutation(addCourseType, {
+  } = useMutation(['add'], addNotice, {
     retry: 0,
     onSuccess: () => {
       reset()
       setEdit(false)
-      queryClient.invalidateQueries(['courseTypes'])
+      queryClient.invalidateQueries(['notices'])
     },
   })
-
-  const [id, setId] = useState(null)
-  const [edit, setEdit] = useState(false)
 
   const formCleanHandler = () => {
     setEdit(false)
@@ -106,57 +109,59 @@ const CourseType = () => {
     edit
       ? updateMutateAsync({
           _id: id,
-          name: data.name,
+          title: data.title,
+          description: data.description,
           isActive: data.isActive,
         })
       : addMutateAsync(data)
   }
 
-  const editHandler = (courseType) => {
-    setId(courseType._id)
+  const editHandler = (notice) => {
+    setId(notice._id)
     setEdit(true)
-    setValue('name', courseType.name)
-    setValue('isActive', courseType.isActive)
+    setValue('title', notice.title)
+    setValue('description', notice.description)
+    setValue('isActive', notice.isActive)
   }
 
   return (
     <div className='container'>
       <Head>
-        <title>CourseType</title>
-        <meta property='og:title' content='CourseType' key='title' />
+        <title>Notices</title>
+        <meta property='og:title' content='Notices' key='title' />
       </Head>
       {isSuccessUpdate && (
         <Message variant='success'>
-          CourseType has been updated successfully.
+          Notice has been updated successfully.
         </Message>
       )}
       {isErrorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
       {isSuccessAdd && (
         <Message variant='success'>
-          CourseType has been Created successfully.
+          Notice has been Created successfully.
         </Message>
       )}
       {isErrorAdd && <Message variant='danger'>{errorAdd}</Message>}
       {isSuccessDelete && (
         <Message variant='success'>
-          CourseType has been deleted successfully.
+          Notice has been deleted successfully.
         </Message>
       )}
       {isErrorDelete && <Message variant='danger'>{errorDelete}</Message>}
       <div
         className='modal fade'
-        id='editCourseTypeModal'
+        id='editNoticeModal'
         data-bs-backdrop='static'
         data-bs-keyboard='false'
         tabIndex='-1'
-        aria-labelledby='editCourseTypeModalLabel'
+        aria-labelledby='editNoticeModalLabel'
         aria-hidden='true'
       >
         <div className='modal-dialog'>
           <div className='modal-content modal-background'>
             <div className='modal-header'>
-              <h3 className='modal-title ' id='editCourseTypeModalLabel'>
-                {edit ? 'Edit CourseType' : 'Add CourseType'}
+              <h3 className='modal-title ' id='editNoticeModalLabel'>
+                {edit ? 'Edit Notice' : 'Add Notice'}
               </h3>
               <button
                 type='button'
@@ -181,7 +186,18 @@ const CourseType = () => {
                 <Message variant='danger'>{error}</Message>
               ) : (
                 <form onSubmit={handleSubmit(submitHandler)}>
-                  {inputText({ register, label: 'Name', errors, name: 'name' })}
+                  {inputText({
+                    register,
+                    errors,
+                    label: 'Title',
+                    name: 'title',
+                  })}
+                  {inputTextArea({
+                    register,
+                    errors,
+                    label: 'Description',
+                    name: 'description',
+                  })}
 
                   <div className='row'>
                     <div className='col'>
@@ -224,11 +240,11 @@ const CourseType = () => {
       </div>
 
       <div className='d-flex justify-content-between align-items-center'>
-        <h3 className=''>CourseTypes</h3>
+        <h3 className=''>Notices</h3>
         <button
           className='btn btn-primary '
           data-bs-toggle='modal'
-          data-bs-target='#editCourseTypeModal'
+          data-bs-target='#editNoticeModal'
         >
           <FaPlus className='mb-1' />
         </button>
@@ -253,42 +269,39 @@ const CourseType = () => {
               <caption>{data && data.length} records were found</caption>
               <thead>
                 <tr>
-                  <th>NAME</th>
+                  <th>TITLE</th>
+                  <th>DESCRIPTION</th>
                   <th>ACTIVE</th>
-                  <th>DATE & TIME</th>
                   <th>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
                 {data &&
-                  data.map((courseType) => (
-                    <tr key={courseType._id}>
+                  data.map((notice) => (
+                    <tr key={notice._id}>
+                      <td>{notice.title}</td>
+                      <td>{notice.description}</td>
                       <td>
-                        {courseType.name.charAt(0).toUpperCase() +
-                          courseType.name.slice(1)}
-                      </td>
-                      <td>
-                        {courseType.isActive ? (
+                        {notice.isActive ? (
                           <FaCheckCircle className='text-success mb-1' />
                         ) : (
                           <FaTimesCircle className='text-danger mb-1' />
                         )}
                       </td>
-                      <td>{moment(courseType.createdAt).format('llll')}</td>
 
                       <td className='btn-group'>
                         <button
                           className='btn btn-primary btn-sm'
-                          onClick={() => editHandler(courseType)}
+                          onClick={() => editHandler(notice)}
                           data-bs-toggle='modal'
-                          data-bs-target='#editCourseTypeModal'
+                          data-bs-target='#editNoticeModal'
                         >
                           <FaEdit className='mb-1' /> Edit
                         </button>
 
                         <button
                           className='btn btn-danger btn-sm'
-                          onClick={() => deleteHandler(courseType._id)}
+                          onClick={() => deleteHandler(notice._id)}
                           disabled={isLoadingDelete}
                         >
                           {isLoadingDelete ? (
@@ -312,6 +325,4 @@ const CourseType = () => {
   )
 }
 
-export default dynamic(() => Promise.resolve(withAuth(CourseType)), {
-  ssr: false,
-})
+export default dynamic(() => Promise.resolve(withAuth(Notice)), { ssr: false })

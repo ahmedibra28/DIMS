@@ -198,7 +198,7 @@ const Attendance = () => {
         <form onSubmit={handleSubmitAttendance(submitHandlerAttendance)}>
           {data && (
             <div className='table-responsive '>
-              <table className='table table-sm hover bordered striped caption-top '>
+              <table className='table table-striped table-hover table-sm caption-top '>
                 <caption>
                   {data && data.student.length} records were found
                 </caption>

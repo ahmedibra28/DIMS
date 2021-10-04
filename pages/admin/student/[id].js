@@ -352,7 +352,7 @@ const AssignCourse = () => {
               </p>
               <hr />
               <div className='table-responsive'>
-                <table className='table table-sm hover bordered striped caption-top '>
+                <table className='table table-striped table-hover table-sm caption-top '>
                   <thead>
                     <tr>
                       <th>LEVEL OF EDUCATION</th>
@@ -386,7 +386,7 @@ const AssignCourse = () => {
                 Courses Information
               </h6>
               <div className='table-responsive'>
-                <table className='table table-sm hover bordered striped caption-top '>
+                <table className='table table-striped table-hover table-sm caption-top '>
                   <thead>
                     <tr>
                       <th>COURSE</th>

@@ -324,7 +324,7 @@ const Users = () => {
       ) : (
         <>
           <div className='table-responsive '>
-            <table className='table table-sm hover bordered striped caption-top '>
+            <table className='table table-striped table-hover table-sm caption-top '>
               <caption>{data && data.total} records were found</caption>
               <thead>
                 <tr>
