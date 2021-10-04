@@ -2,16 +2,15 @@ import nc from 'next-connect'
 import dbConnect from '../../../utils/db'
 import { isAuth } from '../../../utils/auth'
 import Attendance from '../../../models/Attendance'
+import AssignSubject from '../../../models/AssignSubject'
 import moment from 'moment'
-import Student from '../../../models/Student'
 
 const handler = nc()
 handler.use(isAuth)
 
 handler.post(async (req, res) => {
   await dbConnect()
-  const { courseType, course, subject, shift, startDate, endDate, student } =
-    req.body
+  const { courseType, course, subject, shift, startDate, endDate } = req.body
   const semester = Number(req.body.semester)
 
   const start = moment(startDate).clone().startOf('day').format()
@@ -22,6 +21,26 @@ handler.post(async (req, res) => {
 
   if (s > e) {
     return res.status(400).send('Please check the range of the date')
+  }
+
+  const instructor =
+    req.user.group === 'instructor' ? req.user.instructor : null
+  const admin = req.user.group === 'admin'
+
+  const instructorObj = await AssignSubject.findOne({
+    instructor,
+    courseType,
+    course,
+    subject,
+    shift,
+    semester,
+    isActive: true,
+  })
+
+  if (!instructorObj && !admin) {
+    return res
+      .status(400)
+      .send(`${req.user.name}, your are not a instructor of this subject`)
   }
 
   const attendance = await Attendance.find({
