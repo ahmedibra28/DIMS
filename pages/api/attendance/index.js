@@ -66,8 +66,8 @@ handler.post(async (req, res) => {
   }
 
   if (obj.length > 0) {
-    const startDate = moment(new Date()).clone().startOf('day').format()
-    const endDate = moment(new Date()).clone().endOf('day').format()
+    const start = moment(new Date()).clone().startOf('day').format()
+    const end = moment(new Date()).clone().endOf('day').format()
 
     const attendance = await Attendance.findOne({
       courseType,
@@ -76,7 +76,7 @@ handler.post(async (req, res) => {
       shift,
       instructor,
       subject,
-      createdAt: { $gte: startDate, $lt: endDate },
+      createdAt: { $gte: start, $lt: end },
     })
 
     if (!attendance) {
@@ -102,7 +102,7 @@ handler.post(async (req, res) => {
             shift,
             instructor,
             subject,
-            createdAt: { $gte: startDate, $lt: endDate },
+            createdAt: { $gte: start, $lt: end },
           })
             .populate('student.student')
             .populate('courseType', 'name')
@@ -125,7 +125,7 @@ handler.post(async (req, res) => {
           shift,
           instructor,
           subject,
-          createdAt: { $gte: startDate, $lt: endDate },
+          createdAt: { $gte: start, $lt: end },
         })
           .populate('student.student')
           .populate('courseType', 'name')

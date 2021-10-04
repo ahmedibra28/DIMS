@@ -8,6 +8,7 @@ import {
   FaSignInAlt,
   FaUserPlus,
   FaPowerOff,
+  FaChartBar,
 } from 'react-icons/fa'
 import { logout } from '../api/users'
 import { useMutation } from 'react-query'
@@ -31,6 +32,12 @@ const Navigation = () => {
           typeof window !== 'undefined' && localStorage.getItem('userInfo')
         )
       : null
+
+  const routes =
+    customLocalStorage() &&
+    customLocalStorage().userAccessRoutes &&
+    customLocalStorage().userAccessRoutes.route &&
+    customLocalStorage().userAccessRoutes.route
 
   const guestItems = () => {
     return (
@@ -59,10 +66,8 @@ const Navigation = () => {
     return (
       <>
         <ul className='navbar-nav me-auto'>
-          {customLocalStorage() &&
-            customLocalStorage().userAccessRoutes &&
-            customLocalStorage().userAccessRoutes.route &&
-            customLocalStorage().userAccessRoutes.route.map(
+          {routes &&
+            routes.map(
               (route) =>
                 route.isActive &&
                 route.menu === 'Normal' && (
@@ -77,6 +82,35 @@ const Navigation = () => {
             )}
         </ul>
         <ul className='navbar-nav ms-auto'>
+          <li className='nav-item dropdown'>
+            <a
+              className='nav-link dropdown-toggle'
+              href='#'
+              id='navbarDropdownMenuLink'
+              role='button'
+              data-bs-toggle='dropdown'
+              aria-expanded='false'
+            >
+              <FaChartBar className='mb-1' /> Report
+            </a>
+            <ul
+              className='dropdown-menu border-0'
+              aria-labelledby='navbarDropdownMenuLink'
+            >
+              {routes &&
+                routes.map(
+                  (route) =>
+                    route.isActive &&
+                    route.menu === 'Report' && (
+                      <li key={route._id}>
+                        <Link href={route.path}>
+                          <a className='dropdown-item'>{route.name}</a>
+                        </Link>
+                      </li>
+                    )
+                )}
+            </ul>
+          </li>
           {UnlockAccess(Access.admin) && (
             <li className='nav-item dropdown'>
               <a
@@ -93,10 +127,8 @@ const Navigation = () => {
                 className='dropdown-menu border-0'
                 aria-labelledby='navbarDropdownMenuLink'
               >
-                {customLocalStorage() &&
-                  customLocalStorage().userAccessRoutes &&
-                  customLocalStorage().userAccessRoutes.route &&
-                  customLocalStorage().userAccessRoutes.route.map(
+                {routes &&
+                  routes.map(
                     (route) =>
                       route.isActive &&
                       route.menu === 'Admin' && (
