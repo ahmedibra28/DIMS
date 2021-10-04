@@ -1,6 +1,8 @@
 import crypto from 'crypto'
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
+import Student from './Student'
+import Instructor from './Instructor'
 
 const userScheme = mongoose.Schema(
   {
@@ -8,8 +10,8 @@ const userScheme = mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     group: { type: String, required: true },
-    student: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
-    instructor: { type: mongoose.Schema.Types.ObjectId, ref: 'Instructor' },
+    student: { type: mongoose.Schema.Types.ObjectId, ref: Student },
+    instructor: { type: mongoose.Schema.Types.ObjectId, ref: Instructor },
     isActive: { type: Boolean, default: true },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
