@@ -1,8 +1,6 @@
 import nc from 'next-connect'
 import dbConnect from '../../../utils/db'
 import Tuition from '../../../models/Tuition'
-import AssignCourse from '../../../models/AssignCourse'
-import Course from '../../../models/Course'
 import { isAuth } from '../../../utils/auth'
 import moment from 'moment'
 

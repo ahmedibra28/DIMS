@@ -198,7 +198,6 @@ const Attendance = () => {
                 <label htmlFor='option'>Option</label>
                 <select
                   type='text'
-                  // {...register('option', { required: 'Option is required' })}
                   name='option'
                   onChange={(e) => setOption(e.target.value)}
                   value={option}
@@ -209,9 +208,6 @@ const Attendance = () => {
                   <option value='true'>Present</option>
                   <option value='false'>Absent</option>
                 </select>
-                {errors.option && (
-                  <span className='text-danger'>{errors.option.message}</span>
-                )}
               </div>
             )}
           </div>

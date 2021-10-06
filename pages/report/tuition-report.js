@@ -5,7 +5,6 @@ import withAuth from '../../HOC/withAuth'
 import Message from '../../components/Message'
 import Loader from 'react-loader-spinner'
 
-import { getSubjects } from '../../api/subject'
 import { useQuery, useMutation } from 'react-query'
 
 import { useForm } from 'react-hook-form'
@@ -18,7 +17,7 @@ import {
   inputText,
   staticInputSelect,
 } from '../../utils/dynamicForm'
-import { getAttendancesReport } from '../../api/attendance-report'
+import { getTuitionsReport } from '../../api/tuition-report'
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 
 const Tuition = () => {
@@ -31,10 +30,6 @@ const Tuition = () => {
     defaultValues: {},
   })
   const [option, setOption] = useState('none')
-
-  const { data: subjectData } = useQuery('subjects', () => getSubjects(), {
-    retry: 0,
-  })
 
   const { data: courseData } = useQuery('courses', () => getCourses(), {
     retry: 0,
@@ -55,7 +50,7 @@ const Tuition = () => {
     isSuccess: isSuccessPost,
     mutateAsync: postMutateAsync,
     data,
-  } = useMutation(getAttendancesReport, {
+  } = useMutation(getTuitionsReport, {
     retry: 0,
     onSuccess: () => {},
   })
@@ -67,16 +62,16 @@ const Tuition = () => {
   const semesterDuration =
     courseData && courseData.filter((c) => c._id === watch().course)
 
-  const filteredAttendanceDisplay = (data, d, std) => {
+  const filteredTuitionDisplay = (std) => {
     return (
-      <tr key={std.student && std.student._id}>
+      <tr key={std._id}>
         <td>{std.student && std.student.rollNo}</td>
         <td>{std.student && std.student.fullName}</td>
-        <td>{data && data[0].course && data && data[0].course.name}</td>
-        <td>{data && data[0].subject && data && data[0].subject.name}</td>
-        <td>{d.createdAt.slice(0, 10)}</td>
+        <td>{std.course && std.course.name}</td>
+        <td>${std.amount.toFixed(2)}</td>
+        <td>{std.createdAt.slice(0, 10)}</td>
         <td>
-          {std.isAttended ? (
+          {std.isPaid ? (
             <FaCheckCircle className='text-success mb-1' />
           ) : (
             <FaTimesCircle className='text-danger mb-1' />
@@ -89,12 +84,12 @@ const Tuition = () => {
   return (
     <div className='container'>
       <Head>
-        <title>Attendance Report</title>
-        <meta property='og:title' content='Attendance Report' key='title' />
+        <title>Tuition Report</title>
+        <meta property='og:title' content='Tuition Report' key='title' />
       </Head>
       {isSuccessPost && (
         <Message variant='success'>
-          Attendance record has been fetched successfully.
+          Tuition record has been fetched successfully.
         </Message>
       )}
       {isErrorPost && <Message variant='danger'>{errorPost}</Message>}
@@ -124,7 +119,7 @@ const Tuition = () => {
                   ),
               })}
           </div>
-          <div className='col-md-2 col-4'>
+          <div className='col-md-3 col-4'>
             {watch().course &&
               dynamicInputSelectNumber({
                 register,
@@ -137,24 +132,8 @@ const Tuition = () => {
                   semesterDuration[0].duration,
               })}
           </div>
-          <div className='col-md-2 col-4'>
+          <div className='col-md-3 col-4'>
             {watch().semester &&
-              dynamicInputSelect({
-                register,
-                label: 'Subject',
-                errors,
-                name: 'subject',
-                data:
-                  subjectData &&
-                  subjectData.filter(
-                    (p) =>
-                      p.course._id === watch().course &&
-                      p.semester === Number(watch().semester)
-                  ),
-              })}
-          </div>
-          <div className='col-md-2 col-4'>
-            {watch().subject &&
               staticInputSelect({
                 register,
                 label: 'Shift',
@@ -198,7 +177,6 @@ const Tuition = () => {
                 <label htmlFor='option'>Option</label>
                 <select
                   type='text'
-                  // {...register('option', { required: 'Option is required' })}
                   name='option'
                   onChange={(e) => setOption(e.target.value)}
                   value={option}
@@ -206,12 +184,9 @@ const Tuition = () => {
                   className='form-control'
                 >
                   <option value='none'>-----------</option>
-                  <option value='true'>Present</option>
-                  <option value='false'>Absent</option>
+                  <option value='true'>Paid</option>
+                  <option value='false'>UnPaid</option>
                 </select>
-                {errors.option && (
-                  <span className='text-danger'>{errors.option.message}</span>
-                )}
               </div>
             )}
           </div>
@@ -250,36 +225,31 @@ const Tuition = () => {
           {data && (
             <div className='table-responsive '>
               <table className='table table-striped table-hover table-sm caption-top '>
-                <caption>
-                  {data && data[0] && data[0].student.length} records were found
-                </caption>
+                <caption>{data && data.length} records were found</caption>
                 <thead>
                   <tr>
                     <th>ROLL NO. </th>
                     <th>STUDENT</th>
                     <th>COURSE</th>
-                    <th>SUBJECT</th>
+                    <th>TUITION FEE</th>
                     <th>DATE</th>
                     <th>STATUS</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data &&
-                    data &&
-                    data.map((d) =>
-                      d.student.map((std) =>
-                        watch().student
-                          ? watch().student === std.student.rollNo &&
-                            option !== 'none'
-                            ? std.isAttended.toString() === option &&
-                              filteredAttendanceDisplay(data, d, std)
-                            : watch().student === std.student.rollNo &&
-                              filteredAttendanceDisplay(data, d, std)
-                          : option !== 'none'
-                          ? std.isAttended.toString() === option &&
-                            filteredAttendanceDisplay(data, d, std)
-                          : filteredAttendanceDisplay(data, d, std)
-                      )
+                    data.map((std) =>
+                      watch().student
+                        ? watch().student === std.student.rollNo &&
+                          option !== 'none'
+                          ? std.isPaid.toString() === option &&
+                            filteredTuitionDisplay(std)
+                          : watch().student === std.student.rollNo &&
+                            filteredTuitionDisplay(std)
+                        : option !== 'none'
+                        ? std.isPaid.toString() === option &&
+                          filteredTuitionDisplay(std)
+                        : filteredTuitionDisplay(std)
                     )}
                 </tbody>
               </table>
