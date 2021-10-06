@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
-import Message from '../../../components/Message'
+import Message from '../../../../components/Message'
 import Loader from 'react-loader-spinner'
 import {
   FaArrowAltCircleLeft,
@@ -20,29 +20,29 @@ import {
   updateAssignCourse,
   deleteAssignCourse,
   addAssignCourse,
-} from '../../../api/assignCourse'
+} from '../../../../api/assignCourse'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 import { confirmAlert } from 'react-confirm-alert'
-import { Confirm } from '../../../components/Confirm'
+import { Confirm } from '../../../../components/Confirm'
 import { useForm } from 'react-hook-form'
-import { getCourseTypes } from '../../../api/courseType'
+import { getCourseTypes } from '../../../../api/courseType'
 import {
   dynamicInputSelect,
   inputCheckBox,
   staticInputSelect,
-} from '../../../utils/dynamicForm'
+} from '../../../../utils/dynamicForm'
 import { useRouter } from 'next/router'
-import { getCourses } from '../../../api/course'
-import { getStudent } from '../../../api/student'
-import SubPageAccess from '../../../utils/SubPageAccess'
+import { getCourses } from '../../../../api/course'
+import { getStudent } from '../../../../api/student'
+import SubPageAccess from '../../../../utils/SubPageAccess'
 import moment from 'moment'
-import { Access, UnlockAccess } from '../../../utils/UnlockAccess'
+import { Access, UnlockAccess } from '../../../../utils/UnlockAccess'
 
 const AssignCourse = () => {
   const router = useRouter()
 
-  const { id: studentId } = router.query
+  const { studentId } = router.query
 
   const {
     register,
@@ -415,7 +415,9 @@ const AssignCourse = () => {
                             )}
                           </td>
                           <td className='btn-group'>
-                            <Link href={`/student/mark-sheet/${assign._id}`}>
+                            <Link
+                              href={`/admin/student/${assign.student._id}/${assign._id}/${assign.course._id}`}
+                            >
                               <a className='btn btn-primary btn-sm me-1'>
                                 <FaTable className='mb-1' /> Mark Sheet
                               </a>
