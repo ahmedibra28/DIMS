@@ -28,11 +28,13 @@ handler.post(async (req, res) => {
   })
 
   if (courseData.length === 0)
-    return res.status(404).send('No student in the semester you selected')
+    return res
+      .status(404)
+      .send('No student in the semester or shift you selected')
 
   if (courseData.length > 0) {
     const allStudents = courseData.map((std) => std.student)
-    const price = await Course.findById(courseData && courseData[0]._id)
+    const price = await Course.findById(course)
 
     const startOfMonth = moment(paymentDate).clone().startOf('month').format()
     const endOfMonth = moment(paymentDate).clone().endOf('month').format()

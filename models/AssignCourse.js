@@ -20,10 +20,6 @@ const assignCourseScheme = mongoose.Schema(
       ref: Course,
       required: true,
     },
-    price: {
-      type: Number,
-      required: true,
-    },
     semester: {
       type: Number,
       required: true,

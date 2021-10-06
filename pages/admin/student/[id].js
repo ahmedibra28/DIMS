@@ -331,7 +331,7 @@ const AssignCourse = () => {
         <>
           <div className='row pt-3'>
             <div className='col-md-9 col-12'>
-              <p className='d-flex justify-content-between'>
+              <div className='d-flex justify-content-between'>
                 <Link href='/admin/student' className=''>
                   <a>
                     <FaArrowAltCircleLeft className='mb-1' /> Go Back{' '}
@@ -349,7 +349,7 @@ const AssignCourse = () => {
                     <FaBook className='mb-1' /> Assign To Course
                   </button>
                 )}
-              </p>
+              </div>
               <hr />
               <div className='table-responsive'>
                 <table className='table table-striped table-hover table-sm caption-top '>
@@ -475,11 +475,11 @@ const AssignCourse = () => {
             </div>
             {studentData && (
               <div className='col-md-3 col-12 border-start border-info'>
-                <p className=''>
+                <div className='pb-2'>
                   <span className='fw-bold text-primary'>Student Info </span>
-                </p>
+                </div>
                 <hr />
-                <p className=''>
+                <div className=''>
                   <Image
                     width='260'
                     height='260'
@@ -488,10 +488,10 @@ const AssignCourse = () => {
                     alt={studentData.picture && studentData.picture.pictureName}
                     className='img-fluid w-50 rounded-pill'
                   />
-                </p>
-                <p className='fs-3 mb-1 fw-light'>
+                </div>
+                <div className='fs-3 mb-1 fw-light'>
                   {studentData.fullName.toUpperCase()}
-                </p>
+                </div>
                 <div>
                   <span className='fw-bold'>Student Roll No: </span>{' '}
                   {studentData.rollNo}

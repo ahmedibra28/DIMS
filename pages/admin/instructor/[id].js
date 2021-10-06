@@ -455,7 +455,7 @@ const AssignSubject = () => {
             </div>
             {instructorData && (
               <div className='col-md-3 col-12 border-start border-info'>
-                <div className=''>
+                <div className='pb-2'>
                   <span className='fw-bold text-primary'>Instructor Info </span>
                 </div>
                 <hr />

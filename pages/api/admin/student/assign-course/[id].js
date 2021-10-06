@@ -2,7 +2,6 @@ import nc from 'next-connect'
 import dbConnect from '../../../../../utils/db'
 import AssignCourse from '../../../../../models/AssignCourse'
 import { isAdmin, isAuth } from '../../../../../utils/auth'
-import Course from '../../../../../models/Course'
 
 const handler = nc()
 handler.use(isAuth)
@@ -14,7 +13,7 @@ handler.get(async (req, res) => {
     .sort({ createdAt: -1 })
     .populate('student', 'fullName')
     .populate('courseType', 'name')
-    .populate('course', 'name')
+    .populate('course', ['name', 'price'])
 
   res.send(obj)
 })
@@ -41,8 +40,6 @@ handler.put(async (req, res) => {
       course,
     })
     if (exist.length === 0 && exist2.length === 0) {
-      const coursePrice = await Course.findById(course)
-      obj.price = coursePrice.price
       obj.student = student
       obj.shift = shift
       obj.isActive = isActive
