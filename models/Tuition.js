@@ -26,6 +26,7 @@ const tuitionScheme = mongoose.Schema(
     amount: { type: Number, default: 0.0 },
     paymentMethod: { type: String, default: 'on_cash' },
     paymentDate: { type: Date },
+    invoice: { type: String, default: 'NA' },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }

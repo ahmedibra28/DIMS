@@ -48,13 +48,16 @@ handler.put(async (req, res) => {
   const tuition = await Tuition.findOne({
     _id: req.body._id,
     isPaid: false,
-  })
+  }).populate('student', 'rollNo')
 
   if (!tuition) {
     return res.status(404).send('Payment has not done successfully')
   } else {
     tuition.isPaid = true
     tuition.paymentDate = paymentDate
+    tuition.invoice =
+      paymentDate.slice(0, 10).replaceAll('-', '') + tuition.student.rollNo
+
     await tuition.save()
     return res.status(200).json(tuition)
   }

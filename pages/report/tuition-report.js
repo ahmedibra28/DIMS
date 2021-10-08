@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import { useReactToPrint } from 'react-to-print'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import withAuth from '../../HOC/withAuth'
 import Message from '../../components/Message'
 import Loader from 'react-loader-spinner'
-
+import InvoiceTemplate from '../../components/InvoiceTemplate'
 import { useQuery, useMutation } from 'react-query'
 
 import { useForm } from 'react-hook-form'
@@ -18,7 +19,7 @@ import {
   staticInputSelect,
 } from '../../utils/dynamicForm'
 import { getTuitionsReport } from '../../api/tuition-report'
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
+import { FaCheckCircle, FaTimesCircle, FaPrint } from 'react-icons/fa'
 
 const Tuition = () => {
   const {
@@ -30,6 +31,7 @@ const Tuition = () => {
     defaultValues: {},
   })
   const [option, setOption] = useState('none')
+  const [stdPaymentInfo, setStdPaymentInfo] = useState(null)
 
   const { data: courseData } = useQuery('courses', () => getCourses(), {
     retry: 0,
@@ -77,9 +79,31 @@ const Tuition = () => {
             <FaTimesCircle className='text-danger mb-1' />
           )}
         </td>
+        <td>
+          {std.isPaid && (
+            <button
+              className='btn btn-success btn-sm'
+              onClick={() => {
+                setStdPaymentInfo(std)
+                // handlePrint()
+              }}
+              data-bs-toggle='modal'
+              data-bs-target='#invoicePrint'
+              // onClick={handlePrint}
+            >
+              <FaPrint className='mb-1' />
+            </button>
+          )}
+        </td>
       </tr>
     )
   }
+
+  const componentRef = useRef()
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: 'Report',
+  })
 
   return (
     <div className='container'>
@@ -234,6 +258,7 @@ const Tuition = () => {
                     <th>TUITION FEE</th>
                     <th>DATE</th>
                     <th>STATUS</th>
+                    <th>INVOICE</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -255,6 +280,53 @@ const Tuition = () => {
               </table>
             </div>
           )}
+
+          <div
+            className='modal fade'
+            id='invoicePrint'
+            data-bs-backdrop='static'
+            data-bs-keyboard='false'
+            tabIndex='-1'
+            aria-labelledby='invoicePrint'
+            aria-hidden='true'
+          >
+            <div className='modal-dialog modal-lg'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title' id='invoicePrint'>
+                    Tuition Fee Invoice
+                  </h5>
+                  <button
+                    type='button'
+                    className='btn-close'
+                    data-bs-dismiss='modal'
+                    aria-label='Close'
+                  ></button>
+                </div>
+                <div ref={componentRef}>
+                  <InvoiceTemplate stdPaymentInfo={stdPaymentInfo} />
+                </div>
+                <div className='modal-footer'>
+                  <button
+                    type='button'
+                    className='btn btn-secondary'
+                    data-bs-dismiss='modal'
+                  >
+                    Close
+                  </button>
+
+                  <button
+                    onClick={handlePrint}
+                    type='submit'
+                    className='btn btn-success '
+                  >
+                    <FaPrint className='mb-1' />
+                    Print
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
