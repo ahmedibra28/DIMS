@@ -11,22 +11,40 @@ import { useForm } from 'react-hook-form'
 import { getCourses } from '../../../../../api/course'
 import {
   dynamicInputSelect,
+  dynamicOneOptionInputSelect,
   inputNumber,
 } from '../../../../../utils/dynamicForm'
-import { getExams } from '../../../../../api/exam'
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
+import {
+  getExams,
+  addExam,
+  updateExam,
+  deleteExam,
+} from '../../../../../api/exam'
+import {
+  // FaCheckCircle,
+  // FaTimesCircle,
+  // FaEdit,
+  FaTrash,
+  FaPlus,
+} from 'react-icons/fa'
 import SubPageAccess from '../../../../../utils/SubPageAccess'
+import { confirmAlert } from 'react-confirm-alert'
+import { Confirm } from '../../../../../components/Confirm'
 
 const Exam = () => {
   SubPageAccess()
   const router = useRouter()
 
   const { course: assignCourseId, id: courseId } = router.query
+  const [id, setId] = useState(null)
+  const [edit, setEdit] = useState(false)
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {},
@@ -38,141 +56,256 @@ const Exam = () => {
     ['exams', assignCourseId],
     async () => await getExams({ assignCourseId }),
     {
-      enabled: !!assignCourseId,
+      enabled: !!assignCourseId && !!courseId,
       retry: 0,
     }
   )
 
+  const {
+    isLoading: isLoadingAdd,
+    isError: isErrorAdd,
+    error: errorAdd,
+    isSuccess: isSuccessAdd,
+    mutateAsync: addMutateAsync,
+  } = useMutation(addExam, {
+    retry: 0,
+    onSuccess: () => {
+      reset()
+      setEdit(false)
+      queryClient.invalidateQueries(['exams', assignCourseId])
+    },
+  })
+
+  const {
+    isLoading: isLoadingUpdate,
+    isError: isErrorUpdate,
+    error: errorUpdate,
+    isSuccess: isSuccessUpdate,
+    mutateAsync: updateMutateAsync,
+  } = useMutation(updateExam, {
+    retry: 0,
+    onSuccess: () => {
+      reset()
+      setEdit(false)
+      queryClient.invalidateQueries(['exams', assignCourseId])
+    },
+  })
+
+  const {
+    isLoading: isLoadingDelete,
+    isError: isErrorDelete,
+    error: errorDelete,
+    isSuccess: isSuccessDelete,
+    mutateAsync: deleteMutateAsync,
+  } = useMutation(deleteExam, {
+    retry: 0,
+    onSuccess: () => queryClient.invalidateQueries(['exams', assignCourseId]),
+  })
+
   const { data: subjectData } = useQuery('subjects', () => getSubjects(), {
     retry: 0,
+    enabled: !!assignCourseId && !!courseId,
   })
 
   const { data: courseData } = useQuery('courses', () => getCourses(), {
     retry: 0,
+    enabled: !!assignCourseId && !!courseId,
   })
 
   const submitHandler = (data) => {
-    // MutateAsync(data)
-    console.log(data)
+    edit
+      ? updateMutateAsync({
+          _id: id,
+          exam: data.exam,
+          practicalMarks: data.practicalMarks,
+          theoryMarks: data.theoryMarks,
+          subject: data.subject,
+          assignCourseId,
+          courseId,
+        })
+      : addMutateAsync({
+          exam: data.exam,
+          practicalMarks: data.practicalMarks,
+          theoryMarks: data.theoryMarks,
+          subject: data.subject,
+          assignCourseId,
+          courseId,
+        })
   }
 
-  const filteredAttendanceDisplay = (data, d, std) => {
-    return (
-      <tr key={std.student && std.student._id}>
-        <td>{std.student && std.student.rollNo}</td>
-        <td>{std.student && std.student.fullName}</td>
-        <td>{data && data[0].course && data && data[0].course.name}</td>
-        <td>{data && data[0].subject && data && data[0].subject.name}</td>
-        <td>{d.createdAt.slice(0, 10)}</td>
-        <td>
-          {std.isAttended ? (
-            <FaCheckCircle className='text-success mb-1' />
-          ) : (
-            <FaTimesCircle className='text-danger mb-1' />
-          )}
-        </td>
-      </tr>
-    )
+  // const editHandler = (exam) => {
+  //   setId(exam._id)
+  //   setEdit(true)
+  //   setValue('exam', exam.exam)
+  //   setValue('theoryMarks', exam.theoryMarks)
+  //   setValue('practicalMarks', exam.practicalMarks)
+  //   setValue('subject', exam.subject._id)
+  // }
+
+  const deleteHandler = (id) => {
+    confirmAlert(Confirm(() => deleteMutateAsync(id)))
   }
 
   const examData =
-    courseData && courseData.filter((p) => p._id === courseId && p.exam)
+    courseId &&
+    courseData &&
+    courseData.filter((p) => p._id === courseId && p.exam)
+
+  const rowAverage = (exam) => {
+    const totalEarnedMarks =
+      Number(exam.theoryMarks) + Number(exam.practicalMarks)
+    const totalOriginalMarks =
+      Number(exam.subject && exam.subject.theoryMarks) +
+      Number(exam.subject && exam.subject.practicalMarks)
+    return (totalEarnedMarks / totalOriginalMarks) * 100
+  }
+
+  const formCleanHandler = () => {
+    setEdit(false)
+    reset()
+  }
 
   return (
     <div className='container'>
       <Head>
-        <title>Attendance Report</title>
-        <meta property='og:title' content='Attendance Report' key='title' />
+        <title>Exam</title>
+        <meta property='og:title' content='Exam' key='title' />
       </Head>
-      {/* {isSuccess && (
+      {isSuccessAdd && (
         <Message variant='success'>
-          Attendance record has been fetched successfully.
+          Exam has been recorded successfully.
         </Message>
-      )} */}
+      )}
+      {isErrorAdd && <Message variant='danger'>{errorAdd}</Message>}
       {isError && <Message variant='danger'>{error}</Message>}
+      {isSuccessDelete && (
+        <Message variant='success'>
+          Exam record has been deleted successfully.
+        </Message>
+      )}
+      {isErrorDelete && <Message variant='danger'>{errorDelete}</Message>}
+      {isSuccessUpdate && (
+        <Message variant='success'>
+          Exam record has been updated successfully.
+        </Message>
+      )}
+      {isErrorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
 
-      <form onSubmit={handleSubmit(submitHandler)}>
-        <div className='row'>
-          <div className='col-md-3 col-6'>
-            <div className='mb-3'>
-              {courseId && (
-                <>
-                  <label htmlFor='exam'>Exam</label>
-                  <select
-                    {...register('exam', {
-                      required: 'Exam is required',
+      <div className='d-flex justify-content-between align-items-center'>
+        <h3 className=''>Exam</h3>
+        <button
+          className='btn btn-primary '
+          data-bs-toggle='modal'
+          data-bs-target='#editExamModal'
+        >
+          <FaPlus className='mb-1' />
+        </button>
+      </div>
+
+      <div
+        className='modal fade'
+        id='editExamModal'
+        data-bs-backdrop='static'
+        data-bs-keyboard='false'
+        tabIndex='-1'
+        aria-labelledby='editExamModalLabel'
+        aria-hidden='true'
+      >
+        <div className='modal-dialog'>
+          <div className='modal-content modal-background'>
+            <div className='modal-header'>
+              <h3 className='modal-title ' id='editExamModalLabel'>
+                {edit ? 'Edit Exam Record' : 'Add Exam Record'}
+              </h3>
+              <button
+                type='button'
+                className='btn-close'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+                onClick={formCleanHandler}
+              ></button>
+            </div>
+            <div className='modal-body'>
+              {isLoading ? (
+                <div className='text-center'>
+                  <Loader
+                    type='ThreeDots'
+                    color='#00BFFF'
+                    height={100}
+                    width={100}
+                    timeout={3000} //3 secs
+                  />
+                </div>
+              ) : isError ? (
+                <Message variant='danger'>{error}</Message>
+              ) : (
+                <form onSubmit={handleSubmit(submitHandler)}>
+                  <div className='row'>
+                    {dynamicOneOptionInputSelect({
+                      register,
+                      label: 'Exam',
+                      errors,
+                      name: 'exam',
+                      data: examData && examData[0] && examData[0].exam,
                     })}
-                    type='text'
-                    placeholder='Enter exam'
-                    className='form-control'
-                  >
-                    <option value=''>-----------</option>
-                    {examData &&
-                      examData[0] &&
-                      examData[0].exam.map((exam) => (
-                        <option key={exam} value={exam}>
-                          {exam}
-                        </option>
-                      ))}
-                  </select>
-                  {errors.exam && (
-                    <span className='text-danger'>{errors.exam.message}</span>
-                  )}
-                </>
+
+                    {watch().exam &&
+                      dynamicInputSelect({
+                        register,
+                        label: 'Subject',
+                        errors,
+                        name: 'subject',
+                        data:
+                          subjectData &&
+                          subjectData.filter(
+                            (p) => p.course._id === courseId && p.semester === 1
+                          ),
+                      })}
+
+                    {watch().exam &&
+                      inputNumber({
+                        register,
+                        label: 'Theory',
+                        errors,
+                        name: 'theoryMarks',
+                      })}
+
+                    {watch().exam &&
+                      inputNumber({
+                        register,
+                        label: 'Practical',
+                        errors,
+                        name: 'practicalMarks',
+                      })}
+                  </div>
+
+                  <div className='modal-footer'>
+                    <button
+                      type='button'
+                      className='btn btn-secondary '
+                      data-bs-dismiss='modal'
+                      onClick={formCleanHandler}
+                    >
+                      Close
+                    </button>
+                    <button
+                      type='submit'
+                      className='btn btn-primary '
+                      disabled={isLoadingAdd || isLoadingUpdate}
+                    >
+                      {isLoadingAdd || isLoadingUpdate ? (
+                        <span className='spinner-border spinner-border-sm' />
+                      ) : (
+                        'Submit'
+                      )}
+                    </button>
+                  </div>
+                </form>
               )}
             </div>
           </div>
-
-          <div className='col-md-2 col-4'>
-            {watch().exam &&
-              dynamicInputSelect({
-                register,
-                label: 'Subject',
-                errors,
-                name: 'subject',
-                data:
-                  subjectData &&
-                  subjectData.filter(
-                    (p) => p.course._id === courseId && p.semester === 1
-                  ),
-              })}
-          </div>
-          <div className='col-md-2 col-4'>
-            {watch().exam &&
-              inputNumber({
-                register,
-                label: 'Theory',
-                errors,
-                name: 'theoryMarks',
-              })}
-          </div>
-          <div className='col-md-2 col-4'>
-            {watch().exam &&
-              inputNumber({
-                register,
-                label: 'Practical',
-                errors,
-                name: 'practicalMarks',
-              })}
-          </div>
-
-          {watch().subject && (
-            <div className='col-md-2 col-4 my-auto'>
-              <button
-                type='submit'
-                className='btn btn-primary btn-lg mt-2 form-control shadow'
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <span className='spinner-border spinner-border-sm' />
-                ) : (
-                  'Search'
-                )}
-              </button>
-            </div>
-          )}
         </div>
-      </form>
+      </div>
 
       {isLoading ? (
         <div className='text-center'>
@@ -191,37 +324,54 @@ const Exam = () => {
           {data && (
             <div className='table-responsive '>
               <table className='table table-striped table-hover table-sm caption-top '>
-                <caption>
-                  {data && data[0] && data[0].student.length} records were found
-                </caption>
+                <caption>{data && data.length} records were found</caption>
                 <thead>
                   <tr>
-                    <th>ROLL NO. </th>
-                    <th>STUDENT</th>
-                    <th>COURSE</th>
-                    <th>SUBJECT</th>
                     <th>DATE</th>
-                    <th>STATUS</th>
+                    <th>EXAM </th>
+                    <th>SUBJECT</th>
+                    <th>TH. MARKS</th>
+                    <th>P. MARKS</th>
+                    <th>AVERAGE</th>
+                    <th>ACTION</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data &&
-                    data &&
-                    data.map((d) =>
-                      d.student.map((std) =>
-                        watch().student
-                          ? watch().student === std.student.rollNo &&
-                            option !== 'none'
-                            ? std.isAttended.toString() === option &&
-                              filteredAttendanceDisplay(data, d, std)
-                            : watch().student === std.student.rollNo &&
-                              filteredAttendanceDisplay(data, d, std)
-                          : option !== 'none'
-                          ? std.isAttended.toString() === option &&
-                            filteredAttendanceDisplay(data, d, std)
-                          : filteredAttendanceDisplay(data, d, std)
-                      )
-                    )}
+                    data.map((exam) => (
+                      <tr key={exam._id}>
+                        <td>{exam.createdAt.slice(0, 10)}</td>
+                        <td>{exam.exam}</td>
+                        <td>{exam.subject && exam.subject.name}</td>
+                        <td>{exam.theoryMarks}</td>
+                        <td>{exam.practicalMarks}</td>
+                        <td>{rowAverage(exam).toFixed(2)}%</td>
+                        <td className='btn-group'>
+                          {/* <button
+                            className='btn btn-primary btn-sm'
+                            onClick={() => editHandler(exam)}
+                            data-bs-toggle='modal'
+                            data-bs-target='#editExamModal'
+                          >
+                            <FaEdit className='mb-1' /> Edit
+                          </button> */}
+
+                          <button
+                            className='btn btn-danger btn-sm ms-1'
+                            onClick={() => deleteHandler(exam._id)}
+                            disabled={isLoadingDelete}
+                          >
+                            {isLoadingDelete ? (
+                              <span className='spinner-border spinner-border-sm' />
+                            ) : (
+                              <span>
+                                <FaTrash className='mb-1' /> Delete
+                              </span>
+                            )}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>

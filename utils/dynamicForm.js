@@ -47,6 +47,7 @@ export const inputNumber = (args) => {
       <input
         {...register(name, isRequired && { required: `${label} is required` })}
         type='number'
+        step='0.01'
         placeholder={`Enter ${name}`}
         className='form-control'
       />
@@ -166,6 +167,33 @@ export const staticInputSelect = (args) => {
           data.map((d) => (
             <option key={d.name} value={d.name}>
               {d.name}
+            </option>
+          ))}
+      </select>
+      {errors && errors[name] && (
+        <span className='text-danger'>{errors[name].message}</span>
+      )}
+    </div>
+  )
+}
+
+export const dynamicOneOptionInputSelect = (args) => {
+  const { register, errors, name, data, label, isRequired = true } = args
+
+  return (
+    <div className='mb-3'>
+      <label htmlFor={name}>{label}</label>
+      <select
+        {...register(name, isRequired && { required: `${label} is required` })}
+        type='text'
+        placeholder={`Enter ${name}`}
+        className='form-control'
+      >
+        <option value=''>-------</option>
+        {data &&
+          data.map((d) => (
+            <option key={d} value={d}>
+              {d}
             </option>
           ))}
       </select>

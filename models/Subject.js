@@ -17,7 +17,7 @@ const subjectScheme = mongoose.Schema(
     name: { type: String, required: true },
     semester: { type: Number, required: true },
     theoryMarks: { type: Number, required: true },
-    practicalMarks: { type: [String], required: true },
+    practicalMarks: { type: Number, required: true },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
