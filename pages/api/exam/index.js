@@ -51,14 +51,12 @@ handler.post(async (req, res) => {
     student: assign.student,
   })
 
+  const checkExist = prevExams.map((e) => e.exam === exam)
+
+  if (checkExist.includes(true)) {
+    return res.status(400).send('Subject exam already taken')
+  }
   if (prevExams.length > 0) {
-    const checkExist = prevExams.map((e) => e.exam === exam)
-    const check = checkExist && checkExist[0]
-
-    if (check) {
-      return res.status(400).send('Subject exam already taken')
-    }
-
     const totalPracticalMarks = prevExams.reduce(
       (acc, curr) => acc + Number(curr.practicalMarks),
       0

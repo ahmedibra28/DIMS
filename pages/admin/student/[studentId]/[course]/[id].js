@@ -21,9 +21,9 @@ import {
   deleteExam,
 } from '../../../../../api/exam'
 import {
-  // FaCheckCircle,
-  // FaTimesCircle,
-  // FaEdit,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaEdit,
   FaTrash,
   FaPlus,
 } from 'react-icons/fa'
@@ -133,14 +133,14 @@ const Exam = () => {
         })
   }
 
-  // const editHandler = (exam) => {
-  //   setId(exam._id)
-  //   setEdit(true)
-  //   setValue('exam', exam.exam)
-  //   setValue('theoryMarks', exam.theoryMarks)
-  //   setValue('practicalMarks', exam.practicalMarks)
-  //   setValue('subject', exam.subject._id)
-  // }
+  const editHandler = (exam) => {
+    setId(exam._id)
+    setEdit(true)
+    setValue('exam', exam.exam)
+    setValue('theoryMarks', exam.theoryMarks)
+    setValue('practicalMarks', exam.practicalMarks)
+    setValue('subject', exam.subject._id)
+  }
 
   const deleteHandler = (id) => {
     confirmAlert(Confirm(() => deleteMutateAsync(id)))
@@ -347,14 +347,14 @@ const Exam = () => {
                         <td>{exam.practicalMarks}</td>
                         <td>{rowAverage(exam).toFixed(2)}%</td>
                         <td className='btn-group'>
-                          {/* <button
+                          <button
                             className='btn btn-primary btn-sm'
                             onClick={() => editHandler(exam)}
                             data-bs-toggle='modal'
                             data-bs-target='#editExamModal'
                           >
                             <FaEdit className='mb-1' /> Edit
-                          </button> */}
+                          </button>
 
                           <button
                             className='btn btn-danger btn-sm ms-1'
