@@ -145,7 +145,7 @@ const AssignCourse = () => {
     onSuccess: () => {
       reset()
       setEdit(false)
-      queryClient.invalidateQueries(['upgrade'])
+      queryClient.invalidateQueries(['assignCourses'])
     },
   })
 
@@ -190,7 +190,6 @@ const AssignCourse = () => {
   }
 
   const upgradeHandler = (data) => {
-    console.log(data)
     upgradeMutateAsync(data)
   }
 
@@ -200,6 +199,12 @@ const AssignCourse = () => {
         <title>Assign Course</title>
         <meta property='og:title' content='Assign Course' key='title' />
       </Head>
+      {isSuccessUpgrade && (
+        <Message variant='success'>
+          Course semester has been upgraded successfully.
+        </Message>
+      )}
+      {isErrorUpgrade && <Message variant='danger'>{errorUpgrade}</Message>}
       {isSuccessUpdate && (
         <Message variant='success'>
           Assign Course has been updated successfully.
@@ -434,7 +439,7 @@ const AssignCourse = () => {
                           </td>
                           <td className='btn-group'>
                             <Link
-                              href={`/admin/student/${assign.student._id}/${assign._id}/${assign.course._id}`}
+                              href={`/admin/student/${assign.student._id}/${assign.course._id}/${assign.semester}/${assign._id}`}
                             >
                               <a className='btn btn-primary btn-sm me-1'>
                                 <FaTable className='mb-1' /> Mark Sheet

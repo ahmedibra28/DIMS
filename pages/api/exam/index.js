@@ -12,17 +12,12 @@ handler.use(isAuth)
 
 handler.post(async (req, res) => {
   await dbConnect()
-  const {
-    exam,
-    subject,
-    theoryMarks,
-    practicalMarks,
-    assignCourseId,
-    courseId,
-  } = req.body
+
+  const { exam, subject, theoryMarks, practicalMarks, assignId, courseId } =
+    req.body
 
   const assign = await AssignCourse.findOne({
-    _id: assignCourseId,
+    _id: assignId,
     isActive: true,
     isGraduated: false,
   })

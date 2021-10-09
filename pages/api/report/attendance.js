@@ -34,7 +34,6 @@ handler.post(async (req, res) => {
     subject,
     shift,
     semester,
-    isActive: true,
   })
 
   if (!instructorObj && !admin) {

@@ -1,41 +1,36 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Head from 'next/head'
-import Message from '../../../../../components/Message'
+import Message from '../../../../../../components/Message'
 import Loader from 'react-loader-spinner'
 
-import { getSubjects } from '../../../../../api/subject'
+import { getSubjects } from '../../../../../../api/subject'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 import { useForm } from 'react-hook-form'
-import { getCourses } from '../../../../../api/course'
+import { getCourses } from '../../../../../../api/course'
 import {
   dynamicInputSelect,
   dynamicOneOptionInputSelect,
   inputNumber,
-} from '../../../../../utils/dynamicForm'
+} from '../../../../../../utils/dynamicForm'
 import {
   getExams,
   addExam,
   updateExam,
   deleteExam,
-} from '../../../../../api/exam'
-import {
-  FaCheckCircle,
-  FaTimesCircle,
-  FaEdit,
-  FaTrash,
-  FaPlus,
-} from 'react-icons/fa'
-import SubPageAccess from '../../../../../utils/SubPageAccess'
+} from '../../../../../../api/exam'
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa'
+import SubPageAccess from '../../../../../../utils/SubPageAccess'
 import { confirmAlert } from 'react-confirm-alert'
-import { Confirm } from '../../../../../components/Confirm'
+import { Confirm } from '../../../../../../components/Confirm'
 
 const Exam = () => {
   SubPageAccess()
   const router = useRouter()
 
-  const { course: assignCourseId, id: courseId } = router.query
+  const { assignId, courseId, semester } = router.query
+
   const [id, setId] = useState(null)
   const [edit, setEdit] = useState(false)
 
@@ -53,10 +48,10 @@ const Exam = () => {
   const queryClient = useQueryClient()
 
   const { data, isLoading, isError, error } = useQuery(
-    ['exams', assignCourseId],
-    async () => await getExams({ assignCourseId }),
+    ['exams', assignId],
+    async () => await getExams({ assignId }),
     {
-      enabled: !!assignCourseId && !!courseId,
+      enabled: !!assignId && !!courseId && !!semester,
       retry: 0,
     }
   )
@@ -72,7 +67,7 @@ const Exam = () => {
     onSuccess: () => {
       reset()
       setEdit(false)
-      queryClient.invalidateQueries(['exams', assignCourseId])
+      queryClient.invalidateQueries(['exams', assignId])
     },
   })
 
@@ -87,7 +82,7 @@ const Exam = () => {
     onSuccess: () => {
       reset()
       setEdit(false)
-      queryClient.invalidateQueries(['exams', assignCourseId])
+      queryClient.invalidateQueries(['exams', assignId])
     },
   })
 
@@ -99,17 +94,17 @@ const Exam = () => {
     mutateAsync: deleteMutateAsync,
   } = useMutation(deleteExam, {
     retry: 0,
-    onSuccess: () => queryClient.invalidateQueries(['exams', assignCourseId]),
+    onSuccess: () => queryClient.invalidateQueries(['exams', assignId]),
   })
 
   const { data: subjectData } = useQuery('subjects', () => getSubjects(), {
     retry: 0,
-    enabled: !!assignCourseId && !!courseId,
+    enabled: !!assignId && !!courseId && !!semester,
   })
 
   const { data: courseData } = useQuery('courses', () => getCourses(), {
     retry: 0,
-    enabled: !!assignCourseId && !!courseId,
+    enabled: !!assignId && !!courseId && !!semester,
   })
 
   const submitHandler = (data) => {
@@ -120,7 +115,7 @@ const Exam = () => {
           practicalMarks: data.practicalMarks,
           theoryMarks: data.theoryMarks,
           subject: data.subject,
-          assignCourseId,
+          assignId,
           courseId,
         })
       : addMutateAsync({
@@ -128,7 +123,7 @@ const Exam = () => {
           practicalMarks: data.practicalMarks,
           theoryMarks: data.theoryMarks,
           subject: data.subject,
-          assignCourseId,
+          assignId,
           courseId,
         })
   }
@@ -258,7 +253,9 @@ const Exam = () => {
                         data:
                           subjectData &&
                           subjectData.filter(
-                            (p) => p.course._id === courseId && p.semester === 1
+                            (p) =>
+                              p.course._id === courseId &&
+                              p.semester === Number(semester)
                           ),
                       })}
 

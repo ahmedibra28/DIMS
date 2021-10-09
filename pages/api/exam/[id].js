@@ -10,8 +10,8 @@ handler.use(isAuth)
 
 handler.get(async (req, res) => {
   await dbConnect()
-  const { id: assignCourseId } = req.query
-  const assign = await AssignCourse.findById(assignCourseId)
+  const { id: assignId } = req.query
+  const assign = await AssignCourse.findById(assignId)
 
   const exams = await Exam.find({
     course: assign.course,

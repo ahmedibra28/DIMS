@@ -13,7 +13,7 @@ handler.get(async (req, res) => {
     .sort({ createdAt: -1 })
     .populate('student', 'fullName')
     .populate('courseType', 'name')
-    .populate('course', ['name', 'price'])
+    .populate('course', ['name', 'price', 'duration', 'isActive'])
 
   res.send(obj)
 })
