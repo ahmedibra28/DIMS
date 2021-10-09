@@ -1,15 +1,17 @@
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import withAuth from '../HOC/withAuth'
+import Admin from '../components/dashboard/Admin'
 
 function Home() {
   return (
     <div>
       <Head>
-        <title>NEXT.js Boilerplate</title>
-        <meta property='og:title' content='NEXT.js Boilerplate' key='title' />
+        <title>DIMS</title>
+        <meta property='og:title' content='DIMS' key='title' />
       </Head>
-      <div className='display-1 text-center text-primary'>Dashboard</div>
+      <Admin />
+      {/* <div className='display-1 text-center text-primary'>Dashboard</div> */}
     </div>
   )
 }

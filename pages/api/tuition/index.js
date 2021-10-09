@@ -56,11 +56,28 @@ handler.put(async (req, res) => {
     tuition.isPaid = true
     tuition.paymentDate = paymentDate
     tuition.invoice =
-      paymentDate.slice(0, 10).replaceAll('-', '') + tuition.student.rollNo
+      paymentDate.slice(0, 10).replace(/-/g, '') + tuition.student.rollNo
 
     await tuition.save()
     return res.status(200).json(tuition)
   }
+})
+
+handler.get(async (req, res) => {
+  await dbConnect()
+
+  const runningMonth = moment().subtract(0, 'months').format()
+  const sixMonthsAgo = moment().subtract(6, 'months').format()
+  const startOfMonth = moment(sixMonthsAgo).clone().startOf('month').format()
+  const endOfMonth = moment(runningMonth).clone().endOf('month').format()
+
+  const fee = await Tuition.find({
+    createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+  })
+    .populate('student')
+    .populate('course')
+
+  res.status(200).json(fee)
 })
 
 export default handler
