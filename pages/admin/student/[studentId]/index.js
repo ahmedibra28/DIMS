@@ -35,6 +35,7 @@ import {
 import { useRouter } from 'next/router'
 import { getCourses } from '../../../../api/course'
 import { getStudent } from '../../../../api/student'
+import { updateUpgrade } from '../../../../api/upgrade'
 import SubPageAccess from '../../../../utils/SubPageAccess'
 import moment from 'moment'
 import { Access, UnlockAccess } from '../../../../utils/UnlockAccess'
@@ -133,6 +134,21 @@ const AssignCourse = () => {
     },
   })
 
+  const {
+    isLoading: isLoadingUpgrade,
+    isError: isErrorUpgrade,
+    error: errorUpgrade,
+    isSuccess: isSuccessUpgrade,
+    mutateAsync: upgradeMutateAsync,
+  } = useMutation(updateUpgrade, {
+    retry: 0,
+    onSuccess: () => {
+      reset()
+      setEdit(false)
+      queryClient.invalidateQueries(['upgrade'])
+    },
+  })
+
   const [id, setId] = useState(null)
   const [edit, setEdit] = useState(false)
 
@@ -173,8 +189,10 @@ const AssignCourse = () => {
     setValue('isActive', assign.isActive)
   }
 
-  const upgradeHandler = () => {}
-  const isLoadingUpgrade = false
+  const upgradeHandler = (data) => {
+    console.log(data)
+    upgradeMutateAsync(data)
+  }
 
   return (
     <div className='container'>
@@ -451,7 +469,7 @@ const AssignCourse = () => {
                                     </button>
                                     <button
                                       className='btn btn-success btn-sm ms-1'
-                                      onClick={() => upgradeHandler(assign._id)}
+                                      onClick={() => upgradeHandler(assign)}
                                       disabled={isLoadingUpgrade}
                                     >
                                       {isLoadingUpgrade ? (

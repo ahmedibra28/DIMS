@@ -28,8 +28,11 @@ const Attendance = () => {
   } = useForm({
     defaultValues: {},
   })
-  const { register: registerAttendance, handleSubmit: handleSubmitAttendance } =
-    useForm({})
+  const {
+    register: registerAttendance,
+    handleSubmit: handleSubmitAttendance,
+    reset: resetAttendance,
+  } = useForm({})
 
   const { data: subjectData } = useQuery('subjects', () => getSubjects(), {
     retry: 0,
@@ -67,7 +70,9 @@ const Attendance = () => {
     mutateAsync: updateMutateAsync,
   } = useMutation(updateAttendance, {
     retry: 0,
-    onSuccess: () => {},
+    onSuccess: () => {
+      resetAttendance()
+    },
   })
 
   const submitHandler = (data) => {

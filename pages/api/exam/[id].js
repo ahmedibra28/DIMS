@@ -21,7 +21,7 @@ handler.get(async (req, res) => {
     student: assign.student,
     isActive: true,
   })
-    .sort({ exam: -1 })
+    .sort({ subject: -1 })
     .populate('student', ['fullName', 'rollNo'])
     .populate('courseType', ['name'])
     .populate('course', ['name'])
