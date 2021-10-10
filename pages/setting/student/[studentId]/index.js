@@ -355,7 +355,7 @@ const AssignCourse = () => {
           <div className='row pt-3'>
             <div className='col-md-9 col-12'>
               <div className='d-flex justify-content-between'>
-                <Link href='/admin/student' className=''>
+                <Link href='../student' className=''>
                   <a>
                     <FaArrowAltCircleLeft className='mb-1' /> Go Back{' '}
                   </a>
@@ -439,7 +439,7 @@ const AssignCourse = () => {
                           </td>
                           <td className='btn-group'>
                             <Link
-                              href={`/admin/student/${assign.student._id}/${assign.course._id}/${assign.semester}/${assign._id}`}
+                              href={`${assign.student._id}/${assign.course._id}/${assign.semester}/${assign._id}`}
                             >
                               <a className='btn btn-primary btn-sm me-1'>
                                 <FaTable className='mb-1' /> Mark Sheet

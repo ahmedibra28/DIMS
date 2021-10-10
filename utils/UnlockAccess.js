@@ -12,5 +12,8 @@ export const Access = {
   admin: ['admin'],
   user: ['user'],
   student: ['student'],
+  instructor: ['instructor'],
   adminUser: ['admin', 'user'],
+  adminFinance: ['admin', 'finance'],
+  superAdmin: ['admin', 'user', 'instructor', 'finance', 'student'],
 }

@@ -475,7 +475,7 @@ const Instructors = () => {
               data.data.map((instructor) => (
                 <div key={instructor._id} className='col-md-3 col-sm-6 col-12'>
                   <div className='card bg-transparent border-0 shadow-lg'>
-                    <Link href={`/admin/instructor/${instructor._id}`}>
+                    <Link href={`instructor/${instructor._id}`}>
                       <a className='mx-auto link-primary'>
                         <Image
                           width='260'
@@ -488,7 +488,7 @@ const Instructors = () => {
                       </a>
                     </Link>
                     <div className='card-body'>
-                      <Link href={`/admin/instructor/${instructor._id}`}>
+                      <Link href={`instructor/${instructor._id}`}>
                         <a className='link-primary'>
                           <h6 className='card-title'>{instructor.fullName}</h6>
                           <h6 className='card-title'>
@@ -522,7 +522,7 @@ const Instructors = () => {
                             <FaEdit className='mb-1' /> Edit
                           </button>
 
-                          <Link href={`/admin/instructor/${instructor._id}`}>
+                          <Link href={`instructor/${instructor._id}`}>
                             <a className='btn btn-success btn-sm border-0 mx-1'>
                               <FaInfoCircle className='mb-1' /> Detail{' '}
                             </a>

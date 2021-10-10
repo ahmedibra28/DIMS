@@ -2,6 +2,7 @@ import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import withAuth from '../HOC/withAuth'
 import Admin from '../components/dashboard/Admin'
+import { Access, UnlockAccess } from '../utils/UnlockAccess'
 
 function Home() {
   return (
@@ -10,7 +11,9 @@ function Home() {
         <title>DIMS</title>
         <meta property='og:title' content='DIMS' key='title' />
       </Head>
-      <Admin />
+      {UnlockAccess(Access.adminFinance) && <Admin />}
+      {!UnlockAccess(Access.adminFinance) &&
+        'Sorry you are not authorized any view'}
       {/* <div className='display-1 text-center text-primary'>Dashboard</div> */}
     </div>
   )

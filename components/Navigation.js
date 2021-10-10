@@ -3,12 +3,13 @@ import Image from 'next/image'
 import logo from '../images/logo.png'
 import dynamic from 'next/dynamic'
 import {
-  FaCog,
   FaUserCircle,
   FaSignInAlt,
   FaUserPlus,
   FaPowerOff,
   FaChartBar,
+  FaUserShield,
+  FaUserCog,
 } from 'react-icons/fa'
 import { logout } from '../api/users'
 import { useMutation } from 'react-query'
@@ -111,6 +112,39 @@ const Navigation = () => {
                 )}
             </ul>
           </li>
+
+          {UnlockAccess(Access.adminFinance) && (
+            <li className='nav-item dropdown'>
+              <a
+                className='nav-link dropdown-toggle'
+                href='#'
+                id='navbarDropdownMenuLink'
+                role='button'
+                data-bs-toggle='dropdown'
+                aria-expanded='false'
+              >
+                <FaUserShield className='mb-1' /> Setting
+              </a>
+              <ul
+                className='dropdown-menu border-0'
+                aria-labelledby='navbarDropdownMenuLink'
+              >
+                {routes &&
+                  routes.map(
+                    (route) =>
+                      route.isActive &&
+                      route.menu === 'Setting' && (
+                        <li key={route._id}>
+                          <Link href={route.path}>
+                            <a className='dropdown-item'>{route.name}</a>
+                          </Link>
+                        </li>
+                      )
+                  )}
+              </ul>
+            </li>
+          )}
+
           {UnlockAccess(Access.admin) && (
             <li className='nav-item dropdown'>
               <a
@@ -121,7 +155,7 @@ const Navigation = () => {
                 data-bs-toggle='dropdown'
                 aria-expanded='false'
               >
-                <FaCog className='mb-1' /> Admin
+                <FaUserCog className='mb-1' /> Admin
               </a>
               <ul
                 className='dropdown-menu border-0'

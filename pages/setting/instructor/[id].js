@@ -373,7 +373,7 @@ const AssignSubject = () => {
           <div className='row pt-3'>
             <div className='col-md-9 col-12'>
               <div className='d-flex justify-content-between'>
-                <Link href='/admin/instructor' className=''>
+                <Link href='../instructor' className=''>
                   <a>
                     <FaArrowAltCircleLeft className='mb-1' /> Go Back{' '}
                   </a>

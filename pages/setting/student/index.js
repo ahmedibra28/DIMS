@@ -521,7 +521,7 @@ const Students = () => {
               data.data.map((student) => (
                 <div key={student._id} className='col-md-3 col-sm-6 col-12'>
                   <div className='card bg-transparent border-0 shadow-lg'>
-                    <Link href={`/admin/student/${student._id}`}>
+                    <Link href={`student/${student._id}`}>
                       <a className='mx-auto link-primary'>
                         <Image
                           width='260'
@@ -534,7 +534,7 @@ const Students = () => {
                       </a>
                     </Link>
                     <div className='card-body'>
-                      <Link href={`/admin/student/${student._id}`}>
+                      <Link href={`student/${student._id}`}>
                         <a className='link-primary'>
                           <h6 className='card-title'>{student.fullName}</h6>
                           <h6 className='card-title'>
@@ -568,7 +568,7 @@ const Students = () => {
                             <FaEdit className='mb-1' /> Edit
                           </button>
 
-                          <Link href={`/admin/student/${student._id}`}>
+                          <Link href={`student/${student._id}`}>
                             <a className='btn btn-success btn-sm border-0 mx-1'>
                               <FaInfoCircle className='mb-1' /> Detail{' '}
                             </a>
