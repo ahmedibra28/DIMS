@@ -12,6 +12,7 @@ import { getNotices } from '../../api/notice'
 import {
   getStudentTuitionsReport,
   getStudentMarkSheetReport,
+  getStudentClearanceReport,
 } from '../../api/report'
 
 import { useQuery } from 'react-query'
@@ -50,6 +51,15 @@ const Student = () => {
     retry: 0,
   })
 
+  const {
+    data: clearanceData,
+    isLoading: isLoadingClearance,
+    isError: isErrorClearance,
+    error: errorClearance,
+  } = useQuery(['student clearance'], () => getStudentClearanceReport(), {
+    retry: 0,
+  })
+
   const payHandler = (data) => {
     console.log(data)
   }
@@ -73,7 +83,7 @@ const Student = () => {
     <div className='row mt-1'>
       <div className='col-md-5 col-12'>
         <div className='row'>
-          <div className='col-12 shadow pb-2'>
+          <div className='col-12'>
             <h5>Latest Current Semester Exam Records</h5> <hr />
             {isLoadingMarkSheet ? (
               <div className='text-center'>
@@ -108,7 +118,9 @@ const Student = () => {
                             data &&
                             data.map((exam) => (
                               <tr key={exam._id}>
-                                <td>{exam.createdAt.slice(0, 10)}</td>
+                                <td>
+                                  {moment(exam.createdAt).format('MMM Do YY')}
+                                </td>
                                 <td>{exam.exam}</td>
                                 <td>{exam.subject && exam.subject.name}</td>
                                 <td>{exam.theoryMarks}</td>
@@ -122,14 +134,32 @@ const Student = () => {
                 </div>
               </>
             )}
+            <hr />
           </div>
 
-          <div className='col-12'>Exam Clearance Card</div>
+          <div className='col-12'>
+            <h5>Student Exam Clearance Card</h5> <hr />
+            {isLoadingClearance ? (
+              <div className='text-center'>
+                <Loader
+                  type='ThreeDots'
+                  color='#00BFFF'
+                  height={100}
+                  width={100}
+                  timeout={3000} //3 secs
+                />
+              </div>
+            ) : isErrorClearance ? (
+              <Message variant='danger'>{errorClearance}</Message>
+            ) : (
+              <>Hi</>
+            )}
+          </div>
           <div className='col-12'>Attendance Status Average </div>
         </div>
       </div>
 
-      <div className='col-md-4 col-6  border border-primary border-bottom-0 border-top-0 border-end-0'>
+      <div className='col-md-4 col-12  border border-primary border-bottom-0 border-top-0 border-end-0'>
         <h5>Latest Tuition Fee Transactions</h5> <hr />
         {isLoadingTuition ? (
           <div className='text-center'>
@@ -241,7 +271,7 @@ const Student = () => {
         )}
       </div>
 
-      <div className='col-md-3 col-6  border border-primary border-bottom-0 border-top-0 border-end-0'>
+      <div className='col-md-3 col-12  border border-primary border-bottom-0 border-top-0 border-end-0'>
         <h5>Latest Notices</h5> <hr />
         {isLoadingNotice ? (
           <div className='text-center'>

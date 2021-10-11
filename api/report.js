@@ -13,3 +13,6 @@ export const getStudentTuitionsReport = async () =>
 
 export const getStudentMarkSheetReport = async () =>
   await dynamicAPI('get', `${url}/student-marksheet`, {})
+
+export const getStudentClearanceReport = async () =>
+  await dynamicAPI('get', `${url}/student-clearance`, {})
