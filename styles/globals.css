@@ -91,3 +91,8 @@ main {
 .text-primary {
   color: var(--primary-color) !important;
 }
+
+.dashboard_student_exam {
+  overflow: auto;
+  height: 30vh;
+}

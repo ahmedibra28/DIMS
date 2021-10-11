@@ -18,7 +18,7 @@ import {
   inputText,
   staticInputSelect,
 } from '../../utils/dynamicForm'
-import { getTuitionsReport } from '../../api/tuition-report'
+import { getTuitionsReport } from '../../api/report'
 import { FaCheckCircle, FaTimesCircle, FaPrint } from 'react-icons/fa'
 
 const Tuition = () => {
@@ -102,7 +102,7 @@ const Tuition = () => {
   const componentRef = useRef()
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: 'Report',
+    documentTitle: 'Invoice',
   })
 
   return (

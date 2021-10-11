@@ -18,7 +18,7 @@ import {
   inputText,
   staticInputSelect,
 } from '../../utils/dynamicForm'
-import { getAttendancesReport } from '../../api/attendance-report'
+import { getAttendancesReport } from '../../api/report'
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 
 const Attendance = () => {

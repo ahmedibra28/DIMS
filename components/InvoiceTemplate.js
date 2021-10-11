@@ -41,7 +41,7 @@ const InvoiceTemplate = ({ stdPaymentInfo }) => {
               <div className='col text-end'>
                 DATE:{' '}
                 {student.isPaid ? (
-                  moment(student.paymentDate).format('llll')
+                  moment(student.paymentDate).format('MMM Do YY')
                 ) : (
                   <FaTimesCircle className='text-danger mb-1' />
                 )}
