@@ -1,5 +1,3 @@
-import logo from '../../images/logo.png'
-import Image from 'next/image'
 import { FaDollarSign, FaPrint } from 'react-icons/fa'
 import Message from '../Message'
 import Loader from 'react-loader-spinner'
@@ -8,16 +6,19 @@ import {
   getStudentTuitionsReport,
   getStudentMarkSheetReport,
   getStudentClearanceReport,
+  getStudentAttendanceReport,
 } from '../../api/report'
 
 import { useQuery } from 'react-query'
 import moment from 'moment'
 import { useRef, useState } from 'react'
 import InvoiceTemplate from '../InvoiceTemplate'
+import ClearanceCard from '../ClearanceCard'
 import { useReactToPrint } from 'react-to-print'
 
 const Student = () => {
   const [stdPaymentInfo, setStdPaymentInfo] = useState(null)
+  const [clearanceCardData, setClearanceCardData] = useState(null)
   const {
     data: noticeData,
     isLoading: isLoadingNotice,
@@ -55,6 +56,15 @@ const Student = () => {
   })
   const clearanceData = clearancesData && clearancesData.clearance
   const studentData = clearancesData && clearancesData.student
+
+  const {
+    data: attendanceData,
+    isLoading: isLoadingAttendance,
+    isError: isErrorAttendance,
+    error: errorAttendance,
+  } = useQuery(['student attendance'], () => getStudentAttendanceReport(), {
+    retry: 0,
+  })
 
   const payHandler = (data) => {
     console.log(data)
@@ -138,8 +148,7 @@ const Student = () => {
             )}
             <hr />
           </div>
-
-          <div className='col-12'>
+          <div className='col-12 mt-3'>
             <h5>Student Exam Clearance Card</h5> <hr />
             {isLoadingClearance ? (
               <div className='text-center'>
@@ -154,72 +163,136 @@ const Student = () => {
             ) : isErrorClearance ? (
               <Message variant='danger'>{errorClearance}</Message>
             ) : (
-              clearanceData &&
-              clearanceData.map((clearance) =>
-                clearance.map((c) => (
-                  <div key={c._id}>
-                    <div className='row' ref={componentRefClearance}>
-                      <div className='col-md-2'>
-                        <Image
-                          width='131'
-                          height='131'
-                          priority
-                          src={logo}
-                          alt='logo'
-                          className='img-fluid'
-                        />
-                      </div>
-                      <div className='col-md-8'>
-                        <h5 className='text-center school-title text-primary'>
-                          Sayid Mohamed Technical Education College
+              <>
+                <div className='table-responsive'>
+                  <table className='table table-striped table-hover table-sm'>
+                    <thead>
+                      <tr>
+                        <th>COURSE</th>
+                        <th>EXAM</th>
+                        <th>ACADEMIC </th>
+                        <th>PRINT </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {clearanceData &&
+                        clearanceData.map((data) =>
+                          data.map((clearance) => (
+                            <tr key={clearance._id}>
+                              <td>{clearance.exam}</td>
+                              <td>{clearance.course.name}</td>
+                              <td>{clearance.academic}</td>
+                              <td>
+                                <button
+                                  className='btn btn-success btn-sm'
+                                  onClick={() => {
+                                    setClearanceCardData(clearance)
+                                  }}
+                                  data-bs-toggle='modal'
+                                  data-bs-target='#clearanceCardPrint'
+                                >
+                                  <FaPrint className='mb-1' />
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  className='modal fade'
+                  id='clearanceCardPrint'
+                  data-bs-backdrop='static'
+                  data-bs-keyboard='false'
+                  tabIndex='-1'
+                  aria-labelledby='clearanceCardPrint'
+                  aria-hidden='true'
+                >
+                  <div className='modal-dialog modal-lg'>
+                    <div className='modal-content'>
+                      <div className='modal-header'>
+                        <h5 className='modal-title' id='clearanceCardPrint'>
+                          Clearance Card
                         </h5>
-                        <h6 className='text-center school-title-2 text-primary'>
-                          SaMTEC
-                        </h6>
-                        <h6 className='text-center school-title-2 text-primary'>
-                          {c.course.name}
-                        </h6>
+                        <button
+                          type='button'
+                          className='btn-close'
+                          data-bs-dismiss='modal'
+                          aria-label='Close'
+                        ></button>
                       </div>
-                      <div className='col-md-2'>
-                        <Image
-                          width='131'
-                          height='131'
-                          priority
-                          src={studentData && studentData.picture.picturePath}
-                          alt={studentData && studentData.picture.pictureName}
-                          className='img-fluid'
+                      <div ref={componentRefClearance}>
+                        <ClearanceCard
+                          clearance={clearanceCardData}
+                          studentData={studentData}
                         />
                       </div>
-                      <hr />
-                      <div className='col-12'>
-                        <div className='rounded-lg'>
-                          <div className='d-flex justify-content-between'>
-                            <h6>{studentData.fullName}</h6>{' '}
-                            <h6>ROLL NO.: {studentData.rollNo}</h6>
-                          </div>
-                          <div className='d-flex justify-content-between'>
-                            <h6>{c.exam}</h6> <h6>ACADEMIC: {c.academic}</h6>
-                          </div>
-                          <div className='d-flex justify-content-between'>
-                            <h6>SEMESTER{c.semester}</h6>{' '}
-                            <h6>SHIFT: {c.shift}</h6>
-                          </div>
-                        </div>
+                      <div className='modal-footer'>
+                        <button
+                          type='button'
+                          className='btn btn-secondary'
+                          data-bs-dismiss='modal'
+                        >
+                          Close
+                        </button>
+
+                        <button
+                          onClick={handlePrintClearance}
+                          type='submit'
+                          className='btn btn-success '
+                        >
+                          <FaPrint className='mb-1' />
+                          Print
+                        </button>
                       </div>
                     </div>
-                    <button
-                      onClick={handlePrintClearance}
-                      className='btn btn-primary btn sm form-control'
-                    >
-                      <FaPrint className='mb1' />{' '}
-                    </button>
-                    <hr />
                   </div>
-                ))
-              )
+                </div>
+              </>
             )}
           </div>
-          <div className='col-12'>Attendance Status Average </div>
+          <div className='col-12 mt-3'>
+            <h5>Attendance Status Average</h5> <hr />
+            {isLoadingAttendance ? (
+              <div className='text-center'>
+                <Loader
+                  type='ThreeDots'
+                  color='#00BFFF'
+                  height={100}
+                  width={100}
+                  timeout={3000} //3 secs
+                />
+              </div>
+            ) : isErrorAttendance ? (
+              <Message variant='danger'>{errorAttendance}</Message>
+            ) : (
+              <>
+                <div className='table-responsive '>
+                  <table className='table table-striped table-hover table-sm'>
+                    <thead>
+                      <tr>
+                        <th>DATE</th>
+                        <th>ATTENDED</th>
+                        <th>ABSENT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{moment(new Date()).format('MMMM YYYY')}</td>
+                        <td>
+                          {attendanceData && attendanceData.attend.length}
+                        </td>
+                        <td>
+                          {attendanceData && attendanceData.absent.length}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 

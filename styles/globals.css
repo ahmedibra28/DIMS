@@ -105,3 +105,11 @@ main {
 .school-title {
   font-family: 'UnifrakturCook', cursive;
 }
+
+@media print {
+  @page {
+    /* size: landscape; */
+    /* size: 80mm 50mm; */
+    size: 210mm 297mm;
+  }
+}

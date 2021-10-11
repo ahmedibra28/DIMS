@@ -16,3 +16,6 @@ export const getStudentMarkSheetReport = async () =>
 
 export const getStudentClearanceReport = async () =>
   await dynamicAPI('get', `${url}/student-clearance`, {})
+
+export const getStudentAttendanceReport = async () =>
+  await dynamicAPI('get', `${url}/student-attendance`, {})
