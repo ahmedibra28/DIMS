@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=UnifrakturCook:wght@700&display=swap');
+
 :root {
   --primary-color: #005aab;
   --secondary-color: #a8d2ff;
@@ -95,4 +97,11 @@ main {
 .dashboard_student_exam {
   overflow: auto;
   height: 30vh;
+}
+
+.school-title-2 {
+  font-family: 'Orbitron', cursive;
+}
+.school-title {
+  font-family: 'UnifrakturCook', cursive;
 }

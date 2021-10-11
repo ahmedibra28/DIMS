@@ -1,11 +1,6 @@
-import {
-  FaSchool,
-  FaUserGraduate,
-  FaChalkboardTeacher,
-  FaMoneyCheckAlt,
-  FaDollarSign,
-  FaPrint,
-} from 'react-icons/fa'
+import logo from '../../images/logo.png'
+import Image from 'next/image'
+import { FaDollarSign, FaPrint } from 'react-icons/fa'
 import Message from '../Message'
 import Loader from 'react-loader-spinner'
 import { getNotices } from '../../api/notice'
@@ -17,7 +12,6 @@ import {
 
 import { useQuery } from 'react-query'
 import moment from 'moment'
-import CountUp from 'react-countup'
 import { useRef, useState } from 'react'
 import InvoiceTemplate from '../InvoiceTemplate'
 import { useReactToPrint } from 'react-to-print'
@@ -52,13 +46,15 @@ const Student = () => {
   })
 
   const {
-    data: clearanceData,
+    data: clearancesData,
     isLoading: isLoadingClearance,
     isError: isErrorClearance,
     error: errorClearance,
   } = useQuery(['student clearance'], () => getStudentClearanceReport(), {
     retry: 0,
   })
+  const clearanceData = clearancesData && clearancesData.clearance
+  const studentData = clearancesData && clearancesData.student
 
   const payHandler = (data) => {
     console.log(data)
@@ -68,6 +64,12 @@ const Student = () => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: 'Invoice',
+  })
+
+  const componentRefClearance = useRef()
+  const handlePrintClearance = useReactToPrint({
+    content: () => componentRefClearance.current,
+    documentTitle: 'Clearance Card',
   })
 
   const rowAverage = (exam) => {
@@ -152,7 +154,69 @@ const Student = () => {
             ) : isErrorClearance ? (
               <Message variant='danger'>{errorClearance}</Message>
             ) : (
-              <>Hi</>
+              clearanceData &&
+              clearanceData.map((clearance) =>
+                clearance.map((c) => (
+                  <div key={c._id}>
+                    <div className='row' ref={componentRefClearance}>
+                      <div className='col-md-2'>
+                        <Image
+                          width='131'
+                          height='131'
+                          priority
+                          src={logo}
+                          alt='logo'
+                          className='img-fluid'
+                        />
+                      </div>
+                      <div className='col-md-8'>
+                        <h5 className='text-center school-title text-primary'>
+                          Sayid Mohamed Technical Education College
+                        </h5>
+                        <h6 className='text-center school-title-2 text-primary'>
+                          SaMTEC
+                        </h6>
+                        <h6 className='text-center school-title-2 text-primary'>
+                          {c.course.name}
+                        </h6>
+                      </div>
+                      <div className='col-md-2'>
+                        <Image
+                          width='131'
+                          height='131'
+                          priority
+                          src={studentData && studentData.picture.picturePath}
+                          alt={studentData && studentData.picture.pictureName}
+                          className='img-fluid'
+                        />
+                      </div>
+                      <hr />
+                      <div className='col-12'>
+                        <div className='rounded-lg'>
+                          <div className='d-flex justify-content-between'>
+                            <h6>{studentData.fullName}</h6>{' '}
+                            <h6>ROLL NO.: {studentData.rollNo}</h6>
+                          </div>
+                          <div className='d-flex justify-content-between'>
+                            <h6>{c.exam}</h6> <h6>ACADEMIC: {c.academic}</h6>
+                          </div>
+                          <div className='d-flex justify-content-between'>
+                            <h6>SEMESTER{c.semester}</h6>{' '}
+                            <h6>SHIFT: {c.shift}</h6>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handlePrintClearance}
+                      className='btn btn-primary btn sm form-control'
+                    >
+                      <FaPrint className='mb1' />{' '}
+                    </button>
+                    <hr />
+                  </div>
+                ))
+              )
             )}
           </div>
           <div className='col-12'>Attendance Status Average </div>
