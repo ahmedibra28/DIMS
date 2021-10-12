@@ -148,110 +148,120 @@ const Student = () => {
             )}
             <hr />
           </div>
-          <div className='col-12 mt-3'>
-            <h5>Student Exam Clearance Card</h5> <hr />
-            {isLoadingClearance ? (
-              <div className='text-center'>
-                <Loader
-                  type='ThreeDots'
-                  color='#00BFFF'
-                  height={100}
-                  width={100}
-                  timeout={3000} //3 secs
-                />
-              </div>
-            ) : isErrorClearance ? (
-              <Message variant='danger'>{errorClearance}</Message>
-            ) : (
-              <>
-                <div className='table-responsive'>
-                  <table className='table table-striped table-hover table-sm'>
-                    <thead>
-                      <tr>
-                        <th>COURSE</th>
-                        <th>EXAM</th>
-                        <th>ACADEMIC </th>
-                        <th>PRINT </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {clearanceData &&
-                        clearanceData.map((data) =>
-                          data.map((clearance) => (
-                            <tr key={clearance._id}>
-                              <td>{clearance.exam}</td>
-                              <td>{clearance.course.name}</td>
-                              <td>{clearance.academic}</td>
-                              <td>
-                                <button
-                                  className='btn btn-success btn-sm'
-                                  onClick={() => {
-                                    setClearanceCardData(clearance)
-                                  }}
-                                  data-bs-toggle='modal'
-                                  data-bs-target='#clearanceCardPrint'
-                                >
-                                  <FaPrint className='mb-1' />
-                                </button>
-                              </td>
-                            </tr>
-                          ))
-                        )}
-                    </tbody>
-                  </table>
-                </div>
-                <div
-                  className='modal fade'
-                  id='clearanceCardPrint'
-                  data-bs-backdrop='static'
-                  data-bs-keyboard='false'
-                  tabIndex='-1'
-                  aria-labelledby='clearanceCardPrint'
-                  aria-hidden='true'
-                >
-                  <div className='modal-dialog modal-lg'>
-                    <div className='modal-content'>
-                      <div className='modal-header'>
-                        <h5 className='modal-title' id='clearanceCardPrint'>
-                          Clearance Card
-                        </h5>
-                        <button
-                          type='button'
-                          className='btn-close'
-                          data-bs-dismiss='modal'
-                          aria-label='Close'
-                        ></button>
-                      </div>
-                      <div ref={componentRefClearance}>
-                        <ClearanceCard
-                          clearance={clearanceCardData}
-                          studentData={studentData}
+          {clearanceData &&
+            clearanceData.length > 0 &&
+            clearanceData.map(
+              (data) =>
+                data.length > 0 && (
+                  <div className='col-12 mt-3'>
+                    <h5>Student Exam Clearance Card</h5> <hr />
+                    {isLoadingClearance ? (
+                      <div className='text-center'>
+                        <Loader
+                          type='ThreeDots'
+                          color='#00BFFF'
+                          height={100}
+                          width={100}
+                          timeout={3000} //3 secs
                         />
                       </div>
-                      <div className='modal-footer'>
-                        <button
-                          type='button'
-                          className='btn btn-secondary'
-                          data-bs-dismiss='modal'
+                    ) : isErrorClearance ? (
+                      <Message variant='danger'>{errorClearance}</Message>
+                    ) : (
+                      <>
+                        <div className='table-responsive'>
+                          <table className='table table-striped table-hover table-sm'>
+                            <thead>
+                              <tr>
+                                <th>COURSE</th>
+                                <th>EXAM</th>
+                                <th>ACADEMIC </th>
+                                <th>PRINT </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {clearanceData &&
+                                clearanceData.map((data) =>
+                                  data.map((clearance) => (
+                                    <tr key={clearance._id}>
+                                      <td>{clearance.exam}</td>
+                                      <td>{clearance.course.name}</td>
+                                      <td>{clearance.academic}</td>
+                                      <td>
+                                        <button
+                                          className='btn btn-success btn-sm'
+                                          onClick={() => {
+                                            setClearanceCardData(clearance)
+                                          }}
+                                          data-bs-toggle='modal'
+                                          data-bs-target='#clearanceCardPrint'
+                                        >
+                                          <FaPrint className='mb-1' />
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  ))
+                                )}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div
+                          className='modal fade'
+                          id='clearanceCardPrint'
+                          data-bs-backdrop='static'
+                          data-bs-keyboard='false'
+                          tabIndex='-1'
+                          aria-labelledby='clearanceCardPrint'
+                          aria-hidden='true'
                         >
-                          Close
-                        </button>
+                          <div className='modal-dialog modal-lg'>
+                            <div className='modal-content'>
+                              <div className='modal-header'>
+                                <h5
+                                  className='modal-title'
+                                  id='clearanceCardPrint'
+                                >
+                                  Clearance Card
+                                </h5>
+                                <button
+                                  type='button'
+                                  className='btn-close'
+                                  data-bs-dismiss='modal'
+                                  aria-label='Close'
+                                ></button>
+                              </div>
+                              <div ref={componentRefClearance}>
+                                <ClearanceCard
+                                  clearance={clearanceCardData}
+                                  studentData={studentData}
+                                />
+                              </div>
+                              <div className='modal-footer'>
+                                <button
+                                  type='button'
+                                  className='btn btn-secondary'
+                                  data-bs-dismiss='modal'
+                                >
+                                  Close
+                                </button>
 
-                        <button
-                          onClick={handlePrintClearance}
-                          type='submit'
-                          className='btn btn-success '
-                        >
-                          <FaPrint className='mb-1' />
-                          Print
-                        </button>
-                      </div>
-                    </div>
+                                <button
+                                  onClick={handlePrintClearance}
+                                  type='submit'
+                                  className='btn btn-success '
+                                >
+                                  <FaPrint className='mb-1' />
+                                  Print
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
-                </div>
-              </>
+                )
             )}
-          </div>
           <div className='col-12 mt-3'>
             <h5>Attendance Status Average</h5> <hr />
             {isLoadingAttendance ? (

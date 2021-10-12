@@ -48,6 +48,30 @@ const ClearanceCard = ({ clearance, studentData }) => {
             </div>
           </div>
           <hr />
+          <div className='row'>
+            <div className='col-6 mx-auto'>
+              <div className='group'>
+                <span className='fw-bold'>Student Full Name: </span>{' '}
+                <span>{studentData && studentData.fullName}</span>
+              </div>
+
+              <div className='group'>
+                <span className='fw-bold'>Student Roll No: </span>{' '}
+                <span>{studentData && studentData.rollNo}</span>
+              </div>
+            </div>
+            <div className='col-6 mx-auto'>
+              <div className='group'>
+                <span className='fw-bold'>Examination Type: </span>{' '}
+                <span>{clearance && clearance.exam}</span>
+              </div>
+
+              <div className='group'>
+                <span className='fw-bold'>Academic Year: </span>{' '}
+                <span>{clearance && clearance.academic}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
