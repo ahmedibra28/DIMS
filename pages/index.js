@@ -4,6 +4,7 @@ import withAuth from '../HOC/withAuth'
 import Admin from '../components/dashboard/Admin'
 import { Access, UnlockAccess } from '../utils/UnlockAccess'
 import Student from '../components/dashboard/Student'
+import Instructor from '../components/dashboard/Instructor'
 
 function Home() {
   return (
@@ -14,6 +15,7 @@ function Home() {
       </Head>
       {UnlockAccess(Access.adminFinance) && <Admin />}
       {UnlockAccess(Access.student) && <Student />}
+      {UnlockAccess(Access.instructor) && <Instructor />}
       {!UnlockAccess(Access.adminFinance) &&
         'Sorry you are not authorized any view'}
       {/* <div className='display-1 text-center text-primary'>Dashboard</div> */}
