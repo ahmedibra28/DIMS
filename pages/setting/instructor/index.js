@@ -475,18 +475,20 @@ const Instructors = () => {
               data.data.map((instructor) => (
                 <div key={instructor._id} className='col-md-3 col-sm-6 col-12'>
                   <div className='card bg-transparent border-0 shadow-lg'>
-                    <Link href={`instructor/${instructor._id}`}>
-                      <a className='mx-auto link-primary'>
-                        <Image
-                          width='260'
-                          height='260'
-                          priority
-                          src={instructor.picture.picturePath}
-                          alt={instructor.picture.pictureName}
-                          className='card-img-top img-fluid'
-                        />
-                      </a>
-                    </Link>
+                    {instructor && instructor.picture && (
+                      <Link href={`instructor/${instructor._id}`}>
+                        <a className='mx-auto link-primary'>
+                          <Image
+                            width='260'
+                            height='260'
+                            priority
+                            src={instructor.picture.picturePath}
+                            alt={instructor.picture.pictureName}
+                            className='card-img-top img-fluid'
+                          />
+                        </a>
+                      </Link>
+                    )}
                     <div className='card-body'>
                       <Link href={`instructor/${instructor._id}`}>
                         <a className='link-primary'>

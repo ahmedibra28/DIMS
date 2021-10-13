@@ -459,22 +459,24 @@ const AssignSubject = () => {
                   <span className='fw-bold text-primary'>Instructor Info </span>
                 </div>
                 <hr />
-                <div className=''>
-                  <Image
-                    width='260'
-                    height='260'
-                    priority
-                    src={
-                      instructorData.picture &&
-                      instructorData.picture.picturePath
-                    }
-                    alt={
-                      instructorData.picture &&
-                      instructorData.picture.pictureName
-                    }
-                    className='img-fluid w-50 rounded-pill'
-                  />
-                </div>
+                {instructorData && instructorData.picture && (
+                  <div className=''>
+                    <Image
+                      width='260'
+                      height='260'
+                      priority
+                      src={
+                        instructorData.picture &&
+                        instructorData.picture.picturePath
+                      }
+                      alt={
+                        instructorData.picture &&
+                        instructorData.picture.pictureName
+                      }
+                      className='img-fluid w-50 rounded-pill'
+                    />
+                  </div>
+                )}
                 <div className='fs-3 mb-1 fw-light'>
                   {instructorData.fullName &&
                     instructorData.fullName.toUpperCase()}

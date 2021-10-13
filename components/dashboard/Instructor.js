@@ -3,6 +3,7 @@ import Loader from 'react-loader-spinner'
 import { getNotices } from '../../api/notice'
 import { useQuery } from 'react-query'
 import moment from 'moment'
+import Resource from './Resource'
 
 const Instructor = () => {
   const {
@@ -16,7 +17,9 @@ const Instructor = () => {
 
   return (
     <div className='row mt-1'>
-      <div className='col-md-9 col-12'></div>
+      <div className='col-md-9 col-12'>
+        <Resource />
+      </div>
 
       <div className='col-md-3 col-12  border border-primary border-bottom-0 border-top-0 border-end-0'>
         <h5>Latest Notices</h5> <hr />

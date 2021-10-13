@@ -521,18 +521,28 @@ const Students = () => {
               data.data.map((student) => (
                 <div key={student._id} className='col-md-3 col-sm-6 col-12'>
                   <div className='card bg-transparent border-0 shadow-lg'>
-                    <Link href={`student/${student._id}`}>
-                      <a className='mx-auto link-primary'>
-                        <Image
-                          width='260'
-                          height='260'
-                          priority
-                          src={student.picture.picturePath}
-                          alt={student.picture.pictureName}
-                          className='card-img-top img-fluid'
-                        />
-                      </a>
-                    </Link>
+                    {student && student.picture && (
+                      <Link href={`student/${student._id}`}>
+                        <a className='mx-auto link-primary'>
+                          <Image
+                            width='260'
+                            height='260'
+                            priority
+                            src={
+                              student &&
+                              student.picture &&
+                              student.picture.picturePath
+                            }
+                            alt={
+                              student &&
+                              student.picture &&
+                              student.picture.pictureName
+                            }
+                            className='card-img-top img-fluid'
+                          />
+                        </a>
+                      </Link>
+                    )}
                     <div className='card-body'>
                       <Link href={`student/${student._id}`}>
                         <a className='link-primary'>

@@ -27,6 +27,7 @@ const resourceScheme = mongoose.Schema(
       required: true,
     },
     semester: { type: Number, required: true },
+    description: { type: String, required: true },
     shift: { type: String, required: true },
     file: {
       fileName: { type: String },

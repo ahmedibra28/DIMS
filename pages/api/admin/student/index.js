@@ -1,7 +1,7 @@
 import nc from 'next-connect'
 import dbConnect from '../../../../utils/db'
-import Resource from '../../../../models/Resource'
-import { isAuth } from '../../../../utils/auth'
+import Student from '../../../../models/Student'
+import { isAdmin, isAuth } from '../../../../utils/auth'
 import fileUpload from 'express-fileupload'
 import { upload } from '../../../../utils/fileManager'
 export const config = { api: { bodyParser: false } }
@@ -12,42 +12,122 @@ handler.use(fileUpload())
 handler.use(isAuth)
 handler.get(async (req, res) => {
   await dbConnect()
+  if (req.user.student) {
+    let query = Student.find({ _id: req.user.student })
 
-  const obj = await Resource.find({ student: req.query.id })
-    .sort({ createdAt: -1 })
-    .populate('student', 'fullName')
-    .populate('courseType', 'name')
-    .populate('course', ['name', 'price', 'duration', 'isActive'])
+    const page = parseInt(req.query.page) || 1
+    const pageSize = parseInt(req.query.limit) || 50
+    const skip = (page - 1) * pageSize
+    const total = await Student.countDocuments({ _id: req.user.student })
 
-  res.send(obj)
+    const pages = Math.ceil(total / pageSize)
+
+    query = query.skip(skip).limit(pageSize).sort({ createdAt: -1 })
+
+    const result = await query
+
+    res.status(200).json({
+      startIndex: skip + 1,
+      endIndex: skip + result.length,
+      count: result.length,
+      page,
+      pages,
+      total,
+      data: result,
+    })
+  } else {
+    let query = Student.find({})
+
+    const page = parseInt(req.query.page) || 1
+    const pageSize = parseInt(req.query.limit) || 50
+    const skip = (page - 1) * pageSize
+    const total = await Student.countDocuments()
+
+    const pages = Math.ceil(total / pageSize)
+
+    query = query.skip(skip).limit(pageSize).sort({ createdAt: -1 })
+
+    const result = await query
+
+    res.status(200).json({
+      startIndex: skip + 1,
+      endIndex: skip + result.length,
+      count: result.length,
+      page,
+      pages,
+      total,
+      data: result,
+    })
+  }
 })
 
+handler.use(isAdmin)
 handler.post(async (req, res) => {
   await dbConnect()
-  const { courseType, course, subject, instructor, semester, shift, isActive } =
-    req.body
+  const {
+    isActive,
+    placeOfBirth,
+    dateOfBirth,
+    nationality,
+    gender,
+    district,
+    mobileNumber,
+    levelOfEducation,
+    contactFullName,
+    contactMobileNumber,
+    contactEmail,
+    contactRelationship,
+    somali,
+    arabic,
+    english,
+    kiswahili,
+    comment,
+  } = req.body
 
-  const file = req.files && req.files.file
+  const languageSkills = {
+    somali,
+    arabic,
+    english,
+    kiswahili,
+  }
 
-  if (file) {
-    const document = await upload({
-      fileName: file,
-      fileType: 'file',
-      pathName: 'recourse',
+  const fullName = req.body.fullName.toLowerCase()
+  const picture = req.files && req.files.picture
+
+  const rollNo = `STD${(await Student.countDocuments()) + 1}`
+
+  const exist = await Student.findOne({ fullName, mobileNumber })
+  if (exist) {
+    return res.status(400).send('Student already exist')
+  }
+  if (picture) {
+    const profile = await upload({
+      fileName: picture,
+      fileType: 'image',
+      pathName: 'student',
     })
 
-    if (document) {
-      const createObj = await Resource.create({
-        courseType,
-        course,
-        subject,
-        instructor,
-        semester,
-        shift,
+    if (profile) {
+      const createObj = await Student.create({
         isActive,
-        file: {
-          fileName: document.fullFileName,
-          filePath: document.filePath,
+        rollNo,
+        placeOfBirth,
+        dateOfBirth,
+        nationality,
+        gender,
+        district,
+        mobileNumber,
+        levelOfEducation,
+        contactFullName,
+        contactMobileNumber,
+        contactEmail,
+        contactRelationship,
+        fullName,
+        languageSkills,
+        comment,
+        picture: {
+          pictureName: profile.fullFileName,
+          picturePath: profile.filePath,
         },
       })
 
@@ -58,14 +138,23 @@ handler.post(async (req, res) => {
       }
     }
   } else {
-    const createObj = await Resource.create({
-      courseType,
-      course,
-      subject,
-      instructor,
-      semester,
-      shift,
+    const createObj = await Student.create({
       isActive,
+      rollNo,
+      placeOfBirth,
+      dateOfBirth,
+      nationality,
+      fullName,
+      gender,
+      district,
+      mobileNumber,
+      levelOfEducation,
+      contactFullName,
+      contactMobileNumber,
+      contactEmail,
+      contactRelationship,
+      languageSkills,
+      comment,
     })
 
     if (createObj) {

@@ -504,16 +504,22 @@ const AssignCourse = () => {
                   <span className='fw-bold text-primary'>Student Info </span>
                 </div>
                 <hr />
-                <div className=''>
-                  <Image
-                    width='260'
-                    height='260'
-                    priority
-                    src={studentData.picture && studentData.picture.picturePath}
-                    alt={studentData.picture && studentData.picture.pictureName}
-                    className='img-fluid w-50 rounded-pill'
-                  />
-                </div>
+                {studentData && studentData.picture && (
+                  <div className=''>
+                    <Image
+                      width='260'
+                      height='260'
+                      priority
+                      src={
+                        studentData.picture && studentData.picture.picturePath
+                      }
+                      alt={
+                        studentData.picture && studentData.picture.pictureName
+                      }
+                      className='img-fluid w-50 rounded-pill'
+                    />
+                  </div>
+                )}
                 <div className='fs-3 mb-1 fw-light'>
                   {studentData.fullName.toUpperCase()}
                 </div>
