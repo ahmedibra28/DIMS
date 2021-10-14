@@ -55,7 +55,7 @@ handler.post(async (req, res) => {
     const document = await upload({
       fileName: file,
       fileType: 'file',
-      pathName: 'recourse',
+      pathName: 'resource',
     })
 
     if (document) {

@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
 import Head from 'next/head'
 import Message from '../../components/Message'
 import Loader from 'react-loader-spinner'
 import {
   FaCheckCircle,
   FaEdit,
-  FaIdCard,
-  FaInfoCircle,
-  FaPhoneAlt,
   FaPlus,
   FaTimesCircle,
   FaTrash,
@@ -35,7 +30,6 @@ import {
   inputTextArea,
   staticInputSelect,
 } from '../../utils/dynamicForm'
-import moment from 'moment'
 
 const Resource = () => {
   const {
@@ -74,7 +68,6 @@ const Resource = () => {
     onSuccess: () => {
       reset()
       setEdit(false)
-      setImageDisplay('')
       setFile('')
       queryClient.invalidateQueries(['resources'])
     },
@@ -103,14 +96,13 @@ const Resource = () => {
       reset()
       setEdit(false)
       setFile('')
-      setImageDisplay('')
+
       queryClient.invalidateQueries(['resources'])
     },
   })
 
   const [id, setId] = useState(null)
   const [edit, setEdit] = useState(false)
-  const [imageDisplay, setImageDisplay] = useState('')
 
   const { data: courseTypeData } = useQuery(
     'courseTypes',
@@ -147,7 +139,7 @@ const Resource = () => {
   const formCleanHandler = () => {
     setEdit(false)
     setFile('')
-    setImageDisplay('')
+
     reset()
   }
 
@@ -157,9 +149,7 @@ const Resource = () => {
 
   useEffect(() => {
     const reader = new FileReader()
-    reader.addEventListener('load', () => {
-      setImageDisplay(reader.result)
-    })
+    reader.addEventListener('load', () => {})
     file && reader.readAsDataURL(file)
   }, [file])
 
@@ -192,8 +182,6 @@ const Resource = () => {
     setValue('subject', resource.subject._id)
     setValue('shift', resource.shift)
     setValue('description', resource.description)
-
-    setImageDisplay(resource.file && resource.file.filePath)
   }
 
   useEffect(() => {

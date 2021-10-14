@@ -29,7 +29,6 @@ const ClearanceConfirmation = () => {
     onSuccess: () => {},
   })
 
-  const tuitionData = data && data.tuition
   const studentData = data && data.student
 
   const submitHandler = (data) => {

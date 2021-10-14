@@ -34,7 +34,8 @@
     "react-icons": "^4.2.0",
     "react-loader-spinner": "^4.0.0",
     "react-query": "^3.19.6",
-    "react-to-print": "^2.13.0"
+    "react-to-print": "^2.13.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "7.32.0",
