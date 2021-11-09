@@ -6,8 +6,8 @@ export default function Layout({ children }) {
   return (
     <>
       <Head>
-        <title>NEXT.js Boilerplate</title>
-        <meta property='og:title' content='NEXT.js Boilerplate' key='title' />
+        <title>DIMS</title>
+        <meta property='og:title' content='DIMS' key='title' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Navigation />
