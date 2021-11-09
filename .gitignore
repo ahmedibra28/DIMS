@@ -35,6 +35,12 @@ yarn-error.log*
 .env
 
 # public
-/public/instructor/*
-/public/student/*
-/public/resource/*
+/public/*/*.jpg
+/public/*/*.png
+/public/*/*.gif
+/public/*/*.svg
+/public/*/*.pdf
+/public/*/*.docx
+/public/*/*.doc
+/public/*/*.ppt
+/public/*/*.txt
