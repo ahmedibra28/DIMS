@@ -93,7 +93,7 @@ const ClearanceConfirmation = () => {
                         priority
                         src={studentData && studentData.picture.picturePath}
                         alt={studentData && studentData.picture.pictureName}
-                        className='img-fluid rounded-start'
+                        className='img-fluid rounded-start px-2 pt-2 rounded-circle'
                       />
                     </div>
                     <div className='col-md-8 my-auto'>
