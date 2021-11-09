@@ -8,6 +8,7 @@ export default function Layout({ children }) {
       <Head>
         <title>NEXT.js Boilerplate</title>
         <meta property='og:title' content='NEXT.js Boilerplate' key='title' />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
       <Navigation />
       <Canvas />
