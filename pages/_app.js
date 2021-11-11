@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
-      {process.env.CUSTOM_NODE_ENV === 'development' && <ReactQueryDevtools />}
+      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
     </QueryClientProvider>
   )
 }
