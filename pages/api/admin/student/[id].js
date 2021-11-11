@@ -133,7 +133,7 @@ handler.delete(async (req, res) => {
   } else {
     if (obj.picture) {
       deleteFile({
-        pathName: obj.picture.picturePath,
+        pathName: obj.picture.pictureName,
       })
     }
     await AssignCourse.deleteMany({ student: _id })

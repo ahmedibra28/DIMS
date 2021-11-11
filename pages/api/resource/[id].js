@@ -98,7 +98,7 @@ handler.delete(async (req, res) => {
   } else {
     if (obj.file) {
       deleteFile({
-        pathName: obj.file.filePath,
+        pathName: obj.file.fileName,
       })
     }
     await obj.remove()

@@ -14,14 +14,21 @@ handler.use(isAuth)
 handler.get(async (req, res) => {
   await dbConnect()
 
-  const obj = await Resource.find({ student: req.query.id })
-    .sort({ createdAt: -1 })
-    .populate('student', 'fullName')
-    .populate('courseType', 'name')
-    .populate('subject', 'name')
-    .populate('course', ['name', 'price', 'duration', 'isActive'])
+  const instructor =
+    req.user.group === 'instructor' ? req.user.instructor : null
+  const admin = req.user.group === 'admin'
 
-  res.send(obj)
+  if (admin || instructor) {
+    const obj = await Resource.find()
+      .sort({ createdAt: -1 })
+      .populate('courseType', 'name')
+      .populate('subject', 'name')
+      .populate('course', ['name', 'price', 'duration', 'isActive'])
+
+    res.send(obj)
+  } else {
+    return res.status(400).send('You are not authorized on this page!')
+  }
 })
 
 handler.post(async (req, res) => {
