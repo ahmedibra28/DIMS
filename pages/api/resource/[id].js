@@ -50,7 +50,7 @@ handler.put(async (req, res) => {
       if (document) {
         if (obj && obj.file) {
           deleteFile({
-            pathName: obj.file.filePath,
+            pathName: obj.file.fileName,
           })
         }
       }

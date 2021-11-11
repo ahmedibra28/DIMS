@@ -56,7 +56,7 @@ handler.put(async (req, res) => {
       if (picture) {
         if (obj && obj.picture) {
           deleteFile({
-            pathName: obj.picture.picturePath,
+            pathName: obj.picture.pictureName,
           })
         }
 
