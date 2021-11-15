@@ -16,9 +16,10 @@ handler.get(async (req, res) => {
 
   const instructor =
     req.user.group === 'instructor' ? req.user.instructor : null
+  const student = req.user.group === 'student' ? req.user.student : null
   const admin = req.user.group === 'admin'
 
-  if (admin || instructor) {
+  if (admin || instructor || student) {
     const obj = await Resource.find()
       .sort({ createdAt: -1 })
       .populate('courseType', 'name')

@@ -144,7 +144,7 @@ const Exam = () => {
   const examData =
     courseId &&
     courseData &&
-    courseData.filter((p) => p._id === courseId && p.exam)
+    courseData.filter((c) => c._id === courseId && c.exam)
 
   const rowAverage = (exam) => {
     const totalEarnedMarks =
@@ -159,6 +159,31 @@ const Exam = () => {
     setEdit(false)
     reset()
   }
+
+  // const dup_and_sum = (arr) => {
+  //   let seen = {},
+  //     order = []
+  //   arr.forEach((o) => {
+  //     var subject = o['subject'].name
+  //     if (subject in seen) {
+  //       var theoryMarks = seen[subject].theoryMarks + o.theoryMarks
+  //       var practicalMarks = seen[subject].practicalMarks + o.practicalMarks
+  //       seen[subject] = o
+  //       seen[subject].theoryMarks = theoryMarks
+  //       seen[subject].practicalMarks = practicalMarks
+  //       order.push(order.splice(order.indexOf(subject), 1))
+  //     } else {
+  //       seen[subject] = o
+  //       order.push(subject)
+  //     }
+  //   })
+
+  //   return order.map((k) => {
+  //     return seen[k]
+  //   })
+  // }
+
+  // console.log(dup_and_sum(data))
 
   return (
     <div className='container'>
