@@ -433,7 +433,6 @@ const Exam = () => {
                       <th>TH. MARKS</th>
                       <th>P. MARKS</th>
                       <th>AVERAGE</th>
-                      <th>ACTION</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -444,30 +443,6 @@ const Exam = () => {
                           <td>{exam.theoryMarks}</td>
                           <td>{exam.practicalMarks}</td>
                           <td>{rowAverage(exam).toFixed(2)}%</td>
-                          <td className='btn-group'>
-                            <button
-                              className='btn btn-primary btn-sm'
-                              onClick={() => editHandler(exam)}
-                              data-bs-toggle='modal'
-                              data-bs-target='#editExamModal'
-                            >
-                              <FaEdit className='mb-1' /> Edit
-                            </button>
-
-                            <button
-                              className='btn btn-danger btn-sm ms-1'
-                              onClick={() => deleteHandler(exam._id)}
-                              disabled={isLoadingDelete}
-                            >
-                              {isLoadingDelete ? (
-                                <span className='spinner-border spinner-border-sm' />
-                              ) : (
-                                <span>
-                                  <FaTrash className='mb-1' /> Delete
-                                </span>
-                              )}
-                            </button>
-                          </td>
                         </tr>
                       ))}
                   </tbody>
