@@ -27,8 +27,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: pm2 stop next-dims
-      - run: pm2 delete next-dims
+      - run: pm2 stop dims
+      - run: pm2 delete dims
       - run: pm2 unstartup
       - run: npm i
       - run: npm run build --if-present
