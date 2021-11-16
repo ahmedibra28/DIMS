@@ -28,43 +28,43 @@ handler.get(async (req, res) => {
     .populate('subject', ['name', 'theoryMarks', 'practicalMarks'])
     .populate('instructor', ['fullName'])
 
-  // const examResults = await Exam.find({
-  //   course: assign.course,
-  //   courseType: assign.courseType,
-  //   shift: assign.shift,
-  //   semester: assign.semester,
-  //   student: assign.student,
-  //   isActive: true,
-  // })
-  //   .sort({ subject: -1 })
-  //   .populate('student', ['fullName', 'rollNo'])
-  //   .populate('courseType', ['name'])
-  //   .populate('course', ['name'])
-  //   .populate('subject', ['name', 'theoryMarks', 'practicalMarks'])
-  //   .populate('instructor', ['fullName'])
+  const examResults = await Exam.find({
+    course: assign.course,
+    courseType: assign.courseType,
+    shift: assign.shift,
+    semester: assign.semester,
+    student: assign.student,
+    isActive: true,
+  })
+    .sort({ subject: -1 })
+    .populate('student', ['fullName', 'rollNo'])
+    .populate('courseType', ['name'])
+    .populate('course', ['name'])
+    .populate('subject', ['name', 'theoryMarks', 'practicalMarks'])
+    .populate('instructor', ['fullName'])
 
-  // const results = () => {
-  //   let seen = {},
-  //     order = []
-  //   examResults.forEach((o) => {
-  //     var subject = o['subject'].name
-  //     if (subject in seen) {
-  //       var theoryMarks = seen[subject].theoryMarks + o.theoryMarks
-  //       var practicalMarks = seen[subject].practicalMarks + o.practicalMarks
-  //       seen[subject] = o
-  //       seen[subject].theoryMarks = theoryMarks
-  //       seen[subject].practicalMarks = practicalMarks
-  //       order.push(order.splice(order.indexOf(subject), 1))
-  //     } else {
-  //       seen[subject] = o
-  //       order.push(subject)
-  //     }
-  //   })
+  const results = () => {
+    let seen = {},
+      order = []
+    examResults.forEach((o) => {
+      var subject = o['subject'].name
+      if (subject in seen) {
+        var theoryMarks = seen[subject].theoryMarks + o.theoryMarks
+        var practicalMarks = seen[subject].practicalMarks + o.practicalMarks
+        seen[subject] = o
+        seen[subject].theoryMarks = theoryMarks
+        seen[subject].practicalMarks = practicalMarks
+        order.push(order.splice(order.indexOf(subject), 1))
+      } else {
+        seen[subject] = o
+        order.push(subject)
+      }
+    })
 
-  //   return order.map((k) => seen[k])
-  // }
+    return order.map((k) => seen[k])
+  }
 
-  res.status(200).json(exams)
+  res.status(200).json({ exams, summary: results() })
 })
 
 handler.put(async (req, res) => {

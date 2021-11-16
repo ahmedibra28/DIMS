@@ -25,6 +25,12 @@ export const upload = async (args) => {
   const files = /(\.pdf|\.docx|\.doc|\.txt)$/i
   const images = /(\.jpg|\.jpeg|\.png|\.gif|\.svg)$/i
 
+  if (fileName.size > 1000000) {
+    throw new Error(
+      `The file is too large and cannot be uploaded. Please reduce the size of the file. Maximum is 1MB`
+    )
+  }
+
   if (fileType === 'file' && !files.exec(fileName && fullFileName)) {
     throw new Error(`${extension} extension is not allowed`)
   } else if (fileType === 'image' && !images.exec(fileName && fullFileName)) {

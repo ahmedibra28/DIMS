@@ -47,14 +47,18 @@ const Exam = () => {
 
   const queryClient = useQueryClient()
 
-  const { data, isLoading, isError, error } = useQuery(
-    ['exams', assignId],
-    async () => await getExams({ assignId }),
-    {
-      enabled: !!assignId && !!courseId && !!semester,
-      retry: 0,
-    }
-  )
+  const {
+    data: exams,
+    isLoading,
+    isError,
+    error,
+  } = useQuery(['exams', assignId], async () => await getExams({ assignId }), {
+    enabled: !!assignId && !!courseId && !!semester,
+    retry: 0,
+  })
+
+  const data = exams?.exams
+  const summary = exams?.summary
 
   const {
     isLoading: isLoadingAdd,
@@ -400,6 +404,79 @@ const Exam = () => {
           )}
         </div>
       )}
+
+      <div>
+        <h4 className='text-center mt-5'>Examination Summary</h4>
+        {isLoading ? (
+          <div className='text-center'>
+            <Loader
+              type='ThreeDots'
+              color='#00BFFF'
+              height={100}
+              width={100}
+              timeout={3000} //3 secs
+            />
+          </div>
+        ) : isError ? (
+          <Message variant='danger'>{error}</Message>
+        ) : (
+          <div>
+            {summary && (
+              <div className='table-responsive '>
+                <table className='table table-striped table-hover table-sm caption-top '>
+                  <caption>
+                    {summary && summary.length} records were found
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>SUBJECT</th>
+                      <th>TH. MARKS</th>
+                      <th>P. MARKS</th>
+                      <th>AVERAGE</th>
+                      <th>ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {summary &&
+                      summary.map((exam) => (
+                        <tr key={exam._id}>
+                          <td>{exam.subject && exam.subject.name}</td>
+                          <td>{exam.theoryMarks}</td>
+                          <td>{exam.practicalMarks}</td>
+                          <td>{rowAverage(exam).toFixed(2)}%</td>
+                          <td className='btn-group'>
+                            <button
+                              className='btn btn-primary btn-sm'
+                              onClick={() => editHandler(exam)}
+                              data-bs-toggle='modal'
+                              data-bs-target='#editExamModal'
+                            >
+                              <FaEdit className='mb-1' /> Edit
+                            </button>
+
+                            <button
+                              className='btn btn-danger btn-sm ms-1'
+                              onClick={() => deleteHandler(exam._id)}
+                              disabled={isLoadingDelete}
+                            >
+                              {isLoadingDelete ? (
+                                <span className='spinner-border spinner-border-sm' />
+                              ) : (
+                                <span>
+                                  <FaTrash className='mb-1' /> Delete
+                                </span>
+                              )}
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

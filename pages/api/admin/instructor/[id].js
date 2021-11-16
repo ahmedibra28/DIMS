@@ -54,17 +54,19 @@ handler.put(async (req, res) => {
     })
     if (exist.length === 0) {
       if (picture) {
-        if (obj && obj.picture) {
-          deleteFile({
-            pathName: obj.picture.pictureName,
-          })
-        }
-
         const profile = await upload({
           fileName: picture,
           fileType: 'image',
           pathName: 'instructor',
         })
+        if (profile) {
+          if (obj && obj.picture) {
+            deleteFile({
+              pathName: obj.picture.pictureName,
+            })
+          }
+        }
+
         obj.isActive = isActive
         obj.placeOfBirth = placeOfBirth
         obj.dateOfBirth = dateOfBirth

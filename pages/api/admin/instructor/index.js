@@ -129,33 +129,34 @@ handler.post(async (req, res) => {
         return res.status(400).send('Invalid data')
       }
     }
-  } else {
-    const createObj = await Instructor.create({
-      isActive,
-      placeOfBirth,
-      dateOfBirth,
-      nationality,
-      gender,
-      district,
-      mobileNumber,
-      qualification,
-      contactFullName,
-      contactMobileNumber,
-      instructorIdNo,
-      contactEmail,
-      contactRelationship,
-      experience,
-      comment,
-      fullName,
-      email,
-    })
-
-    if (createObj) {
-      res.status(201).json({ status: 'success' })
-    } else {
-      return res.status(400).send('Invalid data')
-    }
   }
+  // else {
+  //   const createObj = await Instructor.create({
+  //     isActive,
+  //     placeOfBirth,
+  //     dateOfBirth,
+  //     nationality,
+  //     gender,
+  //     district,
+  //     mobileNumber,
+  //     qualification,
+  //     contactFullName,
+  //     contactMobileNumber,
+  //     instructorIdNo,
+  //     contactEmail,
+  //     contactRelationship,
+  //     experience,
+  //     comment,
+  //     fullName,
+  //     email,
+  //   })
+
+  //   if (createObj) {
+  //     res.status(201).json({ status: 'success' })
+  //   } else {
+  //     return res.status(400).send('Invalid data')
+  //   }
+  // }
 })
 
 export default handler
