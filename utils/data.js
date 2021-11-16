@@ -82,7 +82,13 @@ export const routes = () => {
       isActive: true,
       menu: 'Report',
       path: '/report/attendance-report',
-      name: 'Attendance',
+      name: 'Attendance Report',
+    },
+     {
+      isActive: true,
+      menu: 'Report',
+      path: '/report/marksheet-report',
+      name: 'Marksheet Report',
     },
     {
       isActive: true,
@@ -100,7 +106,7 @@ export const routes = () => {
       isActive: true,
       menu: 'Report',
       path: '/report/tuition-report',
-      name: 'Tuition Fee',
+      name: 'Tuition Fee Report',
     },
     {
       isActive: true,

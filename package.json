@@ -7,9 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next export",
-    "express-start": "node server.js",
-    "express-dev": "nodemon server.js"
+    "export": "next build && next export"
   },
   "dependencies": {
     "@popperjs/core": "^2.10.2",
