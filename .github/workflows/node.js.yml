@@ -24,7 +24,6 @@ jobs:
       - run: npm i
       - run: echo "This is my ENV Secrets ${{env.MONGO_URI}}"
       - run: echo "This is my ENV Secrets ${{secrets.MONGO_URI}}"
-      - run: echo "This is my ENV Secrets ${{PROD}}"
       # - run: |
       #     ${{PROD}}
       #     ${{PROD.MONGO_URI}}
