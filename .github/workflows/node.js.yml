@@ -21,7 +21,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - run: echo pwd
+      - run: echo $pwd
+      - run: ./custom-pm2.sh
       - run: pm2 delete all
       - run: pm2 unstartup
       - run: npm i
