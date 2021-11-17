@@ -24,7 +24,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
         env:
-        NODE_ENV: ${{ env.NODE_ENV }}
         MONGO_URI: ${{ env.MONGO_URI }}
         JWT_SECRET: ${{ env.JWT_SECRET }}
       - run: npm i
