@@ -7,6 +7,10 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    env:
+      MONGO_URI: ${{env.MONGO_URI}}
+      NODE_ENV: ${{env.NODE_ENV}}
+      JWT_SECRET: ${{env.JWT_SECRET}}
 
     strategy:
       matrix:
@@ -21,12 +25,9 @@ jobs:
           cache: 'npm'
 
       - run: npm i
-        env:
-          MONGO_URI: ${{env.MONGO_URI}}
-          NODE_ENV: ${{env.NODE_ENV}}
-          JWT_SECRET: ${{env.JWT_SECRET}}
+
       - run: echo "This is my ENV Secrets ${{env.MONGO_URI}}"
-      - run: echo "This is my ENV Secrets ${{secrets.MONGO_URI}}"
+      - run: echo "This is my ENV Secrets ${{env.JWT_SECRET}}"
       - run: npm run build --if-present
       - run: npm start
       # - run: |
