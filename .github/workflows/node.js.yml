@@ -24,9 +24,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - run: npm i
       - run: |
-          echo "This is my ENV Secrets $MONGO_URI"
+          echo "${MONGO_URI}"
+      - run: npm i
       - run: npm run build --if-present
       - run: npm start
       # - run: |
