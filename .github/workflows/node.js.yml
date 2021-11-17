@@ -41,6 +41,6 @@ jobs:
       - run: npm i
       - run: npm run build --if-present
       - run: |
-          pm2 restart --name dims npm -- start
+          pm2 restart dims
           pm2 startup
           pm2 save
