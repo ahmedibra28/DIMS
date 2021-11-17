@@ -28,5 +28,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm i
+      - run: echo "::add-mask::${{ secrets.MONGO_URI }}"
+      - run: echo "::add-mask::${{ env.JWT_SECRET }}"
       - run: npm run build --if-present
       - run: npm start
