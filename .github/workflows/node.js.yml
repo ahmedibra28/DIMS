@@ -5,12 +5,9 @@ on:
     branches: [main]
 
 jobs:
-  PROD:
-    runs-on: self-hosted
-    environment: PROD
-
   build:
     runs-on: self-hosted
+    environment: PROD
 
     strategy:
       matrix:
