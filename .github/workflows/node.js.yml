@@ -21,12 +21,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - run: echo "${{pwd}}"
+      - run: echo 'pwd'
       - run: pm2 delete all
       - run: pm2 unstartup
       - run: npm i
       - run: npm run build --if-present
-      - run: echo "${{pwd}}"
+      - run: echo 'pwd'
       - run: pm2 start --name dims npm -- start
       - run: pm2 startup
       - run: pm2 save
