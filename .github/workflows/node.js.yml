@@ -12,6 +12,20 @@ jobs:
       NODE_ENV: ${{ secrets.NODE_ENV }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
+      MERCHANT_U_ID: ${{ secrets.MERCHANT_U_ID }}
+      API_USER_ID: ${{ secrets.API_USER_ID }}
+      API_KEY: ${{ secrets.API_KEY }}
+
+      SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+      SMTP_USER: ${{ secrets.SMTP_USER }}
+      SMTP_PORT: ${{ secrets.SMTP_PORT }}
+      SMTP_KEY: ${{ secrets.SMTP_KEY }}
+
+      S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+      APPLICATION_KEY: ${{ secrets.APPLICATION_KEY }}
+      APPLICATION_KEY_ID: ${{ secrets.APPLICATION_KEY_ID }}
+      APPLICATION_KEY_NAME: ${{ secrets.APPLICATION_KEY_NAME }}
+
     strategy:
       matrix:
         node-version: [16.x]
@@ -24,8 +38,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - run: |
-          echo "${MONGO_URI}"
       - run: npm i
       - run: npm run build --if-present
       - run: npm start
