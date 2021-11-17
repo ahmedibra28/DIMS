@@ -23,9 +23,11 @@ jobs:
 
       - run: npm i
       - run: |
-          printenv
+          ${{PROD}}
+          ${{MONGO_URI}}
       - run: npm run build --if-present
-      - run: |
-          pm2 start --name dims npm -- start
-          pm2 startup
-          pm2 save
+      - run: npm start
+      # - run: |
+      #     pm2 start --name dims npm -- start
+      #     pm2 startup
+      #     pm2 save
