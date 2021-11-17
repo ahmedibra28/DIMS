@@ -22,9 +22,9 @@ jobs:
 
       - run: npm i
         env:
-          MONGO_URI: ${{secrets.MONGO_URI}}
-          NODE_ENV: ${{secrets.NODE_ENV}}
-          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          MONGO_URI: ${{env.MONGO_URI}}
+          NODE_ENV: ${{env.NODE_ENV}}
+          JWT_SECRET: ${{env.JWT_SECRET}}
       - run: echo "This is my ENV Secrets ${{env.MONGO_URI}}"
       - run: echo "This is my ENV Secrets ${{secrets.MONGO_URI}}"
       - run: npm run build --if-present
