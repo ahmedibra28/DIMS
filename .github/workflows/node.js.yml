@@ -22,9 +22,11 @@ jobs:
           cache: 'npm'
 
       - run: npm i
-      - run: |
-          ${{PROD}}
-          ${{MONGO_URI}}
+      - run: echo "This is my ENV Secrets ${{PROD.MONGO_URI}}"
+      - run: echo "This is my ENV Secrets ${{PROD}}"
+      # - run: |
+      #     ${{PROD}}
+      #     ${{PROD.MONGO_URI}}
       - run: npm run build --if-present
       - run: npm start
       # - run: |
