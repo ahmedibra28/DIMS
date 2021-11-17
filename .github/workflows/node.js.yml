@@ -11,9 +11,9 @@ jobs:
   build:
     runs-on: self-hosted
     env:
-      NODE_ENV: production
-      MONGO_URI: mongodb://127.0.0.1:27017/DIMS
-      JWT_SECRET: mom&dad
+      NODE_ENV: ${{ env.NODE_ENV }}
+      MONGO_URI: ${{ env.MONGO_URI }}
+      JWT_SECRET: ${{ env.JWT_SECRET }}
 
     strategy:
       matrix:
@@ -28,7 +28,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm i
-      - run: echo "::add-mask::${{ secrets.MONGO_URI }}"
-      - run: echo "::add-mask::${{ env.JWT_SECRET }}"
       - run: npm run build --if-present
       - run: npm start
