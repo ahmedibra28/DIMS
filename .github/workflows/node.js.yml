@@ -22,10 +22,8 @@ jobs:
           cache: 'npm'
 
       - run: |
-          echo $pwd
-          ls
           pwd
-      - run: sudo ./custom-pm2.sh
+          pm2 status
       - run: pm2 delete all
       - run: pm2 unstartup
       - run: npm i
