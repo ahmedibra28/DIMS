@@ -137,33 +137,9 @@ handler.post(async (req, res) => {
         return res.status(400).send('Invalid data')
       }
     }
+  } else {
+    return res.status(400).send('Please upload a student photo')
   }
-  // else {
-  //   const createObj = await Student.create({
-  //     isActive,
-  //     rollNo,
-  //     placeOfBirth,
-  //     dateOfBirth,
-  //     nationality,
-  //     fullName,
-  //     gender,
-  //     district,
-  //     mobileNumber,
-  //     levelOfEducation,
-  //     contactFullName,
-  //     contactMobileNumber,
-  //     contactEmail,
-  //     contactRelationship,
-  //     languageSkills,
-  //     comment,
-  //   })
-
-  //   if (createObj) {
-  //     res.status(201).json({ status: 'success' })
-  //   } else {
-  //     return res.status(400).send('Invalid data')
-  //   }
-  // }
 })
 
 export default handler

@@ -89,21 +89,7 @@ handler.post(async (req, res) => {
       }
     }
   } else {
-    const createObj = await Resource.create({
-      courseType,
-      course,
-      subject,
-      instructor,
-      semester,
-      shift,
-      isActive,
-    })
-
-    if (createObj) {
-      res.status(201).json({ status: 'success' })
-    } else {
-      return res.status(400).send('Invalid data')
-    }
+    return res.status(400).send('Please upload a resource')
   }
 })
 
