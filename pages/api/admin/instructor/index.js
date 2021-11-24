@@ -4,6 +4,7 @@ import Instructor from '../../../../models/Instructor'
 import { isAdmin, isAuth } from '../../../../utils/auth'
 import fileUpload from 'express-fileupload'
 import { upload } from '../../../../utils/fileManager'
+import autoIncrement from '../../../../utils/autoIncrement'
 export const config = { api: { bodyParser: false } }
 
 const handler = nc()
@@ -85,7 +86,15 @@ handler.post(async (req, res) => {
   const email = req.body.email.toLowerCase()
   const picture = req.files && req.files.picture
 
-  const instructorIdNo = (await Instructor.countDocuments()) + 1
+  const lastRecord = await Instructor.findOne(
+    {},
+    { instructorIdNo: 1 },
+    { sort: { createdAt: -1 } }
+  )
+
+  const instructorIdNo = lastRecord
+    ? autoIncrement(lastRecord.instructorIdNo)
+    : autoIncrement('INS000000')
 
   const exist = await Instructor.findOne({ email })
   if (exist) {

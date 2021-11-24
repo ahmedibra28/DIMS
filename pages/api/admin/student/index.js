@@ -4,6 +4,7 @@ import Student from '../../../../models/Student'
 import { isAdmin, isAuth } from '../../../../utils/auth'
 import fileUpload from 'express-fileupload'
 import { upload } from '../../../../utils/fileManager'
+import autoIncrement from '../../../../utils/autoIncrement'
 export const config = { api: { bodyParser: false } }
 
 const handler = nc()
@@ -12,6 +13,7 @@ handler.use(fileUpload())
 handler.use(isAuth)
 handler.get(async (req, res) => {
   await dbConnect()
+
   if (req.user.student) {
     let query = Student.find({ _id: req.user.student })
 
@@ -94,7 +96,15 @@ handler.post(async (req, res) => {
   const fullName = req.body.fullName.toLowerCase()
   const picture = req.files && req.files.picture
 
-  const rollNo = `STD${(await Student.countDocuments()) + 1}`
+  const lastRecord = await Student.findOne(
+    {},
+    { rollNo: 1 },
+    { sort: { createdAt: -1 } }
+  )
+
+  const rollNo = lastRecord
+    ? autoIncrement(lastRecord.rollNo)
+    : autoIncrement('STD000000')
 
   const exist = await Student.findOne({ fullName, mobileNumber })
   if (exist) {
