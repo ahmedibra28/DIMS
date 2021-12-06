@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const instructorScheme = mongoose.Schema(
   {
-    instructorIdNo: { type: Number, required: true },
+    instructorIdNo: { type: String, required: true },
     fullName: { type: String, required: true },
     placeOfBirth: { type: String, required: true },
     dateOfBirth: { type: Date, required: true },
