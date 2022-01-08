@@ -29,6 +29,7 @@ import { useForm } from 'react-hook-form'
 import { getCourseTypes } from '../../../../api/courseType'
 import {
   dynamicInputSelect,
+  dynamicInputSelectNumber,
   inputCheckBox,
   staticInputSelect,
 } from '../../../../utils/dynamicForm'
@@ -165,6 +166,7 @@ const AssignCourse = () => {
       ? updateMutateAsync({
           _id: id,
           shift: data.shift,
+          semester: data.semester,
           course: data.course,
           courseType: data.courseType,
           isActive: data.isActive,
@@ -172,6 +174,7 @@ const AssignCourse = () => {
         })
       : addMutateAsync({
           shift: data.shift,
+          semester: data.semester,
           course: data.course,
           courseType: data.courseType,
           isActive: data.isActive,
@@ -183,6 +186,7 @@ const AssignCourse = () => {
     setId(assign._id)
     setEdit(true)
     setValue('shift', assign.shift)
+    setValue('semester', assign.semester)
     setValue('course', assign.course._id)
     setValue('courseType', assign.courseType._id)
     setValue('isActive', assign.isActive)
@@ -190,6 +194,11 @@ const AssignCourse = () => {
 
   const upgradeHandler = (data) => {
     upgradeMutateAsync(data)
+  }
+
+  const durationValue = () => {
+    const d = courseData && courseData.filter((c) => c._id === watch().course)
+    return d && d[0] && d[0].duration
   }
 
   return (
@@ -285,6 +294,18 @@ const AssignCourse = () => {
                           label: 'Course',
                         })}
                     </div>
+
+                    <div className='col-12'>
+                      {watch().course &&
+                        dynamicInputSelectNumber({
+                          register,
+                          errors,
+                          data: durationValue(),
+                          name: 'semester',
+                          label: 'Semester',
+                        })}
+                    </div>
+
                     <div className='col-12'>
                       {watch().course &&
                         staticInputSelect({

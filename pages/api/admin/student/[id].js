@@ -4,7 +4,7 @@ import { isAdmin, isAuth } from '../../../../utils/auth'
 import fileUpload from 'express-fileupload'
 import { upload, deleteFile } from '../../../../utils/fileManager'
 import Student from '../../../../models/Student'
-import AssignCourse from '../../../../models/AssignCourse'
+// import AssignCourse from '../../../../models/AssignCourse'
 export const config = { api: { bodyParser: false } }
 
 const handler = nc()
@@ -24,6 +24,7 @@ handler.put(async (req, res) => {
   await dbConnect()
   const {
     isActive,
+    isScholarship,
     placeOfBirth,
     dateOfBirth,
     nationality,
@@ -77,6 +78,7 @@ handler.put(async (req, res) => {
         }
 
         obj.isActive = isActive
+        obj.isScholarship = isScholarship
         obj.placeOfBirth = placeOfBirth
         obj.dateOfBirth = dateOfBirth
         obj.nationality = nationality
@@ -100,6 +102,7 @@ handler.put(async (req, res) => {
         res.json({ status: 'success' })
       } else {
         obj.isActive = isActive
+        obj.isScholarship = isScholarship
         obj.placeOfBirth = placeOfBirth
         obj.dateOfBirth = dateOfBirth
         obj.nationality = nationality

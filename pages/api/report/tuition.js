@@ -41,7 +41,6 @@ handler.post(async (req, res) => {
     .populate('student', ['rollNo', 'fullName'])
     .populate('courseType', 'name')
     .populate('course', 'name')
-    .populate('subject', 'name')
 
   if (tuition.length === 0) {
     return res

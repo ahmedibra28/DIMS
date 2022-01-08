@@ -28,6 +28,7 @@ const assignCourseScheme = mongoose.Schema(
       type: String,
       required: true,
     },
+    isScholarship: { type: Boolean, default: false },
     isActive: {
       type: Boolean,
       default: true,

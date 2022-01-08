@@ -68,6 +68,7 @@ handler.post(async (req, res) => {
   await dbConnect()
   const {
     isActive,
+    isScholarship,
     placeOfBirth,
     dateOfBirth,
     nationality,
@@ -120,6 +121,7 @@ handler.post(async (req, res) => {
     if (profile) {
       const createObj = await Student.create({
         isActive,
+        isScholarship,
         rollNo,
         placeOfBirth,
         dateOfBirth,

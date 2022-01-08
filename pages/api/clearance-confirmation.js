@@ -10,6 +10,7 @@ handler.use(isAuth)
 handler.post(async (req, res) => {
   await dbConnect()
   const { rollNo } = req.body
+  // check if student si isScholarship
 
   const student = await Student.findOne({ rollNo: rollNo.toUpperCase() })
   if (student) {

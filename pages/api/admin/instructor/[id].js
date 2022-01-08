@@ -4,7 +4,7 @@ import { isAdmin, isAuth } from '../../../../utils/auth'
 import fileUpload from 'express-fileupload'
 import { upload, deleteFile } from '../../../../utils/fileManager'
 import Instructor from '../../../../models/Instructor'
-import AssignSubject from '../../../../models/AssignSubject'
+// import AssignSubject from '../../../../models/AssignSubject'
 export const config = { api: { bodyParser: false } }
 
 const handler = nc()

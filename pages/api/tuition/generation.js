@@ -20,6 +20,7 @@ handler.post(async (req, res) => {
 
   const courseData = await AssignCourse.find({
     course,
+    isScholarship: false,
     courseType,
     semester,
     shift,
