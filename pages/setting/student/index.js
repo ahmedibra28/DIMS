@@ -51,6 +51,7 @@ const Students = () => {
   } = useForm({
     defaultValues: {
       isActive: true,
+      isScholarship: false,
     },
   })
 
@@ -155,6 +156,7 @@ const Students = () => {
     formData.append('english', data.english)
     formData.append('kiswahili', data.kiswahili)
     formData.append('comment', data.comment)
+    formData.append('isScholarship', data.isScholarship)
 
     edit
       ? updateMutateAsync({
@@ -185,6 +187,7 @@ const Students = () => {
     setValue('kiswahili', student.languageSkills.kiswahili)
     setValue('arabic', student.languageSkills.arabic)
     setValue('comment', student.comment)
+    setValue('isScholarship', student.isScholarship)
     setImageDisplay(student.picture && student.picture.picturePath)
   }
 
@@ -457,6 +460,14 @@ const Students = () => {
                         errors,
                         label: 'isActive',
                         name: 'isActive',
+                        isRequired: false,
+                      })}
+
+                      {inputCheckBox({
+                        register,
+                        errors,
+                        label: 'isScholarship',
+                        name: 'isScholarship',
                         isRequired: false,
                       })}
                     </div>

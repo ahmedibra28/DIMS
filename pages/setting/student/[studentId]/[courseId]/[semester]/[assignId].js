@@ -21,12 +21,12 @@ import {
   deleteExam,
 } from '../../../../../../api/exam'
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa'
-import SubPageAccess from '../../../../../../utils/SubPageAccess'
 import { confirmAlert } from 'react-confirm-alert'
 import { Confirm } from '../../../../../../components/Confirm'
+import withAuth from '../../../../../../HOC/withAuth'
+import dynamic from 'next/dynamic'
 
 const Exam = () => {
-  SubPageAccess()
   const router = useRouter()
 
   const { assignId, courseId, semester } = router.query
@@ -163,31 +163,6 @@ const Exam = () => {
     setEdit(false)
     reset()
   }
-
-  // const dup_and_sum = (arr) => {
-  //   let seen = {},
-  //     order = []
-  //   arr.forEach((o) => {
-  //     var subject = o['subject'].name
-  //     if (subject in seen) {
-  //       var theoryMarks = seen[subject].theoryMarks + o.theoryMarks
-  //       var practicalMarks = seen[subject].practicalMarks + o.practicalMarks
-  //       seen[subject] = o
-  //       seen[subject].theoryMarks = theoryMarks
-  //       seen[subject].practicalMarks = practicalMarks
-  //       order.push(order.splice(order.indexOf(subject), 1))
-  //     } else {
-  //       seen[subject] = o
-  //       order.push(subject)
-  //     }
-  //   })
-
-  //   return order.map((k) => {
-  //     return seen[k]
-  //   })
-  // }
-
-  // console.log(dup_and_sum(data))
 
   return (
     <div className='container'>
@@ -456,4 +431,6 @@ const Exam = () => {
   )
 }
 
-export default Exam
+export default dynamic(() => Promise.resolve(withAuth(Exam)), {
+  ssr: false,
+})

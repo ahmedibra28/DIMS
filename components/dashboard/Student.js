@@ -88,7 +88,6 @@ const Student = () => {
 
   const paymentHandler = (data) => {
     payMutateAsync(data)
-    console.log(data)
   }
 
   const componentRef = useRef()

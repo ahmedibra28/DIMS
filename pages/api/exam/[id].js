@@ -150,15 +150,18 @@ handler.put(async (req, res) => {
 
 handler.delete(async (req, res) => {
   await dbConnect()
+  return res
+    .status(401)
+    .send('Please contact your system administrator to do any delete operation')
 
-  const _id = req.query.id
-  const obj = await Exam.findById(_id)
-  if (!obj) {
-    return res.status(404).send('Exam record not found')
-  } else {
-    await obj.remove()
-    res.json({ status: 'success' })
-  }
+  // const _id = req.query.id
+  // const obj = await Exam.findById(_id)
+  // if (!obj) {
+  //   return res.status(404).send('Exam record not found')
+  // } else {
+  //   await obj.remove()
+  //   res.json({ status: 'success' })
+  // }
 })
 
 export default handler

@@ -121,23 +121,26 @@ handler.put(async (req, res) => {
 
 handler.delete(async (req, res) => {
   await dbConnect()
+  return res
+    .status(401)
+    .send('Please contact your system administrator to do any delete operation')
 
-  const _id = req.query.id
-  const obj = await Instructor.findById(_id)
-  if (!obj) {
-    return res.status(404).send('Instructor not found')
-  } else {
-    if (obj.picture) {
-      deleteFile({
-        pathName: obj.picture.pictureName,
-      })
-    }
+  // const _id = req.query.id
+  // const obj = await Instructor.findById(_id)
+  // if (!obj) {
+  //   return res.status(404).send('Instructor not found')
+  // } else {
+  //   if (obj.picture) {
+  //     deleteFile({
+  //       pathName: obj.picture.pictureName,
+  //     })
+  //   }
 
-    await AssignSubject.deleteMany({ instructor: _id })
-    await obj.remove()
+  //   await AssignSubject.deleteMany({ instructor: _id })
+  //   await obj.remove()
 
-    res.json({ status: 'success' })
-  }
+  //   res.json({ status: 'success' })
+  // }
 })
 
 export default handler

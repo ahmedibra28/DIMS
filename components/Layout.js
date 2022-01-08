@@ -1,6 +1,7 @@
 import Navigation from './Navigation'
 import Head from 'next/head'
-import Canvas from './Canvas'
+import Footer from './Footer'
+// import Canvas from './Canvas'
 
 export default function Layout({ children }) {
   return (
@@ -11,8 +12,9 @@ export default function Layout({ children }) {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Navigation />
-      <Canvas />
-      <div className='container'>{children}</div>
+      {/* <Canvas /> */}
+      <main className='container'>{children}</main>
+      <Footer />
     </>
   )
 }

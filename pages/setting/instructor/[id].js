@@ -35,8 +35,9 @@ import { getSubjects } from '../../../api/subject'
 import { useRouter } from 'next/router'
 import { getCourses } from '../../../api/course'
 import { getInstructor } from '../../../api/instructor'
-import SubPageAccess from '../../../utils/SubPageAccess'
 import moment from 'moment'
+import dynamic from 'next/dynamic'
+import withAuth from '../../../HOC/withAuth'
 
 const AssignSubject = () => {
   const router = useRouter()
@@ -55,8 +56,6 @@ const AssignSubject = () => {
       isActive: true,
     },
   })
-
-  SubPageAccess()
 
   const queryClient = useQueryClient()
 
@@ -536,4 +535,6 @@ const AssignSubject = () => {
   )
 }
 
-export default AssignSubject
+export default dynamic(() => Promise.resolve(withAuth(AssignSubject)), {
+  ssr: false,
+})

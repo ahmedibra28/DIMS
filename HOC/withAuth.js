@@ -6,7 +6,7 @@ const withAuth = async (WrappedComponent) => {
     if (typeof window !== 'undefined') {
       const router = useRouter()
 
-      const pathName = router.asPath
+      const pathName = router.pathname
       const accessToken =
         customLocalStorage() &&
         customLocalStorage().userInfo &&
@@ -24,7 +24,9 @@ const withAuth = async (WrappedComponent) => {
       }
 
       if (!accessToken) {
-        router.push(`/login?next=${pathName}`)
+        router.isReady &&
+          router.push(`/login?next=${router.isReady && router.asPath}`)
+
         return null
       }
 

@@ -219,7 +219,7 @@ export const inputCheckBox = (args) => {
             isRequired && { required: `${label} is required` }
           )}
         />
-        <label className='form-check-label' htmlFor={name}>
+        <label className='form-check-label mt-1' htmlFor={name}>
           {label}
         </label>
       </div>
@@ -251,7 +251,7 @@ export const inputMultipleCheckBox = (args) => {
                   id={`flexCheck${d._id}`}
                 />
                 <label
-                  className='form-check-label'
+                  className='form-check-label mt-1'
                   htmlFor={`flexCheck${d._id}`}
                 >
                   {d.name}
