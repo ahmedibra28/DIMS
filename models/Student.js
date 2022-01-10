@@ -26,7 +26,6 @@ const studentScheme = mongoose.Schema(
       kiswahili: { type: String, required: true },
     },
     comment: { type: String },
-    isScholarship: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }

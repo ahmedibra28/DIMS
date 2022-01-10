@@ -12,11 +12,9 @@ import {
   FaIdCard,
   FaInfoCircle,
   FaPhoneAlt,
-  FaPlus,
   FaTimesCircle,
   FaTrash,
 } from 'react-icons/fa'
-import Pagination from '../../../components/Pagination'
 import {
   getStudents,
   updateStudent,
@@ -39,9 +37,12 @@ import {
   staticInputSelect,
 } from '../../../utils/dynamicForm'
 import moment from 'moment'
+import FooterActionButtons from '../../../utils/footerActionButtons'
+import SearchHandler from '../../../utils/searchHandler'
 
 const Students = () => {
   const [page, setPage] = useState(1)
+  const [search, setSearch] = useState('')
   const {
     register,
     handleSubmit,
@@ -51,7 +52,6 @@ const Students = () => {
   } = useForm({
     defaultValues: {
       isActive: true,
-      isScholarship: false,
     },
   })
 
@@ -59,9 +59,9 @@ const Students = () => {
 
   const queryClient = useQueryClient()
 
-  const { data, isLoading, isError, error } = useQuery(
+  const { data, isLoading, isError, error, refetch } = useQuery(
     'students',
-    () => getStudents(page),
+    () => getStudents(page, search),
     {
       retry: 0,
     }
@@ -156,7 +156,6 @@ const Students = () => {
     formData.append('english', data.english)
     formData.append('kiswahili', data.kiswahili)
     formData.append('comment', data.comment)
-    formData.append('isScholarship', data.isScholarship)
 
     edit
       ? updateMutateAsync({
@@ -187,16 +186,19 @@ const Students = () => {
     setValue('kiswahili', student.languageSkills.kiswahili)
     setValue('arabic', student.languageSkills.arabic)
     setValue('comment', student.comment)
-    setValue('isScholarship', student.isScholarship)
     setImageDisplay(student.picture && student.picture.picturePath)
   }
 
   useEffect(() => {
-    const refetch = async () => {
-      await queryClient.prefetchQuery('students')
-    }
     refetch()
-  }, [page, queryClient])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page])
+
+  const searchHandler = (e) => {
+    e.preventDefault()
+    refetch()
+  }
 
   return (
     <div className='container'>
@@ -209,6 +211,13 @@ const Students = () => {
           Student has been deleted successfully.
         </Message>
       )}
+
+      {FooterActionButtons({
+        target: '#editStudentModal',
+        data: data && data.data,
+        fileName: 'students.csv',
+      })}
+
       {isErrorDelete && <Message variant='danger'>{errorDelete}</Message>}
       {isSuccessUpdate && (
         <Message variant='success'>
@@ -462,14 +471,6 @@ const Students = () => {
                         name: 'isActive',
                         isRequired: false,
                       })}
-
-                      {inputCheckBox({
-                        register,
-                        errors,
-                        label: 'isScholarship',
-                        name: 'isScholarship',
-                        isRequired: false,
-                      })}
                     </div>
                   </div>
 
@@ -501,17 +502,16 @@ const Students = () => {
         </div>
       </div>
 
-      <div className='d-flex justify-content-between align-items-center'>
-        <button
-          className='btn btn-primary '
-          data-bs-toggle='modal'
-          data-bs-target='#editStudentModal'
-        >
-          <FaPlus className='mb-1' />
-        </button>
-        <h3 className=''>Students</h3>
-        <Pagination data={data} setPage={setPage} />
-      </div>
+      {SearchHandler({
+        data: data,
+        setPage: setPage,
+        searchHandler: searchHandler,
+        setSearch,
+        setSearch,
+        search: search,
+        title: 'Students',
+        searchBy: 'Search by Student ID',
+      })}
 
       {isLoading ? (
         <div className='text-center'>

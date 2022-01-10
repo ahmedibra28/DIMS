@@ -39,7 +39,14 @@ export const inputTextArea = (args) => {
 }
 
 export const inputNumber = (args) => {
-  const { register, errors, name, label, isRequired = true } = args
+  const {
+    register,
+    errors,
+    name,
+    label,
+    isRequired = true,
+    disabled = false,
+  } = args
 
   return (
     <div className='mb-3'>
@@ -47,6 +54,7 @@ export const inputNumber = (args) => {
       <input
         {...register(name, isRequired && { required: `${label} is required` })}
         type='number'
+        disabled={disabled}
         step='0.01'
         placeholder={`Enter ${name}`}
         className='form-control'

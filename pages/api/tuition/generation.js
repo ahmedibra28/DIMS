@@ -34,7 +34,7 @@ handler.post(async (req, res) => {
       .send('No student in the semester or shift you selected')
 
   if (courseData.length > 0) {
-    const allStudents = courseData.map((std) => std.student)
+    const allStudents = courseData
     const price = await Course.findById(course)
 
     const startOfMonth = moment(paymentDate).clone().startOf('month').format()
@@ -52,15 +52,17 @@ handler.post(async (req, res) => {
       const paidStudents = fee.map((std) => std.student.toString())
 
       const unPaidStudents = allStudents.filter(
-        (s) => !paidStudents.includes(s.toString())
+        (s) => !paidStudents.includes(s.student.toString())
       )
 
       if (unPaidStudents.length > 0) {
         const createObj = unPaidStudents.map(async (std) => {
           await Tuition.create({
-            student: std,
+            student: std.student,
             isPaid: false,
-            amount: price.price,
+            amount: (Number(price.price) * (std.pctScholarship / 100)).toFixed(
+              2
+            ),
             paymentDate,
             paymentMethod,
             semester,
@@ -85,9 +87,9 @@ handler.post(async (req, res) => {
     if (fee.length === 0) {
       const createObj = allStudents.map(async (std) => {
         await Tuition.create({
-          student: std,
+          student: std.student,
           isPaid: false,
-          amount: price.price,
+          amount: (Number(price.price) * (std.pctScholarship / 100)).toFixed(2),
           paymentDate,
           paymentMethod,
           semester,

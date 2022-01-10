@@ -24,7 +24,6 @@ handler.put(async (req, res) => {
   await dbConnect()
   const {
     isActive,
-    isScholarship,
     placeOfBirth,
     dateOfBirth,
     nationality,
@@ -78,7 +77,6 @@ handler.put(async (req, res) => {
         }
 
         obj.isActive = isActive
-        obj.isScholarship = isScholarship
         obj.placeOfBirth = placeOfBirth
         obj.dateOfBirth = dateOfBirth
         obj.nationality = nationality
@@ -102,7 +100,6 @@ handler.put(async (req, res) => {
         res.json({ status: 'success' })
       } else {
         obj.isActive = isActive
-        obj.isScholarship = isScholarship
         obj.placeOfBirth = placeOfBirth
         obj.dateOfBirth = dateOfBirth
         obj.nationality = nationality

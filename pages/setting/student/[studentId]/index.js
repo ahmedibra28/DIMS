@@ -31,6 +31,7 @@ import {
   dynamicInputSelect,
   dynamicInputSelectNumber,
   inputCheckBox,
+  inputNumber,
   staticInputSelect,
 } from '../../../../utils/dynamicForm'
 import { useRouter } from 'next/router'
@@ -169,12 +170,14 @@ const AssignCourse = () => {
           semester: data.semester,
           course: data.course,
           courseType: data.courseType,
+          pctScholarship: data.pctScholarship,
           isActive: data.isActive,
           student: studentId,
         })
       : addMutateAsync({
           shift: data.shift,
           semester: data.semester,
+          pctScholarship: data.pctScholarship,
           course: data.course,
           courseType: data.courseType,
           isActive: data.isActive,
@@ -187,6 +190,7 @@ const AssignCourse = () => {
     setEdit(true)
     setValue('shift', assign.shift)
     setValue('semester', assign.semester)
+    setValue('pctScholarship', assign.pctScholarship)
     setValue('course', assign.course._id)
     setValue('courseType', assign.courseType._id)
     setValue('isActive', assign.isActive)
@@ -314,6 +318,16 @@ const AssignCourse = () => {
                           data: [{ name: 'Morning' }, { name: 'Afternoon' }],
                           name: 'shift',
                           label: 'Shift',
+                        })}
+                    </div>
+
+                    <div className='col-12'>
+                      {watch().course &&
+                        inputNumber({
+                          register,
+                          errors,
+                          name: 'pctScholarship',
+                          label: 'Scholarship %',
                         })}
                     </div>
                   </div>

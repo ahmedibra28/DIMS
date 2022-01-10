@@ -2,7 +2,6 @@ import nc from 'next-connect'
 import dbConnect from '../../../../../utils/db'
 import AssignCourse from '../../../../../models/AssignCourse'
 import { isAdmin, isAuth } from '../../../../../utils/auth'
-import Student from '../../../../../models/Student'
 
 const handler = nc()
 
@@ -11,7 +10,19 @@ handler.use(isAuth, isAdmin)
 handler.post(async (req, res) => {
   await dbConnect()
 
-  const { isActive, courseType, course, student, shift, semester } = req.body
+  const {
+    isActive,
+    courseType,
+    course,
+    student,
+    shift,
+    semester,
+    pctScholarship,
+  } = req.body
+
+  if (Number(pctScholarship) > 100 || Number(pctScholarship) < 0) {
+    return res.status(400).send('Please check the percentage scholarship range')
+  }
 
   const exist = await AssignCourse.findOne({
     student,
@@ -28,12 +39,9 @@ handler.post(async (req, res) => {
       .send('This student has already taking a course in this shift')
   }
 
-  const isScholarship = await Student.findById(student, {
-    isScholarship: 1,
-  })
   const createObj = await AssignCourse.create({
     isActive,
-    isScholarship: isScholarship.isScholarship ? true : false,
+    pctScholarship,
     courseType,
     course,
     student,

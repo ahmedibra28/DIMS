@@ -2,8 +2,8 @@ import dynamicAPI from './dynamicAPI'
 
 const url = '/api/admin/student'
 
-export const getStudents = async (page) =>
-  await dynamicAPI('get', `${url}?page=${page}`, {})
+export const getStudents = async (page, search) =>
+  await dynamicAPI('get', `${url}?page=${page}&search=${search}`, {})
 
 export const addStudent = async (obj) => await dynamicAPI('post', url, obj)
 

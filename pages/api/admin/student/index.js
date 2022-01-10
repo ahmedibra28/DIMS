@@ -11,56 +11,35 @@ const handler = nc()
 handler.use(fileUpload())
 
 handler.use(isAuth)
+
 handler.get(async (req, res) => {
   await dbConnect()
 
-  if (req.user.student) {
-    let query = Student.find({ _id: req.user.student })
+  const rollNo = req.query && req.query.search
+  let query = Student.find(rollNo ? { rollNo: rollNo.toUpperCase() } : {})
+  const total = await Student.countDocuments(
+    rollNo ? { rollNo: rollNo.toUpperCase() } : {}
+  )
 
-    const page = parseInt(req.query.page) || 1
-    const pageSize = parseInt(req.query.limit) || 50
-    const skip = (page - 1) * pageSize
-    const total = await Student.countDocuments({ _id: req.user.student })
+  const page = parseInt(req.query.page) || 1
+  const pageSize = parseInt(req.query.limit) || 50
+  const skip = (page - 1) * pageSize
 
-    const pages = Math.ceil(total / pageSize)
+  const pages = Math.ceil(total / pageSize)
 
-    query = query.skip(skip).limit(pageSize).sort({ createdAt: -1 })
+  query = query.skip(skip).limit(pageSize).sort({ createdAt: -1 })
 
-    const result = await query
+  const result = await query
 
-    res.status(200).json({
-      startIndex: skip + 1,
-      endIndex: skip + result.length,
-      count: result.length,
-      page,
-      pages,
-      total,
-      data: result,
-    })
-  } else {
-    let query = Student.find({})
-
-    const page = parseInt(req.query.page) || 1
-    const pageSize = parseInt(req.query.limit) || 50
-    const skip = (page - 1) * pageSize
-    const total = await Student.countDocuments()
-
-    const pages = Math.ceil(total / pageSize)
-
-    query = query.skip(skip).limit(pageSize).sort({ createdAt: -1 })
-
-    const result = await query
-
-    res.status(200).json({
-      startIndex: skip + 1,
-      endIndex: skip + result.length,
-      count: result.length,
-      page,
-      pages,
-      total,
-      data: result,
-    })
-  }
+  res.send({
+    startIndex: skip + 1,
+    endIndex: skip + result.length,
+    count: result.length,
+    page,
+    pages,
+    total,
+    data: result,
+  })
 })
 
 handler.use(isAdmin)
@@ -68,7 +47,6 @@ handler.post(async (req, res) => {
   await dbConnect()
   const {
     isActive,
-    isScholarship,
     placeOfBirth,
     dateOfBirth,
     nationality,
@@ -121,7 +99,6 @@ handler.post(async (req, res) => {
     if (profile) {
       const createObj = await Student.create({
         isActive,
-        isScholarship,
         rollNo,
         placeOfBirth,
         dateOfBirth,
