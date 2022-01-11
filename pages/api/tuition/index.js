@@ -81,7 +81,7 @@ handler.put(async (req, res) => {
               tuition.student.rollNo +
               '-' +
               uuidv4().slice(1, 3),
-            amount: 0.01, //tuition.amount,
+            amount: tuition.amount,
             currency: 'USD',
             description: 'tuition fee',
           },

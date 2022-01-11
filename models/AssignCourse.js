@@ -28,7 +28,7 @@ const assignCourseScheme = mongoose.Schema(
       type: String,
       required: true,
     },
-    pctScholarship: { type: Number, default: 0 },
+    pctScholarship: { type: Number, default: 100 },
     isActive: {
       type: Boolean,
       default: true,

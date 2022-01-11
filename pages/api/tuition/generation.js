@@ -20,7 +20,6 @@ handler.post(async (req, res) => {
 
   const courseData = await AssignCourse.find({
     course,
-    isScholarship: false,
     courseType,
     semester,
     shift,
@@ -59,7 +58,7 @@ handler.post(async (req, res) => {
         const createObj = unPaidStudents.map(async (std) => {
           await Tuition.create({
             student: std.student,
-            isPaid: false,
+            isPaid: Number(std.pctScholarship) === 0 ? true : false,
             amount: (Number(price.price) * (std.pctScholarship / 100)).toFixed(
               2
             ),
@@ -88,7 +87,7 @@ handler.post(async (req, res) => {
       const createObj = allStudents.map(async (std) => {
         await Tuition.create({
           student: std.student,
-          isPaid: false,
+          isPaid: Number(std.pctScholarship) === 0 ? true : false,
           amount: (Number(price.price) * (std.pctScholarship / 100)).toFixed(2),
           paymentDate,
           paymentMethod,
