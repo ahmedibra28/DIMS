@@ -11,6 +11,7 @@ import { getCourseTypes } from '../../../api/courseType'
 import {
   dynamicInputSelect,
   dynamicInputSelectNumber,
+  inputDate,
   staticInputSelect,
 } from '../../../utils/dynamicForm'
 import { getTuitions, updateTuition } from '../../../api/tuition'
@@ -94,7 +95,7 @@ const Tuition = () => {
 
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className='row'>
-          <div className='col-md-6 col-6'>
+          <div className='col-md-4 col-6'>
             {dynamicInputSelect({
               register,
               label: 'Course Type',
@@ -103,7 +104,7 @@ const Tuition = () => {
               data: courseTypeData && courseTypeData,
             })}
           </div>
-          <div className='col-md-6 col-6'>
+          <div className='col-md-4 col-6'>
             {watch().courseType &&
               dynamicInputSelect({
                 register,
@@ -117,7 +118,7 @@ const Tuition = () => {
                   ),
               })}
           </div>
-          <div className='col-md-4 col-4'>
+          <div className='col-md-4 col-6'>
             {watch().course &&
               dynamicInputSelectNumber({
                 register,
@@ -131,7 +132,7 @@ const Tuition = () => {
               })}
           </div>
 
-          <div className='col-md-4 col-4'>
+          <div className='col-md-4 col-6'>
             {watch().semester &&
               staticInputSelect({
                 register,
@@ -142,8 +143,18 @@ const Tuition = () => {
               })}
           </div>
 
-          {watch().shift && (
-            <div className='col-md-4 col-4 my-auto'>
+          <div className='col-md-3 col-6'>
+            {watch().shift &&
+              inputDate({
+                register,
+                label: 'Payment Date',
+                errors,
+                name: 'paymentDate',
+              })}
+          </div>
+
+          {watch().paymentDate && (
+            <div className='col-md-4 col-6 my-auto'>
               <button
                 type='submit'
                 className='btn btn-primary btn-lg mt-2 form-control shadow'

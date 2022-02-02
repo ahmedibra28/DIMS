@@ -15,7 +15,7 @@ handler.post(async (req, res) => {
 
   const { courseType, course, shift } = req.body
   const semester = Number(req.body.semester)
-  let paymentDate = moment(new Date()).format()
+  let paymentDate = moment(req.body.paymentDate).format()
 
   const startOfMonth = moment(paymentDate).clone().startOf('month').format()
   const endOfMonth = moment(paymentDate).clone().endOf('month').format()
