@@ -8,6 +8,9 @@ export const getAttendancesReport = async (obj) =>
 export const getTuitionsReport = async (obj) =>
   await dynamicAPI('post', `${url}/tuition`, obj)
 
+export const getSingleStudentTuitionsReport = async (obj) =>
+  await dynamicAPI('post', `${url}/student-tuition-fee-report`, obj)
+
 export const getStudentTuitionsReport = async () =>
   await dynamicAPI('get', `${url}/student-tuition`, {})
 
