@@ -253,7 +253,7 @@ const Admin = () => {
                         <span>{notice.description}</span>
                         <br />
                         <span className='text-muted'>
-                          {notice.createdBy.name} -{' '}
+                          {/* {notice.createdBy.name} -{' '} */}
                           {moment(notice.createdAt).fromNow()}
                         </span>
                       </p>

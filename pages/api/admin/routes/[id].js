@@ -1,10 +1,10 @@
 import nc from 'next-connect'
 import dbConnect from '../../../../utils/db'
 import Route from '../../../../models/Route'
-import { isAuth } from '../../../../utils/auth'
+import { isAuth, isSuperAdmin } from '../../../../utils/auth'
 
 const handler = nc()
-handler.use(isAuth)
+handler.use(isAuth, isSuperAdmin)
 
 handler.put(async (req, res) => {
   await dbConnect()
@@ -38,21 +38,19 @@ handler.put(async (req, res) => {
   }
 })
 
+handler.use(isSuperAdmin)
 handler.delete(async (req, res) => {
   await dbConnect()
-  return res
-    .status(401)
-    .send('Please contact your system administrator to do any delete operation')
 
-  // const _id = req.query.id
-  // const obj = await Route.findById(_id)
-  // if (!obj) {
-  //   return res.status(404).send('Route not found')
-  // } else {
-  //   await obj.remove()
+  const _id = req.query.id
+  const obj = await Route.findById(_id)
+  if (!obj) {
+    return res.status(404).send('Route not found')
+  } else {
+    await obj.remove()
 
-  //   res.status(201).json({ status: 'success' })
-  // }
+    res.status(201).json({ status: 'success' })
+  }
 })
 
 export default handler

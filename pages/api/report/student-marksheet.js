@@ -1,6 +1,6 @@
 import nc from 'next-connect'
 import dbConnect from '../../../utils/db'
-import { isAdmin, isAuth } from '../../../utils/auth'
+import { isAuth } from '../../../utils/auth'
 import Exam from '../../../models/Exam'
 import AssignCourse from '../../../models/AssignCourse'
 import Student from '../../../models/Student'
@@ -40,7 +40,7 @@ handler.get(async (req, res) => {
   }
 })
 
-handler.use(isAuth, isAdmin)
+handler.use(isAuth)
 handler.post(async (req, res) => {
   const { student, course } = req.body
 

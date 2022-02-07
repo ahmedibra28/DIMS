@@ -1,7 +1,7 @@
 import nc from 'next-connect'
 import dbConnect from '../../../../utils/db'
 import Notice from '../../../../models/Notice'
-import { isAuth } from '../../../../utils/auth'
+import { isAdmin, isAuth } from '../../../../utils/auth'
 
 const handler = nc()
 handler.use(isAuth)
@@ -37,20 +37,19 @@ handler.put(async (req, res) => {
   }
 })
 
+handler.use(isAdmin)
 handler.delete(async (req, res) => {
   await dbConnect()
-  return res
-    .status(401)
-    .send('Please contact your system administrator to do any delete operation')
-  // const _id = req.query.id
-  // const obj = await Notice.findById(_id)
-  // if (!obj) {
-  //   return res.status(404).send('Notice not found')
-  // } else {
-  //   await obj.remove()
 
-  //   res.status(201).json({ status: 'success' })
-  // }
+  const _id = req.query.id
+  const obj = await Notice.findById(_id)
+  if (!obj) {
+    return res.status(404).send('Notice not found')
+  } else {
+    await obj.remove()
+
+    res.status(201).json({ status: 'success' })
+  }
 })
 
 export default handler

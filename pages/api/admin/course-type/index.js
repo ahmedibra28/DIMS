@@ -15,7 +15,6 @@ handler.get(async (req, res) => {
 })
 
 handler.use(isAdmin)
-
 handler.post(async (req, res) => {
   await dbConnect()
 

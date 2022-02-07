@@ -32,8 +32,20 @@ export const isAuth = async (req, res, next) => {
   }
 }
 
+export const isSuperAdmin = async (req, res, next) => {
+  if (req.user && req.user.group === 'super admin') {
+    next()
+  } else {
+    res.status(401)
+    throw new Error('Not authorized as a super admin')
+  }
+}
+
 export const isAdmin = async (req, res, next) => {
-  if (req.user && req.user.group === 'admin') {
+  if (
+    req.user &&
+    (req.user.group === 'admin' || req.user.group === 'super admin')
+  ) {
     next()
   } else {
     res.status(401)

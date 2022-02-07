@@ -1,6 +1,6 @@
 import nc from 'next-connect'
 import dbConnect from '../../../utils/db'
-import { isAuth } from '../../../utils/auth'
+import { isAuth, isSuperAdmin } from '../../../utils/auth'
 import fileUpload from 'express-fileupload'
 import { upload, deleteFile } from '../../../utils/fileManager'
 import Resource from '../../../models/Resource'
@@ -88,25 +88,24 @@ handler.put(async (req, res) => {
   }
 })
 
+handler.use(isSuperAdmin)
 handler.delete(async (req, res) => {
   await dbConnect()
-  return res
-    .status(401)
-    .send('Please contact your system administrator to do any delete operation')
-  // const _id = req.query.id
-  // const obj = await Resource.findById(_id)
-  // if (!obj) {
-  //   return res.status(404).send('Resource not found')
-  // } else {
-  //   if (obj.file) {
-  //     deleteFile({
-  //       pathName: obj.file.fileName,
-  //     })
-  //   }
-  //   await obj.remove()
 
-  //   res.json({ status: 'success' })
-  // }
+  const _id = req.query.id
+  const obj = await Resource.findById(_id)
+  if (!obj) {
+    return res.status(404).send('Resource not found')
+  } else {
+    if (obj.file) {
+      deleteFile({
+        pathName: obj.file.fileName,
+      })
+    }
+    await obj.remove()
+
+    res.json({ status: 'success' })
+  }
 })
 
 export default handler

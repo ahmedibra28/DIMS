@@ -6,13 +6,16 @@ import withAuth from '../../HOC/withAuth'
 import Message from '../../components/Message'
 import Loader from 'react-loader-spinner'
 import InvoiceTemplate from '../../components/InvoiceTemplate'
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 
 import { useForm } from 'react-hook-form'
 
 import { inputText, staticInputSelect } from '../../utils/dynamicForm'
 import { getSingleStudentTuitionsReport } from '../../api/report'
-import { FaCheckCircle, FaTimesCircle, FaPrint } from 'react-icons/fa'
+import { deleteTuition } from '../../api/tuition'
+import { FaCheckCircle, FaTimesCircle, FaPrint, FaTrash } from 'react-icons/fa'
+import { confirmAlert } from 'react-confirm-alert'
+import { Confirm } from '../../components/Confirm'
 
 const Tuition = () => {
   const {
@@ -25,7 +28,7 @@ const Tuition = () => {
   })
 
   const [stdPaymentInfo, setStdPaymentInfo] = useState(null)
-
+  const queryClient = useQueryClient()
   const {
     isLoading: isLoadingPost,
     isError: isErrorPost,
@@ -38,8 +41,23 @@ const Tuition = () => {
     onSuccess: () => {},
   })
 
+  const {
+    isLoading: isLoadingDelete,
+    isError: isErrorDelete,
+    error: errorDelete,
+    isSuccess: isSuccessDelete,
+    mutateAsync: deleteMutateAsync,
+  } = useMutation(deleteTuition, {
+    retry: 0,
+    onSuccess: () => queryClient.invalidateQueries(['tuitions']),
+  })
+
   const submitHandler = (data) => {
     postMutateAsync(data)
+  }
+
+  const deleteHandler = (id) => {
+    confirmAlert(Confirm(() => deleteMutateAsync(id)))
   }
 
   const filteredTuitionDisplay = (std) => {
@@ -74,6 +92,20 @@ const Tuition = () => {
               <FaPrint className='mb-1' />
             </button>
           )}
+          <button
+            className='btn btn-danger btn-sm ms-1'
+            onClick={() => deleteHandler(std._id)}
+            disabled={isLoadingDelete}
+          >
+            {isLoadingDelete ? (
+              <span className='spinner-border spinner-border-sm' />
+            ) : (
+              <span>
+                {' '}
+                <FaTrash className='mb-1' />
+              </span>
+            )}
+          </button>
         </td>
       </tr>
     )
@@ -97,6 +129,11 @@ const Tuition = () => {
         </Message>
       )}
       {isErrorPost && <Message variant='danger'>{errorPost}</Message>}
+
+      {isErrorDelete && <Message variant='danger'>{errorDelete}</Message>}
+      {isSuccessDelete && (
+        <Message variant='success'>Tuition has been cancelled.</Message>
+      )}
 
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className='row'>

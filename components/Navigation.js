@@ -147,7 +147,7 @@ const Navigation = () => {
             </li>
           )}
 
-          {UnlockAccess(Access.admin) && (
+          {UnlockAccess(Access.superAdmin) && (
             <li className='nav-item dropdown'>
               <a
                 className='nav-link dropdown-toggle'

@@ -9,3 +9,6 @@ export const generateTuition = async (obj) =>
   await dynamicAPI('post', `${url}/generation`, obj)
 
 export const updateTuition = async (obj) => await dynamicAPI('put', url, obj)
+
+export const deleteTuition = async (id) =>
+  await dynamicAPI('delete', `${url}/${id}`, {})

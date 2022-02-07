@@ -1,7 +1,7 @@
 import nc from 'next-connect'
 import dbConnect from '../../../../utils/db'
 import Route from '../../../../models/Route'
-import { isAuth } from '../../../../utils/auth'
+import { isAuth, isSuperAdmin } from '../../../../utils/auth'
 
 const handler = nc()
 
@@ -13,7 +13,7 @@ handler.get(async (req, res) => {
   res.status(201).json(obj)
 })
 
-handler.use(isAuth)
+handler.use(isAuth, isSuperAdmin)
 handler.post(async (req, res) => {
   await dbConnect()
 

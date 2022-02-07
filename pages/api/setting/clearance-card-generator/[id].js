@@ -1,7 +1,7 @@
 import nc from 'next-connect'
 import dbConnect from '../../../../utils/db'
 import ClearanceCardGenerator from '../../../../models/ClearanceCardGenerator'
-import { isAdmin, isAuth } from '../../../../utils/auth'
+import { isAdmin, isAuth, isSuperAdmin } from '../../../../utils/auth'
 
 const handler = nc()
 handler.use(isAuth, isAdmin)
@@ -42,21 +42,19 @@ handler.put(async (req, res) => {
   }
 })
 
+handler.use(isSuperAdmin)
 handler.delete(async (req, res) => {
   await dbConnect()
-  return res
-    .status(401)
-    .send('Please contact your system administrator to do any delete operation')
 
-  // const _id = req.query.id
-  // const obj = await ClearanceCardGenerator.findById(_id)
-  // if (!obj) {
-  //   return res.status(404).send('Clearance card generator not found')
-  // } else {
-  //   await obj.remove()
+  const _id = req.query.id
+  const obj = await ClearanceCardGenerator.findById(_id)
+  if (!obj) {
+    return res.status(404).send('Clearance card generator not found')
+  } else {
+    await obj.remove()
 
-  //   res.json({ status: 'success' })
-  // }
+    res.json({ status: 'success' })
+  }
 })
 
 export default handler

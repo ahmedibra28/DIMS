@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import dbConnect from '../../../utils/db'
 import Exam from '../../../models/Exam'
 import AssignCourse from '../../../models/AssignCourse'
-import { isAuth } from '../../../utils/auth'
+import { isAuth, isSuperAdmin, isAdmin } from '../../../utils/auth'
 import Subject from '../../../models/Subject'
 
 const handler = nc()
@@ -67,6 +67,7 @@ handler.get(async (req, res) => {
   res.status(200).json({ exams, summary: results() })
 })
 
+handler.use(isAdmin)
 handler.put(async (req, res) => {
   await dbConnect()
 
@@ -148,20 +149,18 @@ handler.put(async (req, res) => {
   }
 })
 
+handler.use(isSuperAdmin)
 handler.delete(async (req, res) => {
   await dbConnect()
-  return res
-    .status(401)
-    .send('Please contact your system administrator to do any delete operation')
 
-  // const _id = req.query.id
-  // const obj = await Exam.findById(_id)
-  // if (!obj) {
-  //   return res.status(404).send('Exam record not found')
-  // } else {
-  //   await obj.remove()
-  //   res.json({ status: 'success' })
-  // }
+  const _id = req.query.id
+  const obj = await Exam.findById(_id)
+  if (!obj) {
+    return res.status(404).send('Exam record not found')
+  } else {
+    await obj.remove()
+    res.json({ status: 'success' })
+  }
 })
 
 export default handler

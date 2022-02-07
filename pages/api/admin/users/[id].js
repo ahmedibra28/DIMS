@@ -1,7 +1,7 @@
 import nc from 'next-connect'
 import dbConnect from '../../../../utils/db'
 import User from '../../../../models/User'
-import { isAuth, isAdmin } from '../../../../utils/auth'
+import { isAuth, isSuperAdmin, isAdmin } from '../../../../utils/auth'
 
 const handler = nc()
 handler.use(isAuth, isAdmin)
@@ -46,6 +46,7 @@ handler.put(async (req, res) => {
   }
 })
 
+handler.use(isSuperAdmin)
 handler.delete(async (req, res) => {
   await dbConnect()
 
