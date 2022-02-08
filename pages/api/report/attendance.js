@@ -26,6 +26,7 @@ handler.post(async (req, res) => {
   const instructor =
     req.user.group === 'instructor' ? req.user.instructor : null
   const admin = req.user.group === 'admin'
+  const superAdmin = req.user.group === 'super admin'
 
   const instructorObj = await AssignSubject.findOne({
     instructor,
@@ -36,7 +37,7 @@ handler.post(async (req, res) => {
     semester,
   })
 
-  if (!instructorObj && !admin) {
+  if (!instructorObj && !admin && !superAdmin) {
     return res
       .status(400)
       .send(`${req.user.name}, your are not a instructor of this subject`)
