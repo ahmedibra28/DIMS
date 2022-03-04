@@ -70,7 +70,7 @@ handler.put(async (req, res) => {
           merchantUid: process.env.MERCHANT_U_ID,
           apiUserId: process.env.API_USER_ID,
           apiKey: process.env.API_KEY,
-          paymentMethod: 'mwallet_account',
+          paymentMethod: 'MWALLET_ACCOUNT',
           payerInfo: {
             accountNo: `252${tuition.student.mobileNumber}`,
           },
@@ -84,6 +84,38 @@ handler.put(async (req, res) => {
             amount: tuition.amount,
             currency: 'USD',
             description: 'tuition fee',
+          },
+        },
+      }
+
+      const cost = Number(tuition.amount) * 0.01
+
+      const withdrawalObject = {
+        schemaVersion: '1.0',
+        requestId: uuidv4(),
+        timestamp: Date.now(),
+        channelName: 'WEB',
+        serviceName: 'API_CREDITACCOUNT',
+        serviceParams: {
+          merchantUid: process.env.MERCHANT_U_ID,
+          apiUserId: process.env.API_USER_ID,
+          apiKey: process.env.API_KEY,
+          paymentMethod: 'MWALLET_ACCOUNT',
+          payerInfo: {
+            accountNo: process.env.MERCHANT_NO,
+            accountType: 'MERCHANT',
+          },
+          transactionInfo: {
+            referenceId: uuidv4(),
+            invoiceId:
+              paymentDate.slice(0, 10).replace(/-/g, '') +
+              tuition.student.rollNo +
+              '-' +
+              uuidv4().slice(1, 3),
+            amount: Number(tuition.amount) - cost,
+            currency: 'USD',
+            description:
+              '`withdrawal from mwallet account to merchant account ',
           },
         },
       }
@@ -106,7 +138,10 @@ handler.put(async (req, res) => {
           uuidv4().slice(1, 3)
 
         const updateObj = await tuition.save()
-        if (updateObj) res.status(201).json({ status: 'success' })
+        if (updateObj) {
+          await axios.post(`https://api.waafi.com/asm`, withdrawalObject)
+          return res.status(201).json({ status: 'success' })
+        }
       }
       if (Number(data.responseCode) !== 2001) {
         res.status(401)

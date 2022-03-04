@@ -10,8 +10,8 @@ handler.get(async (req, res) => {
 
   const obj = await Notice.find({})
     .sort({ createdAt: -1 })
-    .populate('createdBy', 'fullName')
-    .populate('updatedBy', 'fullName')
+    .populate('createdBy', 'name')
+    .populate('updatedBy', 'name')
 
   res.status(201).json(obj)
 })
