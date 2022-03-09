@@ -4,11 +4,11 @@ import Exam from '../../../models/Exam'
 import AssignCourse from '../../../models/AssignCourse'
 import AssignSubject from '../../../models/AssignSubject'
 import Subject from '../../../models/Subject'
-import { isAdmin, isAuth } from '../../../utils/auth'
+import { isAuth, isExaminer } from '../../../utils/auth'
 
 const handler = nc()
 
-handler.use(isAuth, isAdmin)
+handler.use(isAuth, isExaminer)
 
 handler.post(async (req, res) => {
   await dbConnect()

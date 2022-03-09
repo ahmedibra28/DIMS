@@ -327,7 +327,7 @@ const AssignCourse = () => {
                           register,
                           errors,
                           name: 'pctScholarship',
-                          label: 'Scholarship %',
+                          label: 'Payment Percentage',
                         })}
                     </div>
                   </div>

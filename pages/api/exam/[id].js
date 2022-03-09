@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import dbConnect from '../../../utils/db'
 import Exam from '../../../models/Exam'
 import AssignCourse from '../../../models/AssignCourse'
-import { isAuth, isSuperAdmin, isAdmin } from '../../../utils/auth'
+import { isAuth, isSuperAdmin, isExaminer } from '../../../utils/auth'
 import Subject from '../../../models/Subject'
 
 const handler = nc()
@@ -67,7 +67,7 @@ handler.get(async (req, res) => {
   res.status(200).json({ exams, summary: results() })
 })
 
-handler.use(isAdmin)
+handler.use(isExaminer)
 handler.put(async (req, res) => {
   await dbConnect()
 
@@ -85,6 +85,7 @@ handler.put(async (req, res) => {
 
     const exist = await Exam.find({
       _id: { $ne: _id },
+      student: obj.student,
       subject,
       shift: obj.shift,
       semester: obj.semester,

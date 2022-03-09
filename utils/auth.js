@@ -52,3 +52,17 @@ export const isAdmin = async (req, res, next) => {
     throw new Error('Not authorized as an admin')
   }
 }
+
+export const isExaminer = async (req, res, next) => {
+  if (
+    req.user &&
+    (req.user.group === 'admin' ||
+      req.user.group === 'super admin' ||
+      req.user.group === 'examination')
+  ) {
+    next()
+  } else {
+    res.status(401)
+    throw new Error('Not authorized as an admin')
+  }
+}

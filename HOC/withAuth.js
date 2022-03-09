@@ -19,7 +19,7 @@ const withAuth = async (WrappedComponent) => {
           .userAccessRoutes.route.map((g) => g.path)
           .includes(pathName)
       ) {
-        router.push('/')
+        router.push('/profile')
         return null
       }
 
