@@ -131,3 +131,24 @@ main {
   content: ' ';
   transform: rotate(-90deg);
 }
+
+/* clearance card */
+.clearance {
+  position: relative;
+  overflow: hidden !important;
+}
+.patientID {
+  position: absolute;
+  top: 50%;
+  right: -65px;
+  transform: rotate(270deg);
+  letter-spacing: 10px;
+}
+.approved {
+  position: absolute;
+  top: 13px;
+  left: -58px;
+  transform: rotate(315deg);
+  padding: 6px 50px;
+  font-size: 10px;
+}

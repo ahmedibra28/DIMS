@@ -8,9 +8,16 @@ import { useMutation } from 'react-query'
 import { useForm } from 'react-hook-form'
 import { inputText } from '../utils/dynamicForm'
 import { tuitionConfirmation } from '../api/clearanceConfirmation'
-import { FaCheckCircle, FaPrint } from 'react-icons/fa'
+import {
+  FaCheckCircle,
+  FaPrint,
+  FaMars,
+  FaVenus,
+  FaClock,
+  FaPhone,
+  FaAward,
+} from 'react-icons/fa'
 
-import logo from '../images/logo.png'
 import moment from 'moment'
 import { useReactToPrint } from 'react-to-print'
 
@@ -47,7 +54,7 @@ const ClearanceConfirmation = () => {
     documentTitle: 'Examination Card',
     pageStyle: `
     @page {
-      size: A4 landscape !important;
+      size: A4 portrait !important;
     }
     `,
   })
@@ -96,9 +103,9 @@ const ClearanceConfirmation = () => {
         </div>
       </form>
 
-      <div className='text-end'>
+      <div className='text-center p-2'>
         <button
-          className='btn btn-success btn-lg'
+          className='btn btn-success btn-lg rounded-pill shadow'
           onClick={() => {
             handlePrint()
           }}
@@ -107,154 +114,91 @@ const ClearanceConfirmation = () => {
         </button>
       </div>
 
-      <div ref={componentRef}>
+      <div className='row gy-5' ref={componentRef}>
         {data &&
           data.length > 0 &&
           data.map((d) => (
             <>
-              <div key={d._id} className='my-5 border border-primary p-2 '>
-                <div className='row'>
-                  <div className='col-md-2'>
-                    <Image
-                      width='128'
-                      height='128'
-                      priority
-                      src={logo}
-                      alt='logo'
-                      className='img-fluid'
-                    />
-                  </div>
-                  <div className='col-md-8'>
-                    <h1 className='text-center mark-sheet-title text-primary'>
-                      Sayid Mohamed Technical Education College
-                    </h1>
-                    <h4 className='text-center mark-sheet-title-2 text-primary'>
-                      SaMTEC
-                    </h4>
-                    <h5 className='text-center mark-sheet-title-2 text-primary'>
-                      {d.course.name}
-                    </h5>
-                  </div>
-                  <div className='col-md-2'>
-                    <Image
-                      width='128'
-                      height='128'
-                      priority
-                      src={d.student.picture.picturePath}
-                      alt={d.student.picture.pictureName}
-                      className='img-fluid'
-                      style={{ width: '8rem' }}
-                    />
-                  </div>
-                </div>
-                <hr />
+              <div className='col-lg-6 col-md-10 col-12'>
+                <div className='card shadow-lg clearance'>
+                  <div className='card-body'>
+                    <div className='row'>
+                      <div className='col-auto border border-primary border-start-0 border-top-0 border-bottom-0 d-flex flex-column justify-content-around'>
+                        <Image
+                          width='100'
+                          height='100'
+                          src='/samtec-logo.png'
+                          alt='logo'
+                          className='img-fluid '
+                          style={{ width: '100px' }}
+                        />
+                        <Image
+                          width='100'
+                          height='100'
+                          src={d.student.picture.picturePath}
+                          alt={d.student.picture.pictureName}
+                          className='img-fluid  mt-3 rounded-circle'
+                          style={{ width: '100px' }}
+                        />
+                      </div>
+                      <div className='col-8'>
+                        <div className='text-center'>
+                          <div className='approved bg-success text-uppercase'>
+                            <FaCheckCircle className='me-1' />
+                            Approved
+                          </div>
+                          <h4 className='card-title text-primary fw-bold fs-6 font-monospace patientID'>
+                            {d.student.rollNo}
+                          </h4>
+                          <h4 className='card-title text-primary fw-bold font-monospace'>
+                            {d.student.fullName}
+                          </h4>
+                          <span className=' text-muted fs-6'>
+                            {d.course.name}
+                          </span>
+                        </div>
+                        <hr />
 
-                <h4 className='text-center'>Official Transcript</h4>
-                <div className='table-responsive'>
-                  <table className='table table-bordered border-primary'>
-                    <tbody>
-                      <tr>
-                        <th>Name</th>
-                        <td>{d.student.fullName}</td>
-                        <th>ID. No.</th>
-                        <td> {d.student.rollNo}</td>
-                      </tr>
-                      <tr>
-                        <th>Shift</th>
-                        <td> {d.shift}</td>
-                        <th>Semester</th>
-                        <td> {d.semester}</td>
-                      </tr>
-                      <tr>
-                        <th>Sex</th>
-                        <td> {d.student.gender}</td>
-                        <th>Qualification</th>
-                        <td> {d.course.name}</td>
-                      </tr>
-
-                      <tr>
-                        <th>Status</th>
-                        <td>
-                          <button className='btn btn-success btn-sm'>
-                            <FaCheckCircle className='mb-1' /> Clean
-                          </button>
-                        </td>
-                        <th>Printing Date</th>
-                        <td>{moment(new Date()).format('lll')}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                        <div className='card border-0'>
+                          <ul className='list-group list-group-flush'>
+                            <li className='list-group-item'>
+                              <FaAward className='mb-1 me-1 text-primary' />
+                              <span className=' text-muted fs-6'>
+                                Semester {d.semester}, {d.shift} Shift,
+                              </span>
+                            </li>
+                            <li className='list-group-item'>
+                              {d.student.gender === 'Male' ? (
+                                <FaMars className='mb-1 me-1 text-primary' />
+                              ) : (
+                                <FaVenus className='mb-1 me-1 text-primary' />
+                              )}
+                              <span className=' text-muted fs-6'>
+                                {d.student.gender}
+                              </span>
+                            </li>
+                            <li className='list-group-item'>
+                              <FaPhone className='mb-1 me-1 text-primary' />
+                              <span className=' text-muted fs-6'>
+                                {d.student.mobileNumber}
+                              </span>
+                            </li>
+                            <li className='list-group-item'>
+                              <FaClock className='mb-1 me-1 text-primary' />
+                              <span className=' text-muted fs-6'>
+                                Printed At: {moment().format('llll')}
+                              </span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </>
           ))}
       </div>
-
-      {/* {data && data.tuition && data.tuition.length > 0
-        ? data &&
-          data.student && (
-            <div className='row'>
-              <div className='col-12'>
-                <div className='card mb-3 bg-danger text-light'>
-                  <div className='row g-0'>
-                    <div className='col-md-4'>
-                      <Image
-                        width='260'
-                        height='260'
-                        priority
-                        src={studentData && studentData.picture.picturePath}
-                        alt={studentData && studentData.picture.pictureName}
-                        className='img-fluid rounded-start px-2 pt-2 rounded-circle'
-                      />
-                    </div>
-                    <div className='col-md-8 my-auto'>
-                      <div className='card-body'>
-                        <h5 className='card-title'>
-                          {studentData && studentData.fullName.toUpperCase()}
-                        </h5>
-                        <p className='card-text'>
-                          This student {studentData && studentData.fullName} is
-                          not clean from the finance.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )
-        : data &&
-          data.student && (
-            <div className='row'>
-              <div className='col-12'>
-                <div className='card mb-3'>
-                  <div className='row g-0'>
-                    <div className='col-md-4'>
-                      <Image
-                        width='260'
-                        height='260'
-                        priority
-                        src={studentData && studentData.picture.picturePath}
-                        alt={studentData && studentData.picture.pictureName}
-                        className='img-fluid rounded-start'
-                      />
-                    </div>
-                    <div className='col-md-8 my-auto'>
-                      <div className='card-body'>
-                        <h5 className='card-title'>
-                          {studentData && studentData.fullName.toUpperCase()}
-                        </h5>
-                        <p className='card-text'>
-                          This student {studentData && studentData.fullName} is
-                          clean from the finance.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )} */}
     </div>
   )
 }
