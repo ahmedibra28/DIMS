@@ -150,7 +150,7 @@ const ClearanceConfirmation = () => {
                           <h4 className='card-title text-primary fw-bold fs-6 font-monospace patientID'>
                             {d.student.rollNo}
                           </h4>
-                          <h4 className='card-title text-primary fw-bold font-monospace'>
+                          <h4 className='card-title text-primary fw-bold font-monospace text-uppercase'>
                             {d.student.fullName}
                           </h4>
                           <span className=' text-muted fs-6'>
