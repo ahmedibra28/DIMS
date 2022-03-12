@@ -7,21 +7,13 @@ import Message from '../components/Message'
 import { useMutation } from 'react-query'
 import { useForm } from 'react-hook-form'
 import { inputText } from '../utils/dynamicForm'
-import { tuitionConfirmation } from '../api/clearanceConfirmation'
-import {
-  FaCheckCircle,
-  FaPrint,
-  FaMars,
-  FaVenus,
-  FaClock,
-  FaPhone,
-  FaAward,
-} from 'react-icons/fa'
+import { clearanceCard } from '../api/clearanceCard'
+import { FaCheckCircle, FaPrint, FaPhone, FaAward } from 'react-icons/fa'
 
 import moment from 'moment'
 import { useReactToPrint } from 'react-to-print'
 
-const ClearanceConfirmation = () => {
+const ClearanceCard = () => {
   const {
     register,
     handleSubmit,
@@ -37,12 +29,10 @@ const ClearanceConfirmation = () => {
     isSuccess: isSuccessPost,
     data,
     mutateAsync: postMutateAsync,
-  } = useMutation(tuitionConfirmation, {
+  } = useMutation(clearanceCard, {
     retry: 0,
     onSuccess: () => {},
   })
-
-  console.log({ data })
 
   const submitHandler = (data) => {
     postMutateAsync(data)
@@ -62,16 +52,16 @@ const ClearanceConfirmation = () => {
   return (
     <div className='container'>
       <Head>
-        <title>Student Clearance Confirmation</title>
+        <title>Student Clearance Card</title>
         <meta
           property='og:title'
-          content='Student Clearance Confirmation'
+          content='Student Clearance Card'
           key='title'
         />
       </Head>
       {isSuccessPost && (
         <Message variant='success'>
-          Clearance confirmation has been confirmed successfully.
+          Clearance card has been confirmed successfully.
         </Message>
       )}
       {isErrorPost && <Message variant='danger'>{errorPost}</Message>}
@@ -113,7 +103,6 @@ const ClearanceConfirmation = () => {
           <FaPrint className='mb-1' />
         </button>
       </div>
-
       <div className='row gy-5' ref={componentRef}>
         {data &&
           data.length > 0 &&
@@ -130,15 +119,13 @@ const ClearanceConfirmation = () => {
                           src='/samtec-logo.png'
                           alt='logo'
                           className='img-fluid '
-                          style={{ width: '100px' }}
                         />
                         <Image
                           width='100'
                           height='100'
                           src={d.student.picture.picturePath}
                           alt={d.student.picture.pictureName}
-                          className='img-fluid  mt-3 rounded-circle'
-                          style={{ width: '100px' }}
+                          className='img-fluid  rounded-pill'
                         />
                       </div>
                       <div className='col-8'>
@@ -150,11 +137,19 @@ const ClearanceConfirmation = () => {
                           <h4 className='card-title text-primary fw-bold fs-6 font-monospace patientID'>
                             {d.student.rollNo}
                           </h4>
+                          <h6 className='card-title text-primary fw-bold font-monospace text-uppercase'>
+                            EXAM CLEARANCE CARD @{' '}
+                            {moment(d.generatedAt).format('LL')}
+                          </h6>
                           <h4 className='card-title text-primary fw-bold font-monospace text-uppercase'>
                             {d.student.fullName}
                           </h4>
-                          <span className=' text-muted fs-6'>
-                            {d.course.name}
+                          <span className='  fs-6 text-uppercase'>
+                            {d.course}
+                          </span>
+                          <br />
+                          <span className='  fs-6 text-uppercase'>
+                            {d.exam} - {d.academic}
                           </span>
                         </div>
                         <hr />
@@ -163,30 +158,15 @@ const ClearanceConfirmation = () => {
                           <ul className='list-group list-group-flush'>
                             <li className='list-group-item'>
                               <FaAward className='mb-1 me-1 text-primary' />
-                              <span className=' text-muted fs-6'>
-                                Semester {d.semester}, {d.shift} Shift,
+                              <span className='  fs-6'>
+                                Semester {d.semester}, {d.shift} Shift
                               </span>
                             </li>
-                            <li className='list-group-item'>
-                              {d.student.gender === 'Male' ? (
-                                <FaMars className='mb-1 me-1 text-primary' />
-                              ) : (
-                                <FaVenus className='mb-1 me-1 text-primary' />
-                              )}
-                              <span className=' text-muted fs-6'>
-                                {d.student.gender}
-                              </span>
-                            </li>
+
                             <li className='list-group-item'>
                               <FaPhone className='mb-1 me-1 text-primary' />
-                              <span className=' text-muted fs-6'>
+                              <span className='  fs-6'>
                                 {d.student.mobileNumber}
-                              </span>
-                            </li>
-                            <li className='list-group-item'>
-                              <FaClock className='mb-1 me-1 text-primary' />
-                              <span className=' text-muted fs-6'>
-                                Printed At: {moment().format('llll')}
                               </span>
                             </li>
                           </ul>
@@ -203,6 +183,6 @@ const ClearanceConfirmation = () => {
   )
 }
 
-export default dynamic(() => Promise.resolve(withAuth(ClearanceConfirmation)), {
+export default dynamic(() => Promise.resolve(withAuth(ClearanceCard)), {
   ssr: false,
 })

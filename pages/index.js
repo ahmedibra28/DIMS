@@ -14,12 +14,8 @@ function Home() {
         <meta property='og:title' content='DIMS' key='title' />
       </Head>
       {UnlockAccess(Access.adminFinance) && <Admin />}
-      {/* {UnlockAccess(Access.superAdmin) && <Admin />} */}
       {UnlockAccess(Access.student) && <Student />}
       {UnlockAccess(Access.instructor) && <Instructor />}
-      {!UnlockAccess(Access.adminFinance) &&
-        'Sorry you are not authorized any view'}
-      {/* <div className='display-1 text-center text-primary'>Dashboard</div> */}
     </div>
   )
 }

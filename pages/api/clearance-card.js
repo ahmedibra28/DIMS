@@ -1,26 +1,20 @@
 import nc from 'next-connect'
-import dbConnect from '../../../utils/db'
-import { isAuth } from '../../../utils/auth'
-import Student from '../../../models/Student'
-import Tuition from '../../../models/Tuition'
-import AssignCourse from '../../../models/AssignCourse'
-import ClearanceCardGenerator from '../../../models/ClearanceCardGenerator'
+import dbConnect from '../../utils/db'
+import { isAuth } from '../../utils/auth'
+import Student from '../../models/Student'
+import Tuition from '../../models/Tuition'
+import AssignCourse from '../../models/AssignCourse'
+import ClearanceCardGenerator from '../../models/ClearanceCardGenerator'
 
 const handler = nc()
 handler.use(isAuth)
 
-handler.get(async (req, res) => {
+handler.post(async (req, res) => {
   await dbConnect()
-
-  const std = req.user.group === 'student' ? req.user.student : null
-  if (!std) {
-    return res
-      .status(404)
-      .send(`Sorry, ${req.user.name} you are not authorized this request`)
-  }
+  const { rollNo } = req.body
 
   const student = await Student.findOne(
-    { contactEmail: req.user.email.toLowerCase() },
+    { rollNo: rollNo.toUpperCase() },
     { _id: 1 }
   )
 
@@ -79,9 +73,7 @@ handler.get(async (req, res) => {
       }
     }
   } else {
-    res
-      .status(404)
-      .send('Sorry, your are not the authorized student for this request')
+    res.status(404).send('Sorry, student roll no does not exist')
   }
 })
 
