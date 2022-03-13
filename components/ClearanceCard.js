@@ -44,7 +44,7 @@ const ClearanceCard = ({ clearancesData }) => {
                             {moment(d.generatedAt).format('LL')}
                           </h6>
                           <h5 className='card-title text-primary fw-bold text-uppercase'>
-                            SAYID MOHAMED TECHNICAL EDUCATION COLLAGE <br />
+                            SAYID MOHAMED TECHNICAL EDUCATION COLLEGE <br />
                             (SaMTECH)
                           </h5>{' '}
                           <hr />
