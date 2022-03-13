@@ -271,13 +271,13 @@ const MarkSheetReport = () => {
                   />
                 </div>
                 <div className='col-md-8'>
-                  <h1 className='text-center mark-sheet-title text-primary'>
+                  <h1 className='text-center school-title text-primary'>
                     Sayid Mohamed Technical Education College
                   </h1>
-                  <h4 className='text-center mark-sheet-title-2 text-primary'>
+                  <h4 className='text-center school-title-2 text-primary'>
                     SaMTEC
                   </h4>
-                  <h5 className='text-center mark-sheet-title-2 text-primary'>
+                  <h5 className='text-center school-title-2 text-primary'>
                     {dataGetMarkSheetReport &&
                       dataGetMarkSheetReport[0].course.name}
                   </h5>

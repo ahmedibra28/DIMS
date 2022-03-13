@@ -141,7 +141,12 @@ const ClearanceCard = () => {
                             EXAM CLEARANCE CARD @{' '}
                             {moment(d.generatedAt).format('LL')}
                           </h6>
-                          <h4 className='card-title text-primary fw-bold font-monospace text-uppercase'>
+                          <h5 className='card-title text-primary fw-bold text-uppercase'>
+                            SAYID MOHAMED TECHNICAL EDUCATION COLLAGE <br />
+                            (SaMTECH)
+                          </h5>{' '}
+                          <hr />
+                          <h4 className='card-title text-primary fw-light font-monospace text-uppercase'>
                             {d.student.fullName}
                           </h4>
                           <span className='  fs-6 text-uppercase'>
