@@ -25,3 +25,6 @@ export const getStudentClearanceReport = async () =>
 
 export const getStudentAttendanceReport = async () =>
   await dynamicAPI('get', `${url}/student-attendance`, {})
+
+export const getPayments = async (obj) =>
+  await dynamicAPI('post', `${url}/payment-status`, obj)

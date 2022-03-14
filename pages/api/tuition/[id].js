@@ -4,8 +4,8 @@ import Tuition from '../../../models/Tuition'
 import { isAuth, isSuperAdmin } from '../../../utils/auth'
 
 const handler = nc()
-handler.use(isAuth)
-handler.use(isSuperAdmin)
+
+handler.use(isAuth, isSuperAdmin)
 handler.delete(async (req, res) => {
   await dbConnect()
 

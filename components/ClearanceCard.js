@@ -45,7 +45,7 @@ const ClearanceCard = ({ clearancesData }) => {
                           </h6>
                           <h5 className='card-title text-primary fw-bold text-uppercase'>
                             SAYID MOHAMED TECHNICAL EDUCATION COLLEGE <br />
-                            (SaMTECH)
+                            (SaMTEC)
                           </h5>{' '}
                           <hr />
                           <h4 className='card-title text-primary fw-bold font-monospace text-uppercase'>
