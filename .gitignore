@@ -45,3 +45,4 @@ yarn-error.log*
 /public/*/*.ppt
 /public/*/*.txt
 /public/student
+/public/instructor
