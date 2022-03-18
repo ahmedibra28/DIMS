@@ -44,3 +44,4 @@ yarn-error.log*
 /public/*/*.doc
 /public/*/*.ppt
 /public/*/*.txt
+/public/student
