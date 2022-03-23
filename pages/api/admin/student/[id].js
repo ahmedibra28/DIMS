@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import dbConnect from '../../../../utils/db'
 import { isAdmin, isAuth, isSuperAdmin } from '../../../../utils/auth'
 import fileUpload from 'express-fileupload'
-import { upload, deleteFile } from '../../../../utils/fileManager'
+import { upload } from '../../../../utils/fileManager'
 import Student from '../../../../models/Student'
 import AssignCourse from '../../../../models/AssignCourse'
 export const config = { api: { bodyParser: false } }
@@ -68,13 +68,13 @@ handler.put(async (req, res) => {
           fileType: 'image',
           pathName: 'student',
         })
-        if (profile) {
-          if (obj && obj.picture) {
-            deleteFile({
-              pathName: `student/${obj.picture.pictureName}`,
-            })
-          }
-        }
+        // if (profile) {
+        //   if (obj && obj.picture) {
+        //     deleteFile({
+        //       pathName: `student/${obj.picture.pictureName}`,
+        //     })
+        //   }
+        // }
 
         obj.isActive = isActive
         obj.placeOfBirth = placeOfBirth
@@ -134,11 +134,11 @@ handler.delete(async (req, res) => {
   if (!obj) {
     return res.status(404).send('Student not found')
   } else {
-    if (obj.picture) {
-      deleteFile({
-        pathName: `student/${obj.picture.pictureName}`,
-      })
-    }
+    // if (obj.picture) {
+    //   deleteFile({
+    //     pathName: `student/${obj.picture.pictureName}`,
+    //   })
+    // }
     await AssignCourse.deleteMany({ student: _id })
     await obj.remove()
 
