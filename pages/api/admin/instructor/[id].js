@@ -62,7 +62,7 @@ handler.put(async (req, res) => {
         if (profile) {
           if (obj && obj.picture) {
             deleteFile({
-              pathName: obj.picture.pictureName,
+              pathName: `instructor/${obj.picture.pictureName}`,
             })
           }
         }
@@ -130,7 +130,7 @@ handler.delete(async (req, res) => {
   } else {
     if (obj.picture) {
       deleteFile({
-        pathName: obj.picture.pictureName,
+        pathName: `instructor/${obj.picture.pictureName}`,
       })
     }
 

@@ -71,7 +71,7 @@ handler.put(async (req, res) => {
         if (profile) {
           if (obj && obj.picture) {
             deleteFile({
-              pathName: obj.picture.pictureName,
+              pathName: `student/${obj.picture.pictureName}`,
             })
           }
         }
@@ -136,7 +136,7 @@ handler.delete(async (req, res) => {
   } else {
     if (obj.picture) {
       deleteFile({
-        pathName: obj.picture.pictureName,
+        pathName: `student/${obj.picture.pictureName}`,
       })
     }
     await AssignCourse.deleteMany({ student: _id })
