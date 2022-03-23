@@ -2,7 +2,7 @@ import nc from 'next-connect'
 import dbConnect from '../../../utils/db'
 import { isAuth, isSuperAdmin } from '../../../utils/auth'
 import fileUpload from 'express-fileupload'
-import { upload, deleteFile } from '../../../utils/fileManager'
+import { upload } from '../../../utils/fileManager'
 import Resource from '../../../models/Resource'
 import AssignSubject from '../../../models/AssignSubject'
 export const config = { api: { bodyParser: false } }
@@ -47,13 +47,13 @@ handler.put(async (req, res) => {
         pathName: 'resource',
       })
 
-      if (document) {
-        if (obj && obj.file) {
-          deleteFile({
-            pathName: obj.file.fileName,
-          })
-        }
-      }
+      // if (document) {
+      //   if (obj && obj.file) {
+      //     deleteFile({
+      //       pathName: obj.file.fileName,
+      //     })
+      //   }
+      // }
 
       obj.isActive = isActive
       obj.courseType = courseType
@@ -97,11 +97,11 @@ handler.delete(async (req, res) => {
   if (!obj) {
     return res.status(404).send('Resource not found')
   } else {
-    if (obj.file) {
-      deleteFile({
-        pathName: obj.file.fileName,
-      })
-    }
+    // if (obj.file) {
+    //   deleteFile({
+    //     pathName: obj.file.fileName,
+    //   })
+    // }
     await obj.remove()
 
     res.json({ status: 'success' })
