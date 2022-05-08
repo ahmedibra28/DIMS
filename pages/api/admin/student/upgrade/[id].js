@@ -30,13 +30,14 @@ handler.put(async (req, res) => {
       res.status(201).json({ status: 'success' })
     } else {
       const createNewObj = await AssignCourse.create({
-        courseType,
-        course,
-        student,
+        courseType: obj.courseType,
+        course: obj.course,
+        student: obj.student,
         semester: Number(semester) + 1,
-        shift,
-        isActive: true,
-        isGraduated: false,
+        shift: obj.shift,
+        pctScholarship: obj.pctScholarship,
+        isActive: obj.isActive,
+        isGraduated: obj.isGraduated,
       })
       if (createNewObj) {
         obj.isActive = false
