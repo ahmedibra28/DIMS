@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import moment from 'moment'
 import { FaCheckCircle, FaPhone, FaAward } from 'react-icons/fa'
+import ImageLazyLoad from './LazyLoad'
 
 const ClearanceCard = ({ clearancesData }) => {
   if (clearancesData && clearancesData.course) {
@@ -15,19 +15,18 @@ const ClearanceCard = ({ clearancesData }) => {
                   <div className='card-body'>
                     <div className='row'>
                       <div className='col-auto border border-primary border-start-0 border-top-0 border-bottom-0 d-flex flex-column justify-content-around'>
-                        <Image
-                          width='100'
-                          height='100'
-                          src='/samtec-logo.png'
+                        <ImageLazyLoad
+                          height={100}
+                          width={100}
+                          image='/samtec-logo.png'
                           alt='logo'
-                          className='img-fluid '
                         />
-                        <Image
-                          width='100'
-                          height='100'
-                          src={d.student.picture.picturePath}
-                          alt={d.student.picture.pictureName}
-                          className='img-fluid  rounded-pill'
+                        <ImageLazyLoad
+                          height={100}
+                          width={100}
+                          image={d.student.picture.picturePath}
+                          alt={d.student.picture.picturePath}
+                          circle={true}
                         />
                       </div>
                       <div className='col-8'>

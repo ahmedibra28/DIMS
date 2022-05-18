@@ -39,6 +39,7 @@ import {
 import moment from 'moment'
 import FooterActionButtons from '../../../utils/footerActionButtons'
 import SearchHandler from '../../../utils/searchHandler'
+import LazyLoad from 'react-lazyload'
 
 const Students = () => {
   const [page, setPage] = useState(1)
@@ -534,22 +535,24 @@ const Students = () => {
                     {student && student.picture && (
                       <Link href={`student/${student._id}`}>
                         <a className='mx-auto link-primary'>
-                          <Image
-                            width='260'
-                            height='260'
-                            priority
-                            src={
-                              student &&
-                              student.picture &&
-                              student.picture.picturePath
-                            }
-                            alt={
-                              student &&
-                              student.picture &&
-                              student.picture.pictureName
-                            }
-                            className='card-img-top img-fluid'
-                          />
+                          <LazyLoad height='260' once>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              width='260'
+                              height='260'
+                              src={
+                                student &&
+                                student.picture &&
+                                student.picture.picturePath
+                              }
+                              alt={
+                                student &&
+                                student.picture &&
+                                student.picture.pictureName
+                              }
+                              className='card-img-top'
+                            />
+                          </LazyLoad>
                         </a>
                       </Link>
                     )}

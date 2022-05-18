@@ -39,6 +39,7 @@ import {
   staticInputSelect,
 } from '../../../utils/dynamicForm'
 import moment from 'moment'
+import LazyLoad from 'react-lazyload'
 
 const Instructors = () => {
   const [page, setPage] = useState(1)
@@ -478,14 +479,16 @@ const Instructors = () => {
                     {instructor && instructor.picture && (
                       <Link href={`instructor/${instructor._id}`}>
                         <a className='mx-auto link-primary'>
-                          <Image
-                            width='260'
-                            height='260'
-                            priority
-                            src={instructor.picture.picturePath}
-                            alt={instructor.picture.pictureName}
-                            className='card-img-top img-fluid'
-                          />
+                          <LazyLoad height='260' once>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              width='260'
+                              height='260'
+                              src={instructor.picture.picturePath}
+                              alt={instructor.picture.pictureName}
+                              className='card-img-top'
+                            />
+                          </LazyLoad>
                         </a>
                       </Link>
                     )}

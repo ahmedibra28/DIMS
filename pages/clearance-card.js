@@ -12,6 +12,7 @@ import { FaCheckCircle, FaPrint, FaPhone, FaAward } from 'react-icons/fa'
 
 import moment from 'moment'
 import { useReactToPrint } from 'react-to-print'
+import ImageLazyLoad from '../components/LazyLoad'
 
 const ClearanceCard = () => {
   const {
@@ -120,12 +121,13 @@ const ClearanceCard = () => {
                           alt='logo'
                           className='img-fluid '
                         />
-                        <Image
-                          width='100'
-                          height='100'
-                          src={d.student.picture.picturePath}
+
+                        <ImageLazyLoad
+                          height={100}
+                          width={100}
+                          image={d.student.picture.picturePath}
                           alt={d.student.picture.pictureName}
-                          className='img-fluid  rounded-pill'
+                          circle={true}
                         />
                       </div>
                       <div className='col-8'>

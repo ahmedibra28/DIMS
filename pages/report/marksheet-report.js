@@ -11,6 +11,7 @@ import Message from '../../components/Message'
 import logo from '../../images/logo.png'
 import moment from 'moment'
 import { FaTimesCircle } from 'react-icons/fa'
+import ImageLazyLoad from '../../components/LazyLoad'
 
 const MarkSheetReport = () => {
   const {
@@ -283,11 +284,10 @@ const MarkSheetReport = () => {
                   </h5>
                 </div>
                 <div className='col-md-2'>
-                  <Image
-                    width='128'
-                    height='128'
-                    priority
-                    src={
+                  <ImageLazyLoad
+                    height={128}
+                    width={128}
+                    image={
                       dataGetMarkSheetReport &&
                       dataGetMarkSheetReport[0].student.picture.picturePath
                     }
@@ -295,7 +295,7 @@ const MarkSheetReport = () => {
                       dataGetMarkSheetReport &&
                       dataGetMarkSheetReport[0].student.picture.pictureName
                     }
-                    className='img-fluid'
+                    circle={true}
                     style={{ width: '8rem' }}
                   />
                 </div>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
 import Message from '../../../components/Message'
@@ -38,6 +37,7 @@ import { getInstructor } from '../../../api/instructor'
 import moment from 'moment'
 import dynamic from 'next/dynamic'
 import withAuth from '../../../HOC/withAuth'
+import LazyLoad from 'react-lazyload'
 
 const AssignSubject = () => {
   const router = useRouter()
@@ -460,20 +460,22 @@ const AssignSubject = () => {
                 <hr />
                 {instructorData && instructorData.picture && (
                   <div className=''>
-                    <Image
-                      width='260'
-                      height='260'
-                      priority
-                      src={
-                        instructorData.picture &&
-                        instructorData.picture.picturePath
-                      }
-                      alt={
-                        instructorData.picture &&
-                        instructorData.picture.pictureName
-                      }
-                      className='img-fluid w-50 rounded-pill'
-                    />
+                    <LazyLoad height={260} once>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        width='260'
+                        height='260'
+                        src={
+                          instructorData.picture &&
+                          instructorData.picture.picturePath
+                        }
+                        alt={
+                          instructorData.picture &&
+                          instructorData.picture.pictureName
+                        }
+                        className='img-fluid w-250  rounded-circle'
+                      />
+                    </LazyLoad>
                   </div>
                 )}
                 <div className='fs-3 mb-1 fw-light'>
