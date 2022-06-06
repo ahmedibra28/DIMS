@@ -18,3 +18,9 @@ export const getStudent = async (_id) =>
 
 export const getAllStudents = async () =>
   await dynamicAPI('get', `${url}/all-students`, {})
+
+export const getUnpaidRegFee = async () =>
+  await dynamicAPI('get', `${url}/reg-fee/unpaid-reg-fee`, {})
+
+export const payStudentRegFee = async (id) =>
+  await dynamicAPI('put', `${url}/reg-fee/${id}`, {})

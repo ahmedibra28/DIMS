@@ -63,6 +63,7 @@ handler.post(async (req, res) => {
     english,
     kiswahili,
     comment,
+    isRegFeeRequired,
   } = req.body
 
   const languageSkills = {
@@ -118,6 +119,8 @@ handler.post(async (req, res) => {
           pictureName: profile.fullFileName,
           picturePath: profile.filePath,
         },
+        isRegFeeRequired,
+        isRegFeePaid: isRegFeeRequired ? false : true,
       })
 
       if (createObj) {

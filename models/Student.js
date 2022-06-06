@@ -27,6 +27,8 @@ const studentScheme = mongoose.Schema(
     },
     comment: { type: String },
     isActive: { type: Boolean, default: true },
+    isRegFeeRequired: { type: Boolean, default: false },
+    isRegFeePaid: { type: Boolean, default: false },
   },
   { timestamps: true }
 )

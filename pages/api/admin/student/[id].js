@@ -40,6 +40,7 @@ handler.put(async (req, res) => {
     english,
     kiswahili,
     comment,
+    isRegFeeRequired,
   } = req.body
 
   const fullName = req.body.fullName.toLowerCase()
@@ -95,6 +96,8 @@ handler.put(async (req, res) => {
           pictureName: profile.fullFileName,
           picturePath: profile.filePath,
         }
+        obj.isRegFeeRequired = isRegFeeRequired
+        obj.isRegFeePaid = isRegFeeRequired ? obj.isRegFeePaid : true
 
         await obj.save()
         res.json({ status: 'success' })
@@ -114,6 +117,8 @@ handler.put(async (req, res) => {
         obj.languageSkills = languageSkills
         obj.levelOfEducation = levelOfEducation
         obj.comment = comment
+        obj.isRegFeeRequired = isRegFeeRequired
+        obj.isRegFeePaid = isRegFeeRequired ? obj.isRegFeePaid : true
         await obj.save()
         res.json({ status: 'success' })
       }

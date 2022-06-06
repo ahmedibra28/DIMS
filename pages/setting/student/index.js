@@ -53,6 +53,7 @@ const Students = () => {
   } = useForm({
     defaultValues: {
       isActive: true,
+      isRegFeeRequired: false,
     },
   })
 
@@ -140,6 +141,7 @@ const Students = () => {
     const formData = new FormData()
     formData.append('picture', data.picture[0])
     formData.append('isActive', data.isActive)
+    formData.append('isRegFeeRequired', data.isRegFeeRequired)
     formData.append('fullName', data.fullName)
     formData.append('placeOfBirth', data.placeOfBirth)
     formData.append('dateOfBirth', data.dateOfBirth)
@@ -170,6 +172,7 @@ const Students = () => {
     setId(student._id)
     setEdit(true)
     setValue('isActive', student.isActive)
+    setValue('isRegFeeRequired', student.isRegFeeRequired)
     setValue('fullName', student.fullName)
     setValue('placeOfBirth', student.placeOfBirth)
     setValue('dateOfBirth', moment(student.dateOfBirth).format('YYYY-MM-DD'))
@@ -462,6 +465,15 @@ const Students = () => {
                         errors,
                         label: 'Comment',
                         name: 'comment',
+                      })}
+                    </div>
+                    <div className='col'>
+                      {inputCheckBox({
+                        register,
+                        errors,
+                        label: 'Is Reg Fee Required?',
+                        name: 'isRegFeeRequired',
+                        isRequired: false,
                       })}
                     </div>
                     <div className='col'>
