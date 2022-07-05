@@ -9,8 +9,16 @@ handler.use(isAuth, isAdmin)
 handler.put(async (req, res) => {
   await dbConnect()
 
-  const { isActive, courseType, course, semester, shift, exam, academic } =
-    req.body
+  const {
+    isActive,
+    courseType,
+    course,
+    semester,
+    shift,
+    exam,
+    academic,
+    examDate,
+  } = req.body
   const _id = req.query.id
 
   const obj = await ClearanceCardGenerator.findById(_id)
@@ -31,6 +39,7 @@ handler.put(async (req, res) => {
       obj.exam = exam
       obj.academic = academic
       obj.isActive = isActive
+      obj.examDate = examDate
       await obj.save()
 
       res.json({ status: 'success' })

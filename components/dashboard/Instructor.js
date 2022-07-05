@@ -36,8 +36,7 @@ const Instructor = () => {
         ) : isErrorNotice ? (
           <Message variant='danger'>{errorNotice}</Message>
         ) : (
-          noticeData &&
-          noticeData.map(
+          noticeData?.slice(0, 2)?.map(
             (notice) =>
               notice.isActive && (
                 <div key={notice._id} className='card-text'>

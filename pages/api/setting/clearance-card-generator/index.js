@@ -21,8 +21,16 @@ handler.use(isAdmin)
 handler.post(async (req, res) => {
   await dbConnect()
 
-  const { isActive, courseType, course, semester, shift, exam, academic } =
-    req.body
+  const {
+    isActive,
+    courseType,
+    course,
+    semester,
+    shift,
+    exam,
+    academic,
+    examDate,
+  } = req.body
 
   const exist = await ClearanceCardGenerator.findOne({
     courseType,
@@ -41,6 +49,7 @@ handler.post(async (req, res) => {
     shift,
     exam,
     academic,
+    examDate,
   })
 
   if (createObj) {

@@ -18,6 +18,7 @@ const clearanceCardGeneratorScheme = mongoose.Schema(
     shift: { type: String, required: true },
     exam: { type: String, required: true },
     academic: { type: String, required: true },
+    examDate: { type: Date, default: new Date() },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }

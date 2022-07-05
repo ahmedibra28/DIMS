@@ -54,7 +54,7 @@ handler.post(async (req, res) => {
           exam: c.exam,
           academic: c.academic,
           student: courses[0].student,
-          generatedAt: c.createdAt,
+          generatedAt: c.examDate,
         }))
       )
       const result = [].concat.apply([], data)

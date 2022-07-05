@@ -31,7 +31,9 @@ import {
   inputCheckBox,
   staticInputSelect,
   inputText,
+  inputDate,
 } from '../../utils/dynamicForm'
+import moment from 'moment'
 
 const ClearanceCardGenerator = () => {
   const {
@@ -134,6 +136,7 @@ const ClearanceCardGenerator = () => {
           semester: data.semester,
           shift: data.shift,
           exam: data.exam,
+          examDate: data.examDate,
         })
       : addMutateAsync(data)
   }
@@ -148,6 +151,7 @@ const ClearanceCardGenerator = () => {
     setValue('shift', subject.shift)
     setValue('exam', subject.exam)
     setValue('semester', subject.semester)
+    setValue('examDate', moment(subject.examDate).format('YYYY-MM-DD'))
   }
 
   const durationValue = () => {
@@ -286,6 +290,15 @@ const ClearanceCardGenerator = () => {
                         data: [{ name: 'Morning' }, { name: 'Afternoon' }],
                         name: 'shift',
                         label: 'Shift',
+                      })}
+                    </div>
+
+                    <div className='col-md-6 col-12'>
+                      {inputDate({
+                        register,
+                        errors,
+                        name: 'examDate',
+                        label: 'Exam Date',
                       })}
                     </div>
                   </div>
