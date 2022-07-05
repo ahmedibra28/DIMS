@@ -6,6 +6,8 @@ import { FaTimesCircle } from 'react-icons/fa'
 const InvoiceTemplate = ({ stdPaymentInfo }) => {
   const student = stdPaymentInfo !== null && stdPaymentInfo
 
+  console.log(student)
+
   if (student) {
     return (
       <div className='modal-body'>
@@ -27,7 +29,9 @@ const InvoiceTemplate = ({ stdPaymentInfo }) => {
             )}
           </div>
           <div className='d-flex justify-content-between'>
-            <span className='text-primary fw-bold fs-4'>INVOICE</span>
+            <span className='text-primary fw-bold'>
+              {moment(student.createdAt).format('MMM YYYY')}
+            </span>
             <span className='text-primary'>Invoice No: {student.invoice}</span>
           </div>
           <div className='border border-1 border-primary rounded-3 p-3'>
