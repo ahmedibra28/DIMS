@@ -27,10 +27,12 @@ handler.post(async (req, res) => {
   const exist = await AssignCourse.findOne({
     student,
     shift,
+    isActive: true,
   })
   const exist2 = await AssignCourse.findOne({
     student,
     course,
+    isActive: true,
   })
 
   if (exist || exist2) {

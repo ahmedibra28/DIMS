@@ -45,11 +45,13 @@ handler.put(async (req, res) => {
       _id: { $ne: _id },
       student,
       shift,
+      isActive: true,
     })
     const exist2 = await AssignCourse.find({
       _id: { $ne: _id },
       student,
       course,
+      isActive: true,
     })
     if (exist.length === 0 && exist2.length === 0) {
       obj.student = student

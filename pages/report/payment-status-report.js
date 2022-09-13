@@ -45,8 +45,6 @@ const Tuition = () => {
   const data = payments && payments.payments
   const paymentInfo = payments && payments.paymentInfo
 
-  console.log(data)
-
   const submitHandler = (data) => {
     postMutateAsync(data)
   }
