@@ -1,6 +1,7 @@
 import nc from 'next-connect'
 import dbConnect from '../../../utils/db'
 import Tuition from '../../../models/Tuition'
+import RegFee from '../../../models/RegFee'
 import { isAuth } from '../../../utils/auth'
 import moment from 'moment'
 import axios from 'axios'
@@ -167,13 +168,68 @@ handler.get(async (req, res) => {
   const startOfMonth = moment(sixMonthsAgo).clone().startOf('month').format()
   const endOfMonth = moment(runningMonth).clone().endOf('month').format()
 
-  const fee = await Tuition.find({
-    createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-  })
-    .populate('student')
-    .populate('course')
+  let fee = await Tuition.find(
+    {
+      createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+    },
+    { amount: 1, createdAt: 1, isPaid: 1 }
+  ).lean()
 
-  res.status(200).json(fee)
+  let regFee = await RegFee.find(
+    {
+      createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+    },
+    { amount: 1, createdAt: 1 }
+  ).lean()
+
+  regFee = regFee.map((r) => ({
+    isPaid: true,
+    ...r,
+  }))
+
+  fee = fee.concat(regFee)
+
+  const lastSixMonths = () => {
+    let months = []
+    moment().startOf('month')
+
+    const arr = [...Array(6).keys()]
+
+    arr.forEach((i) => {
+      months.push(
+        moment().startOf('month').subtract(i, 'month').format('MMMM YYYY')
+      )
+    })
+
+    return months.reverse()
+  }
+
+  const month = (index, isPaid) => {
+    const mth = []
+    fee
+      ?.filter(
+        (f) =>
+          moment(f.createdAt).format('MMMM YYYY') ===
+          lastSixMonths().reverse()[index]
+      )
+      ?.map((m) => mth.push(m))
+
+    return mth.reduce(
+      (acc, curr) =>
+        acc + Number(curr && curr.isPaid === isPaid && curr.amount),
+      0
+    )
+  }
+
+  const chartData = {
+    totalCollected: [...Array(6).keys()].map((n) => month(n, true))?.reverse(),
+    totalUnCollected: [...Array(6).keys()]
+      .map((n) => month(n, false))
+      ?.reverse(),
+    lastSixMonths: lastSixMonths(),
+  }
+
+  res.status(200).send(chartData)
 })
 
 export default handler

@@ -2,6 +2,7 @@ import nc from 'next-connect'
 import dbConnect from '../../../utils/db'
 import { isAuth } from '../../../utils/auth'
 import Tuition from '../../../models/Tuition'
+import RegFee from '../../../models/RegFee'
 import Student from '../../../models/Student'
 import moment from 'moment'
 
@@ -63,7 +64,25 @@ handler.post(async (req, res) => {
       }),
     }
 
-    res.status(200).send({ payments: tuition, paymentInfo })
+    const newTuition = Promise.all(
+      tuition.map(async (fee) => {
+        const s = moment(fee.createdAt).clone().startOf('month').format()
+        const e = moment(fee.createdAt).clone().endOf('month').format()
+
+        const regFeeObj = await RegFee.find({
+          student: fee.student,
+          createdAt: { $gte: s, $lte: e },
+        }).lean()
+        return {
+          admissionFee: regFeeObj,
+          ...fee.toObject(),
+        }
+      })
+    )
+
+    const newTuitionArray = await newTuition
+
+    res.status(200).send({ payments: newTuitionArray, paymentInfo })
   } else {
     const tuition = await Tuition.find({
       createdAt: { $gte: start, $lte: end },

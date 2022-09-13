@@ -6,8 +6,6 @@ import { FaTimesCircle } from 'react-icons/fa'
 const InvoiceTemplate = ({ stdPaymentInfo }) => {
   const student = stdPaymentInfo !== null && stdPaymentInfo
 
-  console.log(student)
-
   if (student) {
     return (
       <div className='modal-body'>
@@ -83,12 +81,33 @@ const InvoiceTemplate = ({ stdPaymentInfo }) => {
                   )}
                 </td>
               </tr>
+              {student?.admissionFee?.map((ad, i) => (
+                <tr key={ad._id}>
+                  <th scope='row'>{Number(i) + 2}</th>
+                  <td>Course Admission Fee</td>
+                  <td>{`$${ad.amount.toFixed(2)}`}</td>
+                </tr>
+              ))}
               <tr className='bg-primary text-light'>
                 <td colSpan='2 ' className='text-center'>
                   TOTAL
                 </td>
                 <td>
-                  {student.isPaid ? (
+                  {student?.admissionFee ? (
+                    student.isPaid ? (
+                      `$${(
+                        Number(student.amount) +
+                        Number(
+                          student?.admissionFee?.reduce(
+                            (acc, curr) => acc + curr.amount,
+                            0
+                          )
+                        )
+                      ).toFixed(2)}`
+                    ) : (
+                      <FaTimesCircle className='text-danger mb-1' />
+                    )
+                  ) : student.isPaid ? (
                     `$${student.amount.toFixed(2)}`
                   ) : (
                     <FaTimesCircle className='text-danger mb-1' />

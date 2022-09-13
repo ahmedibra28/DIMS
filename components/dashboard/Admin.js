@@ -23,7 +23,7 @@ const Admin = () => {
   })
 
   const {
-    data: feeData,
+    data: chartData,
     isLoading: isLoadingFee,
     isError: isErrorFee,
     error: errorFee,
@@ -35,88 +35,27 @@ const Admin = () => {
   const allStudentQuery = useQuery('all-students', getAllStudents)
   const allInstructorQuery = useQuery('all-instructors', getAllInstructors)
 
-  const studentData =
-    allStudentQuery && allStudentQuery.data && allStudentQuery.data.length
-  const courseTypeData =
-    courseTypeQuery && courseTypeQuery.data && courseTypeQuery.data.length
-  const instructorData =
-    allInstructorQuery &&
-    allInstructorQuery.data &&
-    allInstructorQuery.data.length
-
-  const lastSixMonths = () => {
-    let months = []
-    moment().startOf('month')
-    for (let i = 0; i < 6; i++) {
-      months.push(
-        moment().startOf('month').subtract(i, 'month').format('MMMM YYYY')
-      )
-    }
-    return months.reverse()
-  }
-
-  // Fee
-  const month = (index, isPaid) => {
-    const mth = []
-    feeData &&
-      feeData
-        .filter(
-          (f) =>
-            moment(f.createdAt).format('MMMM YYYY') ===
-            lastSixMonths().reverse()[index]
-        )
-        .map((m) => mth.push(m))
-
-    return mth.reduce(
-      (acc, curr) =>
-        acc + Number(curr && curr.isPaid === isPaid && curr.amount),
-      0
-    )
-  }
+  const studentData = allStudentQuery?.data?.length
+  const courseTypeData = courseTypeQuery?.data?.length
+  const instructorData = allInstructorQuery?.data?.length
 
   const data = {
-    labels: lastSixMonths(),
+    labels: chartData?.lastSixMonths,
     datasets: [
       {
         label: 'Collected Fees',
-        data: [
-          month(5, true),
-          month(4, true),
-          month(3, true),
-          month(2, true),
-          month(1, true),
-          month(0, true),
-        ],
+        data: chartData?.totalCollected,
         backgroundColor: '#005aab',
         borderWidth: 0,
       },
       {
         label: 'Un-Collected Fees',
-        data: [
-          month(5, false),
-          month(4, false),
-          month(3, false),
-          month(2, false),
-          month(1, false),
-          month(0, false),
-        ],
+        data: chartData?.totalUnCollected,
         backgroundColor: '#ff6384',
         borderWidth: 0,
       },
     ],
   }
-
-  // const options = {
-  //   scales: {
-  //     yAxes: [
-  //       {
-  //         ticks: {
-  //           beginAtZero: true,
-  //         },
-  //       },
-  //     ],
-  //   },
-  // }
 
   return (
     <div className='row'>
