@@ -122,7 +122,7 @@ handler.put(async (req, res) => {
       }
 
       const { data } = await axios.post(
-        `https://api.waafi.com/asm`,
+        `https://api.waafipay.net/asm`,
         paymentObject
       )
 
@@ -140,7 +140,7 @@ handler.put(async (req, res) => {
 
         const updateObj = await tuition.save()
         if (updateObj) {
-          await axios.post(`https://api.waafi.com/asm`, withdrawalObject)
+          await axios.post(`https://api.waafipay.net/asm`, withdrawalObject)
           return res.status(201).json({ status: 'success' })
         }
       }
