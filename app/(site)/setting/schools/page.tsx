@@ -19,6 +19,7 @@ import CustomFormField from '@/components/ui/CustomForm'
 import useEditStore from '@/zustand/editStore'
 import { useColumn } from './hook/useColumn'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
+import useResetStore from '@/zustand/resetStore'
 
 const FormSchema = z.object({
   name: z.string().refine((value) => value !== '', {
@@ -35,6 +36,8 @@ const Page = () => {
   const [id, setId] = useState<string | null>(null)
   const { edit, setEdit } = useEditStore((state) => state)
   const [q, setQ] = useState('')
+
+  const { reset, setReset } = useResetStore((state) => state)
 
   const path = useAuthorization()
   const router = useRouter()
@@ -78,9 +81,11 @@ const Page = () => {
   })
 
   useEffect(() => {
-    if (postApi?.isSuccess || updateApi?.isSuccess || deleteApi?.isSuccess)
-      formCleanHandler()
-    getApi?.refetch()
+    if (postApi?.isSuccess || updateApi?.isSuccess || deleteApi?.isSuccess) {
+      setReset(!reset)
+      getApi?.refetch()
+      window.document.getElementById('dialog-close')?.click()
+    }
     // eslint-disable-next-line
   }, [postApi?.isSuccess, updateApi?.isSuccess, deleteApi?.isSuccess])
 
@@ -123,15 +128,14 @@ const Page = () => {
   const label = 'School'
   const modal = 'school'
 
-  const formCleanHandler = () => {
+  useEffect(() => {
     form.reset()
     setEdit(false)
     setId(null)
     refEdit.current = false
     refId.current = null
-
-    window.document.getElementById('dialog-close')?.click()
-  }
+    // eslint-disable-next-line
+  }, [reset])
 
   const status = [
     { label: 'ACTIVE', value: 'ACTIVE' },
@@ -169,7 +173,6 @@ const Page = () => {
 
   const formChildren = (
     <FormView
-      formCleanHandler={formCleanHandler}
       form={formFields}
       loading={updateApi?.isPending || postApi?.isPending}
       handleSubmit={form.handleSubmit}
