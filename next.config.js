@@ -1,10 +1,24 @@
-module.exports = {
-  reactStrictMode: true,
-  images: {
-    domains: [
-      'https://s3.us-west-002.backblazeb2.com',
-      's3.us-west-002.backblazeb2.com',
-      'backblazeb2.com',
-    ],
-  },
+const path = require('path');
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    reactStrictMode: true,
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'ahmedibra.com'
+            },
+            {
+                protocol: 'https',
+                hostname: 'github.com'
+            },
+            {
+                protocol: 'https',
+                hostname: 'ui-avatars.com'
+            }
+        ]
+    }
 }
+
+module.exports = nextConfig
