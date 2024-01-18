@@ -3,14 +3,42 @@ const roles = [
     id: 'HzdmUa40IctkReRd2Pofm',
     name: 'Super Admin',
     description:
-      'Super Admins can access and manage all features and settings.',
+      'Super Admins have the highest level of access and authority in the system.',
     type: 'SUPER_ADMIN',
   },
   {
-    id: 'a75POUlJzMDmaJtz0JCxp',
-    name: 'Authenticated',
-    description: 'Default role given to authenticated user.',
-    type: 'AUTHENTICATED',
+    id: '2m4Qsx2e-g96eMw0X2qul',
+    name: 'Admin',
+    description: 'Admins have substantial access and control over the system.',
+    type: 'ADMIN',
+  },
+  {
+    id: 'ae0-0NVU0ncKhdOJrbLBc',
+    name: 'Student',
+    description:
+      'Students are users with access to educational resources and specific features within the system.',
+    type: 'STUDENT',
+  },
+  {
+    id: '6G-3UmJr0QPKlR6rm8n8x',
+    name: 'Instructor',
+    description:
+      'Instructors have specialized access and control within the system to facilitate teaching and learning.',
+    type: 'INSTRUCTOR',
+  },
+  {
+    id: 'DYe_C4Xz7kj_vDN7qUdq4',
+    name: 'Finance',
+    description:
+      'Finance personnel have access to financial features and settings within the system.',
+    type: 'FINANCE',
+  },
+  {
+    id: 'wtB-DWHDs3DIzfZv5ZWI0',
+    name: 'Exam',
+    description:
+      'Exam personnel have access to exam-related features and settings in the system.',
+    type: 'EXAM',
   },
 ]
 
@@ -39,6 +67,9 @@ const sort = {
   hidden: 0,
   profile: 1,
   admin: 2,
+  setting: 3,
+  finance: 4,
+  report: 5,
 }
 
 const clientPermissions = [
@@ -89,6 +120,46 @@ const clientPermissions = [
     menu: 'admin',
     sort: sort.admin,
     description: 'Client Permissions page',
+  },
+  {
+    id: 'HnCMgsT54kcTRYlJGaOC3',
+    name: 'School',
+    path: '/setting/schools',
+    menu: 'setting',
+    sort: sort.setting,
+    description: 'School page',
+  },
+  {
+    id: 'HnCMgsT54kcTRYlJGaOC4',
+    name: 'Course',
+    path: '/setting/courses',
+    menu: 'setting',
+    sort: sort.setting,
+    description: 'Course page',
+  },
+  {
+    id: 'HnCMgsT54kcTRYlJGaOC5',
+    name: 'Subject',
+    path: '/setting/subjects',
+    menu: 'setting',
+    sort: sort.setting,
+    description: 'Subject page',
+  },
+  {
+    id: 'HnCMgsT54kcTRYlJGaOC6',
+    name: 'Student',
+    path: '/setting/students',
+    menu: 'setting',
+    sort: sort.setting,
+    description: 'Student page',
+  },
+  {
+    id: 'HnCMgsT54kcTRYlJGaOC7',
+    name: 'Instructor',
+    path: '/setting/instructors',
+    menu: 'setting',
+    sort: sort.setting,
+    description: 'Instructor page',
   },
 ]
 
@@ -242,6 +313,156 @@ const permissions = [
     route: '/api/uploads',
     name: 'Upload',
     method: 'POST',
+  },
+
+  // School
+  {
+    id: 'CN6RLsmP_3BDGSWYB06EU',
+    description: 'School',
+    route: '/api/schools',
+    name: 'School',
+    method: 'GET',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxO',
+    description: 'School',
+    route: '/api/schools',
+    name: 'School',
+    method: 'POST',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxP',
+    description: 'School',
+    route: '/api/schools/:id',
+    name: 'School',
+    method: 'PUT',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxQ',
+    description: 'School',
+    route: '/api/schools/:id',
+    name: 'School',
+    method: 'DELETE',
+  },
+
+  // Course
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxR',
+    description: 'Course',
+    route: '/api/courses',
+    name: 'Course',
+    method: 'GET',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxS',
+    description: 'Course',
+    route: '/api/courses',
+    name: 'Course',
+    method: 'POST',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxT',
+    description: 'Course',
+    route: '/api/courses/:id',
+    name: 'Course',
+    method: 'PUT',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxU',
+    description: 'Course',
+    route: '/api/courses/:id',
+    name: 'Course',
+    method: 'DELETE',
+  },
+
+  // Subject
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxV',
+    description: 'Subject',
+    route: '/api/subjects',
+    name: 'Subject',
+    method: 'GET',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxW',
+    description: 'Subject',
+    route: '/api/subjects',
+    name: 'Subject',
+    method: 'POST',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxX',
+    description: 'Subject',
+    route: '/api/subjects/:id',
+    name: 'Subject',
+    method: 'PUT',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxY',
+    description: 'Subject',
+    route: '/api/subjects/:id',
+    name: 'Subject',
+    method: 'DELETE',
+  },
+
+  // Student
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxZ',
+    description: 'Student',
+    route: '/api/students',
+    name: 'Student',
+    method: 'GET',
+  },
+  {
+    id: 'gob4iLXnCtTi1yvU9_9-A',
+    description: 'Student',
+    route: '/api/students',
+    name: 'Student',
+    method: 'POST',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxb',
+    description: 'Student',
+    route: '/api/students/:id',
+    name: 'Student',
+    method: 'PUT',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxc',
+    description: 'Student',
+    route: '/api/students/:id',
+    name: 'Student',
+    method: 'DELETE',
+  },
+
+  // Instructor
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxd',
+    description: 'Instructor',
+    route: '/api/instructors',
+    name: 'Instructor',
+    method: 'GET',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxe',
+    description: 'Instructor',
+    route: '/api/instructors',
+    name: 'Instructor',
+    method: 'POST',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxf',
+    description: 'Instructor',
+    route: '/api/instructors/:id',
+    name: 'Instructor',
+    method: 'PUT',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxg',
+    description: 'Instructor',
+    route: '/api/instructors/:id',
+    name: 'Instructor',
+    method: 'DELETE',
   },
 ]
 
