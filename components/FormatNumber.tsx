@@ -3,10 +3,10 @@ import { numberFormat } from '@/lib/numberFormat'
 
 export const FormatNumber = ({
   value,
-  isCurrency,
+  isCurrency = true,
 }: {
   value: number
-  isCurrency: boolean
+  isCurrency?: boolean
 }) => {
   const isN = typeof value === 'number' && !isNaN(value)
 
