@@ -16,31 +16,30 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Form } from '@/components/ui/form'
 import CustomFormField from '@/components/ui/CustomForm'
-import useEditStore from '@/zustand/editStore'
-import { useColumn } from './hook/useColumn'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useResetStore from '@/zustand/resetStore'
 import Upload from '@/components/Upload'
 import Image from 'next/image'
+import useDataStore from '@/zustand/dataStore'
+import { columns } from './columns'
 
 const FormSchema = z.object({
   name: z.string().min(1),
   placeOfBirth: z.string().min(1),
   dateOfBirth: z.string().min(1),
   nationality: z.string().min(1),
-  Sex: z.string().min(1),
+  sex: z.string().min(1),
   education: z.string().min(1),
   district: z.string().min(1),
   mobile: z.string().min(1),
   contactName: z.string().min(1),
   contactMobile: z.string().min(1),
-  contactEmail: z.string().min(1),
+  contactEmail: z.string().email().min(1),
   contactRelation: z.string().min(1),
   somaliLanguage: z.string().min(1),
   arabicLanguage: z.string().min(1),
   englishLanguage: z.string().min(1),
   kiswahiliLanguage: z.string().min(1),
-  image: z.string().min(1),
   note: z.string(),
   status: z.string().min(1),
 })
@@ -49,7 +48,7 @@ const Page = () => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(50)
   const [id, setId] = useState<string | null>(null)
-  const { edit, setEdit } = useEditStore((state) => state)
+  const [edit, setEdit] = useState(false)
   const [q, setQ] = useState('')
   const [fileLink, setFileLink] = React.useState<string[]>([])
 
@@ -63,6 +62,8 @@ const Page = () => {
       router.push(path)
     }
   }, [path, router])
+
+  const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
 
   const getApi = useApi({
     key: ['students'],
@@ -95,7 +96,7 @@ const Page = () => {
       placeOfBirth: '',
       dateOfBirth: '',
       nationality: '',
-      Sex: '',
+      sex: '',
       education: '',
       district: '',
       mobile: '',
@@ -107,7 +108,6 @@ const Page = () => {
       arabicLanguage: '',
       englishLanguage: '',
       kiswahiliLanguage: '',
-      image: '',
       note: '',
       status: '',
     },
@@ -115,10 +115,10 @@ const Page = () => {
 
   useEffect(() => {
     if (postApi?.isSuccess || updateApi?.isSuccess || deleteApi?.isSuccess) {
-      setReset(!reset)
       getApi?.refetch()
-      window.document.getElementById('dialog-close')?.click()
+      setDialogOpen(false)
     }
+
     // eslint-disable-next-line
   }, [postApi?.isSuccess, updateApi?.isSuccess, deleteApi?.isSuccess])
 
@@ -143,20 +143,14 @@ const Page = () => {
     setPage(1)
   }
 
-  const refEdit = React.useRef(edit)
-  const refId = React.useRef(id)
-
   const editHandler = (item: IStudent) => {
     setId(item.id!)
     setEdit(true)
-
-    refEdit.current = true
-    refId.current = item.id!
     form.setValue('name', item?.name)
     form.setValue('placeOfBirth', item?.placeOfBirth)
     form.setValue('dateOfBirth', item?.dateOfBirth)
     form.setValue('nationality', item?.nationality)
-    form.setValue('Sex', item?.Sex)
+    form.setValue('sex', item?.sex)
     form.setValue('education', item?.education)
     form.setValue('district', item?.district)
     form.setValue('mobile', String(item?.mobile))
@@ -168,11 +162,11 @@ const Page = () => {
     form.setValue('arabicLanguage', item?.arabicLanguage)
     form.setValue('englishLanguage', item?.englishLanguage)
     form.setValue('kiswahiliLanguage', item?.kiswahiliLanguage)
-    form.setValue('image', item?.image!)
+
     form.setValue('note', item?.note!)
     form.setValue('status', item?.status)
 
-    // setFileLink(!getApi?.isPending ? [getApi?.data?.image] : [])
+    setFileLink([item?.image] as string[])
   }
 
   const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
@@ -181,14 +175,14 @@ const Page = () => {
   const modal = 'student'
 
   useEffect(() => {
-    form.reset()
-    setEdit(false)
-    setId(null)
-    refEdit.current = false
-    refId.current = null
-    setFileLink([])
+    if (!dialogOpen) {
+      form.reset()
+      setEdit(false)
+      setId(null)
+      setFileLink([])
+    }
     // eslint-disable-next-line
-  }, [reset])
+  }, [dialogOpen])
 
   const status = [
     { label: 'ACTIVE', value: 'ACTIVE' },
@@ -215,13 +209,17 @@ const Page = () => {
     { label: 'Eritrea', value: 'Eritrea' },
   ]
 
+  const sex = [
+    { label: 'Male', value: 'MALE' },
+    { label: 'Female', value: 'FEMALE' },
+  ]
+
   const formFields = (
     <Form {...form}>
       <div>
-        <h1 className='font-bold uppercase text-primary'>
+        <h1 className='font-bold uppercase text-primary border border-white border-t-0 border-r-0 border-l-0 mb-2'>
           Personal Information
         </h1>
-        <hr className='my-2' />
         <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-4 mt-2'>
           <CustomFormField
             form={form}
@@ -254,10 +252,12 @@ const Page = () => {
           />
           <CustomFormField
             form={form}
-            name='Sex'
+            name='sex'
             label='Sex'
             placeholder='Sex'
             type='text'
+            fieldType='command'
+            data={sex}
           />
           <CustomFormField
             form={form}
@@ -267,8 +267,9 @@ const Page = () => {
             type='text'
           />
         </div>
-        <h1 className='font-bold uppercase text-primary'>Permanent Address</h1>
-        <hr className='my-2' />
+        <h1 className='font-bold uppercase text-primary border border-white border-t-0 border-r-0 border-l-0 mb-2'>
+          Permanent Address
+        </h1>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-4 mt-2'>
           <CustomFormField
             form={form}
@@ -285,10 +286,9 @@ const Page = () => {
             type='text'
           />
         </div>
-        <h1 className='font-bold uppercase text-primary'>
+        <h1 className='font-bold uppercase text-primary border border-white border-t-0 border-r-0 border-l-0 mb-2'>
           Contact Person In Case Of Emergency
         </h1>
-        <hr className='my-2' />
         <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-4 mt-2'>
           <CustomFormField
             form={form}
@@ -319,8 +319,9 @@ const Page = () => {
             type='text'
           />
         </div>
-        <h1 className='font-bold uppercase text-primary'>Language Skills</h1>
-        <hr className='my-2' />
+        <h1 className='font-bold uppercase text-primary border border-white border-t-0 border-r-0 border-l-0 mb-2'>
+          Language Skills
+        </h1>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-4 mt-2'>
           <CustomFormField
             form={form}
@@ -364,15 +365,15 @@ const Page = () => {
             fileType='image'
           />
           {fileLink.length > 0 && (
-            <div className='avatar text-center flex justify-center items-end mt-2'>
-              <div className='w-12 mask mask-squircle'>
+            <div className='avatar text-center mt-2'>
+              <div className='w-12'>
                 <Image
                   src={fileLink?.[0]}
                   alt='avatar'
                   width={50}
                   height={50}
                   style={{ objectFit: 'cover' }}
-                  className='rounded-full'
+                  className='rounded'
                 />
               </div>
             </div>
@@ -385,6 +386,8 @@ const Page = () => {
           label='Note'
           placeholder='Note'
           type='text'
+          cols={2}
+          rows={2}
         />
         <CustomFormField
           form={form}
@@ -398,34 +401,15 @@ const Page = () => {
     </Form>
   )
 
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
+  const onSubmit = (values: z.infer<typeof FormSchema> & { image: string }) => {
     values.image = fileLink ? fileLink[0] : ''
-    refEdit.current
+    edit
       ? updateApi?.mutateAsync({
-          id: refId.current,
+          id: id,
           ...values,
         })
       : postApi?.mutateAsync(values)
   }
-
-  const formChildren = (
-    <FormView
-      form={formFields}
-      loading={updateApi?.isPending || postApi?.isPending}
-      handleSubmit={form.handleSubmit}
-      submitHandler={onSubmit}
-      label={label}
-      width='w-auto md:min-w-[600px]'
-      height='h-[80vh]'
-    />
-  )
-
-  const { columns } = useColumn({
-    editHandler,
-    isPending: deleteApi?.isPending || false,
-    deleteHandler,
-    formChildren,
-  })
 
   return (
     <>
@@ -438,6 +422,17 @@ const Page = () => {
 
       <TopLoadingBar isFetching={getApi?.isFetching || getApi?.isPending} />
 
+      <FormView
+        form={formFields}
+        loading={updateApi?.isPending || postApi?.isPending}
+        handleSubmit={form.handleSubmit}
+        submitHandler={onSubmit}
+        label={label}
+        edit={edit}
+        height='h-[80vh]'
+        width='md:min-w-[600px]'
+      />
+
       {getApi?.isPending ? (
         <Spinner />
       ) : getApi?.isError ? (
@@ -446,7 +441,11 @@ const Page = () => {
         <div className='overflow-x-auto bg-white p-3 mt-2'>
           <RTable
             data={getApi?.data}
-            columns={columns}
+            columns={columns({
+              editHandler,
+              isPending: deleteApi?.isPending || false,
+              deleteHandler,
+            })}
             setPage={setPage}
             setLimit={setLimit}
             limit={limit}
@@ -455,9 +454,7 @@ const Page = () => {
             searchHandler={searchHandler}
             modal={modal}
             caption='Students List'
-          >
-            {formChildren}
-          </RTable>
+          />
         </div>
       )}
     </>

@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { FaCircleCheck, FaCircleXmark } from 'react-icons/fa6'
 
 interface Props {
   value: string | any

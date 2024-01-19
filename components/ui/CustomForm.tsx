@@ -39,6 +39,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
@@ -277,7 +278,6 @@ export const ActionButton = ({
   isPending,
   deleteHandler,
   original,
-  formChildren,
 }: {
   editHandler?: (item: any) => void
   isPending?: boolean
@@ -286,6 +286,8 @@ export const ActionButton = ({
   original?: any
   formChildren?: React.ReactNode
 }) => {
+  const { setDialogOpen } = useDataStore((state) => state)
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -293,20 +295,18 @@ export const ActionButton = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {editHandler && (
-          <div>
-            <Dialog>
-              <DialogTrigger>
-                <div
-                  onClick={() => editHandler(original)}
-                  className='h-9 min-w-24 flex justify-start items-center gap-x-1 rounded-lg bg-primary text-white py-2 px-4 mx-2 text-sm mb-1'
-                >
-                  <FaFilePen />
-                  Edit
-                </div>
-              </DialogTrigger>
-              {formChildren}
-            </Dialog>
-          </div>
+          <DropdownMenuItem>
+            <FormButton
+              onClick={() => {
+                editHandler(original)
+                setDialogOpen(true)
+              }}
+              icon={<FaFilePen />}
+              label='Edit'
+              type='button'
+              loading={isPending}
+            />
+          </DropdownMenuItem>
         )}
 
         {deleteHandler && (

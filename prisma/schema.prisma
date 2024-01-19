@@ -128,7 +128,7 @@ model Student {
   placeOfBirth      String
   dateOfBirth       String
   nationality       String
-  Sex               Sex
+  sex               Sex
   education         String
   district          String
   mobile            Int
@@ -156,7 +156,7 @@ model Instructor {
   placeOfBirth    String
   dateOfBirth     String
   nationality     String
-  Sex             Sex
+  sex             Sex
   email           String
   qualification   String
   experience      String

@@ -6,12 +6,12 @@ import sharp from 'sharp'
 
 const uploadObject = async (fileName: string, data: any, bucket: string) => {
   const s3Client = new S3Client({
-    endpoint: getEnvVariable('AWS_DO_ENDPOINT'),
+    endpoint: getEnvVariable('R2_ENDPOINT'),
     forcePathStyle: true,
     region: 'us-east-1',
     credentials: {
-      accessKeyId: getEnvVariable('AWS_DO_ACCESS_KEY_ID'),
-      secretAccessKey: getEnvVariable('AWS_DO_ACCESS_KEY'),
+      accessKeyId: getEnvVariable('R2_ACCESS_KEY_ID'),
+      secretAccessKey: getEnvVariable('R2_SECRET_ACCESS_KEY'),
     } as {
       accessKeyId: string
       secretAccessKey: string
@@ -19,7 +19,7 @@ const uploadObject = async (fileName: string, data: any, bucket: string) => {
   })
 
   const params = {
-    Bucket: 'eballan',
+    Bucket: 'sahalbook',
     Key: fileName,
     Body: data,
     ACL: 'public-read',
@@ -87,10 +87,11 @@ export async function POST(req: Request) {
     return NextResponse.json({
       message: 'File uploaded successfully',
       data: fileUrls?.map((url) => ({
-        url: `https://farshaxan.blr1.cdn.digitaloceanspaces.com/eballan/${url.replace(
-          /\s/g,
-          '%20'
-        )}`,
+        url: `https://media.sahalbook.com/${url.replace(/\s/g, '%20')}`,
+        // url: `https://farshaxan.blr1.cdn.digitaloceanspaces.com/eballan/${url.replace(
+        //   /\s/g,
+        //   '%20'
+        // )}`,
       })),
     })
   } catch ({ status = 500, message }: any) {
