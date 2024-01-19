@@ -19,27 +19,29 @@ export async function PUT(req: Request, { params }: Params) {
       dateOfBirth,
       nationality,
       Sex,
-      email,
-      qualification,
-      experience,
+      education,
       district,
       mobile,
       contactName,
       contactMobile,
       contactEmail,
       contactRelation,
+      somaliLanguage,
+      arabicLanguage,
+      englishLanguage,
+      kiswahiliLanguage,
       image,
       note,
       status,
     } = await req.json()
 
-    const instructorObj = await prisma.instructor.findUnique({
+    const studentObj = await prisma.student.findUnique({
       where: { id: params.id },
     })
 
-    if (!instructorObj) return getErrorResponse('Instructor not found', 404)
+    if (!studentObj) return getErrorResponse('Student not found', 404)
 
-    await prisma.instructor.update({
+    await prisma.student.update({
       where: { id: params.id },
       data: {
         name,
@@ -47,15 +49,17 @@ export async function PUT(req: Request, { params }: Params) {
         dateOfBirth,
         nationality,
         Sex,
-        email,
-        qualification,
-        experience,
+        education,
         district,
         mobile,
         contactName,
         contactMobile,
         contactEmail,
         contactRelation,
+        somaliLanguage,
+        arabicLanguage,
+        englishLanguage,
+        kiswahiliLanguage,
         image,
         note,
         status,
@@ -63,8 +67,8 @@ export async function PUT(req: Request, { params }: Params) {
     })
 
     return NextResponse.json({
-      ...instructorObj,
-      message: 'Instructor has been updated successfully',
+      ...studentObj,
+      message: 'Student has been updated successfully',
     })
   } catch ({ status = 500, message }: any) {
     return getErrorResponse(message, status)
@@ -75,15 +79,15 @@ export async function DELETE(req: Request, { params }: Params) {
   try {
     await isAuth(req, params)
 
-    const instructorObj = await prisma.instructor.delete({
+    const studentObj = await prisma.student.delete({
       where: { id: params.id },
     })
 
-    if (!instructorObj) return getErrorResponse('Instructor not removed', 404)
+    if (!studentObj) return getErrorResponse('Student not removed', 404)
 
     return NextResponse.json({
-      ...instructorObj,
-      message: 'Instructor has been removed successfully',
+      ...studentObj,
+      message: 'Student has been removed successfully',
     })
   } catch ({ status = 500, message }: any) {
     return getErrorResponse(message, status)

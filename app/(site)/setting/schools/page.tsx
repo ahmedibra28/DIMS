@@ -22,12 +22,8 @@ import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useResetStore from '@/zustand/resetStore'
 
 const FormSchema = z.object({
-  name: z.string().refine((value) => value !== '', {
-    message: 'Name is required',
-  }),
-  status: z.string().refine((value) => value !== '', {
-    message: 'Status is required',
-  }),
+  name: z.string().min(1),
+  status: z.string().min(1),
 })
 
 const Page = () => {

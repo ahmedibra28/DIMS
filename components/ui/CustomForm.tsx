@@ -125,7 +125,7 @@ export default function CustomFormField({
           <FormItem className='flex flex-col mb-3'>
             {items?.map((item, i) => (
               <div key={i} className='mb-2 bg-slate-100 p-3 gap-y-2'>
-                <FormLabel className='mb-2 pb-3 font-bold'>
+                <FormLabel className='mb-2 pb-3 font-bold text-gray-700'>
                   {item.label}
                 </FormLabel>
                 {item?.children?.map((child, childId) => (
@@ -164,11 +164,11 @@ export default function CustomFormField({
               </div>
             ))}
 
-            <FormMessage />
+            <FormMessage className='text-xs' />
           </FormItem>
         ) : (
           <FormItem className='flex flex-col mb-3'>
-            <FormLabel>{label}</FormLabel>
+            <FormLabel className='text-gray-700'>{label}</FormLabel>
 
             {props?.fieldType === 'command' ? (
               <Popover>
@@ -236,7 +236,7 @@ export default function CustomFormField({
               </FormControl>
             )}
 
-            <FormMessage />
+            <FormMessage className='text-xs' />
           </FormItem>
         )
       }

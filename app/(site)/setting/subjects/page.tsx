@@ -22,24 +22,12 @@ import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useResetStore from '@/zustand/resetStore'
 
 const FormSchema = z.object({
-  name: z.string().refine((value) => value !== '', {
-    message: 'Name is required',
-  }),
-  semester: z.string().refine((value) => value !== '', {
-    message: 'Semester is required',
-  }),
-  theoryMarks: z.string().refine((value) => value !== '', {
-    message: 'Theory marks is required',
-  }),
-  practicalMarks: z.string().refine((value) => value !== '', {
-    message: 'Practical marks is required',
-  }),
-  status: z.string().refine((value) => value !== '', {
-    message: 'Status is required',
-  }),
-  courseId: z.string().refine((value) => value !== '', {
-    message: 'Course is required',
-  }),
+  name: z.string().min(1),
+  semester: z.string().min(1),
+  theoryMarks: z.string().min(1),
+  practicalMarks: z.string().min(1),
+  status: z.string().min(1),
+  courseId: z.string().min(1),
 })
 
 const Page = () => {
@@ -164,52 +152,54 @@ const Page = () => {
 
   const formFields = (
     <Form {...form}>
-      <CustomFormField
-        form={form}
-        name='name'
-        label='Name'
-        placeholder='Name'
-        type='text'
-      />
-      <CustomFormField
-        form={form}
-        name='semester'
-        label='Semester'
-        placeholder='Semester'
-        type='number'
-      />
-      <CustomFormField
-        form={form}
-        name='theoryMarks'
-        label='Theory Marks'
-        placeholder='Theory marks'
-        type='number'
-      />
-      <CustomFormField
-        form={form}
-        name='practicalMarks'
-        label='Practical Marks'
-        placeholder='Practical marks'
-        type='number'
-      />
-      <CustomFormField
-        form={form}
-        name='courseId'
-        label='Course'
-        placeholder='Course'
-        fieldType='command'
-        data={[]}
-        key='courses'
-        url='courses?page=1&limit=10'
-      />
-      <CustomFormField
-        form={form}
-        name='status'
-        label='Status'
-        placeholder='Status'
-        fieldType='command'
-        data={status}
-      />
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4'>
+        <CustomFormField
+          form={form}
+          name='name'
+          label='Name'
+          placeholder='Name'
+          type='text'
+        />
+        <CustomFormField
+          form={form}
+          name='semester'
+          label='Semester'
+          placeholder='Semester'
+          type='number'
+        />
+        <CustomFormField
+          form={form}
+          name='theoryMarks'
+          label='Theory Marks'
+          placeholder='Theory marks'
+          type='number'
+        />
+        <CustomFormField
+          form={form}
+          name='practicalMarks'
+          label='Practical Marks'
+          placeholder='Practical marks'
+          type='number'
+        />
+        <CustomFormField
+          form={form}
+          name='courseId'
+          label='Course'
+          placeholder='Course'
+          fieldType='command'
+          data={[]}
+          key='courses'
+          url='courses?page=1&limit=10'
+        />
+        <CustomFormField
+          form={form}
+          name='status'
+          label='Status'
+          placeholder='Status'
+          fieldType='command'
+          data={status}
+        />
+      </div>
     </Form>
   )
 

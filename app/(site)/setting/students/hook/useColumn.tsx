@@ -27,10 +27,22 @@ export const useColumn = ({
   )
 
   const columns = [
+    { header: 'Roll No', accessorKey: 'rollNo', active: true },
     { header: 'Name', accessorKey: 'name', active: true },
-    { header: 'Semester', accessorKey: 'semester', active: true },
-    { header: 'Theory Marks', accessorKey: 'theoryMarks', active: true },
-    { header: 'Practical Marks', accessorKey: 'practicalMarks', active: true },
+    { header: 'Place of Birth', accessorKey: 'placeOfBirth', active: false },
+    { header: 'Date of Birth', accessorKey: 'dateOfBirth', active: false },
+    { header: 'Sex', accessorKey: 'sex', active: true },
+    { header: 'District', accessorKey: 'district', active: true },
+    { header: 'Mobile', accessorKey: 'mobile', active: true },
+    { header: 'Nationality', accessorKey: 'nationality', active: false },
+    { header: 'Education', accessorKey: 'education', active: false },
+    { header: 'Contact Name', accessorKey: 'contactName', active: false },
+    { header: 'Contact Mobile', accessorKey: 'contactMobile', active: true },
+    {
+      header: 'Contact Relationship',
+      accessorKey: 'contactRelationship',
+      active: false,
+    },
     {
       header: 'Status',
       accessorKey: 'status',

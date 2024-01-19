@@ -22,30 +22,14 @@ import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useResetStore from '@/zustand/resetStore'
 
 const FormSchema = z.object({
-  name: z.string().refine((value) => value !== '', {
-    message: 'Name is required',
-  }),
-  price: z.string().refine((value) => value !== '', {
-    message: 'Price is required',
-  }),
-  duration: z.string().refine((value) => value !== '', {
-    message: 'Duration is required',
-  }),
-  certificate: z.string().refine((value) => value !== '', {
-    message: 'Certificate is required',
-  }),
-  enrolment: z.string().refine((value) => value !== '', {
-    message: 'Enrolment is required',
-  }),
-  examinations: z.string().refine((value) => value !== '', {
-    message: 'Examinations is required',
-  }),
-  status: z.string().refine((value) => value !== '', {
-    message: 'Status is required',
-  }),
-  schoolId: z.string().refine((value) => value !== '', {
-    message: 'School is required',
-  }),
+  name: z.string().min(1),
+  price: z.string().min(1),
+  duration: z.string().min(1),
+  certificate: z.string().min(1),
+  enrolment: z.string().min(1),
+  examinations: z.string().min(1),
+  status: z.string().min(1),
+  schoolId: z.string().min(1),
 })
 
 const Page = () => {
@@ -174,66 +158,68 @@ const Page = () => {
 
   const formFields = (
     <Form {...form}>
-      <CustomFormField
-        form={form}
-        name='name'
-        label='Name'
-        placeholder='Name'
-        type='text'
-      />
-      <CustomFormField
-        form={form}
-        name='price'
-        label='Price'
-        placeholder='Price'
-        type='number'
-      />
-      <CustomFormField
-        form={form}
-        name='duration'
-        label='Duration'
-        placeholder='Duration'
-        type='number'
-      />
-      <CustomFormField
-        form={form}
-        name='examinations'
-        label='Examinations'
-        placeholder='Examinations'
-        type='text'
-      />
-      <CustomFormField
-        form={form}
-        name='certificate'
-        label='Certificate'
-        placeholder='Certificate'
-        type='text'
-      />
-      <CustomFormField
-        form={form}
-        name='enrolment'
-        label='Enrolment'
-        placeholder='Enrolment'
-        type='text'
-      />
-      <CustomFormField
-        form={form}
-        name='schoolId'
-        label='School'
-        placeholder='School'
-        fieldType='command'
-        data={[]}
-        key='schools'
-        url='schools?page=1&limit=10'
-      />
-      <CustomFormField
-        form={form}
-        name='status'
-        label='Status'
-        placeholder='Status'
-        fieldType='command'
-        data={status}
-      />
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4'>
+        <CustomFormField
+          form={form}
+          name='name'
+          label='Name'
+          placeholder='Name'
+          type='text'
+        />
+        <CustomFormField
+          form={form}
+          name='price'
+          label='Price'
+          placeholder='Price'
+          type='number'
+        />
+        <CustomFormField
+          form={form}
+          name='duration'
+          label='Duration'
+          placeholder='Duration'
+          type='number'
+        />
+        <CustomFormField
+          form={form}
+          name='examinations'
+          label='Examinations'
+          placeholder='Examinations'
+          type='text'
+        />
+        <CustomFormField
+          form={form}
+          name='certificate'
+          label='Certificate'
+          placeholder='Certificate'
+          type='text'
+        />
+        <CustomFormField
+          form={form}
+          name='enrolment'
+          label='Enrolment'
+          placeholder='Enrolment'
+          type='text'
+        />
+        <CustomFormField
+          form={form}
+          name='schoolId'
+          label='School'
+          placeholder='School'
+          fieldType='command'
+          data={[]}
+          key='schools'
+          url='schools?page=1&limit=10'
+        />
+        <CustomFormField
+          form={form}
+          name='status'
+          label='Status'
+          placeholder='Status'
+          fieldType='command'
+          data={status}
+        />
+      </div>
     </Form>
   )
 

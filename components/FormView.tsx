@@ -36,7 +36,7 @@ const FormView = ({
   const { setReset, reset } = useResetStore((state) => state)
 
   return (
-    <DialogContent className={`${height} ${width} overflow-y-auto`}>
+    <DialogContent className={`${height} ${width} overflow-y-auto bg-gray-200`}>
       <DialogHeader>
         <DialogTitle>
           {edit ? 'Edit' : 'Add New'} {label}
