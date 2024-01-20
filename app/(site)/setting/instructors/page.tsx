@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import Message from '@/components/Message'
 import FormView from '@/components/FormView'
 import Spinner from '@/components/Spinner'
-import type { Student as IStudent } from '@prisma/client'
+import type { Instructor as IInstructor } from '@prisma/client'
 import RTable from '@/components/RTable'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -28,17 +28,15 @@ const FormSchema = z.object({
   dateOfBirth: z.string().min(1),
   nationality: z.string().min(1),
   sex: z.string().min(1),
-  education: z.string().min(1),
+  email: z.string().email().min(1),
+  qualification: z.string().min(1),
+  experience: z.string().min(1),
   district: z.string().min(1),
   mobile: z.string().min(1),
   contactName: z.string().min(1),
   contactMobile: z.string().min(1),
   contactEmail: z.string().email().min(1),
   contactRelation: z.string().min(1),
-  somaliLanguage: z.string().min(1),
-  arabicLanguage: z.string().min(1),
-  englishLanguage: z.string().min(1),
-  kiswahiliLanguage: z.string().min(1),
   note: z.string(),
   status: z.string().min(1),
 })
@@ -63,27 +61,27 @@ const Page = () => {
   const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
 
   const getApi = useApi({
-    key: ['students'],
+    key: ['instructors'],
     method: 'GET',
-    url: `students?page=${page}&q=${q}&limit=${limit}`,
+    url: `instructors?page=${page}&q=${q}&limit=${limit}`,
   })?.get
 
   const postApi = useApi({
-    key: ['students'],
+    key: ['instructors'],
     method: 'POST',
-    url: `students`,
+    url: `instructors`,
   })?.post
 
   const updateApi = useApi({
-    key: ['students'],
+    key: ['instructors'],
     method: 'PUT',
-    url: `students`,
+    url: `instructors`,
   })?.put
 
   const deleteApi = useApi({
-    key: ['students'],
+    key: ['instructors'],
     method: 'DELETE',
-    url: `students`,
+    url: `instructors`,
   })?.deleteObj
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -94,17 +92,15 @@ const Page = () => {
       dateOfBirth: '',
       nationality: '',
       sex: '',
-      education: '',
+      email: '',
+      qualification: '',
+      experience: '',
       district: '',
       mobile: '',
       contactName: '',
       contactMobile: '',
       contactEmail: '',
       contactRelation: '',
-      somaliLanguage: '',
-      arabicLanguage: '',
-      englishLanguage: '',
-      kiswahiliLanguage: '',
       note: '',
       status: '',
     },
@@ -140,7 +136,7 @@ const Page = () => {
     setPage(1)
   }
 
-  const editHandler = (item: IStudent) => {
+  const editHandler = (item: IInstructor) => {
     setId(item.id!)
     setEdit(true)
     form.setValue('name', item?.name)
@@ -148,18 +144,15 @@ const Page = () => {
     form.setValue('dateOfBirth', item?.dateOfBirth)
     form.setValue('nationality', item?.nationality)
     form.setValue('sex', item?.sex)
-    form.setValue('education', item?.education)
+    form.setValue('email', item?.email)
+    form.setValue('qualification', item?.qualification)
+    form.setValue('experience', item?.experience)
     form.setValue('district', item?.district)
     form.setValue('mobile', String(item?.mobile))
     form.setValue('contactName', item?.contactName)
     form.setValue('contactMobile', String(item?.contactMobile))
     form.setValue('contactEmail', item?.contactEmail)
     form.setValue('contactRelation', item?.contactRelation)
-    form.setValue('somaliLanguage', item?.somaliLanguage)
-    form.setValue('arabicLanguage', item?.arabicLanguage)
-    form.setValue('englishLanguage', item?.englishLanguage)
-    form.setValue('kiswahiliLanguage', item?.kiswahiliLanguage)
-
     form.setValue('note', item?.note!)
     form.setValue('status', item?.status)
 
@@ -168,8 +161,8 @@ const Page = () => {
 
   const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
 
-  const label = 'Student'
-  const modal = 'student'
+  const label = 'Instructor'
+  const modal = 'instructor'
 
   useEffect(() => {
     if (!dialogOpen) {
@@ -184,12 +177,6 @@ const Page = () => {
   const status = [
     { label: 'ACTIVE', value: 'ACTIVE' },
     { label: 'INACTIVE', value: 'INACTIVE' },
-  ]
-
-  const languageLevel = [
-    { label: 'FLUENT', value: 'FLUENT' },
-    { label: 'GOOD', value: 'GOOD' },
-    { label: 'FAIR', value: 'FAIR' },
   ]
 
   const country = [
@@ -258,10 +245,24 @@ const Page = () => {
           />
           <CustomFormField
             form={form}
-            name='education'
-            label='Education'
-            placeholder='Education'
+            name='qualification'
+            label='Qualification'
+            placeholder='Qualification'
             type='text'
+          />
+          <CustomFormField
+            form={form}
+            name='experience'
+            label='Experience'
+            placeholder='Experience'
+            type='text'
+          />
+          <CustomFormField
+            form={form}
+            name='email'
+            label='Email'
+            placeholder='Email'
+            type='email'
           />
         </div>
         <h1 className='font-bold uppercase text-primary border border-white border-t-0 border-r-0 border-l-0 mb-2'>
@@ -314,43 +315,6 @@ const Page = () => {
             label='Contact Relation'
             placeholder='Contact Relation'
             type='text'
-          />
-        </div>
-        <h1 className='font-bold uppercase text-primary border border-white border-t-0 border-r-0 border-l-0 mb-2'>
-          Language Skills
-        </h1>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-4 mt-2'>
-          <CustomFormField
-            form={form}
-            name='somaliLanguage'
-            label='Somali Language'
-            placeholder='Somali Language'
-            fieldType='command'
-            data={languageLevel}
-          />
-          <CustomFormField
-            form={form}
-            name='arabicLanguage'
-            label='Arabic Language'
-            placeholder='Arabic Language'
-            fieldType='command'
-            data={languageLevel}
-          />
-          <CustomFormField
-            form={form}
-            name='englishLanguage'
-            label='English Language'
-            placeholder='English Language'
-            fieldType='command'
-            data={languageLevel}
-          />
-          <CustomFormField
-            form={form}
-            name='kiswahiliLanguage'
-            label='Kiswahili Language'
-            placeholder='Kiswahili Language'
-            fieldType='command'
-            data={languageLevel}
           />
         </div>
 
@@ -450,7 +414,7 @@ const Page = () => {
             setQ={setQ}
             searchHandler={searchHandler}
             modal={modal}
-            caption='Students List'
+            caption='Instructors List'
           />
         </div>
       )}

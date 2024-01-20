@@ -17,7 +17,6 @@ import * as z from 'zod'
 import { Form } from '@/components/ui/form'
 import CustomFormField from '@/components/ui/CustomForm'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
-import useResetStore from '@/zustand/resetStore'
 import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
 
@@ -36,8 +35,6 @@ const Page = () => {
   const [id, setId] = useState<string | null>(null)
   const [edit, setEdit] = useState(false)
   const [q, setQ] = useState('')
-
-  const { reset, setReset } = useResetStore((state) => state)
 
   const path = useAuthorization()
   const router = useRouter()
@@ -185,7 +182,7 @@ const Page = () => {
           fieldType='command'
           data={[]}
           key='courses'
-          url='courses?page=1&limit=10'
+          url='courses?page=1&limit=10&status=ACTIVE'
         />
         <CustomFormField
           form={form}

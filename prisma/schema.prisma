@@ -190,7 +190,7 @@ enum Status {
 
 enum Sex {
   MALE
-  FEMAILE
+  FEMALE
 }
 
 enum LanguageLevel {
