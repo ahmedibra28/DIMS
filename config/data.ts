@@ -161,6 +161,14 @@ const clientPermissions = [
     sort: sort.setting,
     description: 'Instructor page',
   },
+  {
+    id: 'HnCMgsT54kcTRYlJGaOC8',
+    name: 'Notice',
+    path: '/admin/notices',
+    menu: 'admin',
+    sort: sort.admin,
+    description: 'Notice page',
+  },
 ]
 
 const permissions = [
@@ -462,6 +470,36 @@ const permissions = [
     description: 'Instructor',
     route: '/api/instructors/:id',
     name: 'Instructor',
+    method: 'DELETE',
+  },
+
+  // Notice
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxh',
+    description: 'Notice',
+    route: '/api/notices',
+    name: 'Notice',
+    method: 'GET',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxi',
+    description: 'Notice',
+    route: '/api/notices',
+    name: 'Notice',
+    method: 'POST',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxj',
+    description: 'Notice',
+    route: '/api/notices/:id',
+    name: 'Notice',
+    method: 'PUT',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxk',
+    description: 'Notice',
+    route: '/api/notices/:id',
+    name: 'Notice',
     method: 'DELETE',
   },
 ]

@@ -5,7 +5,7 @@ import { QueryMode, prisma } from '@/lib/prisma.db'
 
 import type { Status as IStatus } from '@prisma/client'
 
-export async function GET(req: Request) {
+export async function GET(req: NextApiRequestExtended) {
   try {
     await isAuth(req)
 
@@ -17,25 +17,45 @@ export async function GET(req: Request) {
       }),
     } as { status: IStatus }
 
+    const user =
+      req.user.role === 'SUPER_ADMIN'
+        ? {}
+        : { OR: [{ user: req.user.id }, { createdBy: req.user.id }] }
+
     const query = q
       ? {
-          name: { contains: q, mode: QueryMode.insensitive },
+          title: { contains: q, mode: QueryMode.insensitive },
           ...status,
+          ...user,
         }
-      : { ...status }
+      : { ...status, ...user }
 
     const page = parseInt(searchParams.get('page') as string) || 1
     const pageSize = parseInt(searchParams.get('limit') as string) || 25
     const skip = (page - 1) * pageSize
 
     const [result, total] = await Promise.all([
-      prisma.school.findMany({
-        where: query,
+      prisma.notice.findMany({
+        where: query as any,
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          roles: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
       }),
-      prisma.school.count({ where: query }),
+      prisma.notice.count({ where: query as any }),
     ])
 
     const pages = Math.ceil(total / pageSize)
@@ -58,28 +78,46 @@ export async function POST(req: NextApiRequestExtended) {
   try {
     await isAuth(req)
 
-    const { name, status } = await req.json()
+    const { title, note, roles, userId, status } = await req.json()
 
-    const checkExistence =
-      name &&
-      (await prisma.school.findFirst({
+    if (userId) {
+      const checkUser = await prisma.user.findFirst({
         where: {
-          name,
+          id: `${userId}`,
+          confirmed: true,
+          blocked: false,
         },
-      }))
-    if (checkExistence) return getErrorResponse('School already exist')
+      })
+      if (!checkUser)
+        return getErrorResponse('User does not exist or is not active')
+    }
 
-    const schoolObj = await prisma.school.create({
+    const checkRoles = await prisma.role.findMany({
+      where: {
+        id: {
+          in: roles,
+        },
+      },
+    })
+    if (checkRoles.length !== roles.length)
+      return getErrorResponse('One or more roles do not exist')
+
+    const noticeObj = await prisma.notice.create({
       data: {
-        name,
+        title,
+        note,
         status,
+        roles: {
+          connect: [...roles.map((role: string) => ({ id: role }))],
+        },
+        ...(userId && { userId }),
         createdById: req.user.id,
       },
     })
 
     return NextResponse.json({
-      ...schoolObj,
-      message: 'School created successfully',
+      ...noticeObj,
+      message: 'Notice created successfully',
     })
   } catch ({ status = 500, message }: any) {
     return getErrorResponse(message, status)

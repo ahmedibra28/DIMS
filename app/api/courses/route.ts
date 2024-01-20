@@ -61,7 +61,7 @@ export async function GET(req: Request) {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextApiRequestExtended) {
   try {
     await isAuth(req)
 
@@ -104,6 +104,7 @@ export async function POST(req: Request) {
         enrolment,
         status,
         schoolId,
+        createdById: req.user.id,
       },
     })
 

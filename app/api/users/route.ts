@@ -10,9 +10,16 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url)
     const q = searchParams.get('q')
 
+    const status = {
+      ...(searchParams.get('status') && {
+        confirmed: true,
+        blocked: false,
+      }),
+    } as { confirmed: boolean; blocked: boolean }
+
     const query = q
-      ? { email: { contains: q, mode: QueryMode.insensitive } }
-      : {}
+      ? { email: { contains: q, mode: QueryMode.insensitive, ...status } }
+      : { ...status }
 
     const page = parseInt(searchParams.get('page') as string) || 1
     const pageSize = parseInt(searchParams.get('limit') as string) || 25

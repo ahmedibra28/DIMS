@@ -54,7 +54,7 @@ export async function GET(req: Request) {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextApiRequestExtended) {
   try {
     await isAuth(req)
 
@@ -91,6 +91,7 @@ export async function POST(req: Request) {
         practicalMarks: parseInt(practicalMarks),
         status,
         courseId,
+        createdById: req.user.id,
       },
     })
 
