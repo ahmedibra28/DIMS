@@ -26,7 +26,6 @@ const FormSchema = z.object({
   shift: z.string().min(1),
   discount: z.string().min(1),
   status: z.string().min(1),
-  studentId: z.string().min(1),
   courseId: z.string().min(1),
 })
 
@@ -84,7 +83,6 @@ const Page = ({ params }: { params: { id: string } }) => {
       shift: '',
       discount: '',
       status: '',
-      studentId: '',
       courseId: '',
     },
   })
@@ -126,7 +124,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     form.setValue('shift', item?.shift)
     form.setValue('discount', String(item?.discount))
     form.setValue('status', item?.status)
-    form.setValue('studentId', item?.studentId)
     form.setValue('courseId', item?.courseId)
   }
 
@@ -164,7 +161,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             (_, i) => ({ label: `${i + 1}`, value: `${i + 1}` })
           )
 
-          form.setValue('semester', '')
+          // form.setValue('semester', '')
           setSemester(numberToArray)
         })
       })
@@ -202,20 +199,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           placeholder='Discount'
           type='number'
         />
-        <CustomFormField
-          form={form}
-          name='price'
-          label='Price'
-          placeholder='Price'
-          type='number'
-        />
-        <CustomFormField
-          form={form}
-          name='duration'
-          label='Duration'
-          placeholder='Duration'
-          type='number'
-        />
+
         <CustomFormField
           form={form}
           name='shift'
@@ -237,7 +221,10 @@ const Page = ({ params }: { params: { id: string } }) => {
     </Form>
   )
 
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
+  const onSubmit = (
+    values: z.infer<typeof FormSchema> & { studentId: string }
+  ) => {
+    values.studentId = params.id
     edit
       ? updateApi?.mutateAsync({
           id: id,

@@ -87,7 +87,10 @@ export async function POST(req: NextApiRequestExtended) {
           status: 'ACTIVE',
         },
       }))
-    if (checkExistence) return getErrorResponse('Assign course already exist')
+    if (checkExistence)
+      return getErrorResponse(
+        'Assign course already exist or shift is not available'
+      )
 
     const checkStudent = await prisma.student.findFirst({
       where: {
@@ -102,7 +105,7 @@ export async function POST(req: NextApiRequestExtended) {
       where: {
         id: `${courseId}`,
         status: 'ACTIVE',
-        duration: { lte: Number(semester) },
+        duration: { gte: Number(semester) },
       },
     })
     if (!checkCourse)

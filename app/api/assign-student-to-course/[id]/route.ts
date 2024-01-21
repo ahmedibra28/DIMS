@@ -102,7 +102,10 @@ export async function PUT(req: Request, { params }: Params) {
           id: { not: params.id },
         },
       }))
-    if (checkExistence) return getErrorResponse('Assign course already exist')
+    if (checkExistence)
+      return getErrorResponse(
+        'Assign course already exist or shift is not available'
+      )
 
     const checkStudent = await prisma.student.findFirst({
       where: {
@@ -117,7 +120,7 @@ export async function PUT(req: Request, { params }: Params) {
       where: {
         id: `${courseId}`,
         status: 'ACTIVE',
-        duration: { lte: Number(semester) },
+        duration: { gte: Number(semester) },
       },
     })
     if (!checkCourse)
