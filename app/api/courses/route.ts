@@ -99,7 +99,7 @@ export async function POST(req: NextApiRequestExtended) {
         name,
         price: parseFloat(price),
         duration: parseInt(duration),
-        examinations: examinations.split(',').map((e: string) => e.trim()),
+        examinations,
         certificate,
         enrolment,
         status,

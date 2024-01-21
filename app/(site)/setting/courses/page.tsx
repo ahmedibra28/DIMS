@@ -19,6 +19,7 @@ import CustomFormField from '@/components/ui/CustomForm'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
+import { MultiSelect } from '@/components/ui/multi-select'
 
 const FormSchema = z.object({
   name: z.string().min(1),
@@ -26,7 +27,7 @@ const FormSchema = z.object({
   duration: z.string().min(1),
   certificate: z.string().min(1),
   enrolment: z.string().min(1),
-  examinations: z.string().min(1),
+  examinations: z.array(z.string()).min(1),
   status: z.string().min(1),
   schoolId: z.string().min(1),
 })
@@ -37,6 +38,9 @@ const Page = () => {
   const [id, setId] = useState<string | null>(null)
   const [edit, setEdit] = useState(false)
   const [q, setQ] = useState('')
+  const [selectedExaminations, setSelectedExaminations] = React.useState<
+    { label: string; value: string }[]
+  >([])
 
   const path = useAuthorization()
   const router = useRouter()
@@ -81,7 +85,7 @@ const Page = () => {
       duration: '',
       certificate: '',
       enrolment: '',
-      examinations: '',
+      examinations: [],
       schoolId: '',
       status: '',
     },
@@ -123,11 +127,17 @@ const Page = () => {
     form.setValue('name', item?.name)
     form.setValue('price', String(item?.price))
     form.setValue('duration', String(item?.duration))
-    form.setValue('examinations', item?.examinations as any)
     form.setValue('certificate', item?.certificate!)
     form.setValue('enrolment', item?.enrolment!)
     form.setValue('schoolId', item?.schoolId!)
     form.setValue('status', item?.status)
+
+    const examinations = item?.examinations?.map((item) => ({
+      label: item,
+      value: item,
+    }))
+
+    setSelectedExaminations(examinations)
   }
 
   const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
@@ -140,6 +150,7 @@ const Page = () => {
       form.reset()
       setEdit(false)
       setId(null)
+      setSelectedExaminations([])
     }
     // eslint-disable-next-line
   }, [dialogOpen])
@@ -148,6 +159,25 @@ const Page = () => {
     { label: 'ACTIVE', value: 'ACTIVE' },
     { label: 'INACTIVE', value: 'INACTIVE' },
   ]
+
+  const exams = [
+    { label: 'CAT I', value: 'CAT I' },
+    { label: 'CAT II', value: 'CAT II' },
+    { label: 'FINAL', value: 'FINAL' },
+  ]
+
+  let multiExaminations = React.useMemo(() => {
+    const newRoles: any[] = []
+
+    exams?.forEach((role: any) => {
+      if (!selectedExaminations.find((item) => item.value === role.value)) {
+        newRoles.push(role)
+      }
+    })
+
+    return newRoles
+    // eslint-disable-next-line
+  }, [edit])
 
   const formFields = (
     <Form {...form}>
@@ -173,13 +203,19 @@ const Page = () => {
           placeholder='Duration'
           type='number'
         />
-        <CustomFormField
-          form={form}
-          name='examinations'
-          label='Examinations'
-          placeholder='Examinations'
-          type='text'
-        />
+
+        <div className='grid grid-cols-1'>
+          <MultiSelect
+            data={multiExaminations}
+            selected={selectedExaminations}
+            setSelected={setSelectedExaminations}
+            label='Examinations'
+            form={form}
+            name='examinations'
+            edit={edit}
+          />
+        </div>
+
         <CustomFormField
           form={form}
           name='certificate'

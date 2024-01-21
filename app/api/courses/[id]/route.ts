@@ -56,7 +56,7 @@ export async function PUT(req: Request, { params }: Params) {
         name,
         price: parseFloat(price),
         duration: parseInt(duration),
-        examinations: examinations.split(',').map((e: string) => e.trim()),
+        examinations,
         certificate,
         enrolment,
         status,

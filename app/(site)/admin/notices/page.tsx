@@ -122,11 +122,22 @@ const Page = () => {
   }
 
   let multiRoles = React.useMemo(() => {
-    return getRoles?.data?.data?.map((item: any) => ({
+    const roles = getRoles?.data?.data?.map((item: any) => ({
       label: item.name,
       value: item.id,
     }))
-  }, [getRoles?.data?.data])
+
+    const newRoles: any[] = []
+
+    roles?.forEach((role: any) => {
+      if (!selectedRoles.find((item) => item.value === role.value)) {
+        newRoles.push(role)
+      }
+    })
+
+    return newRoles
+    // eslint-disable-next-line
+  }, [getRoles?.data?.data, edit])
 
   const editHandler = (item: INotice & { roles: IRole[] }) => {
     setId(item.id!)
@@ -188,6 +199,7 @@ const Page = () => {
           label='Roles'
           form={form}
           name='roles'
+          edit={edit}
         />
 
         <CustomFormField

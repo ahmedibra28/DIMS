@@ -19,6 +19,7 @@ export function MultiSelect({
   label,
   form,
   name,
+  edit,
 }: {
   data: Prop[]
   selected: Prop[]
@@ -26,6 +27,7 @@ export function MultiSelect({
   label?: string
   form?: UseFormReturn<any>
   name: string
+  edit?: boolean
 }) {
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [open, setOpen] = React.useState(false)
