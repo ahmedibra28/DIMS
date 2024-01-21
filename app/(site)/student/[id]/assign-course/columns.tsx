@@ -1,3 +1,4 @@
+import { FormatNumber } from '@/components/FormatNumber'
 import { ActionButton } from '@/components/ui/CustomForm'
 import DateTime from '@/lib/dateTime'
 
@@ -9,7 +10,18 @@ type Column = {
 
 export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
   return [
-    { header: 'Name', accessorKey: 'name', active: true },
+    { header: 'Course', accessorKey: 'course.name', active: true },
+    { header: 'Semester', accessorKey: 'semester', active: true },
+    { header: 'Shift', accessorKey: 'shift', active: true },
+
+    {
+      header: 'Discount',
+      accessorKey: 'discount',
+      active: true,
+      cell: ({ row: { original } }: any) => (
+        <FormatNumber value={original?.discount} />
+      ),
+    },
     {
       header: 'Status',
       accessorKey: 'status',

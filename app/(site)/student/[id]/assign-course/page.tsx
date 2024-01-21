@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, FormEvent } from 'react'
+import React, { useState, useEffect, FormEvent, useTransition } from 'react'
 import dynamic from 'next/dynamic'
 import { useForm } from 'react-hook-form'
 import useAuthorization from '@/hooks/useAuthorization'
@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import Message from '@/components/Message'
 import FormView from '@/components/FormView'
 import Spinner from '@/components/Spinner'
-import type { School as ISchool } from '@prisma/client'
+import type { AssignCourse as IAssignCourse } from '@prisma/client'
 import RTable from '@/components/RTable'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,18 +19,26 @@ import CustomFormField from '@/components/ui/CustomForm'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
+import getCoursesById from '@/actions/getCoursesById'
 
 const FormSchema = z.object({
-  name: z.string().min(1),
+  semester: z.string().min(1),
+  shift: z.string().min(1),
+  discount: z.string().min(1),
   status: z.string().min(1),
+  studentId: z.string().min(1),
+  courseId: z.string().min(1),
 })
 
-const Page = () => {
+const Page = ({ params }: { params: { id: string } }) => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(50)
   const [id, setId] = useState<string | null>(null)
   const [edit, setEdit] = useState(false)
   const [q, setQ] = useState('')
+  const [semester, setSemester] = useState<{ label: string; value: string }[]>(
+    []
+  )
 
   const path = useAuthorization()
   const router = useRouter()
@@ -41,37 +49,43 @@ const Page = () => {
     }
   }, [path, router])
 
+  const [isPending, startTransition] = useTransition()
+
   const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
 
   const getApi = useApi({
-    key: ['schools'],
+    key: ['assign-courses'],
     method: 'GET',
-    url: `schools?page=${page}&q=${q}&limit=${limit}`,
+    url: `assign-student-to-course/${params.id}?page=${page}&q=${q}&limit=${limit}`,
   })?.get
 
   const postApi = useApi({
-    key: ['schools'],
+    key: ['assign-courses'],
     method: 'POST',
-    url: `schools`,
+    url: `assign-student-to-course`,
   })?.post
 
   const updateApi = useApi({
-    key: ['schools'],
+    key: ['assign-courses'],
     method: 'PUT',
-    url: `schools`,
+    url: `assign-student-to-course`,
   })?.put
 
   const deleteApi = useApi({
-    key: ['schools'],
+    key: ['assign-courses'],
     method: 'DELETE',
-    url: `schools`,
+    url: `assign-student-to-course`,
   })?.deleteObj
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: '',
+      semester: '',
+      shift: '',
+      discount: '',
       status: '',
+      studentId: '',
+      courseId: '',
     },
   })
 
@@ -105,23 +119,28 @@ const Page = () => {
     setPage(1)
   }
 
-  const editHandler = (item: ISchool) => {
+  const editHandler = (item: IAssignCourse) => {
     setId(item.id!)
     setEdit(true)
-    form.setValue('name', item?.name)
+    form.setValue('semester', String(item?.semester))
+    form.setValue('shift', item?.shift)
+    form.setValue('discount', String(item?.discount))
     form.setValue('status', item?.status)
+    form.setValue('studentId', item?.studentId)
+    form.setValue('courseId', item?.courseId)
   }
 
   const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
 
-  const label = 'School'
-  const modal = 'school'
+  const label = 'Assign Course'
+  const modal = 'assignCourse'
 
   useEffect(() => {
     if (!dialogOpen) {
       form.reset()
       setEdit(false)
       setId(null)
+      setSemester([])
     }
     // eslint-disable-next-line
   }, [dialogOpen])
@@ -131,23 +150,90 @@ const Page = () => {
     { label: 'INACTIVE', value: 'INACTIVE' },
   ]
 
+  const shift = [
+    { label: 'Morning', value: 'MORNING' },
+    { label: 'Afternoon', value: 'AFTERNOON' },
+  ]
+
+  useEffect(() => {
+    if (form.watch().courseId) {
+      startTransition(() => {
+        getCoursesById({ id: form.watch().courseId }).then((res) => {
+          const numberToArray = Array.from(
+            { length: res?.duration || 0 },
+            (_, i) => ({ label: `${i + 1}`, value: `${i + 1}` })
+          )
+
+          form.setValue('semester', '')
+          setSemester(numberToArray)
+        })
+      })
+    }
+
+    // eslint-disable-next-line
+  }, [form.watch().courseId])
+
   const formFields = (
     <Form {...form}>
-      <CustomFormField
-        form={form}
-        name='name'
-        label='Name'
-        placeholder='Name'
-        type='text'
-      />
-      <CustomFormField
-        form={form}
-        name='status'
-        label='Status'
-        placeholder='Status'
-        fieldType='command'
-        data={status}
-      />
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4'>
+        <CustomFormField
+          form={form}
+          name='courseId'
+          label='Course'
+          placeholder='Course'
+          fieldType='command'
+          data={[]}
+          key='courses'
+          url='courses?page=1&limit=10&status=ACTIVE'
+        />
+        <CustomFormField
+          form={form}
+          name='semester'
+          label='Semester'
+          placeholder='Semester'
+          fieldType='select'
+          data={semester}
+        />
+
+        <CustomFormField
+          form={form}
+          name='discount'
+          label='Discount'
+          placeholder='Discount'
+          type='number'
+        />
+        <CustomFormField
+          form={form}
+          name='price'
+          label='Price'
+          placeholder='Price'
+          type='number'
+        />
+        <CustomFormField
+          form={form}
+          name='duration'
+          label='Duration'
+          placeholder='Duration'
+          type='number'
+        />
+        <CustomFormField
+          form={form}
+          name='shift'
+          label='Shift'
+          placeholder='Shift'
+          fieldType='command'
+          data={shift}
+        />
+
+        <CustomFormField
+          form={form}
+          name='status'
+          label='Status'
+          placeholder='Status'
+          fieldType='command'
+          data={status}
+        />
+      </div>
     </Form>
   )
 
@@ -169,11 +255,13 @@ const Page = () => {
       {postApi?.isSuccess && <Message value={postApi?.data?.message} />}
       {postApi?.isError && <Message value={postApi?.error} />}
 
-      <TopLoadingBar isFetching={getApi?.isFetching || getApi?.isPending} />
+      <TopLoadingBar
+        isFetching={getApi?.isFetching || getApi?.isPending || isPending}
+      />
 
       <FormView
         form={formFields}
-        loading={updateApi?.isPending || postApi?.isPending}
+        loading={updateApi?.isPending || postApi?.isPending || isPending}
         handleSubmit={form.handleSubmit}
         submitHandler={onSubmit}
         label={label}
@@ -200,7 +288,7 @@ const Page = () => {
             setQ={setQ}
             searchHandler={searchHandler}
             modal={modal}
-            caption='Schools List'
+            caption='Assign Courses List'
           />
         </div>
       )}

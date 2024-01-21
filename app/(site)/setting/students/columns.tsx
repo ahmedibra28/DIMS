@@ -30,7 +30,10 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
       accessorKey: 'rollNo',
       active: true,
       cell: ({ row }: any) => (
-        <Link className='underline' href={`/student/${row.original.id}`}>
+        <Link
+          className='underline'
+          href={`/student/${row.original.id}/assign-course`}
+        >
           {row.original.rollNo}
         </Link>
       ),
@@ -40,7 +43,10 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
       accessorKey: 'name',
       active: true,
       cell: ({ row }: any) => (
-        <Link className='underline' href={`/student/${row.original.id}`}>
+        <Link
+          className='underline'
+          href={`/student/${row.original.id}/assign-course`}
+        >
           {row.original.name}
         </Link>
       ),

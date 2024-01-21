@@ -42,10 +42,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import ConfirmDialog from '../ConfirmDialog'
 import useDataStore from '@/zustand/dataStore'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface ListItem {
   label: string
@@ -66,7 +72,7 @@ export interface FormProps {
   cols?: number
   rows?: number
   step?: string
-  fieldType?: 'command' | 'switch' | 'multipleCheckbox'
+  fieldType?: 'command' | 'switch' | 'multipleCheckbox' | 'select'
   data?: {
     label: string
     value: string
@@ -227,6 +233,21 @@ export default function CustomFormField({
               </Popover>
             ) : props?.fieldType === 'switch' ? (
               <Switch checked={field.value} onCheckedChange={field.onChange} />
+            ) : props?.fieldType === 'select' ? (
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Select item' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {props?.data?.map((item) => (
+                    <SelectItem key={item.value} value={item?.value}>
+                      {item?.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             ) : (
               <FormControl>
                 {props.cols && props.rows ? (

@@ -172,18 +172,18 @@ const clientPermissions = [
   {
     id: 'HnCMgsT54kcTRYlJGaOC9',
     name: 'Student Details',
-    path: '/student/[id]',
+    path: '/student/[id]/assign-course',
     menu: 'hidden',
     sort: sort.hidden,
-    description: 'Student Details page',
+    description: 'Student Details & Assign to Course page',
   },
   {
     id: 'I6b_3jAPx9IGclV3o7_1a',
     name: 'Instructor Details',
-    path: '/instructor/[id]',
+    path: '/instructor/[id]/assign-subject',
     menu: 'hidden',
     sort: sort.hidden,
-    description: 'Instructor Details page',
+    description: 'Instructor Details & Assign to Subject page',
   },
 ]
 
@@ -458,6 +458,13 @@ const permissions = [
     name: 'Student',
     method: 'DELETE',
   },
+  {
+    id: 'YTU-o6kjJk4A-juM8kgxh',
+    description: 'Get Student Details',
+    route: '/api/students/:id',
+    name: 'Student',
+    method: 'GET',
+  },
 
   // Instructor
   {
@@ -487,6 +494,13 @@ const permissions = [
     route: '/api/instructors/:id',
     name: 'Instructor',
     method: 'DELETE',
+  },
+  {
+    id: 'YTU-o6vjJk4A-juM8kgxh',
+    description: 'Get Instructor Details',
+    route: '/api/instructors/:id',
+    name: 'Instructor',
+    method: 'GET',
   },
 
   // Notice
@@ -548,6 +562,13 @@ const permissions = [
     name: 'Assign Student to Course',
     method: 'DELETE',
   },
+  {
+    id: 'YTU-o6jjJk4A-4uM8kgxp',
+    description: 'Get Assign Course by Student Id',
+    route: '/api/assign-student-to-course/:id',
+    name: 'Assign Student to Course',
+    method: 'GET',
+  },
 
   // Assign Instructor to Subject
   {
@@ -577,6 +598,13 @@ const permissions = [
     route: '/api/assign-instructor-to-subject/:id',
     name: 'Assign Instructor to Subject',
     method: 'DELETE',
+  },
+  {
+    id: 'YTU-o6jjJk46-4uM8kgxp',
+    description: 'Get Assign Subject by Instructor Id',
+    route: '/api/assign-instructor-to-subject/:id',
+    name: 'Assign Instructor to Subject',
+    method: 'GET',
   },
 ]
 

@@ -9,6 +9,20 @@ interface Params {
   }
 }
 
+export async function GET(req: Request, { params }: Params) {
+  try {
+    await isAuth(req, params)
+
+    const instructor = await prisma.instructor.findUnique({
+      where: { id: params.id },
+    })
+
+    return NextResponse.json(instructor)
+  } catch ({ status = 500, message }: any) {
+    return getErrorResponse(message, status)
+  }
+}
+
 export async function PUT(req: Request, { params }: Params) {
   try {
     await isAuth(req, params)
