@@ -9,16 +9,7 @@ type Column = {
 
 export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
   return [
-    { header: 'Title', accessorKey: 'title', active: true },
-    { header: 'Note', accessorKey: 'note', active: true },
-    {
-      header: 'Roles',
-      accessorKey: 'roles',
-      active: true,
-      cell: ({ row }: any) =>
-        row?.original?.roles?.map((item: any) => item.name).join(', '),
-    },
-    { header: 'User', accessorKey: 'user.name', active: true },
+    { header: 'Name', accessorKey: 'name', active: true },
     {
       header: 'Status',
       accessorKey: 'status',

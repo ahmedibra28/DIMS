@@ -1,5 +1,7 @@
 import { ActionButton } from '@/components/ui/CustomForm'
 import DateTime from '@/lib/dateTime'
+import Image from 'next/image'
+import Link from 'next/link'
 
 type Column = {
   editHandler: (item: any) => void
@@ -9,8 +11,40 @@ type Column = {
 
 export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
   return [
-    { header: 'Roll No', accessorKey: 'rollNo', active: true },
-    { header: 'Name', accessorKey: 'name', active: true },
+    {
+      header: 'Image',
+      accessorKey: 'image',
+      active: true,
+      cell: ({ row }: any) => (
+        <Image
+          src={row.original?.image}
+          alt={row.original?.name}
+          className='w-10 h-10 rounded-full object-cover'
+          width={40}
+          height={40}
+        />
+      ),
+    },
+    {
+      header: 'Roll No',
+      accessorKey: 'rollNo',
+      active: true,
+      cell: ({ row }: any) => (
+        <Link className='underline' href={`/instructor/${row.original.id}`}>
+          {row.original.rollNo}
+        </Link>
+      ),
+    },
+    {
+      header: 'Name',
+      accessorKey: 'name',
+      active: true,
+      cell: ({ row }: any) => (
+        <Link className='underline' href={`/instructor/${row.original.id}`}>
+          {row.original.name}
+        </Link>
+      ),
+    },
     { header: 'Place of Birth', accessorKey: 'placeOfBirth', active: false },
     { header: 'Date of Birth', accessorKey: 'dateOfBirth', active: false },
     { header: 'Sex', accessorKey: 'sex', active: false },

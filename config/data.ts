@@ -169,6 +169,22 @@ const clientPermissions = [
     sort: sort.admin,
     description: 'Notice page',
   },
+  {
+    id: 'HnCMgsT54kcTRYlJGaOC9',
+    name: 'Student Details',
+    path: '/student/[id]',
+    menu: 'hidden',
+    sort: sort.hidden,
+    description: 'Student Details page',
+  },
+  {
+    id: 'I6b_3jAPx9IGclV3o7_1a',
+    name: 'Instructor Details',
+    path: '/instructor/[id]',
+    menu: 'hidden',
+    sort: sort.hidden,
+    description: 'Instructor Details page',
+  },
 ]
 
 const permissions = [
@@ -500,6 +516,66 @@ const permissions = [
     description: 'Notice',
     route: '/api/notices/:id',
     name: 'Notice',
+    method: 'DELETE',
+  },
+
+  // Assign Student to Course
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxl',
+    description: 'Assign Student to Course',
+    route: '/api/assign-student-to-course',
+    name: 'Assign Student to Course',
+    method: 'GET',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxm',
+    description: 'Assign Student to Course',
+    route: '/api/assign-student-to-course',
+    name: 'Assign Student to Course',
+    method: 'POST',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxn',
+    description: 'Assign Student to Course',
+    route: '/api/assign-student-to-course/:id',
+    name: 'Assign Student to Course',
+    method: 'PUT',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxo',
+    description: 'Assign Student to Course',
+    route: '/api/assign-student-to-course/:id',
+    name: 'Assign Student to Course',
+    method: 'DELETE',
+  },
+
+  // Assign Instructor to Subject
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxp',
+    description: 'Assign Instructor to Subject',
+    route: '/api/assign-instructor-to-subject',
+    name: 'Assign Instructor to Subject',
+    method: 'GET',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxq',
+    description: 'Assign Instructor to Subject',
+    route: '/api/assign-instructor-to-subject',
+    name: 'Assign Instructor to Subject',
+    method: 'POST',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxr',
+    description: 'Assign Instructor to Subject',
+    route: '/api/assign-instructor-to-subject/:id',
+    name: 'Assign Instructor to Subject',
+    method: 'PUT',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgxs',
+    description: 'Assign Instructor to Subject',
+    route: '/api/assign-instructor-to-subject/:id',
+    name: 'Assign Instructor to Subject',
     method: 'DELETE',
   },
 ]
