@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, FormEvent } from 'react'
+import React, { useState, useEffect, FormEvent, useTransition } from 'react'
 import dynamic from 'next/dynamic'
 import { useForm } from 'react-hook-form'
 import useAuthorization from '@/hooks/useAuthorization'
@@ -19,6 +19,12 @@ import CustomFormField from '@/components/ui/CustomForm'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
+import getCoursesById from '@/actions/getCoursesById'
+
+interface DataProp {
+  label: string
+  value: string
+}
 
 const FormSchema = z.object({
   name: z.string().min(1),
@@ -35,6 +41,7 @@ const Page = () => {
   const [id, setId] = useState<string | null>(null)
   const [edit, setEdit] = useState(false)
   const [q, setQ] = useState('')
+  const [semester, setSemester] = useState<DataProp[]>([])
 
   const path = useAuthorization()
   const router = useRouter()
@@ -46,6 +53,7 @@ const Page = () => {
   }, [path, router])
 
   const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
+  const [isPending, startTransition] = useTransition()
 
   const getApi = useApi({
     key: ['subjects'],
@@ -134,6 +142,7 @@ const Page = () => {
       form.reset()
       setEdit(false)
       setId(null)
+      setSemester([])
     }
     // eslint-disable-next-line
   }, [dialogOpen])
@@ -142,6 +151,24 @@ const Page = () => {
     { label: 'ACTIVE', value: 'ACTIVE' },
     { label: 'INACTIVE', value: 'INACTIVE' },
   ]
+
+  useEffect(() => {
+    if (form.watch().courseId) {
+      startTransition(() => {
+        getCoursesById({ courseId: form.watch().courseId }).then((res) => {
+          const numberToArray = Array.from(
+            { length: res?.duration || 0 },
+            (_, i) => ({ label: `${i + 1}`, value: `${i + 1}` })
+          )
+
+          // form.setValue('semester', '')
+          setSemester(numberToArray)
+        })
+      })
+    }
+
+    // eslint-disable-next-line
+  }, [form.watch().courseId])
 
   const formFields = (
     <Form {...form}>
@@ -155,10 +182,21 @@ const Page = () => {
         />
         <CustomFormField
           form={form}
+          name='courseId'
+          label='Course'
+          placeholder='Course'
+          fieldType='command'
+          data={[]}
+          key='courses'
+          url='courses?page=1&limit=10&status=ACTIVE'
+        />
+        <CustomFormField
+          form={form}
           name='semester'
           label='Semester'
           placeholder='Semester'
-          type='number'
+          fieldType='select'
+          data={semester}
         />
         <CustomFormField
           form={form}
@@ -173,16 +211,6 @@ const Page = () => {
           label='Practical Marks'
           placeholder='Practical marks'
           type='number'
-        />
-        <CustomFormField
-          form={form}
-          name='courseId'
-          label='Course'
-          placeholder='Course'
-          fieldType='command'
-          data={[]}
-          key='courses'
-          url='courses?page=1&limit=10&status=ACTIVE'
         />
         <CustomFormField
           form={form}

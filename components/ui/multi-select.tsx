@@ -36,6 +36,7 @@ export function MultiSelect({
 
   const handleUnselect = React.useCallback((item: Prop) => {
     setSelected((prev) => prev.filter((s) => s.value !== item.value))
+    // eslint-disable-next-line
   }, [])
 
   const handleKeyDown = React.useCallback(
@@ -57,6 +58,7 @@ export function MultiSelect({
         }
       }
     },
+    // eslint-disable-next-line
     []
   )
 

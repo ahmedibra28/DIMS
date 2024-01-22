@@ -19,7 +19,7 @@ export async function GET(req: Request) {
 
     const query = q
       ? {
-          course: {
+          subject: {
             name: { contains: q, mode: QueryMode.insensitive },
           },
           ...status,
@@ -31,16 +31,22 @@ export async function GET(req: Request) {
     const skip = (page - 1) * pageSize
 
     const [result, total] = await Promise.all([
-      prisma.assignCourse.findMany({
+      prisma.assignSubject.findMany({
         where: query,
         include: {
-          course: {
+          subject: {
             select: {
               id: true,
               name: true,
+              course: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
             },
           },
-          student: {
+          instructor: {
             select: {
               id: true,
               name: true,
@@ -51,7 +57,7 @@ export async function GET(req: Request) {
         take: pageSize,
         orderBy: { createdAt: 'desc' },
       }),
-      prisma.assignCourse.count({ where: query }),
+      prisma.assignSubject.count({ where: query }),
     ])
 
     const pages = Math.ceil(total / pageSize)
@@ -74,69 +80,55 @@ export async function POST(req: NextApiRequestExtended) {
   try {
     await isAuth(req)
 
-    const { semester, shift, discount, status, studentId, courseId } =
+    const { semester, shift, status, instructorId, subjectId } =
       await req.json()
 
-    const checkExistence =
-      shift &&
-      studentId &&
-      (await prisma.assignCourse.findFirst({
-        where: {
-          shift,
-          studentId,
-          status: 'ACTIVE',
-        },
-      }))
-    if (checkExistence)
+    const checkSubjectStatus = await prisma.assignSubject.findFirst({
+      where: {
+        subjectId: `${subjectId}`,
+        semester: parseInt(semester),
+        status: 'ACTIVE',
+        shift,
+      },
+    })
+
+    if (checkSubjectStatus) return getErrorResponse(`Subject already assigned`)
+
+    const checkInstructor = await prisma.instructor.findFirst({
+      where: {
+        id: `${instructorId}`,
+        status: 'ACTIVE',
+      },
+    })
+    if (!checkInstructor)
+      return getErrorResponse('Instructor does not exist or is not active')
+
+    const checkSubject = await prisma.subject.findFirst({
+      where: {
+        id: `${subjectId}`,
+        status: 'ACTIVE',
+        semester: parseInt(semester),
+      },
+    })
+    if (!checkSubject)
       return getErrorResponse(
-        'Assign course already exist or shift is not available'
+        'Subject has already been assigned to another instructor or is not active'
       )
 
-    const checkStudent = await prisma.student.findFirst({
-      where: {
-        id: `${studentId}`,
-        status: 'ACTIVE',
-      },
-    })
-    if (!checkStudent)
-      return getErrorResponse('Student does not exist or is not active')
-
-    const checkCourse = await prisma.course.findFirst({
-      where: {
-        id: `${courseId}`,
-        status: 'ACTIVE',
-        duration: { gte: Number(semester) },
-      },
-    })
-    if (!checkCourse)
-      return getErrorResponse(
-        'Course with the selected semester does not exist or is not active'
-      )
-
-    const checkCourseStatus = await prisma.assignCourse.findFirst({
-      where: {
-        courseId: `${courseId}`,
-        status: 'ACTIVE',
-      },
-    })
-
-    if (checkCourseStatus) return getErrorResponse(`Course already assigned`)
-
-    const assignCourseObj = await prisma.assignCourse.create({
+    const assignSubjectObj = await prisma.assignSubject.create({
       data: {
         semester: parseInt(semester),
         shift,
-        discount: parseFloat(discount),
         status,
-        courseId,
-        studentId,
+        subjectId,
+        instructorId,
         createdById: req.user.id,
       },
     })
 
     return NextResponse.json({
-      ...assignCourseObj,
-      message: 'Assign course created successfully',
+      ...assignSubjectObj,
+      message: 'Assign subject created successfully',
     })
   } catch ({ status = 500, message }: any) {
     return getErrorResponse(message, status)

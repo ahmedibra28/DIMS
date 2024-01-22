@@ -2,13 +2,17 @@
 
 import { prisma } from '@/lib/prisma.db'
 
-export default async function getCoursesById({ id }: { id: string }) {
+export default async function getCoursesById({
+  courseId,
+}: {
+  courseId: string
+}) {
   try {
-    if (!id) return null
+    if (!courseId) return null
 
     const course = await prisma.course.findFirst({
       where: {
-        id,
+        id: `${courseId}`,
       },
       select: {
         duration: true,

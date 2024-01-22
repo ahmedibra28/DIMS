@@ -24,29 +24,35 @@ export async function GET(req: Request, { params }: Params) {
 
     const query = q
       ? {
-          course: {
+          subject: {
             name: { contains: q, mode: QueryMode.insensitive },
           },
-          studentId: params.id,
+          instructorId: params.id,
           ...status,
         }
-      : { ...status, studentId: params.id }
+      : { ...status, instructorId: params.id }
 
     const page = parseInt(searchParams.get('page') as string) || 1
     const pageSize = parseInt(searchParams.get('limit') as string) || 25
     const skip = (page - 1) * pageSize
 
     const [result, total] = await Promise.all([
-      prisma.assignCourse.findMany({
+      prisma.assignSubject.findMany({
         where: query,
         include: {
-          course: {
+          subject: {
             select: {
               id: true,
               name: true,
+              course: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
             },
           },
-          student: {
+          instructor: {
             select: {
               id: true,
               name: true,
@@ -57,7 +63,7 @@ export async function GET(req: Request, { params }: Params) {
         take: pageSize,
         orderBy: { createdAt: 'desc' },
       }),
-      prisma.assignCourse.count({ where: query }),
+      prisma.assignSubject.count({ where: query }),
     ])
 
     const pages = Math.ceil(total / pageSize)
@@ -80,79 +86,63 @@ export async function PUT(req: Request, { params }: Params) {
   try {
     await isAuth(req, params)
 
-    const { semester, shift, discount, status, studentId, courseId } =
+    const { semester, shift, status, instructorId, subjectId } =
       await req.json()
 
-    const assignCourseObj = await prisma.assignCourse.findUnique({
+    const assignSubjectObj = await prisma.assignSubject.findUnique({
       where: { id: `${params.id}` },
     })
 
-    if (!assignCourseObj)
-      return getErrorResponse('Assign course not found', 404)
+    if (!assignSubjectObj)
+      return getErrorResponse('Assign subject not found', 404)
 
-    const checkExistence =
-      shift &&
-      studentId &&
-      params.id &&
-      (await prisma.assignCourse.findFirst({
-        where: {
-          shift,
-          studentId,
-          status: 'ACTIVE',
-          id: { not: params.id },
-        },
-      }))
-    if (checkExistence)
-      return getErrorResponse(
-        'Assign course already exist or shift is not available'
-      )
-
-    const checkStudent = await prisma.student.findFirst({
+    const checkSubjectStatus = await prisma.assignSubject.findFirst({
       where: {
-        id: `${studentId}`,
+        subjectId: `${subjectId}`,
         status: 'ACTIVE',
-      },
-    })
-    if (!checkStudent)
-      return getErrorResponse('Student does not exist or is not active')
-
-    const checkCourse = await prisma.course.findFirst({
-      where: {
-        id: `${courseId}`,
-        status: 'ACTIVE',
-        duration: { gte: Number(semester) },
-      },
-    })
-    if (!checkCourse)
-      return getErrorResponse(
-        'Course with the selected semester does not exist or is not active'
-      )
-
-    const checkCourseStatus = await prisma.assignCourse.findFirst({
-      where: {
-        courseId: `${courseId}`,
-        status: 'ACTIVE',
+        semester: parseInt(semester),
+        shift,
         id: { not: params.id },
       },
     })
 
-    if (checkCourseStatus) return getErrorResponse(`Course already assigned`)
+    if (checkSubjectStatus) return getErrorResponse(`Subject already assigned`)
 
-    await prisma.assignCourse.update({
+    const checkInstructor = await prisma.instructor.findFirst({
+      where: {
+        id: `${instructorId}`,
+        status: 'ACTIVE',
+      },
+    })
+    if (!checkInstructor)
+      return getErrorResponse('Instructor does not exist or is not active')
+
+    const checkSubject = await prisma.subject.findFirst({
+      where: {
+        id: `${subjectId}`,
+        status: 'ACTIVE',
+        semester: parseInt(semester),
+      },
+    })
+    if (!checkSubject)
+      return getErrorResponse(
+        'Subject has already been assigned to another instructor or is not active'
+      )
+
+    await prisma.assignSubject.update({
       where: { id: params.id },
       data: {
         semester: parseInt(semester),
         shift,
-        discount: parseFloat(discount),
         status,
-        courseId,
-        studentId,
+        subjectId,
+        instructorId,
       },
     })
 
     return NextResponse.json({
-      ...assignCourseObj,
-      message: 'Assign course has been updated successfully',
+      ...assignSubjectObj,
+      message: 'Assign subject has been updated successfully',
     })
   } catch ({ status = 500, message }: any) {
     return getErrorResponse(message, status)
@@ -163,16 +153,16 @@ export async function DELETE(req: Request, { params }: Params) {
   try {
     await isAuth(req, params)
 
-    const assignCourseObj = await prisma.assignCourse.delete({
+    const assignSubjectObj = await prisma.assignSubject.delete({
       where: { id: params.id },
     })
 
-    if (!assignCourseObj)
-      return getErrorResponse('Assign course not removed', 404)
+    if (!assignSubjectObj)
+      return getErrorResponse('Assign subject not removed', 404)
 
     return NextResponse.json({
-      ...assignCourseObj,
-      message: 'Assign course has been removed successfully',
+      ...assignSubjectObj,
+      message: 'Assign subject has been removed successfully',
     })
   } catch ({ status = 500, message }: any) {
     return getErrorResponse(message, status)

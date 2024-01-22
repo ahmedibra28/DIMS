@@ -10,8 +10,8 @@ import Message from '@/components/Message'
 import FormView from '@/components/FormView'
 import Spinner from '@/components/Spinner'
 import type {
-  AssignCourse as IAssignCourse,
-  Student as IStudent,
+  AssignSubject as IAssignSubject,
+  Instructor as IInstructor,
 } from '@prisma/client'
 import RTable from '@/components/RTable'
 
@@ -27,15 +27,20 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
-import { FormatNumber } from '@/components/FormatNumber'
+import getSubjectsByCourseSemester from '@/actions/getSubjectsByCourseSemester'
 
 const FormSchema = z.object({
   semester: z.string().min(1),
   shift: z.string().min(1),
-  discount: z.string().min(1),
+  subjectId: z.string().min(1),
   status: z.string().min(1),
   courseId: z.string().min(1),
 })
+
+interface DataProp {
+  label: string
+  value: string
+}
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [page, setPage] = useState(1)
@@ -43,9 +48,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [id, setId] = useState<string | null>(null)
   const [edit, setEdit] = useState(false)
   const [q, setQ] = useState('')
-  const [semester, setSemester] = useState<{ label: string; value: string }[]>(
-    []
-  )
+  const [semester, setSemester] = useState<DataProp[]>([])
+  const [subject, setSubject] = useState<DataProp[]>([])
 
   const path = useAuthorization()
   const router = useRouter()
@@ -60,34 +64,34 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
 
-  const getStudent = useApi({
-    key: ['student', params.id],
+  const getInstructor = useApi({
+    key: ['instructor', params.id],
     method: 'GET',
-    url: `students/${params.id}`,
+    url: `instructors/${params.id}`,
   })?.get
 
   const getApi = useApi({
     key: ['assign-courses', params.id],
     method: 'GET',
-    url: `assign-student-to-course/${params.id}?page=${page}&q=${q}&limit=${limit}`,
+    url: `assign-instructor-to-subject/${params.id}?page=${page}&q=${q}&limit=${limit}`,
   })?.get
 
   const postApi = useApi({
     key: ['assign-courses'],
     method: 'POST',
-    url: `assign-student-to-course`,
+    url: `assign-instructor-to-subject`,
   })?.post
 
   const updateApi = useApi({
     key: ['assign-courses'],
     method: 'PUT',
-    url: `assign-student-to-course`,
+    url: `assign-instructor-to-subject`,
   })?.put
 
   const deleteApi = useApi({
     key: ['assign-courses'],
     method: 'DELETE',
-    url: `assign-student-to-course`,
+    url: `assign-instructor-to-subject`,
   })?.deleteObj
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -95,7 +99,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     defaultValues: {
       semester: '',
       shift: '',
-      discount: '',
+      subjectId: '',
       status: '',
       courseId: '',
     },
@@ -131,20 +135,22 @@ const Page = ({ params }: { params: { id: string } }) => {
     setPage(1)
   }
 
-  const editHandler = (item: IAssignCourse) => {
+  const editHandler = (
+    item: IAssignSubject & { subject: { course: { id: string } } }
+  ) => {
     setId(item.id!)
     setEdit(true)
     form.setValue('semester', String(item?.semester))
     form.setValue('shift', item?.shift)
-    form.setValue('discount', String(item?.discount))
+    form.setValue('subjectId', item?.subjectId)
     form.setValue('status', item?.status)
-    form.setValue('courseId', item?.courseId)
+    form.setValue('courseId', item?.subject?.course?.id)
   }
 
   const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
 
-  const label = 'Assign Course'
-  const modal = 'assignCourse'
+  const label = 'Assign Subject'
+  const modal = 'assignSubject'
 
   useEffect(() => {
     if (!dialogOpen) {
@@ -184,6 +190,26 @@ const Page = ({ params }: { params: { id: string } }) => {
     // eslint-disable-next-line
   }, [form.watch().courseId])
 
+  useEffect(() => {
+    if (form.watch().courseId && form.watch().semester) {
+      startTransition(() => {
+        getSubjectsByCourseSemester({
+          courseId: form.watch().courseId,
+          semester: form.watch().semester,
+        }).then((res) => {
+          const subject = res?.map((item) => ({
+            label: item?.name,
+            value: item?.id,
+          }))
+
+          setSubject(subject)
+        })
+      })
+    }
+
+    // eslint-disable-next-line
+  }, [form.watch().courseId, form.watch().semester])
+
   const formFields = (
     <Form {...form}>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4'>
@@ -205,13 +231,13 @@ const Page = ({ params }: { params: { id: string } }) => {
           fieldType='select'
           data={semester}
         />
-
         <CustomFormField
           form={form}
-          name='discount'
-          label='Discount'
-          placeholder='Discount'
-          type='number'
+          name='subjectId'
+          label='Subject'
+          placeholder='Subject'
+          fieldType='select'
+          data={subject}
         />
 
         <CustomFormField
@@ -236,9 +262,9 @@ const Page = ({ params }: { params: { id: string } }) => {
   )
 
   const onSubmit = (
-    values: z.infer<typeof FormSchema> & { studentId: string }
+    values: z.infer<typeof FormSchema> & { instructorId: string }
   ) => {
-    values.studentId = params.id
+    values.instructorId = params.id
     edit
       ? updateApi?.mutateAsync({
           id: id,
@@ -247,7 +273,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       : postApi?.mutateAsync(values)
   }
 
-  const student = getStudent?.data as IStudent | undefined
+  const instructor = getInstructor?.data as IInstructor | undefined
 
   return (
     <>
@@ -263,7 +289,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           getApi?.isFetching ||
           getApi?.isPending ||
           isPending ||
-          getStudent?.isPending
+          getInstructor?.isPending
         }
       />
 
@@ -276,49 +302,39 @@ const Page = ({ params }: { params: { id: string } }) => {
         edit={edit}
       />
 
-      {getStudent?.isPending ? (
+      {getInstructor?.isPending ? (
         <Spinner />
-      ) : getStudent?.isError ? (
-        <Message value={getStudent?.error} />
+      ) : getInstructor?.isError ? (
+        <Message value={getInstructor?.error} />
       ) : (
         <div className='p-3 mt-2 mb-10 flex flex-wrap flex-col md:flex-row gap-2'>
           <div className='w-full'>
-            <div className='flex justify-between items-center'>
-              <div className='p-2 relative w-44'>
-                <Image
-                  src={getStudent?.data?.image || '/images/placeholder.png'}
-                  alt='student'
-                  width={200}
-                  height={200}
-                  className='rounded m-auto w-44'
-                />
-                <div className='absolute -top-2 right-0'>
-                  {student?.status === 'ACTIVE' ? (
-                    <Badge
-                      className='bg-green-500 h-[22px] w-5 rounded-full'
-                      title={student?.status}
-                    />
-                  ) : (
-                    <Badge
-                      className='bg-red-500 h-[22px] w-5 rounded-full'
-                      title={student?.status}
-                    />
-                  )}
-                </div>
+            <div className='p-2 relative w-44'>
+              <Image
+                src={getInstructor?.data?.image || '/images/placeholder.png'}
+                alt='instructor'
+                width={200}
+                height={200}
+                className='rounded m-auto w-44'
+              />
+              <div className='absolute -top-2 right-0'>
+                {instructor?.status === 'ACTIVE' ? (
+                  <Badge
+                    className='bg-green-500 h-[22px] w-5 rounded-full'
+                    title={instructor?.status}
+                  />
+                ) : (
+                  <Badge
+                    className='bg-red-500 h-[22px] w-5 rounded-full'
+                    title={instructor?.status}
+                  />
+                )}
               </div>
-              <h1
-                className={`text-5xl md:text-6xl lg:text-8xl duration-1000 ${
-                  Number(student?.balance || 0) > 0 ? 'text-red-500' : ''
-                }`}
-              >
-                <h6 className='text-sm text-primary'>Student Balance</h6>
-                <FormatNumber value={student?.balance || 0} />
-              </h1>
             </div>
 
-            {student?.note && (
+            {instructor?.note && (
               <div className='font-mono text-sm'>
-                <p>{student?.note}</p>
+                <p>{instructor?.note}</p>
               </div>
             )}
           </div>
@@ -327,12 +343,13 @@ const Page = ({ params }: { params: { id: string } }) => {
             <Table>
               <TableBody>
                 {[
-                  { label: 'Name', value: student?.name },
-                  { label: 'Place of Birth', value: student?.placeOfBirth },
-                  { label: 'Date of Birth', value: student?.dateOfBirth },
-                  { label: 'Nationality', value: student?.nationality },
-                  { label: 'Sex', value: student?.sex },
-                  { label: 'Education', value: student?.education },
+                  { label: 'Name', value: instructor?.name },
+                  { label: 'Place of Birth', value: instructor?.placeOfBirth },
+                  { label: 'Date of Birth', value: instructor?.dateOfBirth },
+                  { label: 'Nationality', value: instructor?.nationality },
+                  { label: 'Sex', value: instructor?.sex },
+                  { label: 'Qualification', value: instructor?.qualification },
+                  { label: 'Experience', value: instructor?.experience },
                 ].map((item, index) => (
                   <TableRow key={index}>
                     <TableCell className='font-medium py-1'>
@@ -352,8 +369,8 @@ const Page = ({ params }: { params: { id: string } }) => {
             <Table>
               <TableBody>
                 {[
-                  { label: 'District', value: student?.district },
-                  { label: 'Mobile', value: student?.mobile },
+                  { label: 'District', value: instructor?.district },
+                  { label: 'Mobile', value: instructor?.mobile },
                 ].map((item, index) => (
                   <TableRow key={index}>
                     <TableCell className='font-medium py-1'>
@@ -375,41 +392,12 @@ const Page = ({ params }: { params: { id: string } }) => {
             <Table>
               <TableBody>
                 {[
-                  { label: 'Contact Name', value: student?.contactName },
-                  { label: 'Contact Mobile', value: student?.contactMobile },
-                  { label: 'Contact Email', value: student?.contactEmail },
+                  { label: 'Contact Name', value: instructor?.contactName },
+                  { label: 'Contact Mobile', value: instructor?.contactMobile },
+                  { label: 'Contact Email', value: instructor?.contactEmail },
                   {
                     label: 'Contact Relation',
-                    value: student?.contactRelation,
-                  },
-                ].map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell className='font-medium py-1'>
-                      {item?.label}
-                    </TableCell>
-                    <TableCell className='font-light py-1'>
-                      {item?.value}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-
-          <div className='p-2 bg-white sm:w-full md:w-[48%] lg:w-[32%]'>
-            <h4 className='font-bold text-primary'>LANGUAGE SKILLS</h4>
-            <Table>
-              <TableBody>
-                {[
-                  { label: 'Somali Language', value: student?.somaliLanguage },
-                  { label: 'Arabic Language', value: student?.arabicLanguage },
-                  {
-                    label: 'English Language',
-                    value: student?.englishLanguage,
-                  },
-                  {
-                    label: 'Kiswahili Language',
-                    value: student?.kiswahiliLanguage,
+                    value: instructor?.contactRelation,
                   },
                 ].map((item, index) => (
                   <TableRow key={index}>
@@ -447,7 +435,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             setQ={setQ}
             searchHandler={searchHandler}
             modal={modal}
-            caption='Assign Courses List'
+            caption='Assign Subjects List'
           />
         </div>
       )}
