@@ -12,9 +12,9 @@ model User {
   email               String   @unique
   name                String
   image               String?
+  bio                 String?
   mobile              Int?
   address             String?
-  bio                 String?
   password            String
   confirmed           Boolean  @default(false)
   blocked             Boolean  @default(false)
@@ -162,6 +162,7 @@ model Student {
   kiswahiliLanguage LanguageLevel
   image             String?
   note              String?
+  balance           Float         @default(0)
   status            Status        @default(ACTIVE)
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt

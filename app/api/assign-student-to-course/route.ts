@@ -113,6 +113,15 @@ export async function POST(req: NextApiRequestExtended) {
         'Course with the selected semester does not exist or is not active'
       )
 
+    const checkCourseStatus = await prisma.assignCourse.findFirst({
+      where: {
+        courseId: `${courseId}`,
+        status: 'ACTIVE',
+      },
+    })
+
+    if (checkCourseStatus) return getErrorResponse(`Course already assigned`)
+
     const assignCourseObj = await prisma.assignCourse.create({
       data: {
         semester: parseInt(semester),

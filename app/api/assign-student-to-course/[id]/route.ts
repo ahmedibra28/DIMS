@@ -128,6 +128,16 @@ export async function PUT(req: Request, { params }: Params) {
         'Course with the selected semester does not exist or is not active'
       )
 
+    const checkCourseStatus = await prisma.assignCourse.findFirst({
+      where: {
+        courseId: `${courseId}`,
+        status: 'ACTIVE',
+        id: { not: params.id },
+      },
+    })
+
+    if (checkCourseStatus) return getErrorResponse(`Course already assigned`)
+
     await prisma.assignCourse.update({
       where: { id: params.id },
       data: {
