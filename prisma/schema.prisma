@@ -35,6 +35,7 @@ model User {
   instructors        Instructor[]
   assignCourses      AssignCourse[]
   assignSubjects     AssignSubject[]
+  transactions       Transaction[]
 
   @@map("users")
 }
@@ -117,6 +118,7 @@ model Course {
   createdBy     User           @relation(fields: [createdById], references: [id], onDelete: Restrict)
   createdById   String
   assignCourses AssignCourse[]
+  transactions  Transaction[]
 
   @@map("courses")
 }
@@ -170,6 +172,7 @@ model Student {
   createdBy     User           @relation(fields: [createdById], references: [id], onDelete: Restrict)
   createdById   String
   assignCourses AssignCourse[]
+  transactions  Transaction[]
 
   @@map("students")
 }
@@ -260,6 +263,31 @@ model AssignSubject {
   @@map("assign_subjects")
 }
 
+model Transaction {
+  id            String          @id @default(dbgenerated("nanoid()")) @db.VarChar(21)
+  type          TransactionType
+  semester      Int?
+  shift         Shift?
+  amount        Float           @default(0)
+  discount      Float           @default(0)
+  reference     String?
+  description   String?
+  status        Status          @default(ACTIVE)
+  paymentStatus PaymentStatus?  @default(UNPAID)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdById String
+  student     Student? @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  studentId   String?
+  course      Course?  @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  courseId    String?
+
+  @@map("transactions")
+}
+
 enum Method {
   GET
   POST
@@ -287,4 +315,20 @@ enum LanguageLevel {
 enum Shift {
   MORNING
   AFTERNOON
+}
+
+enum TransactionType {
+  ENROLLMENT_FEE
+  TUITION_PAYMENT
+  EXAM_FEE
+  SCHOLARSHIP_DISBURSEMENT
+  REFUND_ENROLLMENT_FEE
+  REFUND_TUITION_PAYMENT
+  REFUND_EXAM_FEE
+  REFUND_SCHOLARSHIP_DISBURSEMENT
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
 }

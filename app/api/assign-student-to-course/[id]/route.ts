@@ -83,6 +83,9 @@ export async function PUT(req: Request, { params }: Params) {
     const { semester, shift, discount, status, studentId, courseId } =
       await req.json()
 
+    if (Number(discount) > 100 || Number(discount) < 0)
+      return getErrorResponse('Discount must be between 0 and 100')
+
     const assignCourseObj = await prisma.assignCourse.findUnique({
       where: { id: `${params.id}` },
     })
@@ -133,6 +136,7 @@ export async function PUT(req: Request, { params }: Params) {
         courseId: `${courseId}`,
         status: 'ACTIVE',
         id: { not: params.id },
+        studentId: checkStudent.id,
       },
     })
 

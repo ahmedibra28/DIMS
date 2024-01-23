@@ -77,6 +77,9 @@ export async function POST(req: NextApiRequestExtended) {
     const { semester, shift, discount, status, studentId, courseId } =
       await req.json()
 
+    if (Number(discount) > 100 || Number(discount) < 0)
+      return getErrorResponse('Discount must be between 0 and 100')
+
     const checkExistence =
       shift &&
       studentId &&
@@ -117,6 +120,7 @@ export async function POST(req: NextApiRequestExtended) {
       where: {
         courseId: `${courseId}`,
         status: 'ACTIVE',
+        studentId: checkStudent.id,
       },
     })
 

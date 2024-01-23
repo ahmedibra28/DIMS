@@ -242,7 +242,9 @@ const Page = () => {
       {postApi?.isSuccess && <Message value={postApi?.data?.message} />}
       {postApi?.isError && <Message value={postApi?.error} />}
 
-      <TopLoadingBar isFetching={getApi?.isFetching || getApi?.isPending} />
+      <TopLoadingBar
+        isFetching={getApi?.isFetching || getApi?.isPending || isPending}
+      />
 
       <FormView
         form={formFields}

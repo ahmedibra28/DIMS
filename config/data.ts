@@ -185,6 +185,14 @@ const clientPermissions = [
     sort: sort.hidden,
     description: 'Instructor Details & Assign to Subject page',
   },
+  {
+    id: 'YTU-o6vjJk4A-6uM8kgx4',
+    name: 'Generate Tuition Fee',
+    path: '/finance/generate-tuition-fee',
+    menu: 'finance',
+    sort: sort.finance,
+    description: 'Generate Tuition Fee page',
+  },
 ]
 
 const permissions = [
@@ -605,6 +613,15 @@ const permissions = [
     route: '/api/assign-instructor-to-subject/:id',
     name: 'Assign Instructor to Subject',
     method: 'GET',
+  },
+
+  // Generate Tuition Fee
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgx4',
+    description: 'Generate Tuition Fee',
+    route: '/api/generate-tuition-fee',
+    name: 'Finance',
+    method: 'POST',
   },
 ]
 
