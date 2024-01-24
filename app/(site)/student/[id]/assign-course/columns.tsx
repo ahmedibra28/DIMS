@@ -19,7 +19,9 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
       accessorKey: 'discount',
       active: true,
       cell: ({ row: { original } }: any) => (
-        <FormatNumber value={original?.discount} />
+        <>
+          <FormatNumber value={original?.discount} isCurrency={false} />%
+        </>
       ),
     },
     {
