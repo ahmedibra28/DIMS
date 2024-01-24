@@ -281,7 +281,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       ) : getStudent?.isError ? (
         <Message value={getStudent?.error} />
       ) : (
-        <div className='p-3 mt-2 mb-10 flex flex-wrap flex-col md:flex-row gap-2'>
+        <div className='p-3 mt-2 mb-10 flex flex-wrap flex-col md:flex-row gap-2 bg-white'>
           <div className='w-full'>
             <div className='flex justify-between items-center'>
               <div className='p-2 relative w-44'>
@@ -322,7 +322,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               </div>
             )}
           </div>
-          <div className='p-2 bg-white sm:w-full md:w-[48%] lg:w-[32%]'>
+          <div className='p-2 bg-white shadow sm:w-full md:w-[48%] lg:w-[32%]'>
             <h4 className='font-bold text-primary'>PERSONAL INFORMATION</h4>
             <Table>
               <TableBody>
@@ -347,7 +347,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Table>
           </div>
 
-          <div className='p-2 bg-white sm:w-full md:w-[48%] lg:w-[32%]'>
+          <div className='p-2 bg-white shadow sm:w-full md:w-[48%] lg:w-[32%]'>
             <h4 className='font-bold text-primary'>PERMANENT ADDRESS</h4>
             <Table>
               <TableBody>
@@ -368,7 +368,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Table>
           </div>
 
-          <div className='p-2 bg-white sm:w-full md:w-[48%] lg:w-[32%]'>
+          <div className='p-2 bg-white shadow sm:w-full md:w-[48%] lg:w-[32%]'>
             <h4 className='font-bold text-primary'>
               CONTACT PERSON IN CASE OF EMERGENCY
             </h4>
@@ -396,7 +396,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Table>
           </div>
 
-          <div className='p-2 bg-white sm:w-full md:w-[48%] lg:w-[32%]'>
+          <div className='p-2 bg-white shadow sm:w-full md:w-[48%] lg:w-[32%]'>
             <h4 className='font-bold text-primary'>LANGUAGE SKILLS</h4>
             <Table>
               <TableBody>

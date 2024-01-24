@@ -17,7 +17,7 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
       active: true,
       cell: ({ row }: any) => (
         <Image
-          src={row.original?.image}
+          src={row.original?.image || '/avatar.png'}
           alt={row.original?.name}
           className='w-10 h-10 rounded-full object-cover'
           width={40}

@@ -19,6 +19,7 @@ import CustomFormField from '@/components/ui/CustomForm'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
 import { columns } from './columns'
 import useDataStore from '@/zustand/dataStore'
+import { roles } from '@/config/data'
 
 const FormSchema = z
   .object({
@@ -44,6 +45,8 @@ const FormSchema = z
       .refine((val) => val.length === 0 || val.length > 6, {
         message: "Confirm password can't be less than 6 characters",
       }),
+    studentId: z.string().optional(),
+    instructorId: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Password do not match',
@@ -142,6 +145,8 @@ const Page = () => {
     form.setValue('name', item?.name)
     form.setValue('email', item?.email)
     form.setValue('roleId', item?.role?.id!)
+    form.setValue('studentId', item?.student?.id!)
+    form.setValue('instructorId', item?.instructor?.id!)
   }
 
   const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
@@ -157,6 +162,9 @@ const Page = () => {
     }
     // eslint-disable-next-line
   }, [dialogOpen])
+
+  const studentRole = roles.find((role) => role.type === 'STUDENT')?.id
+  const instructorRole = roles.find((role) => role.type === 'INSTRUCTOR')?.id
 
   const formFields = (
     <Form {...form}>
@@ -184,6 +192,32 @@ const Page = () => {
         key='roles'
         url='roles?page=1&limit=10'
       />
+
+      {form.watch('roleId') === studentRole && (
+        <CustomFormField
+          form={form}
+          name='studentId'
+          label='Student'
+          placeholder='Student'
+          fieldType='command'
+          data={[]}
+          key='students'
+          url='students?page=1&limit=10'
+        />
+      )}
+
+      {form.watch('roleId') === instructorRole && (
+        <CustomFormField
+          form={form}
+          name='instructorId'
+          label='Instructor'
+          placeholder='Instructor'
+          fieldType='command'
+          data={[]}
+          key='instructors'
+          url='instructors?page=1&limit=10'
+        />
+      )}
       <CustomFormField
         form={form}
         name='password'
@@ -216,6 +250,9 @@ const Page = () => {
   )
 
   const onSubmit = (values: z.infer<typeof FormSchema>) => {
+    if (values.roleId === studentRole && !values.studentId) return null
+    if (values.roleId === instructorRole && !values.instructorId) return null
+
     edit
       ? updateApi?.mutateAsync({
           id: id,

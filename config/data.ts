@@ -66,10 +66,11 @@ const profile = {
 const sort = {
   hidden: 0,
   profile: 1,
-  admin: 2,
-  setting: 3,
-  finance: 4,
-  report: 5,
+  normal: 2,
+  admin: 3,
+  setting: 4,
+  finance: 5,
+  report: 6,
 }
 
 const clientPermissions = [
@@ -192,6 +193,14 @@ const clientPermissions = [
     menu: 'finance',
     sort: sort.finance,
     description: 'Generate Tuition Fee page',
+  },
+  {
+    id: 'YTU-o6vjJk4A-6uM8kgx5',
+    name: 'Lesson Plan',
+    path: '/lesson-plans',
+    menu: 'normal',
+    sort: sort.normal,
+    description: 'Lesson Plan page',
   },
 ]
 
@@ -622,6 +631,36 @@ const permissions = [
     route: '/api/generate-tuition-fee',
     name: 'Finance',
     method: 'POST',
+  },
+
+  // Lesson Plan
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgx5',
+    description: 'Lesson Plan',
+    route: '/api/lesson-plans',
+    name: 'Lesson Plan',
+    method: 'GET',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgx6',
+    description: 'Lesson Plan',
+    route: '/api/lesson-plans',
+    name: 'Lesson Plan',
+    method: 'POST',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgx7',
+    description: 'Lesson Plan',
+    route: '/api/lesson-plans/:id',
+    name: 'Lesson Plan',
+    method: 'PUT',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgx8',
+    description: 'Lesson Plan',
+    route: '/api/lesson-plans/:id',
+    name: 'Lesson Plan',
+    method: 'DELETE',
   },
 ]
 
