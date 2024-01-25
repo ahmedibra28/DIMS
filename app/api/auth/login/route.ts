@@ -121,6 +121,8 @@ export async function POST(req: Request) {
       confirmed: user.confirmed,
       image: user.image,
       role: role.type,
+      studentId: user?.studentId,
+      instructorId: user?.instructorId,
       routes,
       menu: sortMenu(formatRoutes(routes) as any[]),
       token: await generateToken(user.id),

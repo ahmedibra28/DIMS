@@ -45,6 +45,8 @@ export const isAuth = async (req: any, params?: { id: string }) => {
         email: userRole?.email,
         mobile: userRole?.mobile,
         role: userRole?.role.type,
+        instructorId: userRole?.instructorId,
+        studentId: userRole?.studentId,
       }
 
       const permissions = userRole?.role?.permissions

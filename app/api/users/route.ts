@@ -45,6 +45,8 @@ export async function GET(req: Request) {
               name: true,
             },
           },
+          student: { select: { id: true, name: true } },
+          instructor: { select: { id: true, name: true } },
         },
       }),
       prisma.user.count({ where: query }),
@@ -70,8 +72,16 @@ export async function POST(req: Request) {
   try {
     await isAuth(req)
 
-    const { name, email, password, confirmed, blocked, roleId } =
-      await req.json()
+    const {
+      name,
+      email,
+      password,
+      confirmed,
+      blocked,
+      roleId,
+      instructorId,
+      studentId,
+    } = await req.json()
 
     const role =
       roleId && (await prisma.role.findFirst({ where: { id: roleId } }))
@@ -84,8 +94,23 @@ export async function POST(req: Request) {
       }))
     if (user) return getErrorResponse('User already exists', 409)
 
+    if (role.type === 'STUDENT') {
+      const student =
+        studentId && (await prisma.user.findFirst({ where: { studentId } }))
+      if (student) return getErrorResponse('Student already exists', 409)
+    }
+
+    if (role.type === 'INSTRUCTOR') {
+      const instructor =
+        instructorId &&
+        (await prisma.user.findFirst({ where: { instructorId } }))
+      if (instructor) return getErrorResponse('Instructor already exists', 409)
+    }
+
     const userObj = await prisma.user.create({
       data: {
+        ...(role.type === 'INSTRUCTOR' && { instructorId }),
+        ...(role.type === 'STUDENT' && { studentId }),
         name,
         email: email.toLowerCase(),
         confirmed,

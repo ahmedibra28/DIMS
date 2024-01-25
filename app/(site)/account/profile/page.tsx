@@ -129,7 +129,10 @@ const Profile = () => {
               <div className='avatar text-center flex justify-center'>
                 <div className='w-32'>
                   <Image
-                    src={getApi?.data?.image}
+                    src={
+                      getApi?.data.image ||
+                      `https://ui-avatars.com/api/?uppercase=true&name=${getApi?.data?.name}`
+                    }
                     alt='avatar'
                     width={100}
                     height={100}

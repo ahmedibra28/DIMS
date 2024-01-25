@@ -23,6 +23,8 @@ declare global {
       name: string
       email: string
       role: string
+      instructorId?: string
+      studentId?: string
     }
     url: string
     method: 'GET' | 'POST' | 'DELETE' | 'PUT'

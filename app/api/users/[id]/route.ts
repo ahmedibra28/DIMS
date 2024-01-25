@@ -114,8 +114,16 @@ export async function PUT(req: Request, { params }: Params) {
   try {
     await isAuth(req, params)
 
-    const { name, confirmed, blocked, password, email, roleId } =
-      await req.json()
+    const {
+      name,
+      confirmed,
+      blocked,
+      password,
+      email,
+      roleId,
+      studentId,
+      instructorId,
+    } = await req.json()
 
     const role =
       roleId && (await prisma.role.findFirst({ where: { id: roleId } }))
@@ -129,9 +137,29 @@ export async function PUT(req: Request, { params }: Params) {
       }))
     if (user) return getErrorResponse('User already exists', 409)
 
+    if (role.type === 'STUDENT') {
+      const student =
+        studentId &&
+        (await prisma.user.findFirst({
+          where: { studentId, id: { not: params.id } },
+        }))
+      if (student) return getErrorResponse('Student already exists', 409)
+    }
+
+    if (role.type === 'INSTRUCTOR') {
+      const instructor =
+        instructorId &&
+        (await prisma.user.findFirst({
+          where: { instructorId, id: { not: params.id } },
+        }))
+      if (instructor) return getErrorResponse('Instructor already exists', 409)
+    }
+
     const userObj = await prisma.user.update({
       where: { id: params.id },
       data: {
+        ...(role.type === 'INSTRUCTOR' && { instructorId }),
+        ...(role.type === 'STUDENT' && { studentId }),
         name,
         email: email.toLowerCase(),
         confirmed,

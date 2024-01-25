@@ -87,7 +87,7 @@ export async function POST(req: NextApiRequestExtended) {
       where: {
         status: 'ACTIVE',
         instructor: {
-          id: `${req.user.id}`,
+          id: `${req.user.instructorId}`,
           status: 'ACTIVE',
         },
         subject: {

@@ -1,15 +1,47 @@
 import { ActionButton } from '@/components/ui/CustomForm'
+import { Badge } from '@/components/ui/badge'
 import DateTime from '@/lib/dateTime'
+import { UserInfo } from '@/zustand/userStore'
+import { FaBell } from 'react-icons/fa6'
 
 type Column = {
   editHandler: (item: any) => void
   isPending: boolean
   deleteHandler: (item: any) => void
+  userInfo: UserInfo
 }
 
-export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
+export const columns = ({
+  editHandler,
+  isPending,
+  deleteHandler,
+  userInfo,
+}: Column) => {
   return [
-    { header: 'Title', accessorKey: 'title', active: true },
+    {
+      header: 'Title',
+      accessorKey: 'title',
+      active: true,
+      cell: ({ row: { original } }: any) => (
+        <div>
+          {original?.title}
+
+          {!original?.isApproved && (
+            <>
+              {userInfo.id === original?.createdById &&
+                !original?.isCreatedRead && (
+                  <Badge className='text-xs bg-green-500 ml-1'>unread</Badge>
+                )}
+
+              {['ADMIN', 'SUPER_ADMIN'].includes(userInfo?.role) &&
+                !original?.isAdminRead && (
+                  <Badge className='text-xs bg-green-500 ml-1'>unread</Badge>
+                )}
+            </>
+          )}
+        </div>
+      ),
+    },
     { header: 'Subject', accessorKey: 'subject.name', active: true },
     { header: 'Semester', accessorKey: 'subject.semester', active: true },
     {

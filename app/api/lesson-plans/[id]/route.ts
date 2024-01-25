@@ -15,71 +15,78 @@ export async function PUT(req: NextApiRequestExtended, { params }: Params) {
 
     const { note, file, status, subjectId, isApproved } = await req.json()
 
+    const { role } = req.user
+    const allowedRoles = ['SUPER_ADMIN', 'ADMIN']
+    const isEditAllowed = allowedRoles.includes(role)
+
     const lessonPlanObj = await prisma.lessonPlan.findUnique({
       where: { id: params.id },
     })
 
     if (!lessonPlanObj) return getErrorResponse('Lesson plan not found', 404)
 
-    const check = await prisma.assignSubject.findFirst({
-      where: {
-        status: 'ACTIVE',
-        instructor: {
-          id: `${req.user.id}`,
+    if (!isEditAllowed) {
+      const check = await prisma.assignSubject.findFirst({
+        where: {
           status: 'ACTIVE',
-        },
-        subject: {
-          id: `${subjectId}`,
-          status: 'ACTIVE',
-        },
-      },
-      include: {
-        subject: {
-          select: {
-            name: true,
-            semester: true,
+          instructor: {
+            id: `${req.user.instructorId}`,
+            status: 'ACTIVE',
+          },
+          subject: {
+            id: `${subjectId}`,
+            status: 'ACTIVE',
           },
         },
-        instructor: {
-          select: {
-            name: true,
+        include: {
+          subject: {
+            select: {
+              name: true,
+              semester: true,
+            },
+          },
+          instructor: {
+            select: {
+              name: true,
+            },
           },
         },
-      },
-    })
+      })
 
-    if (!check) return getErrorResponse('Subject or Instructor not found', 404)
+      if (!check)
+        return getErrorResponse('Subject or Instructor not found', 404)
 
-    const { role } = req.user
-    const allowedRoles = ['SUPER_ADMIN', 'ADMIN']
-    const isEditAllowed = allowedRoles.includes(role)
-
-    await prisma.lessonPlan.update({
-      where: {
-        id: params.id,
-        ...(!allowedRoles.includes(role) && {
+      await prisma.lessonPlan.update({
+        where: {
+          id: params.id,
           createdById: req.user.id,
-        }),
-      },
-      data: {
-        note,
-        ...(isEditAllowed
-          ? {
-              isApproved,
-              isAdminRead: true,
-              isCreatedRead: false,
-            }
-          : {
-              title: `Lesson Plan for ${check.subject.name} semester ${check.subject.semester} ${check.shift} shift by ${check.instructor.name}`,
-              file,
-              subjectId,
-              status,
-              isAdminRead: false,
-              isApproved: false,
-              isCreatedRead: true,
-            }),
-      },
-    })
+        },
+        data: {
+          note,
+          title: `Lesson Plan for ${check.subject.name} semester ${check.subject.semester} ${check.shift} shift by ${check.instructor.name}`,
+          file,
+          subjectId,
+          status,
+          isAdminRead: false,
+          isApproved: false,
+          isCreatedRead: true,
+        },
+      })
+    }
+
+    if (isEditAllowed) {
+      await prisma.lessonPlan.update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          note,
+          isApproved,
+          isAdminRead: true,
+          isCreatedRead: false,
+        },
+      })
+    }
 
     return NextResponse.json({
       ...lessonPlanObj,

@@ -21,16 +21,16 @@ import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
 import useUserInfoStore from '@/zustand/userStore'
 import Upload from '@/components/Upload'
+import { FaFileArrowDown } from 'react-icons/fa6'
 
 const FormSchema = z.object({
   subjectId: z.string().min(1),
   status: z.string().min(1),
   isApproved: z.boolean().optional(),
   note: z.string().min(1),
-  courseId: z.string().min(1),
 })
 
-const Page = ({ params }: { params: { id: string } }) => {
+const Page = () => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(50)
   const [id, setId] = useState<string | null>(null)
@@ -50,14 +50,24 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
   const { userInfo } = useUserInfoStore((state) => state)
 
+  const allowedToApprove =
+    userInfo?.role === 'ADMIN' || userInfo?.role === 'SUPER_ADMIN'
+
+  const uId =
+    userInfo?.role === 'INSTRUCTOR'
+      ? userInfo?.instructorId
+      : userInfo?.role === 'STUDENT'
+      ? userInfo?.studentId
+      : userInfo?.id
+
   const getSubjectsApi = useApi({
-    key: ['assign-courses', userInfo.id!],
+    key: ['assign-courses', uId!],
     method: 'GET',
-    url: `assign-instructor-to-subject/${userInfo.id}?page=${page}&q=${q}&limit=${limit}`,
+    url: `assign-instructor-to-subject/${uId}?page=1&q=&limit=50&status=ACTIVE`,
   })?.get
 
   const getApi = useApi({
-    key: ['lesson-plans', params.id],
+    key: ['lesson-plans', uId!],
     method: 'GET',
     url: `lesson-plans?page=${page}&q=${q}&limit=${limit}`,
   })?.get
@@ -85,7 +95,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     defaultValues: {
       subjectId: '',
       status: '',
-      courseId: '',
     },
   })
 
@@ -133,7 +142,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
 
-  const label = 'Assign Subject'
+  const label = 'Lesson Plan'
   const modal = 'lessonPlan'
 
   useEffect(() => {
@@ -154,15 +163,12 @@ const Page = ({ params }: { params: { id: string } }) => {
   const subjects =
     getSubjectsApi?.data?.data?.map((item: any) => ({
       label: `${item?.subject?.name} - ${item?.semester} - ${item?.shift}`,
-      value: item?.id,
+      value: item?.subjectId,
     })) || []
-
-  const allowedToApprove =
-    userInfo?.role === 'ADMIN' || userInfo?.role === 'SUPER_ADMIN'
 
   const formFields = (
     <Form {...form}>
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4'>
+      {!allowedToApprove && (
         <CustomFormField
           form={form}
           name='subjectId'
@@ -171,57 +177,59 @@ const Page = ({ params }: { params: { id: string } }) => {
           fieldType='select'
           data={subjects}
         />
+      )}
 
-        <CustomFormField
-          form={form}
-          name='note'
-          label='Note'
-          placeholder='Note'
-          cols={5}
-          rows={5}
+      <CustomFormField
+        form={form}
+        name='note'
+        label='Note'
+        placeholder='Note'
+        cols={5}
+        rows={5}
+      />
+      <div className='mb-2'>
+        <Upload
+          label='Document'
+          setFileLink={setFileLink}
+          fileLink={fileLink}
+          fileType='document'
         />
-        <div className='mb-2'>
-          <Upload
-            label='Document'
-            setFileLink={setFileLink}
-            fileLink={fileLink}
-            fileType='document'
-          />
-          {fileLink.length > 0 && (
-            <div className='avatar text-center mt-2'>
-              <div className='w-12'>
-                <pre>{JSON.stringify(fileLink, null, 2)}</pre>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {allowedToApprove ? (
-          <CustomFormField
-            form={form}
-            name='isApproved'
-            label='Approve'
-            placeholder='Approve'
-            fieldType='switch'
-          />
-        ) : (
-          <CustomFormField
-            form={form}
-            name='status'
-            label='Status'
-            placeholder='Status'
-            fieldType='command'
-            data={status}
-          />
+        {fileLink.length > 0 && (
+          <a
+            href={fileLink[0]}
+            className='text-blue-500 flex justify-end items-center'
+          >
+            <FaFileArrowDown className='mr-1' />
+            Download File
+          </a>
         )}
       </div>
+
+      {allowedToApprove ? (
+        <CustomFormField
+          form={form}
+          name='isApproved'
+          label='Approve'
+          placeholder='Approve'
+          fieldType='switch'
+        />
+      ) : (
+        <CustomFormField
+          form={form}
+          name='status'
+          label='Status'
+          placeholder='Status'
+          fieldType='command'
+          data={status}
+        />
+      )}
     </Form>
   )
 
   const onSubmit = (
     values: z.infer<typeof FormSchema> & { instructorId: string; file: string }
   ) => {
-    values.instructorId = params.id
+    values.instructorId = userInfo?.instructorId || ''
     values.file = fileLink?.[0]
 
     edit
@@ -264,6 +272,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               editHandler,
               isPending: deleteApi?.isPending || false,
               deleteHandler,
+              userInfo,
             })}
             setPage={setPage}
             setLimit={setLimit}
@@ -272,7 +281,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             setQ={setQ}
             searchHandler={searchHandler}
             modal={modal}
-            caption='Assign Subjects List'
+            caption='Lesson Plans List'
           />
         </div>
       )}

@@ -27,8 +27,19 @@ const Page = () => {
 
   useEffect(() => {
     if (postApi?.isSuccess) {
-      const { id, email, menu, routes, token, name, mobile, role, image } =
-        postApi.data
+      const {
+        id,
+        email,
+        menu,
+        routes,
+        token,
+        name,
+        mobile,
+        role,
+        image,
+        studentId,
+        instructorId,
+      } = postApi.data
       updateUserInfo({
         id,
         email,
@@ -39,6 +50,8 @@ const Page = () => {
         mobile,
         role,
         image,
+        studentId,
+        instructorId,
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

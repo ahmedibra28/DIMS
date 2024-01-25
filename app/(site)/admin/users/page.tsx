@@ -137,7 +137,13 @@ const Page = () => {
     setPage(1)
   }
 
-  const editHandler = (item: IUser & { role: { id: string } }) => {
+  const editHandler = (
+    item: IUser & {
+      role: { id: string }
+      student: { id: string }
+      instructor: { id: string }
+    }
+  ) => {
     setId(item.id!)
     setEdit(true)
     form.setValue('blocked', Boolean(item?.blocked))

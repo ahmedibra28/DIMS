@@ -205,7 +205,9 @@ export default function CustomFormField({
                       placeholder='Search item...'
                       className='h-9'
                     />
-                    <CommandEmpty>No item found.</CommandEmpty>
+                    <CommandEmpty>
+                      {getData?.isFetching ? 'Loading...' : 'No item found.'}
+                    </CommandEmpty>
                     <CommandGroup>
                       {data?.map((item) => (
                         <CommandItem

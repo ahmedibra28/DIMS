@@ -11,6 +11,8 @@ export type UserInfo = {
   routes: any[]
   menu: any[]
   image?: string
+  instructorId?: string
+  studentId?: string
 }
 
 type UserInfoStore = {
@@ -32,6 +34,8 @@ const useUserInfoStore = create(
         routes: [],
         menu: [],
         image: '',
+        instructorId: '',
+        studentId: '',
       },
       updateUserInfo: (userInfo) => {
         return set((state) => ({
@@ -54,6 +58,8 @@ const useUserInfoStore = create(
             routes: [],
             menu: [],
             image: '',
+            instructorId: '',
+            studentId: '',
           },
         }))
       },
