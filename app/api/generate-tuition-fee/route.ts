@@ -3,6 +3,78 @@ import { getErrorResponse } from '@/lib/helpers'
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma.db'
 
+export async function GET(req: NextApiRequestExtended) {
+  try {
+    await isAuth(req)
+
+    const activeCourses = await prisma.assignCourse.groupBy({
+      where: {
+        status: 'ACTIVE',
+      },
+      by: ['courseId', 'semester', 'shift'],
+      _count: {
+        studentId: true,
+      },
+      _sum: {
+        discount: true,
+      },
+    })
+
+    const data = await Promise.all(
+      activeCourses.map(async (course) => {
+        const assignCourse = await prisma.assignCourse.findFirst({
+          where: {
+            courseId: course.courseId,
+            semester: course.semester,
+            shift: course.shift,
+            status: 'ACTIVE',
+            student: {
+              status: 'ACTIVE',
+            },
+          },
+          select: {
+            course: {
+              select: {
+                id: true,
+                name: true,
+                price: true,
+              },
+            },
+          },
+        })
+
+        if (!assignCourse) return course
+
+        const discount =
+          assignCourse.course.price * (Number(course._sum.discount || 0) / 100)
+
+        const amount =
+          assignCourse.course.price * Number(course._count.studentId || 0)
+
+        const students = course._count.studentId
+
+        return {
+          course: {
+            id: assignCourse.course.id,
+            name: assignCourse.course.name,
+          },
+          shift: course.shift,
+          semester: course.semester,
+          discount,
+          amount,
+          students,
+        }
+      })
+    )
+    return NextResponse.json({
+      data,
+      message: 'Tuition fee generated successfully',
+    })
+  } catch ({ status = 500, message }: any) {
+    return getErrorResponse(message, status)
+  }
+}
+
 export async function POST(req: NextApiRequestExtended) {
   try {
     await isAuth(req)

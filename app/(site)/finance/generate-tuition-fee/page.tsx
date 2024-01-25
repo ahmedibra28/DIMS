@@ -1,34 +1,28 @@
 'use client'
 
-import React, { useState, useEffect, useTransition } from 'react'
+import React, { useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { useForm } from 'react-hook-form'
 import useAuthorization from '@/hooks/useAuthorization'
 import useApi from '@/hooks/useApi'
 import { useRouter } from 'next/navigation'
 import Message from '@/components/Message'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Form } from '@/components/ui/form'
-import CustomFormField, { FormButton } from '@/components/ui/CustomForm'
-import getCoursesById from '@/actions/getCoursesById'
-import FormContainer from '@/components/FormContainer'
 
-interface DataProp {
-  label: string
-  value: string
-}
-
-const FormSchema = z.object({
-  semester: z.string(),
-  shift: z.string(),
-  courseId: z.string(),
-})
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import Spinner from '@/components/Spinner'
+import { FormatNumber } from '@/components/FormatNumber'
+import { FormButton } from '@/components/ui/CustomForm'
+import { FaGear } from 'react-icons/fa6'
 
 const Page = () => {
-  const [semester, setSemester] = useState<DataProp[]>([])
-
   const path = useAuthorization()
   const router = useRouter()
 
@@ -38,7 +32,11 @@ const Page = () => {
     }
   }, [path, router])
 
-  const [isPending, startTransition] = useTransition()
+  const getApi = useApi({
+    key: ['generate-tuition-fee'],
+    method: 'GET',
+    url: `generate-tuition-fee`,
+  })?.get
 
   const postApi = useApi({
     key: ['generate-tuition-fee'],
@@ -46,72 +44,25 @@ const Page = () => {
     url: `generate-tuition-fee`,
   })?.post
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      semester: '',
-      courseId: '',
-      shift: '',
-    },
-  })
-
-  useEffect(() => {
-    if (form.watch().courseId) {
-      startTransition(() => {
-        getCoursesById({ courseId: form.watch().courseId }).then((res) => {
-          const numberToArray = Array.from(
-            { length: res?.duration || 0 },
-            (_, i) => ({ label: `${i + 1}`, value: `${i + 1}` })
-          )
-
-          // form.setValue('semester', '')
-          setSemester(numberToArray)
-        })
-      })
+  interface GenerateProp {
+    course: {
+      id: string
+      name: string
     }
-
-    // eslint-disable-next-line
-  }, [form.watch().courseId])
-
-  const onSubmit = (values: any) => {
-    postApi?.mutateAsync(values)
+    shift: string
+    semester: number
+    discount: number
+    amount: number
+    students: number
   }
 
-  const shift = [
-    { label: 'Morning', value: 'MORNING' },
-    { label: 'Afternoon', value: 'AFTERNOON' },
-  ]
-
-  const formFields = (
-    <Form {...form}>
-      <CustomFormField
-        form={form}
-        name='courseId'
-        label='Course'
-        placeholder='Course'
-        fieldType='command'
-        data={[]}
-        key='courses'
-        url='courses?page=1&limit=10&status=ACTIVE'
-      />
-      <CustomFormField
-        form={form}
-        name='semester'
-        label='Semester'
-        placeholder='Semester'
-        fieldType='select'
-        data={semester}
-      />
-      <CustomFormField
-        form={form}
-        name='shift'
-        label='Shift'
-        placeholder='Shift'
-        fieldType='command'
-        data={shift}
-      />
-    </Form>
-  )
+  const handleGenerate = (item: GenerateProp) => {
+    postApi?.mutateAsync({
+      courseId: item?.course?.id,
+      semester: item?.semester,
+      shift: item?.shift,
+    })
+  }
 
   return (
     <>
@@ -119,17 +70,52 @@ const Page = () => {
       {postApi?.isError && <Message value={postApi?.error} />}
 
       <TopLoadingBar isFetching={postApi?.isPending} />
-
-      <FormContainer title='Generate Tuition Fee' showFooter={false}>
-        <form onSubmit={form.handleSubmit(onSubmit)} method='dialog'>
-          {formFields}
-          <FormButton
-            loading={isPending || postApi?.isPending}
-            type='submit'
-            label='Generate Tuition Fee'
-          />
-        </form>
-      </FormContainer>
+      {getApi?.isPending ? (
+        <Spinner />
+      ) : getApi?.isError ? (
+        <Message value={getApi?.error} />
+      ) : (
+        <div className='p-3 mt-2 mb-10 flex flex-wrap flex-col md:flex-row gap-2 bg-white'>
+          <Table>
+            <TableCaption>A list of available classes.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Course</TableHead>
+                <TableHead>Shift</TableHead>
+                <TableHead>Semester</TableHead>
+                <TableHead>Students</TableHead>
+                <TableHead>Discounts</TableHead>
+                <TableHead>T. Amounts</TableHead>
+                <TableHead>Generate</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {getApi?.data?.data?.map((item: GenerateProp, index: number) => (
+                <TableRow key={index}>
+                  <TableCell>{item?.course?.name}</TableCell>
+                  <TableCell>{item?.shift}</TableCell>
+                  <TableCell>{item?.semester}</TableCell>
+                  <TableCell>{item?.students}</TableCell>
+                  <TableCell className='text-red-500'>
+                    <FormatNumber value={item?.discount} />
+                  </TableCell>
+                  <TableCell className='text-green-500'>
+                    <FormatNumber value={item?.amount - item?.discount} />
+                  </TableCell>
+                  <TableCell>
+                    <FormButton
+                      label='Generate'
+                      onClick={() => handleGenerate(item)}
+                      loading={postApi?.isPending}
+                      icon={<FaGear />}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </>
   )
 }

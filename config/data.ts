@@ -626,6 +626,13 @@ const permissions = [
 
   // Generate Tuition Fee
   {
+    id: 'YTU-o6vjJk4A-4uM8kg44',
+    description: 'Get Classes To Generate Tuition Fee',
+    route: '/api/generate-tuition-fee',
+    name: 'Finance',
+    method: 'GET',
+  },
+  {
     id: 'YTU-o6vjJk4A-4uM8kgx4',
     description: 'Generate Tuition Fee',
     route: '/api/generate-tuition-fee',
