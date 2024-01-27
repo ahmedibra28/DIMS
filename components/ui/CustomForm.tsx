@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import {
   FormControl,
@@ -53,6 +55,22 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import { Label } from '@/components/ui/label'
+import { X } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Command as CommandPrimitive } from 'cmdk'
+
+type Prop = Record<'value' | 'label', string>
+
+export interface FormInputProp {
+  multiple?: boolean
+  label?: string
+  setFileLink: (e: any) => void
+  fileLink: string[]
+  fileType: 'image' | 'document'
+  showLabel?: boolean
+}
+
 interface ListItem {
   label: string
   children: Array<{
@@ -72,7 +90,7 @@ export interface FormProps {
   cols?: number
   rows?: number
   step?: string
-  fieldType?: 'command' | 'switch' | 'multipleCheckbox' | 'select'
+  fieldType?: 'command' | 'switch' | 'multipleCheckbox' | 'select' | 'checkbox'
   data?: {
     label: string
     value: string
@@ -172,6 +190,18 @@ export default function CustomFormField({
             ))}
 
             <FormMessage className='text-xs' />
+          </FormItem>
+        ) : props?.fieldType === 'checkbox' ? (
+          <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-md border p-3 mb-3 '>
+            <FormControl>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </FormControl>
+            <div className='space-y-1 leading-none'>
+              <FormLabel>{label}</FormLabel>
+            </div>
           </FormItem>
         ) : (
           <FormItem className='flex flex-col mb-3'>
@@ -353,5 +383,225 @@ export const ActionButton = ({
         )}
       </DropdownMenuContent>
     </DropdownMenu>
+  )
+}
+
+export const Upload = ({
+  multiple = false,
+  label,
+  setFileLink,
+  fileLink,
+  fileType,
+  showLabel = true,
+  ...props
+}: FormInputProp) => {
+  const [file, setFile] = React.useState<string[]>([])
+
+  const uploadApi = useApi({
+    key: ['upload'],
+    method: 'POST',
+    url: `uploads?type=${fileType}`,
+  })?.post
+
+  React.useEffect(() => {
+    if (file?.length > 0) {
+      const formData = new FormData()
+
+      for (let i = 0; i < file.length; i++) {
+        formData.append('file', file[i])
+      }
+
+      uploadApi
+        ?.mutateAsync(formData)
+        .then((res) => {
+          const urls = res.data?.map((item: any) => item.url)
+
+          if (multiple) {
+            setFileLink([...fileLink, ...urls])
+          } else {
+            setFileLink(urls)
+          }
+        })
+        .catch((err) => err)
+    }
+    // eslint-disable-next-line
+  }, [file])
+
+  return (
+    <div className='w-full'>
+      {label && showLabel && (
+        <Label className='label' htmlFor={label?.replace(/\s+/g, '-')}>
+          {label}
+        </Label>
+      )}
+
+      <Input
+        disabled={Boolean(uploadApi?.isPending)}
+        multiple={multiple}
+        type='file'
+        id='formFile'
+        onChange={(e: any) =>
+          setFile(multiple ? e.target.files : [e.target.files[0]])
+        }
+        {...props}
+      />
+      {uploadApi?.isPending && (
+        <div className='flex justify-start items-center'>
+          <span className='loading loading-spinner loading-sm'> </span>
+          <span className='ms-2 text-gray-500 text-sm'>
+            {fileType} is uploading
+          </span>
+        </div>
+      )}
+      {uploadApi?.isError && (
+        <span className='text-red-500 text-xs mt-1'>
+          {`${uploadApi?.error}` || `${fileType} upload failed`}
+        </span>
+      )}
+      {uploadApi?.isSuccess && (
+        <span className='text-green-500 text-xs mt-1'>
+          {uploadApi?.data?.message}
+        </span>
+      )}
+    </div>
+  )
+}
+
+export const MultiSelect = ({
+  data,
+  selected,
+  setSelected,
+  label,
+  form,
+  name,
+}: {
+  data: Prop[]
+  selected: Prop[]
+  setSelected: React.Dispatch<React.SetStateAction<Prop[]>>
+  label?: string
+  form?: UseFormReturn<any>
+  name: string
+  edit?: boolean
+}) => {
+  const inputRef = React.useRef<HTMLInputElement>(null)
+  const [open, setOpen] = React.useState(false)
+  // const [selected, setSelected] = React.useState<Prop[]>([])
+  const [inputValue, setInputValue] = React.useState('')
+
+  const handleUnselect = React.useCallback((item: Prop) => {
+    setSelected((prev) => prev.filter((s) => s.value !== item.value))
+    // eslint-disable-next-line
+  }, [])
+
+  const handleKeyDown = React.useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      const input = inputRef.current
+      if (input) {
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+          if (input.value === '') {
+            setSelected((prev) => {
+              const newSelected = [...prev]
+              newSelected.pop()
+              return newSelected
+            })
+          }
+        }
+        // This is not a default behaviour of the <input /> field
+        if (e.key === 'Escape') {
+          input.blur()
+        }
+      }
+    },
+    // eslint-disable-next-line
+    []
+  )
+
+  const selectables = data?.filter((item) => !selected.includes(item))
+
+  React.useEffect(() => {
+    if (form) {
+      form.setValue(
+        name,
+        selected.map((item) => item.value)
+      )
+    }
+    // eslint-disable-next-line
+  }, [selected, form])
+
+  return (
+    <React.Fragment>
+      {label && <Label className='mb-2'>{label}</Label>}
+
+      <Command
+        onKeyDown={handleKeyDown}
+        className='overflow-visible bg-transparent mb-2'
+      >
+        <div className='group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 bg-whites'>
+          <div className='flex gap-1 flex-wrap'>
+            {selected.map((item) => {
+              return (
+                <Badge key={item.value} variant='secondary'>
+                  {item.label}
+                  <button
+                    className='ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleUnselect(item)
+                      }
+                    }}
+                    onMouseDown={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }}
+                    onClick={() => handleUnselect(item)}
+                  >
+                    <X className='h-3 w-3 text-muted-foreground hover:text-foreground' />
+                  </button>
+                </Badge>
+              )
+            })}
+            {/* Avoid having the "Search" Icon */}
+            <CommandPrimitive.Input
+              ref={inputRef}
+              value={inputValue}
+              onValueChange={setInputValue}
+              onBlur={() => setOpen(false)}
+              onFocus={() => setOpen(true)}
+              placeholder='Select items...'
+              className='ml-2 bg-transparent outline-none placeholder:text-muted-foreground flex-1'
+            />
+          </div>
+        </div>
+        <div className='relative mt-2'>
+          {open && selectables.length > 0 ? (
+            <div className='absolute w-full z-10 top-0 rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in'>
+              <CommandGroup className='h-full overflow-auto'>
+                {selectables.map((item) => {
+                  return (
+                    <CommandItem
+                      key={item.value}
+                      onMouseDown={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                      }}
+                      onSelect={(value) => {
+                        setInputValue('')
+                        setSelected((prev) => [...prev, item])
+                      }}
+                      className={'cursor-pointer'}
+                    >
+                      {item.label}
+                    </CommandItem>
+                  )
+                })}
+              </CommandGroup>
+            </div>
+          ) : null}
+        </div>
+      </Command>
+      <FormMessage className='text-xs mb-2 -mt-2'>
+        {form?.formState.errors?.[name]?.message as string}
+      </FormMessage>
+    </React.Fragment>
   )
 }

@@ -86,6 +86,7 @@ export async function POST(req: NextApiRequestExtended) {
       image,
       note,
       status,
+      admission,
     } = await req.json()
 
     const count = await prisma.student.count()
@@ -100,30 +101,54 @@ export async function POST(req: NextApiRequestExtended) {
       }))
     if (checkExistence) return getErrorResponse('Student already exist')
 
-    const studentObj = await prisma.student.create({
-      data: {
-        rollNo,
-        name,
-        placeOfBirth,
-        dateOfBirth,
-        nationality,
-        sex,
-        education,
-        district,
-        mobile: Number(mobile),
-        contactName,
-        contactMobile: Number(contactMobile),
-        contactEmail,
-        contactRelation,
-        somaliLanguage,
-        arabicLanguage,
-        englishLanguage,
-        kiswahiliLanguage,
-        image,
-        note,
-        status,
-        createdById: req.user.id,
-      },
+    const studentObj = await prisma.$transaction(async (prisma) => {
+      const studentObj = await prisma.student.create({
+        data: {
+          rollNo,
+          name,
+          placeOfBirth,
+          dateOfBirth,
+          nationality,
+          sex,
+          education,
+          district,
+          mobile: Number(mobile),
+          contactName,
+          contactMobile: Number(contactMobile),
+          contactEmail,
+          contactRelation,
+          somaliLanguage,
+          arabicLanguage,
+          englishLanguage,
+          kiswahiliLanguage,
+          image,
+          note,
+          status,
+          createdById: req.user.id,
+          ...(admission && {
+            balance: parseFloat('5.00'),
+          }),
+        },
+      })
+
+      if (admission) {
+        await prisma.transaction.create({
+          data: {
+            amount: parseFloat('5.00'),
+            discount: parseFloat('0.00'),
+            studentId: studentObj.id,
+            type: 'ENROLLMENT_FEE',
+            status: 'ACTIVE',
+            createdById: req.user.id,
+            description: `Enrollment fee for ${
+              studentObj.name
+            } at ${new Date().toLocaleString()}`,
+            paymentStatus: 'UNPAID',
+          },
+        })
+      }
+
+      return studentObj
     })
 
     return NextResponse.json({

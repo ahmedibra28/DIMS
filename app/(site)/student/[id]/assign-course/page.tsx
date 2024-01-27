@@ -286,7 +286,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className='flex justify-between items-center'>
               <div className='p-2 relative w-44'>
                 <Image
-                  src={getStudent?.data?.image || '/images/placeholder.png'}
+                  src={getStudent?.data?.image || '/avatar.png'}
                   alt='student'
                   width={200}
                   height={200}

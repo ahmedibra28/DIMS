@@ -312,7 +312,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           <div className='w-full'>
             <div className='p-2 relative w-44'>
               <Image
-                src={getInstructor?.data?.image || '/images/placeholder.png'}
+                src={getInstructor?.data?.image || '/avatar.png'}
                 alt='instructor'
                 width={200}
                 height={200}

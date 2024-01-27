@@ -15,9 +15,8 @@ import RTable from '@/components/RTable'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Form } from '@/components/ui/form'
-import CustomFormField from '@/components/ui/CustomForm'
+import CustomFormField, { Upload } from '@/components/ui/CustomForm'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
-import Upload from '@/components/Upload'
 import Image from 'next/image'
 import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
@@ -41,6 +40,7 @@ const FormSchema = z.object({
   kiswahiliLanguage: z.string().min(1),
   note: z.string(),
   status: z.string().min(1),
+  admission: z.boolean().default(false).optional(),
 })
 
 const Page = () => {
@@ -107,6 +107,7 @@ const Page = () => {
       kiswahiliLanguage: '',
       note: '',
       status: '',
+      admission: false,
     },
   })
 
@@ -162,6 +163,7 @@ const Page = () => {
 
     form.setValue('note', item?.note!)
     form.setValue('status', item?.status)
+    form.setValue('admission', false)
 
     setFileLink(item?.image ? [item?.image] : [])
   }
@@ -385,6 +387,13 @@ const Page = () => {
           type='text'
           cols={2}
           rows={2}
+        />
+        <CustomFormField
+          form={form}
+          name='admission'
+          label='Is the student admitted conditional on payment?'
+          placeholder='Admission'
+          fieldType='checkbox'
         />
         <CustomFormField
           form={form}

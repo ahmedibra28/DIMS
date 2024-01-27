@@ -15,12 +15,11 @@ import RTable from '@/components/RTable'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Form } from '@/components/ui/form'
-import CustomFormField from '@/components/ui/CustomForm'
+import CustomFormField, { Upload } from '@/components/ui/CustomForm'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
 import useUserInfoStore from '@/zustand/userStore'
-import Upload from '@/components/Upload'
 import { FaFileArrowDown } from 'react-icons/fa6'
 
 const FormSchema = z.object({
@@ -211,7 +210,7 @@ const Page = () => {
           name='isApproved'
           label='Approve'
           placeholder='Approve'
-          fieldType='switch'
+          fieldType='checkbox'
         />
       ) : (
         <CustomFormField

@@ -243,14 +243,14 @@ const Page = () => {
         name='confirmed'
         label='Confirmed'
         placeholder='Confirmed'
-        fieldType='switch'
+        fieldType='checkbox'
       />
       <CustomFormField
         form={form}
         name='blocked'
         label='Blocked'
         placeholder='Blocked'
-        fieldType='switch'
+        fieldType='checkbox'
       />
     </Form>
   )

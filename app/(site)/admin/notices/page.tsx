@@ -15,11 +15,10 @@ import RTable from '@/components/RTable'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Form } from '@/components/ui/form'
-import CustomFormField from '@/components/ui/CustomForm'
+import CustomFormField, { MultiSelect } from '@/components/ui/CustomForm'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
-import { MultiSelect } from '@/components/ui/multi-select'
 
 const FormSchema = z.object({
   title: z.string().min(1),
