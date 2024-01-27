@@ -13,6 +13,7 @@ import { UseFormReturn } from 'react-hook-form'
 import { Button, ButtonProps } from '@/components/ui/button'
 import {
   FaCheck,
+  FaDollarSign,
   FaEllipsis,
   FaFilePen,
   FaSort,
@@ -42,6 +43,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog'
@@ -331,6 +334,7 @@ export const ActionButton = ({
   isPending,
   deleteHandler,
   original,
+  handleUpdate,
 }: {
   editHandler?: (item: any) => void
   isPending?: boolean
@@ -338,34 +342,60 @@ export const ActionButton = ({
   modal?: string
   original?: any
   formChildren?: React.ReactNode
+  handleUpdate?: ({
+    id,
+    status,
+  }: {
+    id: string
+    status: 'PAID' | 'UNPAID'
+  }) => void
 }) => {
   const { setDialogOpen } = useDataStore((state) => state)
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <FaEllipsis className='text-2xl' />
+      <DropdownMenuTrigger asChild>
+        <Button variant='ghost' className='h-8 w-8 p-0 border-none'>
+          <span className='sr-only'>Open menu</span>
+          <FaEllipsis className='h-4 w-4' />
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align='end'>
+        {handleUpdate && (
+          <DropdownMenuItem
+            disabled={isPending}
+            className={original.paymentStatus === 'PAID' ? 'text-red-500' : ''}
+            onClick={() =>
+              handleUpdate({
+                id: original.id,
+                status: original.paymentStatus === 'PAID' ? 'UNPAID' : 'PAID',
+              })
+            }
+          >
+            <FaDollarSign />
+            <span>
+              {' '}
+              {original.paymentStatus === 'PAID' ? 'Unpaid' : 'Paid'}
+            </span>
+          </DropdownMenuItem>
+        )}
+
         {editHandler && (
-          <DropdownMenuItem>
-            <FormButton
-              onClick={() => {
-                editHandler(original)
-                setDialogOpen(true)
-              }}
-              icon={<FaFilePen />}
-              label='Edit'
-              type='button'
-              loading={isPending}
-            />
+          <DropdownMenuItem
+            disabled={isPending}
+            onClick={() => {
+              editHandler(original)
+              setDialogOpen(true)
+            }}
+          >
+            <FaFilePen /> <span className='mx-1'> Edit</span>
           </DropdownMenuItem>
         )}
 
         {deleteHandler && (
           <AlertDialog>
             <AlertDialogTrigger>
-              <div className='h-9 min-w-24 flex justify-start items-center gap-x-1 rounded-lg bg-red-500 text-white py-2 px-4 mx-2 text-sm'>
+              <div className='h-8 min-w-32 flex justify-start items-center gap-x-1 rounded px-2 text-sm hover:bg-slate-100 text-red-500 w-full'>
                 {isPending ? (
                   <>
                     <FaSpinner className='mr-1 animate-spin' />

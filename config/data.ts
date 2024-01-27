@@ -195,6 +195,22 @@ const clientPermissions = [
     description: 'Generate Tuition Fee page',
   },
   {
+    id: 'YTU-o6vjJk4A-6uM8kgx6',
+    name: 'Admission Fee',
+    path: '/finance/admission-fee',
+    menu: 'finance',
+    sort: sort.finance,
+    description: 'Admission Fee page',
+  },
+  {
+    id: 'YTU-o6vjJk4A-6uM8kgx7',
+    name: 'Tuition Fee',
+    path: '/finance/tuition-fee',
+    menu: 'finance',
+    sort: sort.finance,
+    description: 'Tuition Fee page',
+  },
+  {
     id: 'YTU-o6vjJk4A-6uM8kgx5',
     name: 'Lesson Plan',
     path: '/lesson-plans',
@@ -638,6 +654,38 @@ const permissions = [
     route: '/api/generate-tuition-fee',
     name: 'Finance',
     method: 'POST',
+  },
+
+  // Admission Fee
+  {
+    id: 'wkQcIYKcLu7nMeDYZ7b2q',
+    description: 'Admission Fee',
+    route: '/api/admission-fee',
+    name: 'Finance',
+    method: 'GET',
+  },
+  {
+    id: 'nUGiYb1gm4dcV4BBQb2Sk',
+    description: 'Admission Fee',
+    route: '/api/admission-fee/:id',
+    name: 'Finance',
+    method: 'PUT',
+  },
+
+  // Tuition Fee
+  {
+    id: 'NfxfcW-elq9To5i1YSRi0',
+    description: 'Tuition Fee',
+    route: '/api/tuition-fee',
+    name: 'Finance',
+    method: 'GET',
+  },
+  {
+    id: 'mTnEuc5D84nwplmcsuqTS',
+    description: 'Tuition Fee',
+    route: '/api/tuition-fee/:id',
+    name: 'Finance',
+    method: 'PUT',
   },
 
   // Lesson Plan

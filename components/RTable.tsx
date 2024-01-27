@@ -59,6 +59,7 @@ interface RTableProps {
   searchHandler?: (e: any) => void
   modal?: string
   caption?: string
+  searchType?: React.HTMLInputTypeAttribute
 }
 
 const RTable: React.FC<RTableProps> = ({
@@ -72,6 +73,7 @@ const RTable: React.FC<RTableProps> = ({
   searchHandler,
   modal,
   caption,
+  searchType = 'text',
 }) => {
   const [sorting, setSorting] = useState<any[]>([])
 
@@ -98,7 +100,7 @@ const RTable: React.FC<RTableProps> = ({
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting: sorting,
-      globalFilter: q,
+      ...(searchType !== 'date' && { globalFilter: q }),
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setQ,
@@ -126,7 +128,7 @@ const RTable: React.FC<RTableProps> = ({
               searchHandler={searchHandler}
               placeholder='Search'
               q={q!}
-              type='text'
+              type={searchType}
             />
           </div>
         ) : (
