@@ -43,8 +43,9 @@ model User {
   student   Student? @relation("UserToStudent", fields: [studentId], references: [id], onDelete: Restrict)
   studentId String?
 
-  instructor   Instructor? @relation("UserToInstructor", fields: [instructorId], references: [id], onDelete: Restrict)
+  instructor   Instructor?   @relation("UserToInstructor", fields: [instructorId], references: [id], onDelete: Restrict)
   instructorId String?
+  examinations Examination[]
 
   @@map("users")
 }
@@ -148,6 +149,7 @@ model Subject {
   createdById    String
   assignSubjects AssignSubject[]
   lessonPlans    LessonPlan[]
+  examinations   Examination[]
 
   @@unique([semester, name, courseId])
   @@map("subjects")
@@ -251,12 +253,13 @@ model AssignCourse {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  student     Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
-  studentId   String
-  course      Course  @relation(fields: [courseId], references: [id], onDelete: Restrict)
-  courseId    String
-  createdBy   User    @relation(fields: [createdById], references: [id], onDelete: Restrict)
-  createdById String
+  student      Student       @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  studentId    String
+  course       Course        @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  courseId     String
+  createdBy    User          @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdById  String
+  examinations Examination[]
 
   @@map("assign_courses")
 }
@@ -297,6 +300,28 @@ model LessonPlan {
   createdById String
 
   @@map("lesson_plans")
+}
+
+model Examination {
+  id             String   @id @default(dbgenerated("nanoid()")) @db.VarChar(21)
+  examination    String
+  semester       Int
+  theoryMarks    Float
+  practicalMarks Float
+  status         Status   @default(ACTIVE)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  assignCourse   AssignCourse @relation(fields: [assignCourseId], references: [id], onDelete: Restrict)
+  assignCourseId String
+
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+  subjectId String
+
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdById String
+
+  @@map("examinations")
 }
 
 model Transaction {

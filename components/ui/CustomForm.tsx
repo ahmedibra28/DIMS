@@ -16,6 +16,8 @@ import {
   FaDollarSign,
   FaEllipsis,
   FaFilePen,
+  FaPersonArrowUpFromLine,
+  FaQuestion,
   FaSort,
   FaSpinner,
   FaTrash,
@@ -62,6 +64,7 @@ import { Label } from '@/components/ui/label'
 import { X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Command as CommandPrimitive } from 'cmdk'
+import Link from 'next/link'
 
 type Prop = Record<'value' | 'label', string>
 
@@ -334,6 +337,8 @@ export const ActionButton = ({
   deleteHandler,
   original,
   handleUpdate,
+  upgradeClass,
+  navigateToExam,
 }: {
   editHandler?: (item: any) => void
   isPending?: boolean
@@ -341,6 +346,8 @@ export const ActionButton = ({
   modal?: string
   original?: any
   formChildren?: React.ReactNode
+  upgradeClass?: (id: string) => void
+  navigateToExam?: boolean
   handleUpdate?: ({
     id,
     status,
@@ -360,6 +367,25 @@ export const ActionButton = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
+        {upgradeClass && (
+          <DropdownMenuItem
+            disabled={isPending}
+            onClick={() => upgradeClass(original.id)}
+          >
+            <FaPersonArrowUpFromLine /> <span className='mx-1'> Upgrade</span>
+          </DropdownMenuItem>
+        )}
+
+        {navigateToExam && (
+          <Link
+            href={`/examination/${original.id}?student=${original.studentId}`}
+          >
+            <DropdownMenuItem disabled={isPending}>
+              <FaQuestion /> <span className='mx-1'> Exam</span>
+            </DropdownMenuItem>
+          </Link>
+        )}
+
         {handleUpdate && (
           <DropdownMenuItem
             disabled={isPending}

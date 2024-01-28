@@ -388,13 +388,15 @@ const Page = () => {
           cols={2}
           rows={2}
         />
-        <CustomFormField
-          form={form}
-          name='admission'
-          label='Is the student admitted conditional on payment?'
-          placeholder='Admission'
-          fieldType='checkbox'
-        />
+        {!edit && (
+          <CustomFormField
+            form={form}
+            name='admission'
+            label='Is the student admitted conditional on payment?'
+            placeholder='Admission'
+            fieldType='checkbox'
+          />
+        )}
         <CustomFormField
           form={form}
           name='status'

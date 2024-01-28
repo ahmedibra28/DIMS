@@ -6,28 +6,38 @@ type Column = {
   editHandler: (item: any) => void
   isPending: boolean
   deleteHandler: (item: any) => void
-  upgradeClass: (id: string) => void
 }
 
-export const columns = ({
-  editHandler,
-  isPending,
-  deleteHandler,
-  upgradeClass,
-}: Column) => {
+export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
   return [
-    { header: 'Course', accessorKey: 'course.name', active: true },
+    { header: 'Subject', accessorKey: 'subject.name', active: true },
+    { header: 'Examination', accessorKey: 'examination', active: true },
     { header: 'Semester', accessorKey: 'semester', active: true },
-    { header: 'Shift', accessorKey: 'shift', active: true },
-
     {
-      header: 'Discount',
-      accessorKey: 'discount',
+      header: 'Theory Marks',
+      accessorKey: 'theoryMarks',
       active: true,
       cell: ({ row: { original } }: any) => (
-        <>
-          <FormatNumber value={original?.discount} isCurrency={false} />%
-        </>
+        <FormatNumber value={original.theoryMarks} isCurrency={false} />
+      ),
+    },
+    {
+      header: 'Practical Marks',
+      accessorKey: 'practicalMarks',
+      active: true,
+      cell: ({ row: { original } }: any) => (
+        <FormatNumber value={original.practicalMarks} isCurrency={false} />
+      ),
+    },
+    {
+      header: 'Total Marks',
+      accessorKey: 'average',
+      active: true,
+      cell: ({ row: { original } }: any) => (
+        <FormatNumber
+          value={original.theoryMarks + original.practicalMarks}
+          isCurrency={false}
+        />
       ),
     },
     {
@@ -57,8 +67,6 @@ export const columns = ({
           isPending={isPending}
           deleteHandler={deleteHandler}
           original={original}
-          upgradeClass={upgradeClass}
-          navigateToExam={true}
         />
       ),
     },

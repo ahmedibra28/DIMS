@@ -184,6 +184,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     // eslint-disable-next-line
   }, [form.watch().courseId])
 
+  const upgradeClass = (id: string) => console.log({ id })
+
   const formFields = (
     <Form {...form}>
       <div className='grid grid-cols-1 gap-x-4 md:grid-cols-2'>
@@ -439,6 +441,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               editHandler,
               isPending: deleteApi?.isPending || false,
               deleteHandler,
+              upgradeClass,
             })}
             setPage={setPage}
             setLimit={setLimit}

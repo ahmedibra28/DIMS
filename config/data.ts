@@ -218,6 +218,14 @@ const clientPermissions = [
     sort: sort.normal,
     description: 'Lesson Plan page',
   },
+  {
+    id: 'YTU-o6vjJk4A-6uM8kgx8',
+    name: 'Examination',
+    path: '/examination/[id]',
+    menu: 'hidden',
+    sort: sort.hidden,
+    description: 'Examination page',
+  },
 ]
 
 const permissions = [
@@ -716,6 +724,43 @@ const permissions = [
     route: '/api/lesson-plans/:id',
     name: 'Lesson Plan',
     method: 'DELETE',
+  },
+
+  // Examination
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgx9',
+    description: 'Examination',
+    route: '/api/examinations',
+    name: 'Examination',
+    method: 'GET',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgx0',
+    description: 'Examination',
+    route: '/api/examinations',
+    name: 'Examination',
+    method: 'POST',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgx1',
+    description: 'Examination',
+    route: '/api/examinations/:id',
+    name: 'Examination',
+    method: 'PUT',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgx2',
+    description: 'Examination',
+    route: '/api/examinations/:id',
+    name: 'Examination',
+    method: 'DELETE',
+  },
+  {
+    id: 'YTU-o6vjJk4A-4uM8kgx3',
+    description: 'Get examination by student id',
+    route: '/api/examinations/:id',
+    name: 'Examination',
+    method: 'GET',
   },
 ]
 
