@@ -90,6 +90,12 @@ const Page = ({ params }: { params: { id: string } }) => {
     url: `assign-student-to-course`,
   })?.deleteObj
 
+  const upgradeClassApi = useApi({
+    key: ['assign-courses'],
+    method: 'POST',
+    url: `upgrade-class-to-next-level`,
+  })?.post
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -184,7 +190,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     // eslint-disable-next-line
   }, [form.watch().courseId])
 
-  const upgradeClass = (id: string) => console.log({ id })
+  const upgradeClass = (id: string) => upgradeClassApi?.mutateAsync({ id })
 
   const formFields = (
     <Form {...form}>
@@ -259,13 +265,18 @@ const Page = ({ params }: { params: { id: string } }) => {
       {updateApi?.isError && <Message value={updateApi?.error} />}
       {postApi?.isSuccess && <Message value={postApi?.data?.message} />}
       {postApi?.isError && <Message value={postApi?.error} />}
+      {upgradeClassApi?.isSuccess && (
+        <Message value={upgradeClassApi?.data?.message} />
+      )}
+      {upgradeClassApi?.isError && <Message value={upgradeClassApi?.error} />}
 
       <TopLoadingBar
         isFetching={
           getApi?.isFetching ||
           getApi?.isPending ||
           isPending ||
-          getStudent?.isPending
+          getStudent?.isPending ||
+          upgradeClassApi?.isPending
         }
       />
 

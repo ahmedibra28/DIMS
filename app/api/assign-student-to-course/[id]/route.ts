@@ -101,7 +101,7 @@ export async function PUT(req: Request, { params }: Params) {
         where: {
           shift,
           studentId,
-          status: 'ACTIVE',
+          // status: 'ACTIVE',
           id: { not: params.id },
         },
       }))
@@ -134,7 +134,7 @@ export async function PUT(req: Request, { params }: Params) {
     const checkCourseStatus = await prisma.assignCourse.findFirst({
       where: {
         courseId: `${courseId}`,
-        status: 'ACTIVE',
+        // status: 'ACTIVE',
         id: { not: params.id },
         studentId: checkStudent.id,
       },
@@ -145,7 +145,7 @@ export async function PUT(req: Request, { params }: Params) {
     await prisma.assignCourse.update({
       where: { id: params.id },
       data: {
-        semester: parseInt(semester),
+        // semester: parseInt(semester),
         shift,
         discount: parseFloat(discount),
         status,

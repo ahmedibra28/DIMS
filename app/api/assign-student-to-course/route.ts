@@ -80,6 +80,9 @@ export async function POST(req: NextApiRequestExtended) {
     if (Number(discount) > 100 || Number(discount) < 0)
       return getErrorResponse('Discount must be between 0 and 100')
 
+    if (Number(semester) !== 1)
+      return getErrorResponse('Semester must be 1 for now')
+
     const checkExistence =
       shift &&
       studentId &&
@@ -87,7 +90,7 @@ export async function POST(req: NextApiRequestExtended) {
         where: {
           shift,
           studentId,
-          status: 'ACTIVE',
+          // status: 'ACTIVE',
         },
       }))
     if (checkExistence)
@@ -119,7 +122,7 @@ export async function POST(req: NextApiRequestExtended) {
     const checkCourseStatus = await prisma.assignCourse.findFirst({
       where: {
         courseId: `${courseId}`,
-        status: 'ACTIVE',
+        // status: 'ACTIVE',
         studentId: checkStudent.id,
       },
     })

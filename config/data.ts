@@ -762,6 +762,13 @@ const permissions = [
     name: 'Examination',
     method: 'GET',
   },
+  {
+    id: 'YTU-o6jjJk4A-4uM8kg44',
+    description: 'Upgrade Class To Next Level',
+    route: '/api/upgrade-class-to-next-level',
+    name: 'Examination',
+    method: 'POST',
+  },
 ]
 
 export { roles, users, profile, permissions, clientPermissions }

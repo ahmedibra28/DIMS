@@ -360,6 +360,8 @@ enum Status {
   ACTIVE
   INACTIVE
   DELETED
+  GRADUATED
+  PASSED
 }
 
 enum Sex {
