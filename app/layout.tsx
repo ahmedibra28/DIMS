@@ -28,9 +28,9 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <Providers>
-          <div className='navbar z-50 h-[68px] flex justify-between items-center bg-white px-5'>
+          <div className='navbar z-50 flex h-[68px] items-center justify-between bg-white px-5'>
             <div>
-              <Link href='/' className='w-24 normal-case text-xl'>
+              <Link href='/' className='w-24 text-xl normal-case'>
                 <Image
                   src='/logo.png'
                   width={40}
@@ -42,7 +42,7 @@ export default function RootLayout({
             </div>
             <Navigation />
           </div>
-          <div className='max-w-6xl mx-auto px-2'>
+          <div className='mx-auto max-w-6xl px-2'>
             <main className='flex min-h-[85.5vh] flex-col'>{children}</main>
           </div>
           <Footer />

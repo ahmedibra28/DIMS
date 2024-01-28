@@ -24,18 +24,16 @@ import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
 
 const FormSchema = z.object({
-  name: z.string().refine((value) => value !== '', {
+  name: z.string().refine(value => value !== '', {
     message: 'Name is required',
   }),
   description: z.string().optional(),
-  permissions: z
-    .array(z.string())
-    .refine((value) => value.some((item) => item), {
-      message: 'You have to select at least one item.',
-    }),
+  permissions: z.array(z.string()).refine(value => value.some(item => item), {
+    message: 'You have to select at least one item.',
+  }),
   clientPermissions: z
     .array(z.string())
-    .refine((value) => value.some((item) => item), {
+    .refine(value => value.some(item => item), {
       message: 'You have to select at least one item.',
     }),
 })
@@ -47,7 +45,7 @@ const Page = () => {
   const [edit, setEdit] = useState(false)
   const [q, setQ] = useState('')
 
-  const { setData, dialogOpen, setDialogOpen } = useDataStore((state) => state)
+  const { setData, dialogOpen, setDialogOpen } = useDataStore(state => state)
 
   const path = useAuthorization()
   const router = useRouter()
@@ -140,7 +138,7 @@ const Page = () => {
 
   const permissionsList = (items: IPermission[]): CheckboxListItem[] =>
     items?.reduce((acc: CheckboxListItem[], curr: IPermission) => {
-      const found = acc.find((item) => item.label === curr.name)
+      const found = acc.find(item => item.label === curr.name)
       if (found) {
         found.children.push({
           id: curr.id,
@@ -166,7 +164,7 @@ const Page = () => {
     items: IClientPermission[]
   ): CheckboxListItem[] =>
     items?.reduce((acc: CheckboxListItem[], curr: IClientPermission) => {
-      const found = acc.find((item) => item.label === curr.menu)
+      const found = acc.find(item => item.label === curr.menu)
       if (found) {
         found.children.push({
           id: curr.id,
@@ -203,11 +201,11 @@ const Page = () => {
 
     form.setValue(
       'permissions',
-      item?.permissions?.map((item) => item?.id)
+      item?.permissions?.map(item => item?.id)
     )
     form.setValue(
       'clientPermissions',
-      item?.clientPermissions?.map((item) => item?.id)
+      item?.clientPermissions?.map(item => item?.id)
     )
   }
 
@@ -318,7 +316,7 @@ const Page = () => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='overflow-x-auto bg-white p-3 mt-2'>
+        <div className='mt-2 overflow-x-auto bg-white p-3'>
           <RTable
             data={getApi?.data}
             columns={columns({

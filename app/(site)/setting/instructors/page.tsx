@@ -57,7 +57,7 @@ const Page = () => {
     }
   }, [path, router])
 
-  const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
+  const { dialogOpen, setDialogOpen } = useDataStore(state => state)
 
   const getApi = useApi({
     key: ['instructors'],
@@ -200,10 +200,10 @@ const Page = () => {
   const formFields = (
     <Form {...form}>
       <div>
-        <h1 className='font-bold uppercase text-primary border border-white border-t-0 border-r-0 border-l-0 mb-2'>
+        <h1 className='mb-2 border border-l-0 border-r-0 border-t-0 border-white font-bold uppercase text-primary'>
           Personal Information
         </h1>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-4 mt-2'>
+        <div className='mb-4 mt-2 grid grid-cols-1 gap-x-4 md:grid-cols-2'>
           <CustomFormField
             form={form}
             name='name'
@@ -264,10 +264,10 @@ const Page = () => {
             type='email'
           />
         </div>
-        <h1 className='font-bold uppercase text-primary border border-white border-t-0 border-r-0 border-l-0 mb-2'>
+        <h1 className='mb-2 border border-l-0 border-r-0 border-t-0 border-white font-bold uppercase text-primary'>
           Permanent Address
         </h1>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-4 mt-2'>
+        <div className='mb-4 mt-2 grid grid-cols-1 gap-x-4 md:grid-cols-2'>
           <CustomFormField
             form={form}
             name='district'
@@ -283,10 +283,10 @@ const Page = () => {
             type='text'
           />
         </div>
-        <h1 className='font-bold uppercase text-primary border border-white border-t-0 border-r-0 border-l-0 mb-2'>
+        <h1 className='mb-2 border border-l-0 border-r-0 border-t-0 border-white font-bold uppercase text-primary'>
           Contact Person In Case Of Emergency
         </h1>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-4 mt-2'>
+        <div className='mb-4 mt-2 grid grid-cols-1 gap-x-4 md:grid-cols-2'>
           <CustomFormField
             form={form}
             name='contactName'
@@ -325,7 +325,7 @@ const Page = () => {
             fileType='image'
           />
           {fileLink.length > 0 && (
-            <div className='avatar text-center mt-2'>
+            <div className='avatar mt-2 text-center'>
               <div className='w-12'>
                 <Image
                   src={fileLink?.[0]}
@@ -398,7 +398,7 @@ const Page = () => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='overflow-x-auto bg-white p-3 mt-2'>
+        <div className='mt-2 overflow-x-auto bg-white p-3'>
           <RTable
             data={getApi?.data}
             columns={columns({

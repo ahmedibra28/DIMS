@@ -29,7 +29,7 @@ export async function PUT(req: Request, { params }: Params) {
     })
     if (!checkExistStudent) return getErrorResponse('Student not found', 404)
 
-    await prisma.$transaction(async (prisma) => {
+    await prisma.$transaction(async prisma => {
       await prisma.transaction.update({
         where: { id: params.id },
         data: {

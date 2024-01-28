@@ -5,7 +5,7 @@ import moment from 'moment'
 const Footer = () => {
   const year = moment().format('YYYY')
   return (
-    <footer className='footer footer-center text-center font-light flex justify-center items-center bg-white text-base-content h-[68px]'>
+    <footer className='footer footer-center text-base-content flex h-[68px] items-center justify-center bg-white text-center font-light'>
       <div>
         <p className='text-gray-400'>
           Copyright © {year} - Developed by

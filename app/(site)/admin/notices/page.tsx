@@ -47,7 +47,7 @@ const Page = () => {
     }
   }, [path, router])
 
-  const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
+  const { dialogOpen, setDialogOpen } = useDataStore(state => state)
 
   const getApi = useApi({
     key: ['notices'],
@@ -129,7 +129,7 @@ const Page = () => {
     const newRoles: any[] = []
 
     roles?.forEach((role: any) => {
-      if (!selectedRoles.find((item) => item.value === role.value)) {
+      if (!selectedRoles.find(item => item.value === role.value)) {
         newRoles.push(role)
       }
     })
@@ -143,7 +143,7 @@ const Page = () => {
     setEdit(true)
     form.setValue('title', item?.title)
     form.setValue('note', item?.note)
-    const roles = item?.roles?.map((item) => ({
+    const roles = item?.roles?.map(item => ({
       label: item.name,
       value: item.id,
     }))
@@ -257,7 +257,7 @@ const Page = () => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='overflow-x-auto bg-white p-3 mt-2'>
+        <div className='mt-2 overflow-x-auto bg-white p-3'>
           <RTable
             data={getApi?.data}
             columns={columns({

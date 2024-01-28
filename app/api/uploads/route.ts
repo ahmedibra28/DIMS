@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     if (!allowedTypes.includes(type as string))
       return getErrorResponse('Invalid file type', 400)
 
-    const isAllowed = files.every((file) => {
+    const isAllowed = files.every(file => {
       const ext = file.name.split('.').pop()?.toLowerCase()
       if (type === 'image') return allowedImageTypes.includes(`.${ext}`)
       if (type === 'document') return allowedDocumentTypes.includes(`.${ext}`)
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
 
     if (!isAllowed) return getErrorResponse('Invalid file type', 400)
 
-    const promises = files.map(async (file) => {
+    const promises = files.map(async file => {
       const ext = file.name.split('.').pop()?.toLowerCase()
       const fileName = `${file.name.split('.')[0]}-${Date.now()}.${ext}`
       let buffer = Buffer.from(new Uint8Array(await file.arrayBuffer()))
@@ -86,7 +86,7 @@ export async function POST(req: Request) {
     const fileUrls = await Promise.all(promises)
     return NextResponse.json({
       message: 'File uploaded successfully',
-      data: fileUrls?.map((url) => ({
+      data: fileUrls?.map(url => ({
         url: `https://media.sahalbook.com/${url.replace(/\s/g, '%20')}`,
         // url: `https://farshaxan.blr1.cdn.digitaloceanspaces.com/eballan/${url.replace(
         //   /\s/g,

@@ -19,7 +19,7 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
         <Image
           src={row.original?.image || '/avatar.png'}
           alt={row.original?.name}
-          className='w-10 h-10 rounded-full object-cover'
+          className='h-10 w-10 rounded-full object-cover'
           width={40}
           height={40}
         />

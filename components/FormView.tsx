@@ -34,7 +34,7 @@ const FormView = ({
   width,
   edit,
 }: Props) => {
-  const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
+  const { dialogOpen, setDialogOpen } = useDataStore(state => state)
 
   return (
     <Dialog open={dialogOpen} onOpenChange={() => setDialogOpen(false)}>

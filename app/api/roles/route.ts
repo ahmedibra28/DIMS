@@ -80,8 +80,8 @@ export async function POST(req: Request) {
       }
     }
 
-    permission = permission?.filter((per) => per)
-    clientPermission = clientPermission?.filter((client) => client)
+    permission = permission?.filter(per => per)
+    clientPermission = clientPermission?.filter(client => client)
 
     const checkExistence =
       name &&
@@ -96,10 +96,10 @@ export async function POST(req: Request) {
         description,
         type,
         permissions: {
-          connect: permission?.map((pre) => ({ id: pre })),
+          connect: permission?.map(pre => ({ id: pre })),
         },
         clientPermissions: {
-          connect: clientPermission?.map((client) => ({ id: client })),
+          connect: clientPermission?.map(client => ({ id: client })),
         },
       },
     })

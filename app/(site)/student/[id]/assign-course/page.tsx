@@ -58,7 +58,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const [isPending, startTransition] = useTransition()
 
-  const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
+  const { dialogOpen, setDialogOpen } = useDataStore(state => state)
 
   const getStudent = useApi({
     key: ['student', params.id],
@@ -169,7 +169,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if (form.watch().courseId) {
       startTransition(() => {
-        getCoursesById({ courseId: form.watch().courseId }).then((res) => {
+        getCoursesById({ courseId: form.watch().courseId }).then(res => {
           const numberToArray = Array.from(
             { length: res?.duration || 0 },
             (_, i) => ({ label: `${i + 1}`, value: `${i + 1}` })
@@ -186,7 +186,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const formFields = (
     <Form {...form}>
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4'>
+      <div className='grid grid-cols-1 gap-x-4 md:grid-cols-2'>
         <CustomFormField
           form={form}
           name='courseId'
@@ -281,33 +281,33 @@ const Page = ({ params }: { params: { id: string } }) => {
       ) : getStudent?.isError ? (
         <Message value={getStudent?.error} />
       ) : (
-        <div className='p-3 mt-2 mb-10 flex flex-wrap flex-col md:flex-row gap-2 bg-white'>
+        <div className='mb-10 mt-2 flex flex-col flex-wrap gap-2 bg-white p-3 md:flex-row'>
           <div className='w-full'>
-            <div className='flex justify-between items-center'>
-              <div className='p-2 relative w-44'>
+            <div className='flex items-center justify-between'>
+              <div className='relative w-44 p-2'>
                 <Image
                   src={getStudent?.data?.image || '/avatar.png'}
                   alt='student'
                   width={200}
                   height={200}
-                  className='rounded m-auto w-44'
+                  className='m-auto w-44 rounded'
                 />
                 <div className='absolute -top-2 right-0'>
                   {student?.status === 'ACTIVE' ? (
                     <Badge
-                      className='bg-green-500 h-[22px] w-5 rounded-full'
+                      className='h-[22px] w-5 rounded-full bg-green-500'
                       title={student?.status}
                     />
                   ) : (
                     <Badge
-                      className='bg-red-500 h-[22px] w-5 rounded-full'
+                      className='h-[22px] w-5 rounded-full bg-red-500'
                       title={student?.status}
                     />
                   )}
                 </div>
               </div>
               <h1
-                className={`text-5xl md:text-6xl lg:text-8xl duration-1000 ${
+                className={`text-5xl duration-1000 md:text-6xl lg:text-8xl ${
                   Number(student?.balance || 0) > 0 ? 'text-red-500' : ''
                 }`}
               >
@@ -322,7 +322,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               </div>
             )}
           </div>
-          <div className='p-2 bg-white shadow sm:w-full md:w-[48%] lg:w-[32%]'>
+          <div className='bg-white p-2 shadow sm:w-full md:w-[48%] lg:w-[32%]'>
             <h4 className='font-bold text-primary'>PERSONAL INFORMATION</h4>
             <Table>
               <TableBody>
@@ -335,10 +335,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                   { label: 'Education', value: student?.education },
                 ].map((item, index) => (
                   <TableRow key={index}>
-                    <TableCell className='font-medium py-1'>
+                    <TableCell className='py-1 font-medium'>
                       {item?.label}
                     </TableCell>
-                    <TableCell className='font-light py-1'>
+                    <TableCell className='py-1 font-light'>
                       {item?.value}
                     </TableCell>
                   </TableRow>
@@ -347,7 +347,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Table>
           </div>
 
-          <div className='p-2 bg-white shadow sm:w-full md:w-[48%] lg:w-[32%]'>
+          <div className='bg-white p-2 shadow sm:w-full md:w-[48%] lg:w-[32%]'>
             <h4 className='font-bold text-primary'>PERMANENT ADDRESS</h4>
             <Table>
               <TableBody>
@@ -356,10 +356,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                   { label: 'Mobile', value: student?.mobile },
                 ].map((item, index) => (
                   <TableRow key={index}>
-                    <TableCell className='font-medium py-1'>
+                    <TableCell className='py-1 font-medium'>
                       {item?.label}
                     </TableCell>
-                    <TableCell className='font-light py-1'>
+                    <TableCell className='py-1 font-light'>
                       {item?.value}
                     </TableCell>
                   </TableRow>
@@ -368,7 +368,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Table>
           </div>
 
-          <div className='p-2 bg-white shadow sm:w-full md:w-[48%] lg:w-[32%]'>
+          <div className='bg-white p-2 shadow sm:w-full md:w-[48%] lg:w-[32%]'>
             <h4 className='font-bold text-primary'>
               CONTACT PERSON IN CASE OF EMERGENCY
             </h4>
@@ -384,10 +384,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                   },
                 ].map((item, index) => (
                   <TableRow key={index}>
-                    <TableCell className='font-medium py-1'>
+                    <TableCell className='py-1 font-medium'>
                       {item?.label}
                     </TableCell>
-                    <TableCell className='font-light py-1'>
+                    <TableCell className='py-1 font-light'>
                       {item?.value}
                     </TableCell>
                   </TableRow>
@@ -396,7 +396,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Table>
           </div>
 
-          <div className='p-2 bg-white shadow sm:w-full md:w-[48%] lg:w-[32%]'>
+          <div className='bg-white p-2 shadow sm:w-full md:w-[48%] lg:w-[32%]'>
             <h4 className='font-bold text-primary'>LANGUAGE SKILLS</h4>
             <Table>
               <TableBody>
@@ -413,10 +413,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                   },
                 ].map((item, index) => (
                   <TableRow key={index}>
-                    <TableCell className='font-medium py-1'>
+                    <TableCell className='py-1 font-medium'>
                       {item?.label}
                     </TableCell>
-                    <TableCell className='font-light py-1'>
+                    <TableCell className='py-1 font-light'>
                       {item?.value}
                     </TableCell>
                   </TableRow>
@@ -432,7 +432,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='overflow-x-auto bg-white p-3 mt-2'>
+        <div className='mt-2 overflow-x-auto bg-white p-3'>
           <RTable
             data={getApi?.data}
             columns={columns({

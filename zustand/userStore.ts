@@ -23,7 +23,7 @@ type UserInfoStore = {
 
 const useUserInfoStore = create(
   persist<UserInfoStore>(
-    (set) => ({
+    set => ({
       userInfo: {
         id: '',
         name: '',
@@ -37,8 +37,8 @@ const useUserInfoStore = create(
         instructorId: '',
         studentId: '',
       },
-      updateUserInfo: (userInfo) => {
-        return set((state) => ({
+      updateUserInfo: userInfo => {
+        return set(state => ({
           userInfo: {
             ...state.userInfo,
             ...userInfo,
@@ -46,7 +46,7 @@ const useUserInfoStore = create(
         }))
       },
       logout: () => {
-        return set((state) => ({
+        return set(state => ({
           userInfo: {
             ...state.userInfo,
             id: '',

@@ -14,10 +14,10 @@ export async function GET(req: Request) {
       return getErrorResponse('Invalid secret', 401)
 
     // Check duplicate permissions
-    permissions.map((p) => {
+    permissions.map(p => {
       if (p.method && p.route) {
         const duplicate = permissions.filter(
-          (p2) => p2.method === p.method && p2.route === p.route
+          p2 => p2.method === p.method && p2.route === p.route
         )
         if (duplicate.length > 1) {
           return getErrorResponse(
@@ -37,10 +37,10 @@ export async function GET(req: Request) {
     }
 
     // Create roles or update if exists
-    await prisma.$transaction(async (prisma) => {
+    await prisma.$transaction(async prisma => {
       await Promise.all(
         roles?.map(
-          async (obj) =>
+          async obj =>
             await prisma.role.upsert({
               where: { id: obj.id },
               update: obj,
@@ -75,7 +75,7 @@ export async function GET(req: Request) {
     // Create permissions
     await Promise.all(
       permissions?.map(
-        async (obj) =>
+        async obj =>
           await prisma.permission.upsert({
             where: { id: obj.id },
             update: obj as any,
@@ -87,7 +87,7 @@ export async function GET(req: Request) {
     // Create client permissions
     await Promise.all(
       clientPermissions?.map(
-        async (obj) =>
+        async obj =>
           await prisma.clientPermission.upsert({
             where: { id: obj.id },
             update: obj,
@@ -99,19 +99,19 @@ export async function GET(req: Request) {
     // Create roles or update if exists
     await Promise.all(
       roles?.map(
-        async (obj) =>
+        async obj =>
           await prisma.role.upsert({
             where: { id: obj.id },
             update: {
               ...obj,
               ...(obj.type === 'SUPER_ADMIN' && {
                 permissions: {
-                  connect: permissions.map((p) => ({ id: p.id })),
+                  connect: permissions.map(p => ({ id: p.id })),
                 },
               }),
               ...(obj.type === 'SUPER_ADMIN' && {
                 clientPermissions: {
-                  connect: clientPermissions.map((p) => ({
+                  connect: clientPermissions.map(p => ({
                     id: p.id,
                   })),
                 },
@@ -121,12 +121,12 @@ export async function GET(req: Request) {
               ...obj,
               ...(obj.type === 'SUPER_ADMIN' && {
                 permissions: {
-                  connect: permissions.map((p) => ({ id: p.id })),
+                  connect: permissions.map(p => ({ id: p.id })),
                 },
               }),
               ...(obj.type === 'SUPER_ADMIN' && {
                 clientPermissions: {
-                  connect: clientPermissions.map((p) => ({
+                  connect: clientPermissions.map(p => ({
                     id: p.id,
                   })),
                 },

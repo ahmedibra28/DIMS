@@ -17,7 +17,7 @@ const Page = () => {
   const router = useRouter()
   const params = useSearchParams().get('next')
 
-  const { userInfo, updateUserInfo } = useUserInfoStore((state) => state)
+  const { userInfo, updateUserInfo } = useUserInfoStore(state => state)
 
   const postApi = useApi({
     key: ['login'],
@@ -111,7 +111,7 @@ const Page = () => {
         <div className='col'>
           <Link
             href='/auth/forgot-password'
-            className='ps-1 text-decoration-none'
+            className='text-decoration-none ps-1'
           >
             Forgot Password?
           </Link>

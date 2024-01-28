@@ -9,13 +9,13 @@ const Confirm = (action: () => void) => {
   return {
     customUI: ({ onClose }: { onClose: () => void }) => {
       return (
-        <div className='p-5 shadow-2xl text-center text-dark w-auto md:w-96 min-w-6xl border border-gray-500 rounded-lg'>
-          <h1 className='font-bold text-lg'>Are you sure?</h1>
+        <div className='text-dark min-w-6xl w-auto rounded-lg border border-gray-500 p-5 text-center shadow-2xl md:w-96'>
+          <h1 className='text-lg font-bold'>Are you sure?</h1>
           <p className='mb-5'>You want to delete this?</p>
-          <div className='flex justify-around items-center mt-2'>
+          <div className='mt-2 flex items-center justify-around'>
             <Button
               tabIndex={0}
-              className='btn text-white bg-green-500'
+              className='btn bg-green-500 text-white'
               onClick={onClose}
             >
               No
@@ -23,7 +23,7 @@ const Confirm = (action: () => void) => {
 
             <Button
               tabIndex={0}
-              className='btn text-white bg-red-500'
+              className='btn bg-red-500 text-white'
               onClick={() => {
                 action()
                 onClose()

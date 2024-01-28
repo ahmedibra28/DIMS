@@ -101,7 +101,7 @@ export async function POST(req: NextApiRequestExtended) {
       }))
     if (checkExistence) return getErrorResponse('Student already exist')
 
-    const studentObj = await prisma.$transaction(async (prisma) => {
+    const studentObj = await prisma.$transaction(async prisma => {
       const studentObj = await prisma.student.create({
         data: {
           rollNo,

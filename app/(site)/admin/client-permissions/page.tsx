@@ -20,14 +20,14 @@ import { columns } from './columns'
 import useDataStore from '@/zustand/dataStore'
 
 const FormSchema = z.object({
-  name: z.string().refine((value) => value !== '', {
+  name: z.string().refine(value => value !== '', {
     message: 'Name is required',
   }),
-  menu: z.string().refine((value) => value !== '', {
+  menu: z.string().refine(value => value !== '', {
     message: 'Menu is required',
   }),
   sort: z.string(),
-  path: z.string().refine((value) => value !== '', {
+  path: z.string().refine(value => value !== '', {
     message: 'Path is required',
   }),
   description: z.string().optional(),
@@ -49,7 +49,7 @@ const Page = () => {
     }
   }, [path, router])
 
-  const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
+  const { dialogOpen, setDialogOpen } = useDataStore(state => state)
 
   const getApi = useApi({
     key: ['client-permissions'],
@@ -209,7 +209,7 @@ const Page = () => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='overflow-x-auto bg-white p-3 mt-2'>
+        <div className='mt-2 overflow-x-auto bg-white p-3'>
           <RTable
             data={getApi?.data}
             columns={columns({

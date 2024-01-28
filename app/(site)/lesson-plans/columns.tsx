@@ -30,12 +30,12 @@ export const columns = ({
             <>
               {userInfo.id === original?.createdById &&
                 !original?.isCreatedRead && (
-                  <Badge className='text-xs bg-green-500 ml-1'>unread</Badge>
+                  <Badge className='ml-1 bg-green-500 text-xs'>unread</Badge>
                 )}
 
               {['ADMIN', 'SUPER_ADMIN'].includes(userInfo?.role) &&
                 !original?.isAdminRead && (
-                  <Badge className='text-xs bg-green-500 ml-1'>unread</Badge>
+                  <Badge className='ml-1 bg-green-500 text-xs'>unread</Badge>
                 )}
             </>
           )}

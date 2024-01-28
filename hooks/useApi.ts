@@ -38,22 +38,22 @@ export const api = async (method: string, url: string, obj = {}) => {
       case 'GET':
         return await axios
           .get(`${baseUrl}/${url}`, config())
-          .then((res) => res.data)
+          .then(res => res.data)
 
       case 'POST':
         return await axios
           .post(`${baseUrl}/${url}`, obj, config())
-          .then((res) => res.data)
+          .then(res => res.data)
 
       case 'PUT':
         return await axios
           .put(`${baseUrl}/${url}`, obj, config())
-          .then((res) => res.data)
+          .then(res => res.data)
 
       case 'DELETE':
         return await axios
           .delete(`${baseUrl}/${url}`, config())
-          .then((res) => res.data)
+          .then(res => res.data)
     }
   } catch (error: any) {
     const err = error?.response?.data?.error || 'Something went wrong'

@@ -6,7 +6,7 @@ import { baseUrl } from './useApi'
 import axios from 'axios'
 
 export default function useInterval() {
-  const { userInfo, updateUserInfo } = useUserInfoStore((state) => state)
+  const { userInfo, updateUserInfo } = useUserInfoStore(state => state)
 
   const fetchData = async () => {
     const { data } = await axios.get(`${baseUrl}/users/${userInfo?.id}`)

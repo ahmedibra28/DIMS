@@ -21,7 +21,7 @@ export async function GET(req: NextApiRequestExtended) {
     })
 
     const data = await Promise.all(
-      activeCourses.map(async (course) => {
+      activeCourses.map(async course => {
         const assignCourse = await prisma.assignCourse.findFirst({
           where: {
             courseId: course.courseId,
@@ -115,9 +115,9 @@ export async function POST(req: NextApiRequestExtended) {
     if (studentsInCourse?.length === 0)
       return getErrorResponse('No student found in this course', 404)
 
-    await prisma.$transaction(async (prisma) => {
+    await prisma.$transaction(async prisma => {
       await Promise.all(
-        studentsInCourse.map(async (student) => {
+        studentsInCourse.map(async student => {
           const discount = student.course.price * (student.discount / 100)
           const amount = student.course.price - discount
 

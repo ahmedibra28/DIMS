@@ -15,12 +15,12 @@ const FormContainer: React.FC<Props> = ({
   showFooter = true,
 }) => {
   return (
-    <div className={`max-w-6xl mx-auto ${margin} w-full`}>
-      <div className='flex flex-row justify-center items-center w-92 h-[85vh] max-auto'>
-        <div className='w-full sm:w-[80%] md:w-[70%] lg:w-[45%] p-6 bg-white duration-1000'>
+    <div className={`mx-auto max-w-6xl ${margin} w-full`}>
+      <div className='w-92 max-auto flex h-[85vh] flex-row items-center justify-center'>
+        <div className='w-full bg-white p-6 duration-1000 sm:w-[80%] md:w-[70%] lg:w-[45%]'>
           {title && (
             <div className='mb-10 space-y-3'>
-              <div className='text-3xl uppercase text-center text-primary'>
+              <div className='text-center text-3xl uppercase text-primary'>
                 {title}
               </div>
             </div>
@@ -32,7 +32,7 @@ const FormContainer: React.FC<Props> = ({
               <hr />
               <div>CONTACT</div>
               <a
-                className='text-gray-500 underline font-light'
+                className='font-light text-gray-500 underline'
                 href='mailto:info@ahmedibra.com'
               >
                 info@ahmedibra.com

@@ -67,8 +67,7 @@ export const isAuth = async (req: any, params?: { id: string }) => {
 
       if (
         permissions?.find(
-          (permission) =>
-            permission.route === url && permission.method === method
+          permission => permission.route === url && permission.method === method
         )
       ) {
         url = req.url

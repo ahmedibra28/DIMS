@@ -41,8 +41,8 @@ export async function PUT(req: Request, { params }: Params) {
       }
     }
 
-    permission = permission?.filter((per) => per)
-    clientPermission = clientPermission?.filter((client) => client)
+    permission = permission?.filter(per => per)
+    clientPermission = clientPermission?.filter(client => client)
 
     const object = await prisma.role.findUnique({
       where: { id: params.id },
@@ -78,16 +78,16 @@ export async function PUT(req: Request, { params }: Params) {
         description,
         type,
         permissions: {
-          disconnect: oldPermissions?.permissions?.map((pre) => ({
+          disconnect: oldPermissions?.permissions?.map(pre => ({
             id: pre.id,
           })),
-          connect: permission?.map((pre) => ({ id: pre })),
+          connect: permission?.map(pre => ({ id: pre })),
         },
         clientPermissions: {
-          disconnect: oldPermissions?.clientPermissions?.map((client) => ({
+          disconnect: oldPermissions?.clientPermissions?.map(client => ({
             id: client.id,
           })),
-          connect: clientPermission?.map((client) => ({ id: client })),
+          connect: clientPermission?.map(client => ({ id: client })),
         },
       },
     })

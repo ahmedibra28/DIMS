@@ -6,7 +6,7 @@ const useAuthorization = () => {
   const pathname = usePathname()
   const params = useParams()
 
-  const { userInfo } = useUserInfoStore((state) => state)
+  const { userInfo } = useUserInfoStore(state => state)
 
   const param = () => {
     const keys = Object.keys(params)

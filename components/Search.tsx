@@ -23,7 +23,7 @@ const Search = ({
     <form onSubmit={searchHandler}>
       <div className='flex w-full max-w-sm items-center space-x-2'>
         <Input
-          onChange={(e) => setQ(e.target.value)}
+          onChange={e => setQ(e.target.value)}
           value={q}
           type={type}
           placeholder={placeholder}

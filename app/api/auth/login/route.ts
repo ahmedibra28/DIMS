@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     const formatRoutes = (routes: Route[]) => {
       const formattedRoutes: RouteChildren[] = []
 
-      routes.forEach((route) => {
+      routes.forEach(route => {
         if (route.menu === 'hidden') return null
         if (route.menu === 'profile') return null
 
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
             sort: route.sort,
           })
         } else {
-          const found = formattedRoutes.find((r) => r.name === route.menu)
+          const found = formattedRoutes.find(r => r.name === route.menu)
           if (found) {
             found.children.push({ name: route.name, path: route.path })
           } else {
@@ -101,7 +101,7 @@ export async function POST(req: Request) {
         }
       })
 
-      return sortedMenu.map((m) => {
+      return sortedMenu.map(m => {
         if (m.children) {
           return {
             ...m,

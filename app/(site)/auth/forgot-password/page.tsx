@@ -14,7 +14,7 @@ import CustomFormField, { FormButton } from '@/components/ui/CustomForm'
 
 const Page = () => {
   const router = useRouter()
-  const { userInfo } = useUserInfoStore((state) => state)
+  const { userInfo } = useUserInfoStore(state => state)
 
   const FormSchema = z.object({
     email: z.string().email(),

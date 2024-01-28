@@ -23,32 +23,32 @@ import { roles } from '@/config/data'
 
 const FormSchema = z
   .object({
-    name: z.string().refine((value) => value !== '', {
+    name: z.string().refine(value => value !== '', {
       message: 'Name is required',
     }),
     email: z
       .string()
       .email()
-      .refine((value) => value !== '', {
+      .refine(value => value !== '', {
         message: 'Email is required',
       }),
-    roleId: z.string().refine((value) => value !== '', {
+    roleId: z.string().refine(value => value !== '', {
       message: 'Role is required',
     }),
     confirmed: z.boolean(),
     blocked: z.boolean(),
-    password: z.string().refine((val) => val.length === 0 || val.length > 6, {
+    password: z.string().refine(val => val.length === 0 || val.length > 6, {
       message: "Password can't be less than 6 characters",
     }),
     confirmPassword: z
       .string()
-      .refine((val) => val.length === 0 || val.length > 6, {
+      .refine(val => val.length === 0 || val.length > 6, {
         message: "Confirm password can't be less than 6 characters",
       }),
     studentId: z.string().optional(),
     instructorId: z.string().optional(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine(data => data.password === data.confirmPassword, {
     message: 'Password do not match',
     path: ['confirmPassword'],
   })
@@ -69,7 +69,7 @@ const Page = () => {
     }
   }, [path, router])
 
-  const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
+  const { dialogOpen, setDialogOpen } = useDataStore(state => state)
 
   const getApi = useApi({
     key: ['users'],
@@ -169,8 +169,8 @@ const Page = () => {
     // eslint-disable-next-line
   }, [dialogOpen])
 
-  const studentRole = roles.find((role) => role.type === 'STUDENT')?.id
-  const instructorRole = roles.find((role) => role.type === 'INSTRUCTOR')?.id
+  const studentRole = roles.find(role => role.type === 'STUDENT')?.id
+  const instructorRole = roles.find(role => role.type === 'INSTRUCTOR')?.id
 
   const formFields = (
     <Form {...form}>
@@ -292,7 +292,7 @@ const Page = () => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='overflow-x-auto bg-white p-3 mt-2'>
+        <div className='mt-2 overflow-x-auto bg-white p-3'>
           <RTable
             data={getApi?.data}
             columns={columns({

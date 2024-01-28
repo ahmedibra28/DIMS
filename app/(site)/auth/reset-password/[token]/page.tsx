@@ -22,7 +22,7 @@ const Reset = ({
 }) => {
   const router = useRouter()
   const { token } = params
-  const { userInfo } = useUserInfoStore((state) => state)
+  const { userInfo } = useUserInfoStore(state => state)
 
   const postApi = useApi({
     key: ['reset-password'],
@@ -35,7 +35,7 @@ const Reset = ({
       password: z.string().min(6),
       confirmPassword: z.string().min(6),
     })
-    .refine((data) => data.password === data.confirmPassword, {
+    .refine(data => data.password === data.confirmPassword, {
       message: 'Password do not match',
       path: ['confirmPassword'],
     })

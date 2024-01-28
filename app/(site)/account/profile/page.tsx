@@ -21,7 +21,7 @@ const Profile = () => {
   const path = useAuthorization()
   const router = useRouter()
 
-  const { userInfo, updateUserInfo } = useUserInfoStore((state) => state)
+  const { userInfo, updateUserInfo } = useUserInfoStore(state => state)
 
   useEffect(() => {
     if (path) {
@@ -46,16 +46,16 @@ const Profile = () => {
       address: z.string(),
       mobile: z.number(),
       bio: z.string(),
-      password: z.string().refine((val) => val.length === 0 || val.length > 6, {
+      password: z.string().refine(val => val.length === 0 || val.length > 6, {
         message: "Password can't be less than 6 characters",
       }),
       confirmPassword: z
         .string()
-        .refine((val) => val.length === 0 || val.length > 6, {
+        .refine(val => val.length === 0 || val.length > 6, {
           message: "Confirm password can't be less than 6 characters",
         }),
     })
-    .refine((data) => data.password === data.confirmPassword, {
+    .refine(data => data.password === data.confirmPassword, {
       message: 'Password do not match',
       path: ['confirmPassword'],
     })
@@ -106,7 +106,7 @@ const Profile = () => {
   }, [getApi?.isPending, form.setValue])
 
   return (
-    <div className='max-w-6xl mx-auto bg-white p-3 mt-2'>
+    <div className='mx-auto mt-2 max-w-6xl bg-white p-3'>
       {updateApi?.isError && <Message value={updateApi?.error} />}
 
       {getApi?.isError && <Message value={getApi?.error} />}
@@ -114,10 +114,10 @@ const Profile = () => {
 
       {getApi?.isPending && <Spinner />}
 
-      <div className='bg-opacity-60 max-w-4xl mx-auto'>
-        <div className='text-3xl uppercase text-center'> {userInfo.name}</div>
-        <div className='text-center mb-10'>
-          <div className='bg-primary w-32 text-white rounded-full mx-auto'>
+      <div className='mx-auto max-w-4xl bg-opacity-60'>
+        <div className='text-center text-3xl uppercase'> {userInfo.name}</div>
+        <div className='mb-10 text-center'>
+          <div className='mx-auto w-32 rounded-full bg-primary text-white'>
             <span> {userInfo.role}</span>
           </div>
         </div>
@@ -125,7 +125,7 @@ const Profile = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             {getApi?.data?.image && (
-              <div className='avatar text-center flex justify-center'>
+              <div className='avatar flex justify-center text-center'>
                 <div className='w-32'>
                   <Image
                     src={
@@ -194,8 +194,8 @@ const Profile = () => {
                 />
 
                 {fileLink.length > 0 && (
-                  <div className='avatar text-center flex justify-center items-end mt-2'>
-                    <div className='w-12 mask mask-squircle'>
+                  <div className='avatar mt-2 flex items-end justify-center text-center'>
+                    <div className='mask mask-squircle w-12'>
                       <Image
                         src={fileLink?.[0]}
                         alt='avatar'
@@ -209,7 +209,7 @@ const Profile = () => {
                 )}
               </div>
 
-              <div className='flex justify-start flex-wrap flex-row w-full gap-2'>
+              <div className='flex w-full flex-row flex-wrap justify-start gap-2'>
                 <div className='w-full'>
                   <hr className='my-5' />
                 </div>
@@ -234,7 +234,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className='w-full md:w-[48%] lg:w-[32%] pt-3'>
+            <div className='w-full pt-3 md:w-[48%] lg:w-[32%]'>
               <FormButton
                 loading={updateApi?.isPending}
                 label='Update Profile'

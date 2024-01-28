@@ -27,7 +27,7 @@ import {
 } from '@/components/ui/menubar'
 
 const Navigation = () => {
-  const { userInfo } = useUserInfoStore((state) => state)
+  const { userInfo } = useUserInfoStore(state => state)
   const [menu, setMenu] = React.useState<any>(userInfo.menu)
 
   const handleLogout = () => {
@@ -50,8 +50,8 @@ const Navigation = () => {
 
   const auth = (
     <>
-      <div className='hidden lg:block flex-row'>
-        <ul className='px-1 flex space-x-4 items-center'>
+      <div className='hidden flex-row lg:block'>
+        <ul className='flex items-center space-x-4 px-1'>
           {menu.map((item: any, i: number) => (
             <Fragment key={i}>
               {!item?.children && <Link href={item.path}>{item.name}</Link>}
@@ -98,7 +98,7 @@ const Navigation = () => {
                 <button onClick={() => handleLogout()}>
                   <Link
                     href='/auth/login'
-                    className='flex justify-start items-center flex-row gap-x-1 text-red-500'
+                    className='flex flex-row items-center justify-start gap-x-1 text-red-500'
                   >
                     <FaPowerOff /> <span>Logout</span>
                   </Link>
@@ -113,7 +113,7 @@ const Navigation = () => {
         <Menubar className='border-none lg:hidden'>
           <MenubarMenu>
             <MenubarTrigger>
-              <FaBars className='text-gray-500 text-2xl' />
+              <FaBars className='text-2xl text-gray-500' />
             </MenubarTrigger>
             <MenubarContent className='lg:hidden'>
               <ul>
@@ -132,11 +132,11 @@ const Navigation = () => {
 
                     {item?.children && (
                       <MenubarSub key={item.name}>
-                        <MenubarSubTrigger className='px-2 py-1.5 text-sm flex flex-row items-center outline-none'>
+                        <MenubarSubTrigger className='flex flex-row items-center px-2 py-1.5 text-sm outline-none'>
                           {capitalizeFirstLetter(item.name)}
                         </MenubarSubTrigger>
                         <MenubarPortal>
-                          <MenubarSubContent className='bg-white p-1 rounded-md border border-gray-200 w-auto z-50 lg:hidden'>
+                          <MenubarSubContent className='z-50 w-auto rounded-md border border-gray-200 bg-white p-1 lg:hidden'>
                             {item.children.map((child: any, i: number) => (
                               <MenubarItem key={i}>
                                 <Link
@@ -160,7 +160,7 @@ const Navigation = () => {
                     <button onClick={() => handleLogout()}>
                       <Link
                         href='/auth/login'
-                        className='flex justify-start items-center flex-row gap-x-1 text-red-500'
+                        className='flex flex-row items-center justify-start gap-x-1 text-red-500'
                       >
                         <FaPowerOff /> <span>Logout</span>
                       </Link>
@@ -177,7 +177,7 @@ const Navigation = () => {
 
   return (
     <div className='flex-none'>
-      <ul className='px-1 w-full'>
+      <ul className='w-full px-1'>
         {!userInfo.id && (
           <li>
             <Link href='/auth/login'>Login</Link>

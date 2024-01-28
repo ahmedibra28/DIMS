@@ -46,8 +46,8 @@ const Page = () => {
     }
   }, [path, router])
 
-  const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
-  const { userInfo } = useUserInfoStore((state) => state)
+  const { dialogOpen, setDialogOpen } = useDataStore(state => state)
+  const { userInfo } = useUserInfoStore(state => state)
 
   const allowedToApprove =
     userInfo?.role === 'ADMIN' || userInfo?.role === 'SUPER_ADMIN'
@@ -56,8 +56,8 @@ const Page = () => {
     userInfo?.role === 'INSTRUCTOR'
       ? userInfo?.instructorId
       : userInfo?.role === 'STUDENT'
-      ? userInfo?.studentId
-      : userInfo?.id
+        ? userInfo?.studentId
+        : userInfo?.id
 
   const getSubjectsApi = useApi({
     key: ['assign-courses', uId!],
@@ -196,7 +196,7 @@ const Page = () => {
         {fileLink.length > 0 && (
           <a
             href={fileLink[0]}
-            className='text-blue-500 flex justify-end items-center'
+            className='flex items-center justify-end text-blue-500'
           >
             <FaFileArrowDown className='mr-1' />
             Download File
@@ -264,7 +264,7 @@ const Page = () => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='overflow-x-auto bg-white p-3 mt-2'>
+        <div className='mt-2 overflow-x-auto bg-white p-3'>
           <RTable
             data={getApi?.data}
             columns={columns({

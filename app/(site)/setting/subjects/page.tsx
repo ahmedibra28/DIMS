@@ -52,7 +52,7 @@ const Page = () => {
     }
   }, [path, router])
 
-  const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
+  const { dialogOpen, setDialogOpen } = useDataStore(state => state)
   const [isPending, startTransition] = useTransition()
 
   const getApi = useApi({
@@ -155,7 +155,7 @@ const Page = () => {
   useEffect(() => {
     if (form.watch().courseId) {
       startTransition(() => {
-        getCoursesById({ courseId: form.watch().courseId }).then((res) => {
+        getCoursesById({ courseId: form.watch().courseId }).then(res => {
           const numberToArray = Array.from(
             { length: res?.duration || 0 },
             (_, i) => ({ label: `${i + 1}`, value: `${i + 1}` })
@@ -172,7 +172,7 @@ const Page = () => {
 
   const formFields = (
     <Form {...form}>
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4'>
+      <div className='grid grid-cols-1 gap-x-4 md:grid-cols-2'>
         <CustomFormField
           form={form}
           name='name'
@@ -260,7 +260,7 @@ const Page = () => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='overflow-x-auto bg-white p-3 mt-2'>
+        <div className='mt-2 overflow-x-auto bg-white p-3'>
           <RTable
             data={getApi?.data}
             columns={columns({

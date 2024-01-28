@@ -50,7 +50,7 @@ const Page = () => {
     }
   }, [path, router])
 
-  const { dialogOpen, setDialogOpen } = useDataStore((state) => state)
+  const { dialogOpen, setDialogOpen } = useDataStore(state => state)
 
   const getApi = useApi({
     key: ['courses'],
@@ -131,7 +131,7 @@ const Page = () => {
     form.setValue('schoolId', item?.schoolId!)
     form.setValue('status', item?.status)
 
-    const examinations = item?.examinations?.map((item) => ({
+    const examinations = item?.examinations?.map(item => ({
       label: item,
       value: item,
     }))
@@ -169,7 +169,7 @@ const Page = () => {
     const newRoles: any[] = []
 
     exams?.forEach((role: any) => {
-      if (!selectedExaminations.find((item) => item.value === role.value)) {
+      if (!selectedExaminations.find(item => item.value === role.value)) {
         newRoles.push(role)
       }
     })
@@ -180,7 +180,7 @@ const Page = () => {
 
   const formFields = (
     <Form {...form}>
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4'>
+      <div className='grid grid-cols-1 gap-x-4 md:grid-cols-2'>
         <CustomFormField
           form={form}
           name='name'
@@ -285,7 +285,7 @@ const Page = () => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='overflow-x-auto bg-white p-3 mt-2'>
+        <div className='mt-2 overflow-x-auto bg-white p-3'>
           <RTable
             data={getApi?.data}
             columns={columns({
