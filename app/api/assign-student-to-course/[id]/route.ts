@@ -93,6 +93,9 @@ export async function PUT(req: Request, { params }: Params) {
     if (!assignCourseObj)
       return getErrorResponse('Assign course not found', 404)
 
+    if (!['ACTIVE', 'INACTIVE'].includes(assignCourseObj.status))
+      return getErrorResponse('You can not update this assign course', 403)
+
     const checkExistence =
       shift &&
       studentId &&
@@ -101,7 +104,7 @@ export async function PUT(req: Request, { params }: Params) {
         where: {
           shift,
           studentId,
-          // status: 'ACTIVE',
+          status: 'ACTIVE',
           id: { not: params.id },
         },
       }))
@@ -134,7 +137,7 @@ export async function PUT(req: Request, { params }: Params) {
     const checkCourseStatus = await prisma.assignCourse.findFirst({
       where: {
         courseId: `${courseId}`,
-        // status: 'ACTIVE',
+        status: 'ACTIVE',
         id: { not: params.id },
         studentId: checkStudent.id,
       },
@@ -168,7 +171,12 @@ export async function DELETE(req: Request, { params }: Params) {
     await isAuth(req, params)
 
     const assignCourseObj = await prisma.assignCourse.delete({
-      where: { id: params.id },
+      where: {
+        id: params.id,
+        status: {
+          in: ['ACTIVE', 'INACTIVE'],
+        },
+      },
     })
 
     if (!assignCourseObj)

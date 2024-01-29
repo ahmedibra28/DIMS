@@ -32,7 +32,7 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
       cell: ({ row }: any) => (
         <Link
           className='underline'
-          href={`/student/${row.original.id}/assign-course`}
+          href={`/instructors/${row.original.id}/assign-subject`}
         >
           {row.original.rollNo}
         </Link>
@@ -45,7 +45,7 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
       cell: ({ row }: any) => (
         <Link
           className='underline'
-          href={`/student/${row.original.id}/assign-course`}
+          href={`/instructors/${row.original.id}/assign-subject`}
         >
           {row.original.name}
         </Link>
@@ -54,10 +54,12 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
     { header: 'Place of Birth', accessorKey: 'placeOfBirth', active: false },
     { header: 'Date of Birth', accessorKey: 'dateOfBirth', active: false },
     { header: 'Sex', accessorKey: 'sex', active: false },
+    { header: 'Email', accessorKey: 'email', active: false },
+    { header: 'Qualification', accessorKey: 'qualification', active: false },
+    { header: 'Experience', accessorKey: 'experience', active: true },
     { header: 'District', accessorKey: 'district', active: true },
     { header: 'Mobile', accessorKey: 'mobile', active: true },
     { header: 'Nationality', accessorKey: 'nationality', active: false },
-    { header: 'Education', accessorKey: 'education', active: false },
     { header: 'Contact Name', accessorKey: 'contactName', active: false },
     { header: 'Contact Mobile', accessorKey: 'contactMobile', active: false },
     {

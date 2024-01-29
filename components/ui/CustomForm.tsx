@@ -367,7 +367,7 @@ export const ActionButton = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
-        {upgradeClass && (
+        {upgradeClass && original.status === 'ACTIVE' && (
           <DropdownMenuItem
             disabled={isPending}
             onClick={() => upgradeClass(original.id)}
@@ -405,7 +405,7 @@ export const ActionButton = ({
           </DropdownMenuItem>
         )}
 
-        {editHandler && (
+        {editHandler && !['PASSED', 'GRADUATED'].includes(original.status) && (
           <DropdownMenuItem
             disabled={isPending}
             onClick={() => {
@@ -417,25 +417,26 @@ export const ActionButton = ({
           </DropdownMenuItem>
         )}
 
-        {deleteHandler && (
-          <AlertDialog>
-            <AlertDialogTrigger>
-              <div className='flex h-8 w-full min-w-32 items-center justify-start gap-x-1 rounded px-2 text-sm text-red-500 hover:bg-slate-100'>
-                {isPending ? (
-                  <>
-                    <FaSpinner className='mr-1 animate-spin' />
-                    Loading
-                  </>
-                ) : (
-                  <>
-                    <FaTrash /> Delete
-                  </>
-                )}
-              </div>
-            </AlertDialogTrigger>
-            <ConfirmDialog onClick={() => deleteHandler(original.id)} />
-          </AlertDialog>
-        )}
+        {deleteHandler &&
+          !['PASSED', 'GRADUATED'].includes(original.status) && (
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <div className='flex h-8 w-full min-w-32 items-center justify-start gap-x-1 rounded px-2 text-sm text-red-500 hover:bg-slate-100'>
+                  {isPending ? (
+                    <>
+                      <FaSpinner className='mr-1 animate-spin' />
+                      Loading
+                    </>
+                  ) : (
+                    <>
+                      <FaTrash /> Delete
+                    </>
+                  )}
+                </div>
+              </AlertDialogTrigger>
+              <ConfirmDialog onClick={() => deleteHandler(original.id)} />
+            </AlertDialog>
+          )}
       </DropdownMenuContent>
     </DropdownMenu>
   )

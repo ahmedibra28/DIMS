@@ -182,7 +182,7 @@ export async function DELETE(req: Request, { params }: Params) {
     await isAuth(req, params)
 
     const examinationObj = await prisma.examination.delete({
-      where: { id: params.id },
+      where: { id: params.id, assignCourse: { status: 'ACTIVE' } },
     })
 
     if (!examinationObj) return getErrorResponse('Examination not removed', 404)

@@ -108,13 +108,23 @@ const Page = ({ params }: { params: { id: string } }) => {
   })
 
   useEffect(() => {
-    if (postApi?.isSuccess || updateApi?.isSuccess || deleteApi?.isSuccess) {
+    if (
+      postApi?.isSuccess ||
+      updateApi?.isSuccess ||
+      deleteApi?.isSuccess ||
+      upgradeClassApi?.isSuccess
+    ) {
       getApi?.refetch()
       setDialogOpen(false)
     }
 
     // eslint-disable-next-line
-  }, [postApi?.isSuccess, updateApi?.isSuccess, deleteApi?.isSuccess])
+  }, [
+    postApi?.isSuccess,
+    updateApi?.isSuccess,
+    deleteApi?.isSuccess,
+    upgradeClassApi?.isSuccess,
+  ])
 
   useEffect(() => {
     getApi?.refetch()

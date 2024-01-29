@@ -111,9 +111,17 @@ export async function POST(req: NextApiRequestExtended) {
       )
 
     await prisma.$transaction(async prisma => {
+      delete checkExistence.student
+      delete checkExistence.course
+      delete checkExistence.id
+      delete checkExistence.createdAt
+      delete checkExistence.updatedAt
+
       await prisma.assignCourse.create({
         data: {
           ...checkExistence,
+          studentId: checkExistence.studentId,
+          courseId: checkExistence.courseId,
           semester: checkExistence.semester + 1,
           createdById: req.user.id,
         },
