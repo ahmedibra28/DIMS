@@ -88,6 +88,7 @@ export async function POST(req: NextApiRequestExtended) {
           examination,
           subjectId,
           assignCourse: {
+            id: assignCourseId,
             studentId,
           },
         },

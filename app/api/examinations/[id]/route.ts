@@ -3,6 +3,7 @@ import { getErrorResponse } from '@/lib/helpers'
 import { NextResponse } from 'next/server'
 import { QueryMode, prisma } from '@/lib/prisma.db'
 import type { Status as IStatus } from '@prisma/client'
+import { getPrismaErrorCode } from '@/lib/prismaErrorCodes'
 
 interface Params {
   params: {
@@ -111,6 +112,7 @@ export async function PUT(req: Request, { params }: Params) {
           examination,
           subjectId,
           assignCourse: {
+            id: assignCourseId,
             studentId,
           },
           id: { not: params.id },
@@ -191,7 +193,8 @@ export async function DELETE(req: Request, { params }: Params) {
       ...examinationObj,
       message: 'Examination has been removed successfully',
     })
-  } catch ({ status = 500, message }: any) {
-    return getErrorResponse(message, status)
+  } catch ({ status = 500, message, code }: any) {
+    const error = getPrismaErrorCode(code)?.description || message
+    return getErrorResponse(error, status)
   }
 }

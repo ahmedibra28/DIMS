@@ -37,6 +37,10 @@ export const columns = ({
       cell: ({ row: { original } }: any) =>
         original?.status === 'ACTIVE' ? (
           <span className='text-green-500'>{original?.status}</span>
+        ) : original?.status === 'PASSED' ? (
+          <span className='text-purple-500'>{original?.status}</span>
+        ) : original?.status === 'GRADUATED' ? (
+          <span className='text-blue-500'>{original?.status}</span>
         ) : (
           <span className='text-red-500'>{original?.status}</span>
         ),
