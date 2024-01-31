@@ -58,6 +58,7 @@ interface RTableProps {
   setQ?: (q: string) => void
   searchHandler?: (e: any) => void
   modal?: string
+  hasAdd?: boolean
   caption?: string
   searchType?: React.HTMLInputTypeAttribute
 }
@@ -72,6 +73,7 @@ const RTable: React.FC<RTableProps> = ({
   setQ,
   searchHandler,
   modal,
+  hasAdd = true,
   caption,
   searchType = 'text',
 }) => {
@@ -136,7 +138,7 @@ const RTable: React.FC<RTableProps> = ({
         )}
 
         <div className='flex flex-row items-center justify-start gap-x-2'>
-          {modal && (
+          {modal && hasAdd && (
             <Button onClick={() => setDialogOpen(true)}>
               <FaPlus /> {Capitalize(modal)}
             </Button>

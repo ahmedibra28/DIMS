@@ -195,6 +195,14 @@ const clientPermissions = [
     description: 'Generate Tuition Fee page',
   },
   {
+    id: 'YTU-o6vjJk4A-6MM8kgx4',
+    name: 'Generate Clearance Card',
+    path: '/finance/generate-clearance-card',
+    menu: 'finance',
+    sort: sort.finance,
+    description: 'Generate Clearance Card page',
+  },
+  {
     id: 'YTU-o6vjJk4A-6uM8kgx6',
     name: 'Admission Fee',
     path: '/finance/admission-fee',
@@ -662,6 +670,21 @@ const permissions = [
     route: '/api/generate-tuition-fee',
     name: 'Finance',
     method: 'POST',
+  },
+  // Generate Clearance Card
+  {
+    id: 'YTU-o6vjJk4A-MuM8kgx4',
+    description: 'Get Classes To Generate Clearance Card',
+    route: '/api/generate-clearance-card',
+    name: 'Finance',
+    method: 'GET',
+  },
+  {
+    id: 'YTY-o6vjJk4A-4uM8kgx4',
+    description: 'Generate Clearance Card',
+    route: '/api/generate-clearance-card/:id',
+    name: 'Finance',
+    method: 'PUT',
   },
 
   // Admission Fee

@@ -134,14 +134,17 @@ model Course {
 }
 
 model Subject {
-  id             String   @id @default(dbgenerated("nanoid()")) @db.VarChar(21)
-  name           String
-  semester       Int
-  theoryMarks    Int
-  practicalMarks Int
-  status         Status   @default(ACTIVE)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id              String    @id @default(dbgenerated("nanoid()")) @db.VarChar(21)
+  name            String
+  semester        Int
+  theoryMarks     Int
+  practicalMarks  Int
+  hasActiveExam   Boolean?  @default(false)
+  examDescription String?
+  examDate        DateTime?
+  status          Status    @default(ACTIVE)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   course         Course          @relation(fields: [courseId], references: [id], onDelete: Restrict)
   courseId       String
