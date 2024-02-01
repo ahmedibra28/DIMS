@@ -24,7 +24,6 @@ const FormSchema = z.object({
   title: z.string().min(1),
   note: z.string().min(1),
   roles: z.array(z.string()).min(1),
-  userId: z.string(),
   status: z.string().min(1),
 })
 
@@ -85,7 +84,6 @@ const Page = () => {
       title: '',
       note: '',
       roles: [],
-      userId: '',
       status: '',
     },
   })
@@ -149,7 +147,6 @@ const Page = () => {
     }))
 
     setSelectedRoles(roles)
-    form.setValue('userId', item?.userId as string)
     form.setValue('status', item?.status)
   }
 
@@ -201,16 +198,6 @@ const Page = () => {
           edit={edit}
         />
 
-        <CustomFormField
-          form={form}
-          name='userId'
-          label='User'
-          placeholder='User'
-          fieldType='command'
-          data={[]}
-          key='users'
-          url='users?page=1&limit=10&status=ACTIVE'
-        />
         <CustomFormField
           form={form}
           name='status'

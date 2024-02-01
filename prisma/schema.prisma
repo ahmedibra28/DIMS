@@ -26,11 +26,10 @@ model User {
   role   Role   @relation(fields: [roleId], references: [id], onDelete: Restrict)
   roleId String
 
-  noticesAsUser      Notice[]  @relation("UserToNotice")
-  noticesAsCreatedBy Notice[]  @relation("CreatedByToNotice")
-  schools            School[]
-  courses            Course[]
-  subjects           Subject[]
+  notices  Notice[]
+  schools  School[]
+  courses  Course[]
+  subjects Subject[]
 
   assignCourses  AssignCourse[]
   assignSubjects AssignSubject[]
@@ -236,12 +235,8 @@ model Notice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  roles Role[]
-
-  user   User?   @relation("UserToNotice", fields: [userId], references: [id], onDelete: Restrict)
-  userId String?
-
-  createdBy   User   @relation("CreatedByToNotice", fields: [createdById], references: [id], onDelete: Restrict)
+  roles       Role[]
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Restrict)
   createdById String
 
   @@map("notices")

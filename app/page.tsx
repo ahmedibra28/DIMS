@@ -1,9 +1,16 @@
-import FormContainer from '@/components/FormContainer'
+'use client'
+
+import Student from '@/components/dashboard/Student'
+import SuperAdmin from '@/components/dashboard/SuperAdmin'
+import useUserInfoStore from '@/zustand/userStore'
 
 export default function Home() {
+  const { userInfo } = useUserInfoStore(state => state)
   return (
-    <FormContainer title='Home'>
-      <h1 className='text-center text-gray-500'>Welcome to DIMS</h1>
-    </FormContainer>
+    <div>
+      {/* {userInfo.role === 'STUDENT' && <Student />} */}
+      {/* {userInfo.role === 'SUPER_ADMIN' && <SuperAdmin />} */}
+      <Student />
+    </div>
   )
 }

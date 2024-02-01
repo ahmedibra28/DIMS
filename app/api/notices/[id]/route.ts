@@ -13,7 +13,7 @@ export async function PUT(req: Request, { params }: Params) {
   try {
     await isAuth(req, params)
 
-    const { title, note, roles, userId, status } = await req.json()
+    const { title, note, roles, status } = await req.json()
 
     const noticeObj = await prisma.notice.findUnique({
       where: { id: `${params.id}` },
@@ -27,16 +27,6 @@ export async function PUT(req: Request, { params }: Params) {
     })
 
     if (!noticeObj) return getErrorResponse('Notice not found', 404)
-
-    const checkUser = await prisma.user.findFirst({
-      where: {
-        id: `${userId}`,
-        confirmed: true,
-        blocked: false,
-      },
-    })
-    if (!checkUser)
-      return getErrorResponse('User does not exist or is not active')
 
     const checkRoles = await prisma.role.findMany({
       where: {
@@ -58,9 +48,7 @@ export async function PUT(req: Request, { params }: Params) {
           disconnect: noticeObj.roles.map((role: any) => ({ id: role.id })),
           connect: [...roles.map((role: string) => ({ id: role }))],
         },
-        ...(userId && { userId }),
         status,
-        userId,
       },
     })
 

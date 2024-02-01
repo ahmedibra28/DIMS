@@ -18,7 +18,6 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
       cell: ({ row }: any) =>
         row?.original?.roles?.map((item: any) => item.name).join(', '),
     },
-    { header: 'User', accessorKey: 'user.name', active: true },
     {
       header: 'Status',
       accessorKey: 'status',

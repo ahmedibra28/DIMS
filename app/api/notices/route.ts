@@ -20,7 +20,20 @@ export async function GET(req: NextApiRequestExtended) {
     const user =
       req.user.role === 'SUPER_ADMIN'
         ? {}
-        : { OR: [{ user: req.user.id }, { createdBy: req.user.id }] }
+        : {
+            OR: [
+              {
+                createdById: req.user.id,
+              },
+              {
+                roles: {
+                  some: {
+                    type: req.user.role,
+                  },
+                },
+              },
+            ],
+          }
 
     const query = q
       ? {
@@ -36,14 +49,8 @@ export async function GET(req: NextApiRequestExtended) {
 
     const [result, total] = await Promise.all([
       prisma.notice.findMany({
-        where: query as any,
+        where: query,
         include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
           roles: {
             select: {
               id: true,
@@ -55,7 +62,7 @@ export async function GET(req: NextApiRequestExtended) {
         take: pageSize,
         orderBy: { createdAt: 'desc' },
       }),
-      prisma.notice.count({ where: query as any }),
+      prisma.notice.count({ where: query }),
     ])
 
     const pages = Math.ceil(total / pageSize)
@@ -78,19 +85,7 @@ export async function POST(req: NextApiRequestExtended) {
   try {
     await isAuth(req)
 
-    const { title, note, roles, userId, status } = await req.json()
-
-    if (userId) {
-      const checkUser = await prisma.user.findFirst({
-        where: {
-          id: `${userId}`,
-          confirmed: true,
-          blocked: false,
-        },
-      })
-      if (!checkUser)
-        return getErrorResponse('User does not exist or is not active')
-    }
+    const { title, note, roles, status } = await req.json()
 
     const checkRoles = await prisma.role.findMany({
       where: {
@@ -110,7 +105,6 @@ export async function POST(req: NextApiRequestExtended) {
         roles: {
           connect: [...roles.map((role: string) => ({ id: role }))],
         },
-        ...(userId && { userId }),
         createdById: req.user.id,
       },
     })
