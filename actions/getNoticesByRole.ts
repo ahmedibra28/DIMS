@@ -25,6 +25,9 @@ export default async function getNoticesByRole({ role }: { role: string }) {
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
 
     return notices
