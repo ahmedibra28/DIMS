@@ -34,6 +34,7 @@ import {
 import getTransactionsByStudentId from '@/actions/getTransactionsByStudentId'
 import { FormatNumber } from '../FormatNumber'
 import { Badge } from '@/components/ui/badge'
+import { InvoiceCard } from '@/components/InvoiceCard'
 
 interface DataProp {
   semester: number
@@ -69,6 +70,12 @@ interface TransactionProp {
   paymentStatus: 'UNPAID' | 'PAID'
   type: 'TUITION_PAYMENT' | 'ENROLLMENT_FEE'
   semester?: number
+  shift?: 'MORNING' | 'AFTERNOON'
+  createdAt: Date
+  student?: {
+    rollNo?: string
+    name?: string
+  }
   course?: {
     name?: string
   }
@@ -90,7 +97,7 @@ interface ExamProp {
 }
 
 export default function Student() {
-  const { setDialogOpen } = useDataStore(state => state)
+  const { setDialogOpen, dialogOpen } = useDataStore(state => state)
   const { userInfo } = useUserInfoStore(state => state)
   const [item, setItem] = React.useState<DataProp>()
 
@@ -98,8 +105,16 @@ export default function Student() {
   const [notes, setNotes] = React.useState<NoticeProp[]>([])
   const [exam, setExam] = React.useState<ExamProp[]>([])
   const [transactions, setTransactions] = React.useState<TransactionProp[]>([])
+  const [printItem, setPrintItem] = React.useState<TransactionProp>()
 
   const [isPending, startTransition] = React.useTransition()
+
+  React.useEffect(() => {
+    if (!dialogOpen) {
+      setItem(undefined)
+      setPrintItem(undefined)
+    }
+  }, [dialogOpen])
 
   React.useEffect(() => {
     if (userInfo.studentId) {
@@ -199,7 +214,7 @@ export default function Student() {
             </div>
             <div className='borders rounded bg-gray-100 p-1'>
               <Image
-                src={data?.student?.image || 'avatar.png'}
+                src={data?.student?.image || '/avatar.png'}
                 alt='logo'
                 width={100}
                 height={100}
@@ -250,7 +265,7 @@ export default function Student() {
   const noticeCard = () => (
     <Card className='w-full md:w-[48%] lg:w-[48%]'>
       <CardHeader>
-        <CardTitle>Notice Board for Students</CardTitle>
+        <CardTitle>Notice Board</CardTitle>
         <CardDescription>Get all the latest updates here.</CardDescription>
       </CardHeader>
       <CardContent className='grid grid-cols-1 gap-2'>
@@ -381,11 +396,20 @@ export default function Student() {
                     </TableCell>
                     <TableCell className='flex items-center gap-x-2 py-1 text-xs'>
                       {item?.paymentStatus === 'UNPAID' ? (
-                        <Badge className='flex items-center rounded text-white'>
+                        <Badge
+                          onClick={() => console.log('Paid')}
+                          className='flex cursor-pointer items-center rounded text-white'
+                        >
                           <FaDollarSign className='text-lg' /> Pay
                         </Badge>
                       ) : (
-                        <Badge className='flex items-center gap-x-1 rounded bg-green-500 text-white'>
+                        <Badge
+                          onClick={() => {
+                            setPrintItem(item)
+                            setDialogOpen(true)
+                          }}
+                          className='flex cursor-pointer items-center gap-x-1 rounded bg-green-500 text-white'
+                        >
                           <FaPrint className='text-lg' /> Print
                         </Badge>
                       )}
@@ -402,10 +426,20 @@ export default function Student() {
 
   return (
     <div className='flex flex-wrap justify-start gap-4'>
-      <PrintDialog
-        data={<ClearanceCard data={item} />}
-        label='Clearance Card'
-      />
+      {item && (
+        <PrintDialog
+          data={<ClearanceCard data={item} />}
+          label='Clearance Card'
+        />
+      )}
+      {printItem && (
+        <PrintDialog
+          data={<InvoiceCard data={printItem} />}
+          label='Invoice'
+          width='md:min-w-[800px]'
+          size='A4'
+        />
+      )}
       {transactions?.length > 0 && transactionCard()}
       {notes?.length > 0 && noticeCard()}
       {exam?.length > 0 && examCard()}

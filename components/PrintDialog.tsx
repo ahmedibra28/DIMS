@@ -20,16 +20,23 @@ interface Props {
   height?: string
   width?: string
   data: React.JSX.Element
+  size?: string
 }
 
-const PrintDialog = ({ data, label, height, width }: Props) => {
+const PrintDialog = ({ data, label, height, width, size }: Props) => {
   const { dialogOpen, setDialogOpen } = useDataStore(state => state)
 
   const componentRef = React.useRef<HTMLDivElement>(null)
   const handlePrint = useReactToPrint({
     content: () => componentRef.current!,
     documentTitle: `Clearance Card`,
-    pageStyle: `
+    pageStyle:
+      size === 'A4'
+        ? `
+    @page {
+      size: auto;
+    }`
+        : `
     @page {
       size: auto;
       margin-left: 31mm;

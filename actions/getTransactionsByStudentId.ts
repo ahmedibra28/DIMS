@@ -23,6 +23,14 @@ export default async function getTransactionsByStudentId({
         amount: true,
         paymentStatus: true,
         type: true,
+        shift: true,
+        createdAt: true,
+        student: {
+          select: {
+            name: true,
+            rollNo: true,
+          },
+        },
         semester: true,
         course: {
           select: {

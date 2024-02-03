@@ -9,6 +9,7 @@ type Column = {
 
 export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
   return [
+    { header: 'Suggested', accessorKey: 'createdBy.name', active: true },
     { header: 'Title', accessorKey: 'title', active: true },
     { header: 'Body', accessorKey: 'body', active: true },
     {

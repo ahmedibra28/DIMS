@@ -36,6 +36,13 @@ export async function GET(req: NextApiRequestExtended) {
     const [result, total] = await Promise.all([
       prisma.suggestion.findMany({
         where: query,
+        include: {
+          createdBy: {
+            select: {
+              name: true,
+            },
+          },
+        },
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
