@@ -45,6 +45,7 @@ model User {
   instructor   Instructor?   @relation("UserToInstructor", fields: [instructorId], references: [id], onDelete: Restrict)
   instructorId String?
   examinations Examination[]
+  Suggestions  Suggestion[]
 
   @@map("users")
 }
@@ -320,6 +321,20 @@ model Examination {
   createdById String
 
   @@map("examinations")
+}
+
+model Suggestion {
+  id        String   @id @default(dbgenerated("nanoid()")) @db.VarChar(21)
+  title     String
+  body      String
+  status    Status   @default(ACTIVE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdById String
+
+  @@map("suggestions")
 }
 
 model Transaction {

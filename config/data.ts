@@ -227,6 +227,14 @@ const clientPermissions = [
     description: 'Lesson Plan page',
   },
   {
+    id: 'DCeQkifIBSpeAsIaeBqOU',
+    name: 'Suggestion',
+    path: '/suggestions',
+    menu: 'normal',
+    sort: sort.normal,
+    description: 'Suggestion page',
+  },
+  {
     id: 'YTU-o6vjJk4A-6uM8kgx8',
     name: 'Examination',
     path: '/examination/[id]',
@@ -791,6 +799,36 @@ const permissions = [
     route: '/api/upgrade-class-to-next-level',
     name: 'Examination',
     method: 'POST',
+  },
+
+  // Suggestion
+  {
+    id: 'Wkezyl8YazqYdydJif16v',
+    description: 'Suggestion',
+    route: '/api/suggestions',
+    name: 'Suggestion',
+    method: 'GET',
+  },
+  {
+    id: 'nZJDX-bV6LxtHXHhEr62I',
+    description: 'Suggestion',
+    route: '/api/suggestions',
+    name: 'Suggestion',
+    method: 'POST',
+  },
+  {
+    id: '2RPTSI9uO031NvJrg6Ae1',
+    description: 'Suggestion',
+    route: '/api/suggestions/:id',
+    name: 'Suggestion',
+    method: 'PUT',
+  },
+  {
+    id: 'eymr4Uwd5J7QBo6tSEWJU',
+    description: 'Suggestion',
+    route: '/api/suggestions/:id',
+    name: 'Suggestion',
+    method: 'DELETE',
   },
 ]
 
