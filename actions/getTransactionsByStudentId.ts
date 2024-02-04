@@ -41,6 +41,7 @@ export default async function getTransactionsByStudentId({
       orderBy: {
         createdAt: 'desc',
       },
+      take: 100,
     })
 
     return transactions

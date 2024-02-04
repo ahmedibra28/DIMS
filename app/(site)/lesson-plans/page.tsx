@@ -196,6 +196,8 @@ const Page = () => {
         {fileLink.length > 0 && (
           <a
             href={fileLink[0]}
+            target='_blank'
+            rel='noreferrer'
             className='flex items-center justify-end text-blue-500'
           >
             <FaFileArrowDown className='mr-1' />

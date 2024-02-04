@@ -71,7 +71,7 @@ export default function Instructor() {
       startTransition(() => {
         getSubjectsByInstructor({ instructorId: userInfo.instructorId! }).then(
           res => {
-            setSubjects(res || [])
+            setSubjects((res as SubjectProp[]) || [])
           }
         )
       })
