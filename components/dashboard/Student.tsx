@@ -442,8 +442,8 @@ export default function Student() {
       )}
       {transactions?.length > 0 && transactionCard()}
       {notes?.length > 0 && noticeCard()}
-      {exam?.length > 0 && examCard()}
       {subject?.length > 0 && clearanceCardCard()}
+      {exam?.length > 0 && examCard()}
     </div>
   )
 }

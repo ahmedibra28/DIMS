@@ -41,7 +41,6 @@ export async function matchPassword({
 }
 
 export async function encryptPassword({ password }: { password: string }) {
-  console.log({ password })
   const salt = bcrypt.genSaltSync(10)
   return bcrypt.hashSync(password, salt)
 }
@@ -65,3 +64,5 @@ export async function generateToken(id: string) {
     expiresIn: '1d',
   })
 }
+
+export const allowedRoles = ['SUPER_ADMIN', 'ADMIN']

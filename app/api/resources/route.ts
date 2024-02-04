@@ -39,7 +39,7 @@ export async function GET(req: NextApiRequestExtended) {
     const skip = (page - 1) * pageSize
 
     const [result, total] = await Promise.all([
-      prisma.lessonPlan.findMany({
+      prisma.resource.findMany({
         where: query,
         include: {
           subject: {
@@ -54,7 +54,7 @@ export async function GET(req: NextApiRequestExtended) {
         take: pageSize,
         orderBy: { createdAt: 'desc' },
       }),
-      prisma.lessonPlan.count({ where: query }),
+      prisma.resource.count({ where: query }),
     ])
 
     const pages = Math.ceil(total / pageSize)
@@ -111,23 +111,20 @@ export async function POST(req: NextApiRequestExtended) {
 
     if (!check) return getErrorResponse('Subject or Instructor not found', 404)
 
-    const lessonPlanObj = await prisma.lessonPlan.create({
+    const resourceObj = await prisma.resource.create({
       data: {
-        title: `Lesson Plan for ${check.subject.name} semester ${check.subject.semester} ${check.shift} shift by ${check.instructor.name}`,
+        title: `Resource for ${check.subject.name} semester ${check.subject.semester} ${check.shift} shift by ${check.instructor.name}`,
         note,
         file,
         subjectId,
         status,
         createdById: req.user.id,
-        isApproved: false,
-        isCreatedRead: true,
-        isAdminRead: false,
       },
     })
 
     return NextResponse.json({
-      ...lessonPlanObj,
-      message: 'LessonPlan created successfully',
+      ...resourceObj,
+      message: 'Resource created successfully',
     })
   } catch ({ status = 500, message }: any) {
     return getErrorResponse(message, status)

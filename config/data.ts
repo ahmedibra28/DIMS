@@ -227,6 +227,14 @@ const clientPermissions = [
     description: 'Lesson Plan page',
   },
   {
+    id: '8ApAOn7ELEiJTgn5uvjkz',
+    name: 'Resource',
+    path: '/resources',
+    menu: 'normal',
+    sort: sort.normal,
+    description: 'Resource page',
+  },
+  {
     id: 'DCeQkifIBSpeAsIaeBqOU',
     name: 'Suggestion',
     path: '/suggestions',
@@ -754,6 +762,36 @@ const permissions = [
     description: 'Lesson Plan',
     route: '/api/lesson-plans/:id',
     name: 'Lesson Plan',
+    method: 'DELETE',
+  },
+
+  // Resource
+  {
+    id: '1YKspa_noCOH6c0WDDOnd',
+    description: 'Resource',
+    route: '/api/resources',
+    name: 'Resource',
+    method: 'GET',
+  },
+  {
+    id: 'KQHBzCAzyFgJKeasr-C1n',
+    description: 'Resource',
+    route: '/api/resources',
+    name: 'Resource',
+    method: 'POST',
+  },
+  {
+    id: 'LaP4P8cGxykj3NiBbdh6x',
+    description: 'Resource',
+    route: '/api/resources/:id',
+    name: 'Resource',
+    method: 'PUT',
+  },
+  {
+    id: 'coSDHgZjidk9gvuP4frkb',
+    description: 'Resource',
+    route: '/api/resources/:id',
+    name: 'Resource',
     method: 'DELETE',
   },
 

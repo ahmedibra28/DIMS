@@ -1,5 +1,5 @@
 import { isAuth } from '@/lib/auth'
-import { getErrorResponse } from '@/lib/helpers'
+import { allowedRoles, getErrorResponse } from '@/lib/helpers'
 import { NextResponse } from 'next/server'
 import { QueryMode, prisma } from '@/lib/prisma.db'
 
@@ -18,7 +18,6 @@ export async function GET(req: NextApiRequestExtended) {
     } as { status: IStatus }
 
     const { role } = req.user
-    const allowedRoles = ['SUPER_ADMIN', 'ADMIN']
     const isAllowed = allowedRoles.includes(role)
 
     const query = q
