@@ -28,6 +28,7 @@ import { Badge } from '@/components/ui/badge'
 
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import getSubjectsByCourseSemester from '@/actions/getSubjectsByCourseSemester'
+import useUserInfoStore from '@/zustand/userStore'
 
 const FormSchema = z.object({
   semester: z.string().min(1),
@@ -50,6 +51,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [q, setQ] = useState('')
   const [semester, setSemester] = useState<DataProp[]>([])
   const [subject, setSubject] = useState<DataProp[]>([])
+
+  const { userInfo } = useUserInfoStore(state => state)
 
   const path = useAuthorization()
   const router = useRouter()
@@ -437,6 +440,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             searchHandler={searchHandler}
             modal={modal}
             caption='Assign Subjects List'
+            hasAdd={Boolean(userInfo.role !== 'INSTRUCTOR')}
           />
         </div>
       )}

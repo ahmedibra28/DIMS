@@ -8,7 +8,6 @@ export default async function getSubjectsByInstructor({
   instructorId: string
 }) {
   try {
-    console.log('--------', instructorId)
     if (!instructorId) return []
 
     const subjects = await prisma.assignSubject.findMany({
@@ -24,12 +23,16 @@ export default async function getSubjectsByInstructor({
           select: {
             id: true,
             name: true,
+            course: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },
     })
-
-    console.log(subjects)
 
     return subjects
   } catch (error: any) {

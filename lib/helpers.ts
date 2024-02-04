@@ -41,6 +41,7 @@ export async function matchPassword({
 }
 
 export async function encryptPassword({ password }: { password: string }) {
+  console.log({ password })
   const salt = bcrypt.genSaltSync(10)
   return bcrypt.hashSync(password, salt)
 }

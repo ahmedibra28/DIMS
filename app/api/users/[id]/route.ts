@@ -165,7 +165,7 @@ export async function PUT(req: Request, { params }: Params) {
         confirmed,
         blocked,
         roleId: role.id,
-        ...(password && { password: await encryptPassword(password) }),
+        ...(password && { password: await encryptPassword({ password }) }),
       },
     })
 

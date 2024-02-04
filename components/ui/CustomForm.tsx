@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { UseFormReturn } from 'react-hook-form'
 import { Button, ButtonProps } from '@/components/ui/button'
 import {
+  FaCalculator,
   FaCheck,
   FaDollarSign,
   FaEllipsis,
@@ -65,6 +66,7 @@ import { X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Command as CommandPrimitive } from 'cmdk'
 import Link from 'next/link'
+import useUserInfoStore from '@/zustand/userStore'
 
 type Prop = Record<'value' | 'label', string>
 
@@ -339,6 +341,7 @@ export const ActionButton = ({
   handleUpdate,
   upgradeClass,
   navigateToExam,
+  source,
 }: {
   editHandler?: (item: any) => void
   isPending?: boolean
@@ -348,6 +351,7 @@ export const ActionButton = ({
   formChildren?: React.ReactNode
   upgradeClass?: (id: string) => void
   navigateToExam?: boolean
+  source?: string
   handleUpdate?: ({
     id,
     status,
@@ -357,6 +361,9 @@ export const ActionButton = ({
   }) => void
 }) => {
   const { setDialogOpen } = useDataStore(state => state)
+  const {
+    userInfo: { role },
+  } = useUserInfoStore(state => state)
 
   return (
     <DropdownMenu>
@@ -374,6 +381,14 @@ export const ActionButton = ({
           >
             <FaPersonArrowUpFromLine /> <span className='mx-1'> Upgrade</span>
           </DropdownMenuItem>
+        )}
+
+        {source === 'assign-subject' && (
+          <Link href={`/attendances/${original.id}`}>
+            <DropdownMenuItem disabled={isPending}>
+              <FaCalculator /> <span className='mx-1'> Attendance</span>
+            </DropdownMenuItem>
+          </Link>
         )}
 
         {navigateToExam && (
