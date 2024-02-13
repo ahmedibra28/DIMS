@@ -250,6 +250,14 @@ const clientPermissions = [
     sort: sort.hidden,
     description: 'Examination page',
   },
+  {
+    id: 'YTU-o6vjJk4A-6uM8kgxY',
+    name: 'Attendance',
+    path: '/attendance',
+    menu: 'hidden',
+    sort: sort.hidden,
+    description: 'Attendance page',
+  },
 ]
 
 const permissions = [
@@ -866,6 +874,36 @@ const permissions = [
     description: 'Suggestion',
     route: '/api/suggestions/:id',
     name: 'Suggestion',
+    method: 'DELETE',
+  },
+
+  // Attendance - Get & Post
+  {
+    id: 'YTU-16vjJk4A-4uM8kgxx',
+    description: 'Attendance',
+    route: '/api/attendances',
+    name: 'Attendance',
+    method: 'GET',
+  },
+  {
+    id: 'YTU-o6vjJk4A-1uM8kgxg',
+    description: 'Attendance',
+    route: '/api/attendances',
+    name: 'Attendance',
+    method: 'POST',
+  },
+  {
+    id: 'vs7hQ0q16WDX7Z8uAF0su',
+    description: 'Attendance',
+    route: '/api/attendances/:id',
+    name: 'Attendance',
+    method: 'PUT',
+  },
+  {
+    id: 'RrtIDdd7j5MKiRqthWRDc',
+    description: 'Attendance',
+    route: '/api/attendances/:id',
+    name: 'Attendance',
     method: 'DELETE',
   },
 ]

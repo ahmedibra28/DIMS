@@ -61,6 +61,7 @@ interface RTableProps {
   hasAdd?: boolean
   caption?: string
   searchType?: React.HTMLInputTypeAttribute
+  py?: string
 }
 
 const RTable: React.FC<RTableProps> = ({
@@ -76,6 +77,7 @@ const RTable: React.FC<RTableProps> = ({
   hasAdd = true,
   caption,
   searchType = 'text',
+  py = 'py-0',
 }) => {
   const [sorting, setSorting] = useState<any[]>([])
 
@@ -187,7 +189,7 @@ const RTable: React.FC<RTableProps> = ({
             table?.getRowModel()?.rows?.map(row => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map(cell => (
-                  <TableCell className='px-2 py-0' key={cell.id}>
+                  <TableCell className={`px-2 ${py}`} key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

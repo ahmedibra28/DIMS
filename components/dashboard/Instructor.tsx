@@ -153,7 +153,7 @@ export default function Instructor() {
                       <Badge
                         onClick={() =>
                           router.push(
-                            `/attendances?semester=${item?.semester}&shift=${item?.shift}&course_id=${item?.subject?.course?.id}&subject_id=${item?.subject?.id}`
+                            `/attendance?semester=${item?.semester}&shift=${item?.shift}&course_id=${item?.subject?.course?.id}&subject_id=${item?.subject?.id}`
                           )
                         }
                         className='flex cursor-pointer items-center gap-x-1 rounded bg-green-500 text-white'
