@@ -24,37 +24,14 @@ import {
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import getSubjectsByInstructor from '@/actions/getSubjectsByInstructor'
-
-interface NoticeProp {
-  id: string
-  title: string
-  note: string
-  createdAt: Date
-  createdBy: {
-    name: string
-  }
-}
-
-interface SubjectProp {
-  id: string
-  semester: 2
-  shift: string
-  subject: {
-    id: string
-    name: string
-    course: {
-      id: string
-      name: string
-    }
-  }
-}
+import { InstructorSubjectProp, NoticeProp } from '@/types'
 
 export default function Instructor() {
   const { userInfo } = useUserInfoStore(state => state)
   const router = useRouter()
 
   const [notes, setNotes] = React.useState<NoticeProp[]>([])
-  const [subjects, setSubjects] = React.useState<SubjectProp[]>([])
+  const [subjects, setSubjects] = React.useState<InstructorSubjectProp[]>([])
 
   const [isPending, startTransition] = React.useTransition()
 
@@ -71,7 +48,7 @@ export default function Instructor() {
       startTransition(() => {
         getSubjectsByInstructor({ instructorId: userInfo.instructorId! }).then(
           res => {
-            setSubjects((res as SubjectProp[]) || [])
+            setSubjects((res as InstructorSubjectProp[]) || [])
           }
         )
       })

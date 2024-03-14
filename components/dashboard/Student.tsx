@@ -36,93 +36,29 @@ import { FormatNumber } from '../FormatNumber'
 import { Badge } from '@/components/ui/badge'
 import { InvoiceCard } from '@/components/InvoiceCard'
 import getResourcesByStudentId from '@/actions/getResourcesByStudentId'
-
-interface DataProp {
-  semester: number
-  shift: 'MORNING' | 'AFTERNOON'
-  course: {
-    name: string
-    subject: {
-      name: string
-      examDescription: string
-      examDate: Date
-    }[]
-  }
-  student: {
-    rollNo: string
-    image: string
-    name: string
-  }
-}
-
-interface NoticeProp {
-  id: string
-  title: string
-  note: string
-  createdAt: Date
-  createdBy: {
-    name: string
-  }
-}
-
-interface TransactionProp {
-  id: string
-  amount: number
-  paymentStatus: 'UNPAID' | 'PAID'
-  type: 'TUITION_PAYMENT' | 'ENROLLMENT_FEE'
-  semester?: number
-  shift?: 'MORNING' | 'AFTERNOON'
-  createdAt: Date
-  student?: {
-    rollNo?: string
-    name?: string
-  }
-  course?: {
-    name?: string
-  }
-}
-
-interface ExamProp {
-  course: string
-  semester: number
-  subjects: {
-    name: string
-    originalTheoryMarks: number
-    originalPracticalMarks: number
-    marks: Array<{
-      examination: string
-      theoryMarks: number
-      practicalMarks: number
-    }>
-  }[]
-}
-
-interface ResourcesProp {
-  semester: number
-  course: {
-    id: string
-    name: string
-    subject: {
-      id: string
-      semester: number
-      name: string
-      resources: {
-        file: string
-      }[]
-    }[]
-  }
-}
+import {
+  AttendanceSummaryProp,
+  ExamProp,
+  NoticeProp,
+  ResourcesProp,
+  SubjectProp,
+  TransactionProp,
+} from '@/types'
+import getAttendanceByStudentId from '@/actions/getAttendanceByStudentId'
 
 export default function Student() {
   const { setDialogOpen, dialogOpen } = useDataStore(state => state)
   const { userInfo } = useUserInfoStore(state => state)
-  const [item, setItem] = React.useState<DataProp>()
+  const [item, setItem] = React.useState<SubjectProp>()
 
-  const [subject, setSubject] = React.useState<DataProp[]>([])
+  const [subject, setSubject] = React.useState<SubjectProp[]>([])
   const [notes, setNotes] = React.useState<NoticeProp[]>([])
   const [exam, setExam] = React.useState<ExamProp[]>([])
   const [transactions, setTransactions] = React.useState<TransactionProp[]>([])
   const [resources, setResources] = React.useState<ResourcesProp[]>([])
+  const [attendances, setAttendances] = React.useState<AttendanceSummaryProp[]>(
+    []
+  )
   const [printItem, setPrintItem] = React.useState<TransactionProp>()
 
   const [isPending, startTransition] = React.useTransition()
@@ -139,7 +75,7 @@ export default function Student() {
       startTransition(() => {
         getClearanceCardByStudentId({ studentId: userInfo.studentId! }).then(
           res => {
-            setSubject((res as DataProp[]) || [])
+            setSubject((res as SubjectProp[]) || [])
           }
         )
       })
@@ -182,10 +118,20 @@ export default function Student() {
       })
     }
 
+    if (userInfo.studentId) {
+      startTransition(() => {
+        getAttendanceByStudentId({ studentId: userInfo.studentId! }).then(
+          res => {
+            setAttendances((res as AttendanceSummaryProp[]) || [])
+          }
+        )
+      })
+    }
+
     // eslint-disable-next-line
   }, [])
 
-  const ClearanceCard = ({ data }: { data?: DataProp }) => {
+  const ClearanceCard = ({ data }: { data?: SubjectProp }) => {
     return (
       <Card>
         <CardHeader>
@@ -385,7 +331,6 @@ export default function Student() {
               <TableHeader>
                 <TableRow>
                   <TableHead className='ps-0 text-xs'>Course</TableHead>
-                  <TableHead className='ps-0 text-xs'>Semester</TableHead>
                   <TableHead className='ps-0 text-xs'>Amount</TableHead>
                   <TableHead className='ps-0 text-xs'>Type</TableHead>
                   <TableHead className='ps-0 text-xs'>P. Status</TableHead>
@@ -396,20 +341,18 @@ export default function Student() {
                 {transactions?.map((item, i: number) => (
                   <TableRow key={i}>
                     <TableCell className='px-2 py-1 text-xs'>
-                      {item?.course?.name}
-                    </TableCell>
-                    <TableCell className='px-2 py-1 text-xs'>
-                      {item?.semester}
+                      {item?.course?.name} ({item?.semester})
                     </TableCell>
                     <TableCell className='px-2 py-1 text-xs'>
                       <FormatNumber value={item?.amount} />
                     </TableCell>
-                    <TableCell className='px-2 py-1 text-xs'>
+                    <TableCell className='grid grid-cols-1 px-2 py-1 text-xs'>
                       {item?.type === 'TUITION_PAYMENT' ? (
                         <span className='text-green-500'>{item?.type}</span>
                       ) : (
                         <span className='text-blue-500'>{item?.type}</span>
                       )}
+                      {DateTime(item?.createdAt).format('YYYY-MM-DD')}
                     </TableCell>
                     <TableCell className='px-2 py-1 text-xs'>
                       {item?.paymentStatus === 'PAID' ? (
@@ -511,6 +454,51 @@ export default function Student() {
     </Card>
   )
 
+  const attendanceCard = () => (
+    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+      <CardHeader>
+        <CardTitle>Attendances</CardTitle>
+        <CardDescription>Get all summarized attendances.</CardDescription>
+      </CardHeader>
+      <CardContent className='grid grid-cols-1 gap-2'>
+        {isPending ? (
+          <FormButton loading label='Loading...' />
+        ) : (
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className='ps-0 text-xs'>Course</TableHead>
+                  <TableHead className='ps-0 text-xs'>Subject</TableHead>
+                  <TableHead className='ps-0 text-xs'>Present</TableHead>
+                  <TableHead className='ps-0 text-xs'>Absent</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {attendances?.map((item, i: number) => (
+                  <TableRow key={i}>
+                    <TableCell className='px-2 py-1 text-xs'>
+                      {item?.course}
+                    </TableCell>
+                    <TableCell className='px-2 py-1 text-xs'>
+                      {item?.subject}
+                    </TableCell>
+                    <TableCell className='px-2 py-1 text-xs'>
+                      {item?.present}
+                    </TableCell>
+                    <TableCell className='px-2 py-1 text-xs'>
+                      {item?.absent}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  )
+
   return (
     <div className='flex flex-wrap justify-start gap-4'>
       {item && (
@@ -532,6 +520,7 @@ export default function Student() {
       {resources?.length > 0 && resourceCard()}
       {subject?.length > 0 && clearanceCardCard()}
       {exam?.length > 0 && examCard()}
+      {attendances?.length > 0 && attendanceCard()}
     </div>
   )
 }
