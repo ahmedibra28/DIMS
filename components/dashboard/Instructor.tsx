@@ -24,7 +24,12 @@ import {
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import getSubjectsByInstructor from '@/actions/getSubjectsByInstructor'
-import { InstructorSubjectProp, NoticeProp } from '@/types'
+import {
+  AttendanceSummaryProp,
+  InstructorSubjectProp,
+  NoticeProp,
+} from '@/types'
+import getAttendanceByInstructorId from '@/actions/getAttendanceByInstructorId'
 
 export default function Instructor() {
   const { userInfo } = useUserInfoStore(state => state)
@@ -32,6 +37,9 @@ export default function Instructor() {
 
   const [notes, setNotes] = React.useState<NoticeProp[]>([])
   const [subjects, setSubjects] = React.useState<InstructorSubjectProp[]>([])
+  const [attendances, setAttendances] = React.useState<AttendanceSummaryProp[]>(
+    []
+  )
 
   const [isPending, startTransition] = React.useTransition()
 
@@ -51,6 +59,16 @@ export default function Instructor() {
             setSubjects((res as InstructorSubjectProp[]) || [])
           }
         )
+      })
+    }
+
+    if (userInfo.instructorId) {
+      startTransition(() => {
+        getAttendanceByInstructorId({
+          instructorId: userInfo.instructorId!,
+        }).then(res => {
+          setAttendances((res as AttendanceSummaryProp[]) || [])
+        })
       })
     }
 
@@ -148,10 +166,64 @@ export default function Instructor() {
     </Card>
   )
 
+  const attendanceCard = () => (
+    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+      <CardHeader>
+        <CardTitle>Attendances</CardTitle>
+        <CardDescription>
+          Get top 10 summarized absent attendances by student.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className='grid grid-cols-1 gap-2'>
+        {isPending ? (
+          <FormButton loading label='Loading...' />
+        ) : (
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className='ps-0 text-xs'>Course</TableHead>
+                  <TableHead className='ps-0 text-xs'>Student</TableHead>
+                  <TableHead className='ps-0 text-xs'>Present</TableHead>
+                  <TableHead className='ps-0 text-xs'>Absent</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {attendances?.map((item, i: number) => (
+                  <TableRow key={i}>
+                    <TableCell className='grid grid-cols-1 px-2 py-1 text-xs'>
+                      <span>{item?.course}</span>
+                      <span>
+                        {item?.subject} ({item?.semester})
+                      </span>
+                    </TableCell>
+                    <TableCell className='px-2 py-1 text-xs'>
+                      <div className='grid grid-cols-1'>
+                        <span>{item?.student?.name}</span>
+                        <span>{item?.student?.rollNo}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className='px-2 py-1 text-xs'>
+                      {item?.present}
+                    </TableCell>
+                    <TableCell className='px-2 py-1 text-xs'>
+                      {item?.absent}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  )
+
   return (
     <div className='flex flex-wrap justify-start gap-4'>
       {notes?.length > 0 && noticeCard()}
       {notes?.length > 0 && subjectCard()}
+      {attendances?.length > 0 && attendanceCard()}
     </div>
   )
 }

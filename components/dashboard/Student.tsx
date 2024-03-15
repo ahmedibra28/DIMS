@@ -368,7 +368,7 @@ export default function Student() {
                     <TableCell className='flex items-center gap-x-2 py-1 text-xs'>
                       {item?.paymentStatus === 'UNPAID' ? (
                         <Badge
-                          onClick={() => console.log('Paid')}
+                          onClick={() => console.log('online payment popup...')}
                           className='flex cursor-pointer items-center rounded text-white'
                         >
                           <FaDollarSign className='text-lg' /> Pay

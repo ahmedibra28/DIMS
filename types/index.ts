@@ -93,4 +93,9 @@ export interface AttendanceSummaryProp {
   subject: string
   present: number
   absent: number
+  semester?: number
+  student?: {
+    name: string
+    rollNo: string
+  }
 }

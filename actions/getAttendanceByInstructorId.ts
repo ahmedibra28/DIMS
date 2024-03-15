@@ -3,21 +3,21 @@
 import { prisma } from '@/lib/prisma.db'
 import { AttendanceSummaryProp } from '@/types'
 
-export default async function getAttendanceByStudentId({
-  studentId,
+export default async function getAttendanceByInstructorId({
+  instructorId,
 }: {
-  studentId: string
+  instructorId: string
 }) {
   try {
-    if (!studentId) return null
+    if (!instructorId) return null
 
-    const activeCourses = await prisma.assignCourse.findMany({
+    const activeCourses = await prisma.assignSubject.findMany({
       where: {
-        studentId,
+        instructorId,
         status: 'ACTIVE',
       },
       select: {
-        studentId: true,
+        instructorId: true,
       },
     })
 
@@ -25,11 +25,13 @@ export default async function getAttendanceByStudentId({
 
     const attendances = await prisma.attendance.findMany({
       where: {
-        assignCourse: {
-          student: {
-            id: { in: activeCourses.map(item => item.studentId) },
-            status: 'ACTIVE',
+        assignSubject: {
+          instructorId: {
+            in: activeCourses.map(item => item.instructorId),
           },
+        },
+        assignCourse: {
+          status: 'ACTIVE',
         },
       },
       select: {
@@ -43,6 +45,14 @@ export default async function getAttendanceByStudentId({
             },
           },
         },
+        assignCourse: {
+          select: {
+            student: {
+              select: { name: true, rollNo: true },
+            },
+            semester: true,
+          },
+        },
       },
     })
 
@@ -50,7 +60,7 @@ export default async function getAttendanceByStudentId({
 
     attendances?.forEach(att => {
       const item = attSummary.find(
-        (i: any) => i?.subject === att?.assignSubject?.subject?.name
+        (i: any) => i?.student?.rollNo === att?.assignCourse?.student?.rollNo
       )
 
       if (item) {
@@ -58,6 +68,11 @@ export default async function getAttendanceByStudentId({
         item.absent += att?.isPresent ? 0 : 1
       } else {
         attSummary.push({
+          student: {
+            name: att?.assignCourse?.student?.name,
+            rollNo: att?.assignCourse?.student?.rollNo,
+          },
+          semester: att?.assignCourse?.semester,
           course: att?.assignSubject?.subject?.course?.name,
           subject: att?.assignSubject?.subject?.name,
           present: att?.isPresent ? 1 : 0,
@@ -66,7 +81,11 @@ export default async function getAttendanceByStudentId({
       }
     })
 
-    return attSummary as AttendanceSummaryProp[]
+    const att = attSummary as AttendanceSummaryProp[]
+
+    att?.sort((a, b) => b?.absent - a?.absent)
+
+    return att.slice(0, 10)
   } catch (error: any) {
     throw new Error(error?.message)
   }
