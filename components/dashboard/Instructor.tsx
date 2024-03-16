@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { FormButton } from '../ui/CustomForm'
 import DateTime from '@/lib/dateTime'
 import useUserInfoStore from '@/zustand/userStore'
 import getNoticesByRole from '@/actions/getNoticesByRole'
@@ -30,6 +29,7 @@ import {
   NoticeProp,
 } from '@/types'
 import getAttendanceByInstructorId from '@/actions/getAttendanceByInstructorId'
+import Skeleton from '@/components/dashboard/Skeleton'
 
 export default function Instructor() {
   const { userInfo } = useUserInfoStore(state => state)
@@ -41,11 +41,13 @@ export default function Instructor() {
     []
   )
 
-  const [isPending, startTransition] = React.useTransition()
+  const [isPendingNote, startTransitionNote] = React.useTransition()
+  const [isPendingSubject, startTransitionSubject] = React.useTransition()
+  const [isPendingAtt, startTransitionAtt] = React.useTransition()
 
   React.useEffect(() => {
     if (userInfo.role) {
-      startTransition(() => {
+      startTransitionNote(() => {
         getNoticesByRole({ role: userInfo.role! }).then(res => {
           setNotes(res || [])
         })
@@ -53,7 +55,7 @@ export default function Instructor() {
     }
 
     if (userInfo.instructorId) {
-      startTransition(() => {
+      startTransitionSubject(() => {
         getSubjectsByInstructor({ instructorId: userInfo.instructorId! }).then(
           res => {
             setSubjects((res as InstructorSubjectProp[]) || [])
@@ -63,7 +65,7 @@ export default function Instructor() {
     }
 
     if (userInfo.instructorId) {
-      startTransition(() => {
+      startTransitionAtt(() => {
         getAttendanceByInstructorId({
           instructorId: userInfo.instructorId!,
         }).then(res => {
@@ -82,25 +84,21 @@ export default function Instructor() {
         <CardDescription>Get all the latest updates here.</CardDescription>
       </CardHeader>
       <CardContent className='grid grid-cols-1 gap-2'>
-        {isPending ? (
-          <FormButton loading label='Loading...' />
-        ) : (
-          notes?.map((item, i: number) => (
-            <Fragment key={i}>
-              <div>
-                <span className='font-bold'>{item?.title}</span> -
-                <span className='ms-1 text-xs text-gray-500'>
-                  {item?.createdBy?.name}
-                </span>
-                <p className='text-sm text-gray-700'>{item?.note}</p>
-                <span className='text-end text-xs text-gray-500'>
-                  {DateTime(item?.createdAt).format('YYYY-MM-DD hh:mm:ss')}
-                </span>
-              </div>
-              <hr />
-            </Fragment>
-          ))
-        )}
+        {notes?.map((item, i: number) => (
+          <Fragment key={i}>
+            <div>
+              <span className='font-bold'>{item?.title}</span> -
+              <span className='ms-1 text-xs text-gray-500'>
+                {item?.createdBy?.name}
+              </span>
+              <p className='text-sm text-gray-700'>{item?.note}</p>
+              <span className='text-end text-xs text-gray-500'>
+                {DateTime(item?.createdAt).format('YYYY-MM-DD hh:mm:ss')}
+              </span>
+            </div>
+            <hr />
+          </Fragment>
+        ))}
       </CardContent>
     </Card>
   )
@@ -114,54 +112,48 @@ export default function Instructor() {
         </CardDescription>
       </CardHeader>
       <CardContent className='grid grid-cols-1 gap-2'>
-        {isPending ? (
-          <FormButton loading label='Loading...' />
-        ) : (
-          <>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className='ps-0 text-xs'>Course</TableHead>
-                  <TableHead className='ps-0 text-xs'>Subject</TableHead>
-                  <TableHead className='ps-0 text-xs'>Semester</TableHead>
-                  <TableHead className='ps-0 text-xs'>Shift</TableHead>
-                  <TableHead className='ps-0 text-xs'>Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {subjects?.map((item, i: number) => (
-                  <TableRow key={i}>
-                    <TableCell className='px-2 py-1 text-xs'>
-                      {item?.subject?.course?.name}
-                    </TableCell>
-                    <TableCell className='px-2 py-1 text-xs'>
-                      {item?.subject?.name}
-                    </TableCell>
-                    <TableCell className='px-2 py-1 text-xs'>
-                      {item?.semester}
-                    </TableCell>
-                    <TableCell className='px-2 py-1 text-xs'>
-                      {item?.shift}
-                    </TableCell>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className='ps-0 text-xs'>Course</TableHead>
+              <TableHead className='ps-0 text-xs'>Subject</TableHead>
+              <TableHead className='ps-0 text-xs'>Semester</TableHead>
+              <TableHead className='ps-0 text-xs'>Shift</TableHead>
+              <TableHead className='ps-0 text-xs'>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {subjects?.map((item, i: number) => (
+              <TableRow key={i}>
+                <TableCell className='px-2 py-1 text-xs'>
+                  {item?.subject?.course?.name}
+                </TableCell>
+                <TableCell className='px-2 py-1 text-xs'>
+                  {item?.subject?.name}
+                </TableCell>
+                <TableCell className='px-2 py-1 text-xs'>
+                  {item?.semester}
+                </TableCell>
+                <TableCell className='px-2 py-1 text-xs'>
+                  {item?.shift}
+                </TableCell>
 
-                    <TableCell className='flex items-center gap-x-2 py-1 text-xs'>
-                      <Badge
-                        onClick={() =>
-                          router.push(
-                            `/attendance?semester=${item?.semester}&shift=${item?.shift}&course_id=${item?.subject?.course?.id}&subject_id=${item?.subject?.id}`
-                          )
-                        }
-                        className='flex cursor-pointer items-center gap-x-1 rounded bg-green-500 text-white'
-                      >
-                        <FaCalendar className='text-lg' /> At
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </>
-        )}
+                <TableCell className='flex items-center gap-x-2 py-1 text-xs'>
+                  <Badge
+                    onClick={() =>
+                      router.push(
+                        `/attendance?semester=${item?.semester}&shift=${item?.shift}&course_id=${item?.subject?.course?.id}&subject_id=${item?.subject?.id}`
+                      )
+                    }
+                    className='flex cursor-pointer items-center gap-x-1 rounded bg-green-500 text-white'
+                  >
+                    <FaCalendar className='text-lg' /> At
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   )
@@ -175,55 +167,53 @@ export default function Instructor() {
         </CardDescription>
       </CardHeader>
       <CardContent className='grid grid-cols-1 gap-2'>
-        {isPending ? (
-          <FormButton loading label='Loading...' />
-        ) : (
-          <>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className='ps-0 text-xs'>Course</TableHead>
-                  <TableHead className='ps-0 text-xs'>Student</TableHead>
-                  <TableHead className='ps-0 text-xs'>Present</TableHead>
-                  <TableHead className='ps-0 text-xs'>Absent</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {attendances?.map((item, i: number) => (
-                  <TableRow key={i}>
-                    <TableCell className='grid grid-cols-1 px-2 py-1 text-xs'>
-                      <span>{item?.course}</span>
-                      <span>
-                        {item?.subject} ({item?.semester})
-                      </span>
-                    </TableCell>
-                    <TableCell className='px-2 py-1 text-xs'>
-                      <div className='grid grid-cols-1'>
-                        <span>{item?.student?.name}</span>
-                        <span>{item?.student?.rollNo}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className='px-2 py-1 text-xs'>
-                      {item?.present}
-                    </TableCell>
-                    <TableCell className='px-2 py-1 text-xs'>
-                      {item?.absent}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </>
-        )}
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className='ps-0 text-xs'>Course</TableHead>
+              <TableHead className='ps-0 text-xs'>Student</TableHead>
+              <TableHead className='ps-0 text-xs'>Present</TableHead>
+              <TableHead className='ps-0 text-xs'>Absent</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {attendances?.map((item, i: number) => (
+              <TableRow key={i}>
+                <TableCell className='grid grid-cols-1 px-2 py-1 text-xs'>
+                  <span>{item?.course}</span>
+                  <span>
+                    {item?.subject} ({item?.semester})
+                  </span>
+                </TableCell>
+                <TableCell className='px-2 py-1 text-xs'>
+                  <div className='grid grid-cols-1'>
+                    <span>{item?.student?.name}</span>
+                    <span>{item?.student?.rollNo}</span>
+                  </div>
+                </TableCell>
+                <TableCell className='px-2 py-1 text-xs'>
+                  {item?.present}
+                </TableCell>
+                <TableCell className='px-2 py-1 text-xs'>
+                  {item?.absent}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   )
 
   return (
     <div className='flex flex-wrap justify-start gap-4'>
-      {notes?.length > 0 && noticeCard()}
-      {notes?.length > 0 && subjectCard()}
-      {attendances?.length > 0 && attendanceCard()}
+      {isPendingNote ? <Skeleton /> : notes?.length > 0 && noticeCard()}
+      {isPendingSubject ? <Skeleton /> : subjects?.length > 0 && subjectCard()}
+      {isPendingAtt ? (
+        <Skeleton />
+      ) : (
+        attendances?.length > 0 && attendanceCard()
+      )}
     </div>
   )
 }

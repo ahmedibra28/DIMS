@@ -99,3 +99,9 @@ export interface AttendanceSummaryProp {
     rollNo: string
   }
 }
+
+export interface CountProp {
+  label: string
+  count: number
+  isCurrency?: boolean
+}

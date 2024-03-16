@@ -8,11 +8,8 @@ export default async function getNoticesByRole({ role }: { role: string }) {
 
     const notices = await prisma.notice.findMany({
       where: {
-        roles: {
-          some: {
-            type: role,
-          },
-        },
+        ...(role !== 'SUPER_ADMIN' && { roles: { some: { type: role } } }),
+        status: 'ACTIVE',
       },
       select: {
         id: true,
@@ -28,6 +25,7 @@ export default async function getNoticesByRole({ role }: { role: string }) {
       orderBy: {
         createdAt: 'desc',
       },
+      take: 4,
     })
 
     return notices
