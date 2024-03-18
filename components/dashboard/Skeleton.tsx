@@ -10,7 +10,7 @@ import { Table, TableBody, TableRow } from '@/components/ui/table'
 
 export default function Skeleton() {
   return (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle className='h-7 w-36 animate-pulse bg-gray-300' />
         <CardDescription className='h-3 w-[90%] animate-pulse bg-gray-300' />

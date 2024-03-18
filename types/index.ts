@@ -105,3 +105,11 @@ export interface CountProp {
   count: number
   isCurrency?: boolean
 }
+
+export interface UnpaidStudentsProp {
+  id: string
+  rollNo: string
+  name: string
+  balance: number
+  mobile: number
+}

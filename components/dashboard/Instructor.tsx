@@ -78,7 +78,7 @@ export default function Instructor() {
   }, [])
 
   const noticeCard = () => (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Notice Board</CardTitle>
         <CardDescription>Get all the latest updates here.</CardDescription>
@@ -104,7 +104,7 @@ export default function Instructor() {
   )
 
   const subjectCard = () => (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Subjects & Attendance</CardTitle>
         <CardDescription>
@@ -159,7 +159,7 @@ export default function Instructor() {
   )
 
   const attendanceCard = () => (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Attendances</CardTitle>
         <CardDescription>
@@ -191,10 +191,10 @@ export default function Instructor() {
                     <span>{item?.student?.rollNo}</span>
                   </div>
                 </TableCell>
-                <TableCell className='px-2 py-1 text-xs'>
+                <TableCell className='px-2 py-1 text-xs text-green-500'>
                   {item?.present}
                 </TableCell>
-                <TableCell className='px-2 py-1 text-xs'>
+                <TableCell className='px-2 py-1 text-xs text-red-500'>
                   {item?.absent}
                 </TableCell>
               </TableRow>
@@ -206,7 +206,7 @@ export default function Instructor() {
   )
 
   return (
-    <div className='flex flex-wrap justify-start gap-4'>
+    <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
       {isPendingNote ? <Skeleton /> : notes?.length > 0 && noticeCard()}
       {isPendingSubject ? <Skeleton /> : subjects?.length > 0 && subjectCard()}
       {isPendingAtt ? (

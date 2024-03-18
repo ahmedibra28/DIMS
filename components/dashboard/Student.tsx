@@ -216,7 +216,7 @@ export default function Student() {
   }
 
   const clearanceCardCard = () => (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Clearance Card</CardTitle>
         <CardDescription>Get your clearance card for exams</CardDescription>
@@ -239,7 +239,7 @@ export default function Student() {
   )
 
   const noticeCard = () => (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Notice Board</CardTitle>
         <CardDescription>Get all the latest updates here.</CardDescription>
@@ -265,7 +265,7 @@ export default function Student() {
   )
 
   const examCard = () => (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Exam Results</CardTitle>
         <CardDescription>Get all exam results here.</CardDescription>
@@ -311,7 +311,7 @@ export default function Student() {
   )
 
   const transactionCard = () => (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Transactions</CardTitle>
         <CardDescription>Get all transactions results here.</CardDescription>
@@ -382,7 +382,7 @@ export default function Student() {
   )
 
   const resourceCard = () => (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Resources</CardTitle>
         <CardDescription>
@@ -435,7 +435,7 @@ export default function Student() {
   )
 
   const attendanceCard = () => (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Attendances</CardTitle>
         <CardDescription>Get all summarized attendances.</CardDescription>
@@ -459,10 +459,10 @@ export default function Student() {
                 <TableCell className='px-2 py-1 text-xs'>
                   {item?.subject}
                 </TableCell>
-                <TableCell className='px-2 py-1 text-xs'>
+                <TableCell className='px-2 py-1 text-xs text-green-500'>
                   {item?.present}
                 </TableCell>
-                <TableCell className='px-2 py-1 text-xs'>
+                <TableCell className='px-2 py-1 text-xs text-red-500'>
                   {item?.absent}
                 </TableCell>
               </TableRow>
@@ -474,7 +474,7 @@ export default function Student() {
   )
 
   return (
-    <div className='flex flex-wrap justify-start gap-4'>
+    <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
       {item && (
         <PrintDialog
           data={<ClearanceCard data={item} />}

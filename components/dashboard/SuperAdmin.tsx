@@ -1,5 +1,5 @@
 import getNoticesByRole from '@/actions/getNoticesByRole'
-import { CountProp, NoticeProp } from '@/types'
+import { CountProp, NoticeProp, UnpaidStudentsProp } from '@/types'
 import useUserInfoStore from '@/zustand/userStore'
 import React, { Fragment } from 'react'
 import {
@@ -9,19 +9,34 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import Skeleton from '@/components/dashboard/Skeleton'
 import DateTime from '@/lib/dateTime'
 import getCounts from '@/actions/getCounts'
 import { FormatNumber } from '../FormatNumber'
+import getTop10UnpaidStudents from '@/actions/getTop10UnpaidStudents'
 
 export default function SuperAdmin() {
   const [count, setCount] = React.useState<CountProp[]>([])
   const [notes, setNotes] = React.useState<NoticeProp[]>([])
+  const [unpaidStudents, setUnpaidStudents] = React.useState<
+    UnpaidStudentsProp[]
+  >([])
 
   const { userInfo } = useUserInfoStore(state => state)
 
   const [isPendingNote, startTransitionNote] = React.useTransition()
   const [isPendingCount, startTransitionCount] = React.useTransition()
+  const [isPendingUnpaidStudents, startTransitionUnpaidStudents] =
+    React.useTransition()
 
   React.useEffect(() => {
     startTransitionCount(() => {
@@ -38,11 +53,17 @@ export default function SuperAdmin() {
       })
     }
 
+    startTransitionUnpaidStudents(() => {
+      getTop10UnpaidStudents().then(res => {
+        setUnpaidStudents(res || [])
+      })
+    })
+
     // eslint-disable-next-line
   }, [])
 
   const noticeCard = () => (
-    <Card className='w-full md:w-[48%] lg:w-[48%]'>
+    <Card className='w-full'>
       <CardHeader>
         <CardTitle>Notice Board</CardTitle>
         <CardDescription>Get all the latest updates here.</CardDescription>
@@ -63,6 +84,45 @@ export default function SuperAdmin() {
             <hr />
           </Fragment>
         ))}
+      </CardContent>
+    </Card>
+  )
+
+  const unpaidStudentsCard = () => (
+    <Card className='w-full'>
+      <CardHeader>
+        <CardTitle>Unpaid Students</CardTitle>
+        <CardDescription>Get top 10 unpaid students</CardDescription>
+      </CardHeader>
+      <CardContent className='grid grid-cols-1 gap-2'>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className='ps-0 text-xs'>Roll No</TableHead>
+              <TableHead className='ps-0 text-xs'>Name</TableHead>
+              <TableHead className='ps-0 text-xs'>Mobile</TableHead>
+              <TableHead className='ps-0 text-xs'>Balance</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {unpaidStudents?.map((item, i: number) => (
+              <TableRow key={i}>
+                <TableCell className='px-2 py-1 text-xs'>
+                  {item?.rollNo}
+                </TableCell>
+                <TableCell className='px-2 py-1 text-xs'>
+                  {item?.name}
+                </TableCell>
+                <TableCell className='px-2 py-1 text-xs'>
+                  {item?.mobile}
+                </TableCell>
+                <TableCell className='px-2 py-1 text-xs text-red-500'>
+                  <FormatNumber value={item?.balance} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   )
@@ -107,8 +167,9 @@ export default function SuperAdmin() {
             )}
       </div>
 
-      <div className='flex flex-wrap justify-start gap-4'>
+      <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
         {isPendingNote ? <Skeleton /> : notes?.length > 0 && noticeCard()}
+        {isPendingUnpaidStudents ? <Skeleton /> : unpaidStudentsCard()}
       </div>
     </>
   )
