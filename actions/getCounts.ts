@@ -1,12 +1,157 @@
 'use server'
 
+import DateTime from '@/lib/dateTime'
 import { prisma } from '@/lib/prisma.db'
 
 export default async function getCounts() {
   try {
+    const thisMonth = {
+      s: DateTime().utc().startOf('month').format(),
+      e: DateTime().utc().endOf('month').format(),
+    }
+
+    const lastSixMonths = {
+      s: DateTime().utc().subtract(6, 'month').startOf('month').format(),
+      e: DateTime().utc().endOf('month').format(),
+    }
+
+    const lastMonth = {
+      s: DateTime().utc().subtract(1, 'month').startOf('month').format(),
+      e: DateTime().utc().subtract(1, 'month').endOf('month').format(),
+    }
+
+    const lastYear = {
+      s: DateTime().utc().subtract(1, 'year').startOf('year').format(),
+      e: DateTime().utc().subtract(1, 'year').endOf('year').format(),
+    }
+
     const schools = await prisma.school.count({
+      where: { status: 'ACTIVE' },
+    })
+
+    const activeStudents = await prisma.student.count({
+      where: { status: 'ACTIVE' },
+    })
+
+    const graduatedStudents = await prisma.student.count({
+      where: { status: 'GRADUATED' },
+    })
+
+    const dropOutStudents = await prisma.student.count({
+      where: { status: 'INACTIVE' },
+    })
+
+    const thisMonthStudents = await prisma.student.count({
       where: {
         status: 'ACTIVE',
+        createdAt: { gte: thisMonth.s, lte: thisMonth.e },
+      },
+    })
+
+    const last6MonthStudents = await prisma.student.count({
+      where: {
+        status: 'ACTIVE',
+        createdAt: { gte: lastSixMonths.s, lte: lastSixMonths.e },
+      },
+    })
+
+    const activeInstructors = await prisma.instructor.count({
+      where: { status: 'ACTIVE' },
+    })
+
+    const inActiveInstructors = await prisma.instructor.count({
+      where: { status: 'INACTIVE' },
+    })
+
+    const todayIncome = await prisma.transaction.aggregate({
+      where: {
+        paymentStatus: 'PAID',
+        status: 'ACTIVE',
+        createdAt: {
+          gte: thisMonth.s,
+          lte: thisMonth.e,
+        },
+      },
+      _sum: {
+        amount: true,
+      },
+    })
+
+    const thisMonthIncome = await prisma.transaction.aggregate({
+      where: {
+        paymentStatus: 'PAID',
+        status: 'ACTIVE',
+        createdAt: {
+          gte: thisMonth.s,
+          lte: thisMonth.e,
+        },
+      },
+      _sum: {
+        amount: true,
+      },
+    })
+
+    const lastMonthIncome = await prisma.transaction.aggregate({
+      where: {
+        paymentStatus: 'PAID',
+        status: 'ACTIVE',
+        createdAt: {
+          gte: lastMonth.s,
+          lte: lastMonth.e,
+        },
+      },
+      _sum: {
+        amount: true,
+      },
+    })
+
+    const last6MonthsIncome = await prisma.transaction.aggregate({
+      where: {
+        paymentStatus: 'PAID',
+        status: 'ACTIVE',
+        createdAt: {
+          gte: lastSixMonths.s,
+          lte: lastSixMonths.e,
+        },
+      },
+      _sum: {
+        amount: true,
+      },
+    })
+
+    const lastYearIncome = await prisma.transaction.aggregate({
+      where: {
+        paymentStatus: 'PAID',
+        status: 'ACTIVE',
+        createdAt: {
+          gte: lastYear.s,
+          lte: lastYear.e,
+        },
+      },
+      _sum: {
+        amount: true,
+      },
+    })
+
+    const unpaidFee = await prisma.transaction.aggregate({
+      where: {
+        paymentStatus: 'UNPAID',
+        status: 'ACTIVE',
+        type: 'TUITION_PAYMENT',
+      },
+      _sum: {
+        amount: true,
+      },
+    })
+
+    const unpaidAdmission = await prisma.transaction.aggregate({
+      where: {
+        paymentStatus: 'UNPAID',
+        status: 'ACTIVE',
+        type: 'ENROLLMENT_FEE',
+      },
+      _sum: {
+        amount: true,
       },
     })
 
@@ -14,73 +159,73 @@ export default async function getCounts() {
       { label: 'Schools', count: schools || 0, isCurrency: false },
       {
         label: 'Active Students',
-        count: schools || 0,
+        count: activeStudents || 0,
         isCurrency: false,
       },
       {
         label: 'Graduated Students',
-        count: schools || 0,
+        count: graduatedStudents || 0,
         isCurrency: false,
       },
       {
         label: 'Dropout Students',
-        count: schools || 0,
+        count: dropOutStudents || 0,
         isCurrency: false,
       },
       {
         label: 'This Month Students',
-        count: schools || 0,
+        count: thisMonthStudents || 0,
         isCurrency: false,
       },
       {
         label: 'Last 6 Months Students',
-        count: schools || 0,
+        count: last6MonthStudents || 0,
         isCurrency: false,
       },
       {
         label: 'Active Instructors',
-        count: schools || 0,
+        count: activeInstructors || 0,
         isCurrency: false,
       },
       {
         label: 'Inactive Instructors',
-        count: schools || 0,
+        count: inActiveInstructors || 0,
         isCurrency: false,
       },
 
       {
         label: "Today's Income",
-        count: schools || 0,
+        count: todayIncome?._sum?.amount || 0,
         isCurrency: true,
       },
       {
         label: 'This Month Income',
-        count: schools || 0,
+        count: thisMonthIncome?._sum?.amount || 0,
         isCurrency: true,
       },
       {
         label: 'Last Month Income',
-        count: schools || 0,
-        isCurrency: true,
-      },
-      {
-        label: 'Last Year Income',
-        count: schools || 0,
+        count: lastMonthIncome?._sum?.amount || 0,
         isCurrency: true,
       },
       {
         label: 'Last 6 Months Income',
-        count: schools || 0,
+        count: last6MonthsIncome?._sum?.amount || 0,
+        isCurrency: true,
+      },
+      {
+        label: 'Last Year Income',
+        count: lastYearIncome?._sum?.amount || 0,
         isCurrency: true,
       },
       {
         label: 'Unpaid Fee',
-        count: schools || 0,
+        count: unpaidFee?._sum?.amount || 0,
         isCurrency: true,
       },
       {
         label: 'Unpaid Admission',
-        count: schools || 0,
+        count: unpaidAdmission?._sum?.amount || 0,
         isCurrency: true,
       },
     ]
