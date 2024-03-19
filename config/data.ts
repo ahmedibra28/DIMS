@@ -266,6 +266,14 @@ const clientPermissions = [
     sort: sort.hidden,
     description: 'Attendance page',
   },
+  {
+    id: 'YTU-o6vjJk4A-6uM8kgxX',
+    name: 'Payment Transaction',
+    path: '/report/payment-transaction',
+    menu: 'report',
+    sort: sort.report,
+    description: 'Payment Transaction page',
+  },
 ]
 
 const permissions = [
@@ -935,6 +943,15 @@ const permissions = [
     route: '/api/attendances/:id',
     name: 'Attendance',
     method: 'DELETE',
+  },
+
+  // Reports
+  {
+    id: 'RrtIDdd7j5MKiRqthWRDF',
+    description: 'Payment Transaction Reports',
+    route: '/api/reports/payment-transactions',
+    name: 'Reports',
+    method: 'GET',
   },
 ]
 

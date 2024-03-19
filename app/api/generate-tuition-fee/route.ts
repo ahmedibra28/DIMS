@@ -165,7 +165,7 @@ export async function POST(req: NextApiRequestExtended) {
               } semester ${
                 student.shift
               } shift at ${new Date().toLocaleString()}`,
-              paymentStatus: 'UNPAID',
+              paymentStatus: Number(amount) === 0 ? 'PAID' : 'UNPAID',
             },
           })
 
