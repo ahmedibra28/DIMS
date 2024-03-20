@@ -155,8 +155,18 @@ export default async function getCounts() {
       },
     })
 
+    const refundedPayments = await prisma.transaction.aggregate({
+      where: {
+        type: {
+          in: ['REFUND_ENROLLMENT_FEE', 'REFUND_TUITION_PAYMENT'],
+        },
+      },
+      _sum: {
+        amount: true,
+      },
+    })
+
     const counts = [
-      { label: 'Schools', count: schools || 0, isCurrency: false },
       {
         label: 'Active Students',
         count: activeStudents || 0,
@@ -216,6 +226,11 @@ export default async function getCounts() {
       {
         label: 'Last Year Income',
         count: lastYearIncome?._sum?.amount || 0,
+        isCurrency: true,
+      },
+      {
+        label: 'Refunded',
+        count: refundedPayments?._sum?.amount || 0,
         isCurrency: true,
       },
       {

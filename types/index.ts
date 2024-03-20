@@ -86,6 +86,7 @@ export interface InstructorSubjectProp {
       name: string
     }
   }
+  hasStudents: boolean
 }
 
 export interface AttendanceSummaryProp {

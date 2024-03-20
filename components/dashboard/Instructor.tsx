@@ -21,7 +21,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
 import getSubjectsByInstructor from '@/actions/getSubjectsByInstructor'
 import {
   AttendanceSummaryProp,
@@ -30,6 +29,7 @@ import {
 } from '@/types'
 import getAttendanceByInstructorId from '@/actions/getAttendanceByInstructorId'
 import Skeleton from '@/components/dashboard/Skeleton'
+import { Button } from '@/components/ui/button'
 
 export default function Instructor() {
   const { userInfo } = useUserInfoStore(state => state)
@@ -138,17 +138,19 @@ export default function Instructor() {
                   {item?.shift}
                 </TableCell>
 
-                <TableCell className='flex items-center gap-x-2 py-1 text-xs'>
-                  <Badge
+                <TableCell className='flex items-center gap-x-2 py-0.5 text-xs'>
+                  <Button
+                    size='sm'
+                    disabled={!item.hasStudents}
                     onClick={() =>
                       router.push(
                         `/attendance?semester=${item?.semester}&shift=${item?.shift}&course_id=${item?.subject?.course?.id}&subject_id=${item?.subject?.id}`
                       )
                     }
-                    className='flex cursor-pointer items-center gap-x-1 rounded bg-green-500 text-white'
+                    className='flex items-center gap-x-1 rounded bg-green-500 py-0 text-white'
                   >
-                    <FaCalendar className='text-lg' /> At
-                  </Badge>
+                    <FaCalendar className='text-lgs' /> Att
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

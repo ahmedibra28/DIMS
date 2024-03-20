@@ -20,14 +20,14 @@ import { useDebounce } from 'use-debounce'
 import { Button } from '@/components/ui/button'
 
 const FormSchema = z.object({
-  paymentDate: z.string(),
-  paymentType: z.string(),
-  paymentMethod: z.string(),
-  paymentStatus: z.string(),
+  status: z.string(),
   course: z.string(),
   student: z.string(),
   shift: z.string(),
   semester: z.string(),
+  subject: z.string(),
+  instructor: z.string(),
+  attendanceDate: z.string(),
 })
 
 const Page = () => {
@@ -46,38 +46,39 @@ const Page = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      paymentDate: '',
-      paymentType: '',
-      paymentMethod: '',
-      paymentStatus: '',
+      status: '',
       course: '',
       student: '',
       shift: '',
       semester: '',
+      subject: '',
+      instructor: '',
+      attendanceDate: '',
     },
   })
 
   const param = {
-    paymentDate: form.watch('paymentDate'),
-    paymentType: form.watch('paymentType'),
-    paymentMethod: form.watch('paymentMethod'),
-    paymentStatus: form.watch('paymentStatus'),
+    status: form.watch('status'),
     course: form.watch('course'),
     student: form.watch('student'),
     shift: form.watch('shift'),
     semester: form.watch('semester'),
+    subject: form.watch('subject'),
+    instructor: form.watch('instructor'),
+    attendanceDate: form.watch('attendanceDate'),
   }
 
   const getReport = useApi({
-    key: ['payment-transaction'],
+    key: ['attendance'],
     method: 'GET',
-    url: `reports/payment-transactions?page=${page}&limit=${limit}&${new URLSearchParams(
+    url: `reports/attendances?page=${page}&limit=${limit}&${new URLSearchParams(
       param
     )}`,
   })?.get
 
   const [student] = useDebounce(form.watch('student'), 1000)
-  const [semester] = useDebounce(form.watch('semester'), 1000)
+  const [instructor] = useDebounce(form.watch('instructor'), 1000)
+  const [semester] = useDebounce(form.watch('semester'), 3000)
 
   useEffect(() => {
     getReport?.refetch()
@@ -85,19 +86,24 @@ const Page = () => {
     // eslint-disable-next-line
   }, [
     // eslint-disable-next-line
-    form.watch('paymentDate'),
-    // eslint-disable-next-line
-    form.watch('paymentType'),
-    // eslint-disable-next-line
-    form.watch('paymentMethod'),
-    // eslint-disable-next-line
-    form.watch('paymentStatus'),
+    form.watch('status'),
     // eslint-disable-next-line
     form.watch('course'),
     // eslint-disable-next-line
+    form.watch('student'),
+    // eslint-disable-next-line
     form.watch('shift'),
     // eslint-disable-next-line
+    form.watch('semester'),
+    // eslint-disable-next-line
+    form.watch('subject'),
+    // eslint-disable-next-line
+    form.watch('instructor'),
+    // eslint-disable-next-line
+    form.watch('attendanceDate'),
+    // eslint-disable-next-line
     student,
+    instructor,
     semester,
   ])
 
@@ -111,25 +117,13 @@ const Page = () => {
     // eslint-disable-next-line
   }, [limit])
 
-  const paymentTypes = [
-    { label: 'Enrollment', value: 'ENROLLMENT_FEE' },
-    { label: 'Tuition', value: 'TUITION_PAYMENT' },
-    { label: 'Enrollment Refund', value: 'REFUND_ENROLLMENT_FEE' },
-    { label: 'Tuition Refund', value: 'REFUND_TUITION_PAYMENT' },
-  ]
   const shifts = [
     { label: 'Morning', value: 'MORNING' },
     { label: 'Afternoon', value: 'AFTERNOON' },
   ]
-  const paymentMethods = [
-    { label: 'Cash', value: 'CASH' },
-    { label: 'EVC Wallet', value: 'EVC_WALLET' },
-    { label: 'System', value: 'SYSTEM' },
-  ]
-
-  const paymentStatus = [
-    { label: 'Paid', value: 'PAID' },
-    { label: 'Unpaid', value: 'UNPAID' },
+  const status = [
+    { label: 'Present', value: 'True' },
+    { label: 'Absent', value: 'False' },
   ]
 
   return (
@@ -161,6 +155,24 @@ const Page = () => {
               />
               <CustomFormField
                 form={form}
+                name='subject'
+                label='Subject'
+                placeholder='Subject'
+                fieldType='command'
+                data={[]}
+                key='subjects'
+                url='subjects?page=1&limit=10&status=ACTIVE'
+              />
+              <CustomFormField
+                form={form}
+                name='status'
+                label='Status'
+                placeholder='Status'
+                fieldType='select'
+                data={status}
+              />
+              <CustomFormField
+                form={form}
                 name='semester'
                 label='Semester'
                 placeholder='Semester'
@@ -176,35 +188,18 @@ const Page = () => {
               />
               <CustomFormField
                 form={form}
-                name='paymentMethod'
-                label='Payment Method'
-                placeholder='Payment Method'
-                fieldType='select'
-                data={paymentMethods}
-              />
-              <CustomFormField
-                form={form}
-                name='paymentType'
-                label='Payment Type'
-                placeholder='Payment Type'
-                fieldType='select'
-                data={paymentTypes}
-              />
-              <CustomFormField
-                form={form}
-                name='paymentStatus'
-                label='Payment Status'
-                placeholder='Payment Status'
-                fieldType='select'
-                data={paymentStatus}
+                name='instructor'
+                label='Instructor'
+                placeholder='Instructor'
+                type='text'
               />
               <div className='flex items-center gap-2'>
                 <div className='w-full'>
                   <CustomFormField
                     form={form}
-                    name='paymentDate'
-                    label='Payment Date'
-                    placeholder='Payment Date'
+                    name='attendanceDate'
+                    label='Attendance Date'
+                    placeholder='Attendance Date'
                     type='date'
                   />
                 </div>

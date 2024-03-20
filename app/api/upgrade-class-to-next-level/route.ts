@@ -32,18 +32,18 @@ export async function POST(req: NextApiRequestExtended) {
         'Assign course, student or course does not exist or is inactive'
       )
 
-    const checkExistenceInNextLevel = await prisma.course.findFirst({
-      where: {
-        id: `${checkExistence.courseId}`,
-        status: 'ACTIVE',
-        duration: { gte: Number(checkExistence.semester) + 1 },
-      },
-    })
+    // const checkExistenceInNextLevel = await prisma.course.findFirst({
+    //   where: {
+    //     id: `${checkExistence.courseId}`,
+    //     status: 'ACTIVE',
+    //     duration: { gte: Number(checkExistence.semester) + 1 },
+    //   },
+    // })
 
-    if (!checkExistenceInNextLevel)
-      return getErrorResponse(
-        'Course does not exist or duration is less than semester + 1'
-      )
+    // if (!checkExistenceInNextLevel)
+    //   return getErrorResponse(
+    //     'Course does not exist or duration is less than semester + 1'
+    //   )
 
     const checkStudentBalance = await prisma.student.findFirst({
       where: {
@@ -117,22 +117,32 @@ export async function POST(req: NextApiRequestExtended) {
       delete checkExistence.createdAt
       delete checkExistence.updatedAt
 
-      await prisma.assignCourse.create({
-        data: {
-          ...checkExistence,
-          studentId: checkExistence.studentId,
-          courseId: checkExistence.courseId,
-          semester: checkExistence.semester + 1,
-          createdById: req.user.id,
+      const checkExistenceInNextLevel = await prisma.course.findFirst({
+        where: {
+          id: `${checkExistence.courseId}`,
+          status: 'ACTIVE',
+          duration: { gte: Number(checkExistence.semester) + 1 },
         },
       })
+
+      if (checkExistenceInNextLevel) {
+        await prisma.assignCourse.create({
+          data: {
+            ...checkExistence,
+            studentId: checkExistence.studentId,
+            courseId: checkExistence.courseId,
+            semester: checkExistence.semester + 1,
+            createdById: req.user.id,
+          },
+        })
+      }
 
       await prisma.assignCourse.update({
         where: {
           id: `${id}`,
         },
         data: {
-          status: 'PASSED',
+          status: checkExistenceInNextLevel ? 'PASSED' : 'GRADUATED',
         },
       })
     })

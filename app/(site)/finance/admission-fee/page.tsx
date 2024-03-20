@@ -28,7 +28,7 @@ const Page = () => {
   const getApi = useApi({
     key: ['admissions'],
     method: 'GET',
-    url: `admission-fee?page=${page}&q=${q}&limit=${limit}`,
+    url: `admission-fee?page=${page}&q=${q}&limit=${limit}&status=ACTIVE`,
   })?.get
 
   const updateApi = useApi({
@@ -37,13 +37,19 @@ const Page = () => {
     url: `admission-fee`,
   })?.put
 
+  const deleteApi = useApi({
+    key: ['admissions'],
+    method: 'DELETE',
+    url: `admission-fee`,
+  })?.deleteObj
+
   useEffect(() => {
-    if (updateApi?.isSuccess) {
+    if (updateApi?.isSuccess || deleteApi?.isSuccess) {
       getApi?.refetch()
     }
 
     // eslint-disable-next-line
-  }, [updateApi?.isSuccess])
+  }, [updateApi?.isSuccess, deleteApi?.isSuccess])
 
   useEffect(() => {
     getApi?.refetch()
@@ -79,10 +85,14 @@ const Page = () => {
     })
   }
 
+  const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
+
   return (
     <>
       {updateApi?.isSuccess && <Message value={updateApi?.data?.message} />}
       {updateApi?.isError && <Message value={updateApi?.error} />}
+      {deleteApi?.isSuccess && <Message value={deleteApi?.data?.message} />}
+      {deleteApi?.isError && <Message value={deleteApi?.error} />}
 
       <TopLoadingBar isFetching={getApi?.isFetching || getApi?.isPending} />
 
@@ -97,6 +107,7 @@ const Page = () => {
             columns={columns({
               isPending: updateApi?.isPending || false,
               handleUpdate,
+              deleteHandler,
             })}
             setPage={setPage}
             setLimit={setLimit}

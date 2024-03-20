@@ -1,5 +1,4 @@
 import { FormatNumber } from '@/components/FormatNumber'
-import { Badge } from '@/components/ui/badge'
 import DateTime from '@/lib/dateTime'
 
 const getColor = (status: string) => {
@@ -12,6 +11,8 @@ const getColor = (status: string) => {
       return 'text-blue-500'
     case 'ENROLLMENT_FEE':
       return 'text-yellow-500'
+    case 'REFUND_TUITION_PAYMENT':
+      return 'text-red-500'
     default:
       return ''
   }

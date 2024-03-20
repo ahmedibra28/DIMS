@@ -4,6 +4,7 @@ import DateTime from '@/lib/dateTime'
 
 type Column = {
   isPending: boolean
+  deleteHandler: (item: any) => void
   handleUpdate: ({
     id,
     status,
@@ -13,7 +14,7 @@ type Column = {
   }) => void
 }
 
-export const columns = ({ isPending, handleUpdate }: Column) => {
+export const columns = ({ isPending, handleUpdate, deleteHandler }: Column) => {
   return [
     { header: 'Roll No', accessorKey: 'student.rollNo', active: true },
     { header: 'Name', accessorKey: 'student.name', active: true },
@@ -74,6 +75,7 @@ export const columns = ({ isPending, handleUpdate }: Column) => {
           isPending={isPending}
           original={original}
           handleUpdate={handleUpdate}
+          deleteHandler={deleteHandler}
         />
       ),
     },

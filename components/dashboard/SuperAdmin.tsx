@@ -137,7 +137,7 @@ export default function SuperAdmin() {
           className={
             !isCurrency
               ? ``
-              : label.includes('Unpaid')
+              : label.includes('Unpaid') || label.includes('Refunded')
                 ? 'text-red-500'
                 : 'text-green-500'
           }

@@ -57,3 +57,46 @@ export async function PUT(req: Request, { params }: Params) {
     return getErrorResponse(message, status)
   }
 }
+
+export async function DELETE(req: NextApiRequestExtended, { params }: Params) {
+  try {
+    await isAuth(req, params)
+
+    const transaction = await prisma.transaction.findUnique({
+      where: { id: params.id },
+    })
+
+    if (!transaction) return getErrorResponse('Transaction not found', 404)
+
+    await prisma.$transaction(async prisma => {
+      const transactionObj = await prisma.transaction.update({
+        where: { id: transaction.id, type: 'TUITION_PAYMENT' },
+        data: {
+          status: 'DELETED',
+          createdById: req.user.id,
+        },
+      })
+
+      transaction.id = undefined as any
+
+      const createNewTrans = await prisma.transaction.create({
+        data: {
+          ...transaction,
+          status: 'ACTIVE',
+          createdById: req.user.id,
+          type: 'REFUND_TUITION_PAYMENT',
+          createdAt: new Date(),
+        },
+      })
+
+      if (!createNewTrans || !transactionObj)
+        throw { status: 404, message: 'Transaction not removed' }
+    })
+
+    return NextResponse.json({
+      message: 'Transaction has been removed successfully',
+    })
+  } catch ({ status = 500, message }: any) {
+    return getErrorResponse(message, status)
+  }
+}

@@ -274,6 +274,14 @@ const clientPermissions = [
     sort: sort.report,
     description: 'Payment Transaction page',
   },
+  {
+    id: 'YTU-o6vjJk4AF6uM8kgxX',
+    name: 'Attendance Report',
+    path: '/report/attendance',
+    menu: 'report',
+    sort: sort.report,
+    description: 'Attendance page',
+  },
 ]
 
 const permissions = [
@@ -764,6 +772,13 @@ const permissions = [
     name: 'Finance',
     method: 'PUT',
   },
+  {
+    id: 'nUGiYb2gm4dcV4BBQb2Sk',
+    description: 'Admission Fee',
+    route: '/api/admission-fee/:id',
+    name: 'Finance',
+    method: 'DELETE',
+  },
 
   // Tuition Fee
   {
@@ -779,6 +794,13 @@ const permissions = [
     route: '/api/tuition-fee/:id',
     name: 'Finance',
     method: 'PUT',
+  },
+  {
+    id: 'mTnEuc5D84nwslmcsuqTS',
+    description: 'Tuition Fee',
+    route: '/api/tuition-fee/:id',
+    name: 'Finance',
+    method: 'DELETE',
   },
 
   // Lesson Plan
@@ -950,6 +972,13 @@ const permissions = [
     id: 'RrtIDdd7j5MKiRqthWRDF',
     description: 'Payment Transaction Reports',
     route: '/api/reports/payment-transactions',
+    name: 'Reports',
+    method: 'GET',
+  },
+  {
+    id: 'RrtIDdd7j5MKiRqthWRDM',
+    description: 'Attendance Reports',
+    route: '/api/reports/attendances',
     name: 'Reports',
     method: 'GET',
   },

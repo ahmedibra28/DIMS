@@ -7,6 +7,7 @@ import type {
   TransactionType as ITransactionType,
   PaymentMethod as IPaymentMethod,
   PaymentStatus as IPaymentStatus,
+  Shift as IShift,
 } from '@prisma/client'
 import DateTime from '@/lib/dateTime'
 
@@ -21,6 +22,8 @@ export async function GET(req: NextApiRequestExtended) {
     const paymentStatus = searchParams.get('paymentStatus')
     const course = searchParams.get('course')
     const student = searchParams.get('student')
+    const shift = searchParams.get('shift')
+    const semester = searchParams.get('semester')
 
     const query = {
       ...(paymentDate && {
@@ -49,6 +52,12 @@ export async function GET(req: NextApiRequestExtended) {
         student: {
           rollNo: student?.toUpperCase(),
         },
+      }),
+      ...(shift && {
+        shift: shift as IShift,
+      }),
+      ...(semester && {
+        semester: Number(semester),
       }),
     }
 

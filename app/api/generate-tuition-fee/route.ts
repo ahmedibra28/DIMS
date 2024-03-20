@@ -166,6 +166,7 @@ export async function POST(req: NextApiRequestExtended) {
                 student.shift
               } shift at ${new Date().toLocaleString()}`,
               paymentStatus: Number(amount) === 0 ? 'PAID' : 'UNPAID',
+              ...(Number(amount) === 0 && { paymentMethod: 'SYSTEM' }),
             },
           })
 

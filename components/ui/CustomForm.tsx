@@ -361,9 +361,6 @@ export const ActionButton = ({
   }) => void
 }) => {
   const { setDialogOpen } = useDataStore(state => state)
-  const {
-    userInfo: { role },
-  } = useUserInfoStore(state => state)
 
   return (
     <DropdownMenu>

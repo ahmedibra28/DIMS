@@ -34,7 +34,30 @@ export default async function getSubjectsByInstructor({
       },
     })
 
-    return subjects
+    const activeCourses: any[] = []
+
+    await Promise.all(
+      subjects.map(async item => {
+        const student = await prisma.assignCourse.findFirst({
+          where: {
+            semester: Number(item.semester),
+            shift: `${item.shift}`,
+            courseId: `${item.subject.course.id}`,
+            status: 'ACTIVE',
+          },
+          select: {
+            studentId: true,
+          },
+        })
+
+        activeCourses.push({
+          ...item,
+          hasStudents: Boolean(student?.studentId),
+        })
+      })
+    )
+
+    return activeCourses
   } catch (error: any) {
     throw new Error(error?.message)
   }
