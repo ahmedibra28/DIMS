@@ -348,6 +348,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               <TableBody>
                 {[
                   { label: 'Name', value: instructor?.name },
+                  { label: 'Roll No', value: instructor?.rollNo },
                   { label: 'Place of Birth', value: instructor?.placeOfBirth },
                   { label: 'Date of Birth', value: instructor?.dateOfBirth },
                   { label: 'Nationality', value: instructor?.nationality },

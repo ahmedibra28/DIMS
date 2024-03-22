@@ -151,7 +151,7 @@ export async function POST(req: NextApiRequestExtended) {
 
           await prisma.transaction.create({
             data: {
-              amount,
+              amount: Number(amount.toFixed(2)),
               discount,
               studentId: student.studentId,
               courseId: student.courseId,
@@ -176,7 +176,7 @@ export async function POST(req: NextApiRequestExtended) {
             },
             data: {
               balance: {
-                increment: amount,
+                increment: Number(amount.toFixed(2)),
               },
             },
           })

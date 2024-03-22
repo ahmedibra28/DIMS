@@ -43,8 +43,8 @@ export async function PUT(req: Request, { params }: Params) {
         data: {
           balance:
             status === 'PAID'
-              ? { decrement: transactionObj.amount }
-              : { increment: transactionObj.amount },
+              ? { decrement: Number(transactionObj.amount.toFixed(2)) }
+              : { increment: Number(transactionObj.amount.toFixed(2)) },
         },
       })
     })
@@ -74,6 +74,17 @@ export async function DELETE(req: NextApiRequestExtended, { params }: Params) {
         data: {
           status: 'DELETED',
           createdById: req.user.id,
+        },
+      })
+
+      await prisma.student.update({
+        where: { id: transactionObj.studentId },
+        data: {
+          ...(transactionObj.paymentStatus === 'UNPAID' && {
+            balance: {
+              decrement: Number(transactionObj.amount.toFixed(2)),
+            },
+          }),
         },
       })
 

@@ -96,12 +96,27 @@ const Profile = () => {
     // eslint-disable-next-line
   }, [updateApi?.isSuccess])
 
+  // {
+  //   id: 'MTbJ5LaJwd93YjU3liXS6',
+  //   name: 'Fatma Jeri',
+  //   email: 's@ahmedibra.com',
+  //   mobile: null,
+  //   image:
+  //     'https://ui-avatars.com/api/?uppercase=true&name=Fatma Jeri&background=random&color=random&size=128',
+  //   bio: null,
+  //   address: null,
+  //   instructorId: null,
+  //   studentId: '6VOs2P24zBuHNsPLBaABw'
+  // }
+
   useEffect(() => {
-    form.setValue('name', !getApi?.isPending ? getApi?.data?.name : '')
-    form.setValue('address', !getApi?.isPending ? getApi?.data?.address : '')
-    form.setValue('mobile', !getApi?.isPending ? getApi?.data?.mobile : '')
-    form.setValue('bio', !getApi?.isPending ? getApi?.data?.bio : '')
-    setFileLink(!getApi?.isPending ? [getApi?.data?.image] : [])
+    if (!getApi?.isPending) {
+      form.setValue('name', getApi?.data?.name)
+      form.setValue('address', getApi?.data?.address)
+      form.setValue('mobile', getApi?.data?.mobile)
+      form.setValue('bio', getApi?.data?.bio)
+      setFileLink([getApi?.data?.image] || [])
+    }
     // eslint-disable-next-line
   }, [getApi?.isPending, form.setValue])
 
@@ -129,7 +144,7 @@ const Profile = () => {
                 <div className='w-32'>
                   <Image
                     src={
-                      getApi?.data.image ||
+                      getApi?.data.image?.replaceAll(' ', '') ||
                       `https://ui-avatars.com/api/?uppercase=true&name=${getApi?.data?.name}`
                     }
                     alt='avatar'
@@ -197,7 +212,7 @@ const Profile = () => {
                   <div className='avatar mt-2 flex items-end justify-center text-center'>
                     <div className='mask mask-squircle w-12'>
                       <Image
-                        src={fileLink?.[0]}
+                        src={fileLink?.[0]?.replaceAll(' ', '')}
                         alt='avatar'
                         width={50}
                         height={50}

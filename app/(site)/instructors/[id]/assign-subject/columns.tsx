@@ -40,7 +40,6 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
           isPending={isPending}
           deleteHandler={deleteHandler}
           original={original}
-          source='assign-subject'
         />
       ),
     },

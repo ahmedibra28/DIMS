@@ -115,7 +115,7 @@ model School {
 model Course {
   id           String   @id @default(dbgenerated("nanoid()")) @db.VarChar(21)
   name         String
-  price        Float    @default(0)
+  price        Int      @default(0)
   duration     Int
   examinations String[]
   certificate  String?
@@ -182,7 +182,7 @@ model Student {
   kiswahiliLanguage LanguageLevel
   image             String?
   note              String?
-  balance           Float         @default(0)
+  balance           Int           @default(0)
   status            Status        @default(ACTIVE)
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
@@ -250,7 +250,7 @@ model AssignCourse {
   id        String   @id @default(dbgenerated("nanoid()")) @db.VarChar(21)
   semester  Int
   shift     Shift
-  discount  Float    @default(0)
+  discount  Int      @default(0)
   status    Status   @default(ACTIVE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -327,8 +327,8 @@ model Examination {
   id             String   @id @default(dbgenerated("nanoid()")) @db.VarChar(21)
   examination    String
   semester       Int
-  theoryMarks    Float
-  practicalMarks Float
+  theoryMarks    Int
+  practicalMarks Int
   status         Status   @default(ACTIVE)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -382,8 +382,8 @@ model Transaction {
   type          TransactionType
   semester      Int?
   shift         Shift?
-  amount        Float           @default(0)
-  discount      Float           @default(0)
+  amount        Int             @default(0)
+  discount      Int             @default(0)
   reference     String?
   description   String?
   status        Status          @default(ACTIVE)
