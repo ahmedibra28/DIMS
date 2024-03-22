@@ -12,9 +12,15 @@ type Column = {
     id: string
     status: 'PAID' | 'UNPAID'
   }) => void
+  printHandler: (item: any) => void
 }
 
-export const columns = ({ isPending, handleUpdate, deleteHandler }: Column) => {
+export const columns = ({
+  isPending,
+  handleUpdate,
+  deleteHandler,
+  printHandler,
+}: Column) => {
   return [
     { header: 'Roll No', accessorKey: 'student.rollNo', active: true },
     { header: 'Name', accessorKey: 'student.name', active: true },
@@ -76,6 +82,7 @@ export const columns = ({ isPending, handleUpdate, deleteHandler }: Column) => {
           original={original}
           handleUpdate={handleUpdate}
           deleteHandler={deleteHandler}
+          printHandler={printHandler}
         />
       ),
     },

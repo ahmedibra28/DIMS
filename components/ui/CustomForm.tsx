@@ -18,6 +18,7 @@ import {
   FaEllipsis,
   FaFilePen,
   FaPersonArrowUpFromLine,
+  FaPrint,
   FaQuestion,
   FaSort,
   FaSpinner,
@@ -46,8 +47,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { AlertDialog, AlertDialogTrigger } from '@/components/ui/alert-dialog'
@@ -66,7 +65,6 @@ import { X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Command as CommandPrimitive } from 'cmdk'
 import Link from 'next/link'
-import useUserInfoStore from '@/zustand/userStore'
 
 type Prop = Record<'value' | 'label', string>
 
@@ -342,6 +340,7 @@ export const ActionButton = ({
   upgradeClass,
   navigateToExam,
   source,
+  printHandler,
 }: {
   editHandler?: (item: any) => void
   isPending?: boolean
@@ -352,6 +351,7 @@ export const ActionButton = ({
   upgradeClass?: (id: string) => void
   navigateToExam?: boolean
   source?: string
+  printHandler?: (item: any) => void
   handleUpdate?: ({
     id,
     status,
@@ -377,6 +377,18 @@ export const ActionButton = ({
             onClick={() => upgradeClass(original.id)}
           >
             <FaPersonArrowUpFromLine /> <span className='mx-1'> Upgrade</span>
+          </DropdownMenuItem>
+        )}
+
+        {printHandler && original?.paymentStatus === 'PAID' && (
+          <DropdownMenuItem
+            disabled={isPending}
+            onClick={() => {
+              printHandler(original)
+              setDialogOpen(true)
+            }}
+          >
+            <FaPrint /> <span className='mx-1'> Print</span>
           </DropdownMenuItem>
         )}
 

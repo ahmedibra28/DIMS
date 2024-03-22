@@ -9,10 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { FormButton } from '../ui/CustomForm'
+import { FormButton } from '@/components/ui/CustomForm'
 import { FaDollarSign, FaFile, FaPaperclip, FaPrint } from 'react-icons/fa6'
 
-import PrintDialog from '../PrintDialog'
+import PrintDialog from '@/components/PrintDialog'
 import useDataStore from '@/zustand/dataStore'
 import Image from 'next/image'
 import DateTime from '@/lib/dateTime'

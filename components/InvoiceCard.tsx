@@ -29,6 +29,8 @@ interface TransactionProp {
 }
 
 export const InvoiceCard = ({ data }: { data?: TransactionProp }) => {
+  const isTuition = data?.type === 'TUITION_PAYMENT'
+
   return (
     <Card>
       <CardHeader>
@@ -83,24 +85,42 @@ export const InvoiceCard = ({ data }: { data?: TransactionProp }) => {
             </span>
             <span className='text-center'>
               Course:
-              <span className='font-bold'> {data?.course?.name}</span>
+              <span className='ml-1 font-bold'>
+                {isTuition ? (
+                  <>
+                    {data?.course?.name} ({data?.semester})
+                  </>
+                ) : (
+                  <span className='text-red-500'>No Available</span>
+                )}
+              </span>
             </span>
             <span className='text-end'>
               Shift:
-              <span className='font-bold'> {data?.shift}</span>
+              <span className='ml-1 font-bold'>
+                {isTuition ? (
+                  data?.shift
+                ) : (
+                  <span className='text-red-500'>No Available</span>
+                )}
+              </span>
             </span>
           </div>
         </div>
         <Table className='my-5'>
           <TableHeader>
             <TableRow className='bg-primary hover:bg-primary'>
-              <TableHead className='text-white'>Course</TableHead>
+              <TableHead className='text-white'>
+                {isTuition ? 'Course' : 'Type'}
+              </TableHead>
               <TableHead className='text-white'>Fee</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell>{data?.course?.name}</TableCell>
+              <TableCell>
+                {isTuition ? data?.course?.name : 'Enrollment'}
+              </TableCell>
               <TableCell>
                 <FormatNumber value={data?.amount || 0} />
               </TableCell>

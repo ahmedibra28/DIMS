@@ -10,11 +10,17 @@ import Spinner from '@/components/Spinner'
 import RTable from '@/components/RTable'
 import { TopLoadingBar } from '@/components/TopLoadingBar'
 import { columns } from './columns'
+import PrintDialog from '@/components/PrintDialog'
+import { InvoiceCard } from '@/components/InvoiceCard'
+import { TransactionProp } from '@/types'
+import useDataStore from '@/zustand/dataStore'
 
 const Page = () => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(50)
   const [q, setQ] = useState('')
+  const [printItem, setPrintItem] = React.useState<TransactionProp>()
+  const { dialogOpen } = useDataStore(state => state)
 
   const path = useAuthorization()
   const router = useRouter()
@@ -66,6 +72,12 @@ const Page = () => {
     // eslint-disable-next-line
   }, [q])
 
+  React.useEffect(() => {
+    if (!dialogOpen) {
+      setPrintItem(undefined)
+    }
+  }, [dialogOpen])
+
   const searchHandler = (e: FormEvent) => {
     e.preventDefault()
     getApi?.refetch()
@@ -87,6 +99,10 @@ const Page = () => {
 
   const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
 
+  const printHandler = (item: TransactionProp) => {
+    setPrintItem(item)
+  }
+
   return (
     <>
       {updateApi?.isSuccess && <Message value={updateApi?.data?.message} />}
@@ -95,6 +111,15 @@ const Page = () => {
       {deleteApi?.isError && <Message value={deleteApi?.error} />}
 
       <TopLoadingBar isFetching={getApi?.isFetching || getApi?.isPending} />
+
+      {printItem && (
+        <PrintDialog
+          data={<InvoiceCard data={printItem} />}
+          label='Invoice'
+          width='md:min-w-[800px]'
+          size='A4'
+        />
+      )}
 
       {getApi?.isPending ? (
         <Spinner />
@@ -108,6 +133,7 @@ const Page = () => {
               isPending: updateApi?.isPending || false,
               handleUpdate,
               deleteHandler,
+              printHandler,
             })}
             setPage={setPage}
             setLimit={setLimit}
