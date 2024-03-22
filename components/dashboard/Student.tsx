@@ -331,7 +331,13 @@ export default function Student() {
             {transactions?.map((item, i: number) => (
               <TableRow key={i}>
                 <TableCell className='px-2 py-1 text-xs'>
-                  {item?.course?.name} ({item?.semester})
+                  {item?.course?.name ? (
+                    <>
+                      {item?.course?.name} ({item?.semester})
+                    </>
+                  ) : (
+                    'Enrollment Fee'
+                  )}
                 </TableCell>
                 <TableCell className='px-2 py-1 text-xs'>
                   <FormatNumber value={item?.amount} />

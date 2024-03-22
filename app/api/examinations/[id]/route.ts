@@ -148,13 +148,41 @@ export async function PUT(req: Request, { params }: Params) {
 
     if (!subjectCheckMarks) return getErrorResponse('Subject does not exist')
 
-    if (subjectCheckMarks?.theoryMarks < Number(theoryMarks))
+    const previousExam =
+      subjectId &&
+      semester &&
+      (await prisma.examination.aggregate({
+        where: {
+          semester: parseInt(semester),
+          subjectId,
+          assignCourse: {
+            id: assignCourseId,
+            studentId,
+          },
+          id: { not: params.id },
+        },
+        _sum: {
+          theoryMarks: true,
+          practicalMarks: true,
+        },
+      }))
+
+    const prevTotalTheoryMarks = previousExam?._sum.theoryMarks || 0
+    const prevTotalPracticalMarks = previousExam?._sum.practicalMarks || 0
+
+    if (
+      subjectCheckMarks.theoryMarks - prevTotalTheoryMarks <
+      Number(theoryMarks)
+    )
       return getErrorResponse(
-        `Theory marks cannot be greater than ${subjectCheckMarks?.theoryMarks}`
+        `Theory marks cannot be greater than ${subjectCheckMarks.theoryMarks - prevTotalTheoryMarks}`
       )
-    if (subjectCheckMarks?.practicalMarks < Number(practicalMarks))
+    if (
+      subjectCheckMarks.practicalMarks - prevTotalPracticalMarks <
+      Number(practicalMarks)
+    )
       return getErrorResponse(
-        `Practical marks cannot be greater than ${subjectCheckMarks?.practicalMarks}`
+        `Practical marks cannot be greater than ${subjectCheckMarks.practicalMarks - prevTotalPracticalMarks}`
       )
 
     const examinationObj = await prisma.examination.update({

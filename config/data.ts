@@ -282,6 +282,14 @@ const clientPermissions = [
     sort: sort.report,
     description: 'Attendance page',
   },
+  {
+    id: 'YTUSo6vjJk4AF6uM8kgxX',
+    name: 'Transcript Report',
+    path: '/report/transcript',
+    menu: 'report',
+    sort: sort.report,
+    description: 'Transcript page',
+  },
 ]
 
 const permissions = [
@@ -979,6 +987,13 @@ const permissions = [
     id: 'RrtIDdd7j5MKiRqthWRDM',
     description: 'Attendance Reports',
     route: '/api/reports/attendances',
+    name: 'Reports',
+    method: 'GET',
+  },
+  {
+    id: 'RrtIDdd785MKiRqthWRDM',
+    description: 'Transcript Reports',
+    route: '/api/reports/transcripts',
     name: 'Reports',
     method: 'GET',
   },

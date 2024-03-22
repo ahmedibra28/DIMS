@@ -1,3 +1,5 @@
+import { Sex as ISex } from '@prisma/client'
+
 export interface NoticeProp {
   id: string
   title: string
@@ -113,4 +115,29 @@ export interface UnpaidStudentsProp {
   name: string
   balance: number
   mobile: number
+}
+
+export interface ITranscript {
+  id: string
+  semester: number
+  theoryMarks: number
+  practicalMarks: number
+  subject: {
+    id: string
+    name: string
+    theoryMarks: number
+    practicalMarks: number
+  }
+  assignCourse: {
+    student: {
+      rollNo: string
+      name: string
+      image: string | null
+      sex: string
+    }
+    course: {
+      name: string
+    }
+    createdAt: Date
+  }
 }
