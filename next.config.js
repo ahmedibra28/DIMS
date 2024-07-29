@@ -21,6 +21,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'media.sahalbook.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'sahalbook.sgp1.cdn.digitaloceanspaces.com',
+      }
     ],
   },
 }
