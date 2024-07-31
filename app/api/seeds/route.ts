@@ -1,4 +1,10 @@
-import { clientPermissions, permissions, roles, users } from '@/config/data'
+import {
+  clientPermissions,
+  permissions,
+  roles,
+  users,
+  sponsors,
+} from '@/config/data'
 
 import { encryptPassword, getErrorResponse } from '@/lib/helpers'
 import { NextResponse } from 'next/server'
@@ -34,6 +40,7 @@ export async function GET(req: Request) {
       await prisma.permission.deleteMany({})
       await prisma.clientPermission.deleteMany({})
       await prisma.role.deleteMany({})
+      await prisma.sponsor.deleteMany({})
     }
 
     // Create roles or update if exists
@@ -70,6 +77,21 @@ export async function GET(req: Request) {
         roleId: roles[0].id,
       },
       where: { id: users.id },
+    })
+
+    // Create sponsors or update if exists
+    await prisma.sponsor.upsert({
+      where: { id: sponsors.id },
+      create: {
+        ...sponsors,
+        status: 'ACTIVE',
+        createdById: users.id,
+      },
+      update: {
+        ...sponsors,
+        status: 'ACTIVE',
+        createdById: users.id,
+      },
     })
 
     // Create permissions
@@ -142,6 +164,7 @@ export async function GET(req: Request) {
       permissions: await prisma.permission.count({}),
       clientPermissions: await prisma.clientPermission.count({}),
       roles: await prisma.role.count({}),
+      sponsors: await prisma.sponsor.count({}),
     })
   } catch ({ status = 500, message }: any) {
     return getErrorResponse(message, status)

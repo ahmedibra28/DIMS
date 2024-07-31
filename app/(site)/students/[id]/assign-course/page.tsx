@@ -12,6 +12,7 @@ import Spinner from '@/components/Spinner'
 import type {
   AssignCourse as IAssignCourse,
   Student as IStudent,
+  Sponsor as ISponsor,
 } from '@prisma/client'
 import RTable from '@/components/RTable'
 
@@ -23,6 +24,7 @@ import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
 import getCoursesById from '@/actions/getCoursesById'
+import getSponsorsById from '@/actions/getSponsorsById'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 
@@ -35,6 +37,7 @@ const FormSchema = z.object({
   discount: z.string().min(1),
   status: z.string().min(1),
   courseId: z.string().min(1),
+  sponsorId: z.string().optional(),
 })
 
 const Page = ({ params }: { params: { id: string } }) => {
@@ -104,6 +107,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       discount: '',
       status: '',
       courseId: '',
+      sponsorId: '',
     },
   })
 
@@ -155,6 +159,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     form.setValue('discount', String(item?.discount))
     form.setValue('status', item?.status)
     form.setValue('courseId', item?.courseId)
+    item?.sponsorId && form.setValue('sponsorId', item?.sponsorId)
   }
 
   const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
@@ -239,6 +244,16 @@ const Page = ({ params }: { params: { id: string } }) => {
           placeholder='Shift'
           fieldType='command'
           data={shift}
+        />
+        <CustomFormField
+          form={form}
+          name='sponsorId'
+          label='Sponsor'
+          placeholder='Sponsor'
+          fieldType='command'
+          data={[]}
+          key='sponsors'
+          url='sponsors?page=1&limit=10&status=ACTIVE'
         />
 
         <CustomFormField

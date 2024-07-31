@@ -33,7 +33,7 @@ export default async function getCounts() {
       where: { status: 'ACTIVE' },
     })
 
-    const graduatedStudents = await prisma.student.count({
+    const graduatedStudents = await prisma.assignCourse.count({
       where: { status: 'GRADUATED' },
     })
 

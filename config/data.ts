@@ -63,6 +63,12 @@ const profile = {
   bio: 'Full Stack Developer',
 }
 
+const sponsors = {
+  id: 'hMXCyzI2MLXNI6tQLsU0i',
+  name: 'SaMTEC',
+  status: 'ACTIVE',
+}
+
 const sort = {
   hidden: 0,
   profile: 1,
@@ -129,6 +135,14 @@ const clientPermissions = [
     menu: 'admin',
     sort: sort.admin,
     description: 'Database page',
+  },
+  {
+    id: 'HnCMgsT54sLTRYlJGaOC3',
+    name: 'Sponsor',
+    path: '/setting/sponsors',
+    menu: 'setting',
+    sort: sort.setting,
+    description: 'Sponsor page',
   },
   {
     id: 'HnCMgsT54kcTRYlJGaOC3',
@@ -464,6 +478,36 @@ const permissions = [
     route: '/api/databases/backup',
     name: 'Backup database',
     method: 'POST',
+  },
+
+  // Sponsor
+  {
+    id: 'tXSvE55HtkU447Cyd0oHn',
+    description: 'Sponsor',
+    route: '/api/sponsors',
+    name: 'Sponsor',
+    method: 'GET',
+  },
+  {
+    id: 'Pd7RyskbRlOC5I3kdZwwr',
+    description: 'Sponsor',
+    route: '/api/sponsors',
+    name: 'Sponsor',
+    method: 'POST',
+  },
+  {
+    id: 'Mm90OR1e-XU0gWlvmYEqc',
+    description: 'Sponsor',
+    route: '/api/sponsors/:id',
+    name: 'Sponsor',
+    method: 'PUT',
+  },
+  {
+    id: 'zYVlmaD80-wy4dBElWGOT',
+    description: 'Sponsor',
+    route: '/api/sponsors/:id',
+    name: 'Sponsor',
+    method: 'DELETE',
   },
 
   // School
@@ -999,4 +1043,4 @@ const permissions = [
   },
 ]
 
-export { roles, users, profile, permissions, clientPermissions }
+export { roles, users, profile, permissions, clientPermissions, sponsors }

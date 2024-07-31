@@ -46,6 +46,12 @@ export async function GET(req: Request, { params }: Params) {
               name: true,
             },
           },
+          sponsor: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           student: {
             select: {
               id: true,
@@ -80,8 +86,15 @@ export async function PUT(req: Request, { params }: Params) {
   try {
     await isAuth(req, params)
 
-    const { semester, shift, discount, status, studentId, courseId } =
-      await req.json()
+    const {
+      semester,
+      shift,
+      discount,
+      status,
+      studentId,
+      courseId,
+      sponsorId,
+    } = await req.json()
 
     if (Number(discount) > 100 || Number(discount) < 0)
       return getErrorResponse('Discount must be between 0 and 100')
@@ -134,6 +147,17 @@ export async function PUT(req: Request, { params }: Params) {
         'Course with the selected semester does not exist or is not active'
       )
 
+    if (sponsorId) {
+      const checkSponsor = await prisma.sponsor.findFirst({
+        where: {
+          id: `${sponsorId}`,
+          status: 'ACTIVE',
+        },
+      })
+      if (!checkSponsor)
+        return getErrorResponse('Sponsor does not exist or is not active')
+    }
+
     const checkCourseStatus = await prisma.assignCourse.findFirst({
       where: {
         courseId: `${courseId}`,
@@ -153,6 +177,7 @@ export async function PUT(req: Request, { params }: Params) {
         discount: parseFloat(discount),
         status,
         courseId,
+        ...(sponsorId && { sponsorId }),
         studentId,
       },
     })

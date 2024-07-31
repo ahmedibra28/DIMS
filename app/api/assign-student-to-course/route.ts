@@ -40,6 +40,12 @@ export async function GET(req: Request) {
               name: true,
             },
           },
+          sponsor: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           student: {
             select: {
               id: true,
@@ -74,8 +80,15 @@ export async function POST(req: NextApiRequestExtended) {
   try {
     await isAuth(req)
 
-    const { semester, shift, discount, status, studentId, courseId } =
-      await req.json()
+    const {
+      semester,
+      shift,
+      discount,
+      status,
+      studentId,
+      courseId,
+      sponsorId,
+    } = await req.json()
 
     if (Number(discount) > 100 || Number(discount) < 0)
       return getErrorResponse('Discount must be between 0 and 100')
@@ -119,6 +132,17 @@ export async function POST(req: NextApiRequestExtended) {
         'Course with the selected semester does not exist or is not active'
       )
 
+    if (sponsorId) {
+      const checkSponsor = await prisma.sponsor.findFirst({
+        where: {
+          id: `${sponsorId}`,
+          status: 'ACTIVE',
+        },
+      })
+      if (!checkSponsor)
+        return getErrorResponse('Sponsor does not exist or is not active')
+    }
+
     const checkCourseStatus = await prisma.assignCourse.findFirst({
       where: {
         courseId: `${courseId}`,
@@ -136,6 +160,7 @@ export async function POST(req: NextApiRequestExtended) {
         discount: parseFloat(discount),
         status,
         courseId,
+        ...(sponsorId && { sponsorId }),
         studentId,
         createdById: req.user.id,
       },
