@@ -123,6 +123,7 @@ model Sponsor {
   assignCourses AssignCourse[]
   createdBy     User           @relation(fields: [createdById], references: [id], onDelete: Restrict)
   createdById   String
+  transactions  Transaction[]
 
   @@map("sponsors")
 }
@@ -410,12 +411,14 @@ model Transaction {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  createdBy   User    @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Restrict)
   createdById String
-  student     Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Restrict)
   studentId   String
-  course      Course? @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  course      Course?  @relation(fields: [courseId], references: [id], onDelete: Restrict)
   courseId    String?
+  sponsor     Sponsor? @relation(fields: [sponsorId], references: [id], onDelete: Restrict)
+  sponsorId   String?
 
   @@map("transactions")
 }

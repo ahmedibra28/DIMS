@@ -29,6 +29,10 @@ export default async function getCounts() {
       where: { status: 'ACTIVE' },
     })
 
+    const sponsors = await prisma.sponsor.count({
+      where: { status: 'ACTIVE' },
+    })
+
     const activeStudents = await prisma.student.count({
       where: { status: 'ACTIVE' },
     })
@@ -178,8 +182,8 @@ export default async function getCounts() {
         isCurrency: false,
       },
       {
-        label: 'Dropout Students',
-        count: dropOutStudents || 0,
+        label: 'Sponsors',
+        count: sponsors || 0,
         isCurrency: false,
       },
       {

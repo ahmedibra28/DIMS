@@ -11,6 +11,11 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
   return [
     { header: 'Name', accessorKey: 'name', active: true },
     {
+      header: 'Active Courses',
+      accessorKey: 'totalActiveCourses',
+      active: true,
+    },
+    {
       header: 'Status',
       accessorKey: 'status',
       active: true,

@@ -10,6 +10,9 @@ export async function GET(req: NextApiRequestExtended) {
     const activeCourses = await prisma.assignCourse.groupBy({
       where: {
         status: 'ACTIVE',
+        student: {
+          status: 'ACTIVE',
+        },
       },
       by: ['courseId', 'semester', 'shift'],
       _count: {
@@ -20,54 +23,30 @@ export async function GET(req: NextApiRequestExtended) {
       },
     })
 
-    const data = await Promise.all(
-      activeCourses.map(async course => {
-        const assignCourse = await prisma.assignCourse.findFirst({
-          where: {
-            courseId: course.courseId,
-            semester: course.semester,
-            shift: course.shift,
-            status: 'ACTIVE',
-            student: {
-              status: 'ACTIVE',
-            },
-          },
-          select: {
-            course: {
-              select: {
-                id: true,
-                name: true,
-                price: true,
-              },
-            },
-          },
-        })
+    const courses = await prisma.course.findMany({
+      where: {
+        id: { in: activeCourses.map(s => s.courseId) },
+      },
+    })
 
-        if (!assignCourse) return course
+    const detailedSummary = activeCourses.map(item => {
+      const course = courses.find(c => c.id === item.courseId)
+      return {
+        course: {
+          id: course?.id,
+          name: course?.name,
+        },
+        shift: item.shift,
+        semester: item.semester,
+        students: item._count.studentId,
+        discount:
+          Number(course?.price || 0) * (Number(item._sum.discount || 0) / 100),
+        amount: Number(course?.price || 0) * Number(item._count.studentId || 0),
+      }
+    })
 
-        const discount =
-          assignCourse.course.price * (Number(course._sum.discount || 0) / 100)
-
-        const amount =
-          assignCourse.course.price * Number(course._count.studentId || 0)
-
-        const students = course._count.studentId
-
-        return {
-          course: {
-            id: assignCourse.course.id,
-            name: assignCourse.course.name,
-          },
-          shift: course.shift,
-          semester: course.semester,
-          discount,
-          amount,
-          students,
-        }
-      })
-    )
     return NextResponse.json({
-      data,
+      data: detailedSummary,
       message: 'Tuition fee generated successfully',
     })
   } catch ({ status = 500, message }: any) {
@@ -88,7 +67,7 @@ export async function POST(req: NextApiRequestExtended) {
       where: {
         courseId,
         semester: parseInt(semester),
-        ...(shift && { shift }),
+        shift,
         student: {
           status: 'ACTIVE',
         },

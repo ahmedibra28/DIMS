@@ -40,6 +40,21 @@ export async function GET(req: Request) {
 
     const pages = Math.ceil(total / pageSize)
 
+    const sponsorsWithTotalStudents = await Promise.all(
+      result.map(async sponsor => {
+        const totalStudents = await prisma.assignCourse.count({
+          where: {
+            sponsorId: sponsor.id,
+            status: 'ACTIVE',
+          },
+        })
+        return {
+          ...sponsor,
+          totalActiveCourses: totalStudents,
+        }
+      })
+    )
+
     return NextResponse.json({
       startIndex: skip + 1,
       endIndex: skip + result.length,
@@ -47,7 +62,7 @@ export async function GET(req: Request) {
       page,
       pages,
       total,
-      data: result,
+      data: sponsorsWithTotalStudents,
     })
   } catch ({ status = 500, message }: any) {
     return getErrorResponse(message, status)
