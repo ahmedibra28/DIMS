@@ -281,7 +281,7 @@ const clientPermissions = [
     description: 'Attendance page',
   },
   {
-    id: 'YTU-o6vjJk4A-6uM8kgxX',
+    id: 'YTU-o6vjJk4A-6uM8kgxS',
     name: 'Payment Transaction',
     path: '/report/payment-transaction',
     menu: 'report',
@@ -303,6 +303,14 @@ const clientPermissions = [
     menu: 'report',
     sort: sort.report,
     description: 'Transcript page',
+  },
+  {
+    id: 'YTU-o6vjJk4A-6uM8kgxX',
+    name: 'Temporary Transaction',
+    path: '/report/temporary-transaction',
+    menu: 'report',
+    sort: sort.report,
+    description: 'Temporary Transaction page',
   },
 ]
 
@@ -1047,6 +1055,29 @@ const permissions = [
     route: '/api/reports/transcripts',
     name: 'Reports',
     method: 'GET',
+  },
+
+  // Temporary transaction
+  {
+    id: 'RrtIDdd7j6MKiRqthWRDm',
+    description: 'Temporary Transaction',
+    route: '/api/reports/temporary-transactions',
+    name: 'Reports',
+    method: 'GET',
+  },
+  {
+    id: 'RrtIDdd7j7MKiRqthWRDm',
+    description: 'Temporary Transaction',
+    route: '/api/reports/temporary-transactions/:id',
+    name: 'Reports',
+    method: 'PUT',
+  },
+  {
+    id: 'RrtIDdd7j7MFiRqthWRDm',
+    description: 'Temporary Transaction',
+    route: '/api/reports/temporary-transactions/:id',
+    name: 'Reports',
+    method: 'DELETE',
   },
 ]
 

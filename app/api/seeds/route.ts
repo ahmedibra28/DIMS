@@ -106,6 +106,8 @@ export async function GET(req: Request) {
       )
     )
 
+    console.log('-------1')
+
     // Create client permissions
     await Promise.all(
       clientPermissions?.map(
@@ -117,6 +119,8 @@ export async function GET(req: Request) {
           })
       )
     )
+
+    console.log('-------2')
 
     // Create roles or update if exists
     await Promise.all(
