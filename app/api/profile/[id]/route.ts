@@ -36,7 +36,7 @@ export async function PUT(req: Request, { params }: Params) {
       data: {
         ...(password && { password: await encryptPassword({ password }) }),
         name: name || object.name,
-        mobile: mobile || object.mobile,
+        mobile: Number(mobile || object.mobile),
         address: address || object.address,
         image: image || object.image,
         bio: bio || object.bio,

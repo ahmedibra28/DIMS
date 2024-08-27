@@ -46,6 +46,8 @@ import {
 } from '@/types'
 import getAttendanceByStudentId from '@/actions/getAttendanceByStudentId'
 import Skeleton from '@/components/dashboard/Skeleton'
+import useApi from '@/hooks/useApi'
+import Message from '../Message'
 
 export default function Student() {
   const { setDialogOpen, dialogOpen } = useDataStore(state => state)
@@ -68,6 +70,12 @@ export default function Student() {
   const [isPendingTrans, startTransitionTrans] = React.useTransition()
   const [isPendingResource, startTransitionResource] = React.useTransition()
   const [isPendingAtt, startTransitionAtt] = React.useTransition()
+
+  const postApi = useApi({
+    key: ['students-pay-now'],
+    method: 'POST',
+    url: `students/pay`,
+  })?.post
 
   React.useEffect(() => {
     if (!dialogOpen) {
@@ -136,6 +144,10 @@ export default function Student() {
 
     // eslint-disable-next-line
   }, [])
+
+  const handleOnlinePayment = (item: TransactionProp) => {
+    postApi?.mutateAsync({ transactionId: item.id })
+  }
 
   const ClearanceCard = ({ data }: { data?: SubjectProp }) => {
     return (
@@ -362,10 +374,20 @@ export default function Student() {
                 <TableCell className='flex items-center gap-x-2 py-1 text-xs'>
                   {item?.paymentStatus === 'UNPAID' ? (
                     <Badge
-                      onClick={() => console.log('online payment popup...')}
+                      onClick={() =>
+                        postApi?.isPending
+                          ? console.log('payment in progress')
+                          : handleOnlinePayment(item)
+                      }
                       className='flex cursor-pointer items-center rounded text-white'
                     >
-                      <FaDollarSign className='text-lg' /> Pay
+                      {postApi?.isPending ? (
+                        'loading...'
+                      ) : (
+                        <>
+                          <FaDollarSign className='text-lg' /> Pay
+                        </>
+                      )}
                     </Badge>
                   ) : (
                     <Badge
@@ -480,43 +502,47 @@ export default function Student() {
   )
 
   return (
-    <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
-      {item && (
-        <PrintDialog
-          data={<ClearanceCard data={item} />}
-          label='Clearance Card'
-        />
-      )}
-      {printItem && (
-        <PrintDialog
-          data={<InvoiceCard data={printItem} />}
-          label='Invoice'
-          width='md:min-w-[800px]'
-          size='A4'
-        />
-      )}
-      {isPendingTrans ? (
-        <Skeleton />
-      ) : (
-        transactions?.length > 0 && transactionCard()
-      )}
-      {isPendingNote ? <Skeleton /> : notes?.length > 0 && noticeCard()}
-      {isPendingResource ? (
-        <Skeleton />
-      ) : (
-        resources?.length > 0 && resourceCard()
-      )}
-      {isPendingSubject ? (
-        <Skeleton />
-      ) : (
-        subject?.length > 0 && clearanceCardCard()
-      )}
-      {isPendingExam ? <Skeleton /> : exam?.length > 0 && examCard()}
-      {isPendingAtt ? (
-        <Skeleton />
-      ) : (
-        attendances?.length > 0 && attendanceCard()
-      )}
-    </div>
+    <>
+      {postApi?.isSuccess && <Message value={postApi?.data?.message} />}
+      {postApi?.isError && <Message value={postApi?.error} />}
+      <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+        {item && (
+          <PrintDialog
+            data={<ClearanceCard data={item} />}
+            label='Clearance Card'
+          />
+        )}
+        {printItem && (
+          <PrintDialog
+            data={<InvoiceCard data={printItem} />}
+            label='Invoice'
+            width='md:min-w-[800px]'
+            size='A4'
+          />
+        )}
+        {isPendingTrans ? (
+          <Skeleton />
+        ) : (
+          transactions?.length > 0 && transactionCard()
+        )}
+        {isPendingNote ? <Skeleton /> : notes?.length > 0 && noticeCard()}
+        {isPendingResource ? (
+          <Skeleton />
+        ) : (
+          resources?.length > 0 && resourceCard()
+        )}
+        {isPendingSubject ? (
+          <Skeleton />
+        ) : (
+          subject?.length > 0 && clearanceCardCard()
+        )}
+        {isPendingExam ? <Skeleton /> : exam?.length > 0 && examCard()}
+        {isPendingAtt ? (
+          <Skeleton />
+        ) : (
+          attendances?.length > 0 && attendanceCard()
+        )}
+      </div>
+    </>
   )
 }

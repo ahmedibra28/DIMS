@@ -636,6 +636,13 @@ const permissions = [
     name: 'Student',
     method: 'GET',
   },
+  {
+    id: 'gob4iLXnCtTi1yvU9F9-A',
+    description: 'Student pay with EVC Wallet',
+    route: '/api/students/pay',
+    name: 'Student',
+    method: 'POST',
+  },
 
   // Instructor
   {

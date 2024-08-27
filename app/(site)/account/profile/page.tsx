@@ -44,7 +44,7 @@ const Profile = () => {
     .object({
       name: z.string(),
       address: z.string(),
-      mobile: z.number(),
+      mobile: z.string(),
       bio: z.string(),
       password: z.string().refine(val => val.length === 0 || val.length > 6, {
         message: "Password can't be less than 6 characters",
@@ -65,7 +65,7 @@ const Profile = () => {
     defaultValues: {
       name: '',
       address: '',
-      mobile: 0,
+      mobile: '',
       bio: '',
       password: '',
       confirmPassword: '',
@@ -115,6 +115,7 @@ const Profile = () => {
       form.setValue('address', getApi?.data?.address)
       form.setValue('mobile', getApi?.data?.mobile)
       form.setValue('bio', getApi?.data?.bio)
+      // @ts-ignore
       setFileLink([getApi?.data?.image] || [])
     }
     // eslint-disable-next-line

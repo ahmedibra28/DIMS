@@ -25,6 +25,7 @@ declare global {
       role: string
       instructorId?: string
       studentId?: string
+      mobile?: number
     }
     url: string
     method: 'GET' | 'POST' | 'DELETE' | 'PUT'

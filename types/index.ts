@@ -1,5 +1,3 @@
-import { Sex as ISex } from '@prisma/client'
-
 export interface NoticeProp {
   id: string
   title: string
@@ -140,4 +138,16 @@ export interface ITranscript {
     }
     createdAt: Date
   }
+}
+
+export interface WaafiPayResponse {
+  id: string
+  timestamp: string
+  transactionId: '40368106'
+  referenceId: string
+  amount: string
+  mobile: string
+  customReference: string
+  description: string
+  message: string
 }
