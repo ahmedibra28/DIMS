@@ -142,7 +142,7 @@ const Page = () => {
             setQ={setQ}
             searchHandler={searchHandler}
             caption='Tuitions List'
-            searchType='date'
+            searchType='text'
           />
         </div>
       )}

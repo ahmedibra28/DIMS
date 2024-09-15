@@ -20,7 +20,7 @@ export async function GET(req: NextApiRequestExtended) {
         student: student,
       }),
       ...(rollNo && {
-        rollNo: rollNo,
+        rollNo: rollNo.toUpperCase(),
       }),
     }
     const page = parseInt(searchParams.get('page') as string) || 1

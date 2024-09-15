@@ -118,6 +118,11 @@ const Page = () => {
 
   return (
     <>
+      {deleteApi?.isSuccess && <Message value={deleteApi?.data?.message} />}
+      {deleteApi?.isError && <Message value={deleteApi?.error} />}
+      {updateApi?.isSuccess && <Message value={updateApi?.data?.message} />}
+      {updateApi?.isError && <Message value={updateApi?.error} />}
+
       <TopLoadingBar isFetching={getApi?.isFetching || getApi?.isPending} />
 
       <Card className='border-none'>

@@ -23,6 +23,15 @@ export const columns = () => {
     { header: 'Roll No', accessorKey: 'student.rollNo', active: true },
     { header: 'Name', accessorKey: 'student.name', active: true },
     {
+      header: 'Course',
+      accessorKey: 'course.name',
+      active: true,
+      cell: ({ row: { original } }: any) =>
+        original?.course?.name || (
+          <span className='text-xs text-red-500'>EMPTY!</span>
+        ),
+    },
+    {
       header: 'Semester',
       accessorKey: 'semester',
       active: true,
@@ -61,7 +70,7 @@ export const columns = () => {
     {
       header: 'Payment Method',
       accessorKey: 'paymentMethod',
-      active: true,
+      active: false,
       cell: ({ row: { original } }: any) => (
         <span className='text-green-500'>{original?.paymentMethod}</span>
       ),
@@ -69,7 +78,7 @@ export const columns = () => {
     {
       header: 'Transaction',
       accessorKey: 'type',
-      active: true,
+      active: false,
       cell: ({ row: { original } }: any) => (
         <span className={getColor(original?.type)}>{original?.type}</span>
       ),

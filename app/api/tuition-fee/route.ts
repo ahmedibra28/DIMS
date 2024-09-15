@@ -1,7 +1,7 @@
 import { isAuth } from '@/lib/auth'
 import { getErrorResponse } from '@/lib/helpers'
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma.db'
+import { prisma, QueryMode } from '@/lib/prisma.db'
 
 import type {
   Status as IStatus,
@@ -21,15 +21,16 @@ export async function GET(req: Request) {
       }),
     } as { status: IStatus }
 
-    const startDate = DateTime(q).utc().startOf('month').toDate()
-    const endDate = DateTime(q).utc().endOf('month').toDate()
+    // const startDate = DateTime(q).utc().startOf('month').toDate()
+    // const endDate = DateTime(q).utc().endOf('month').toDate()
 
     const query = q
       ? {
-          createdAt: {
-            gte: startDate,
-            lte: endDate,
-          },
+          // createdAt: {
+          //   gte: startDate,
+          //   lte: endDate,
+          // },
+          student: { rollNo: q.toUpperCase() },
           type: 'TUITION_PAYMENT' as ITransactionType,
           ...status,
         }
