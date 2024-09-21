@@ -40,6 +40,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import useDataStore from '@/zustand/dataStore'
+import { DownloadIcon } from 'lucide-react'
 
 interface RTableProps {
   data: {
@@ -62,6 +63,7 @@ interface RTableProps {
   caption?: string
   searchType?: React.HTMLInputTypeAttribute
   py?: string
+  exportToExcel?: any
 }
 
 const RTable: React.FC<RTableProps> = ({
@@ -78,6 +80,7 @@ const RTable: React.FC<RTableProps> = ({
   caption,
   searchType = 'text',
   py = 'py-0',
+  exportToExcel,
 }) => {
   const [sorting, setSorting] = useState<any[]>([])
 
@@ -229,8 +232,19 @@ const RTable: React.FC<RTableProps> = ({
                 ))}
               </SelectContent>
             </Select>
+            {exportToExcel && (
+              <Button
+                onClick={() => exportToExcel()}
+                variant='outline'
+                className='flex items-center gap-x-1'
+              >
+                <DownloadIcon size={16} />
+                Download
+              </Button>
+            )}
           </div>
         )}
+
         {setPage && data?.page && data?.pages ? (
           <div className='flex gap-x-1'>
             <Button

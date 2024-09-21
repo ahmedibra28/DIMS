@@ -73,6 +73,7 @@ interface ApiHookParams {
   method: Method
   url: string
   scrollMethod?: 'GET'
+  enabled?: boolean
 }
 
 export default function useApi({
@@ -80,6 +81,7 @@ export default function useApi({
   method,
   scrollMethod,
   url,
+  enabled = false,
 }: ApiHookParams) {
   const queryClient = new QueryClient()
   switch (method) {
@@ -89,6 +91,7 @@ export default function useApi({
         queryKey: key,
         queryFn: () => api(method, url, {}),
         retry: 0,
+        enabled: enabled,
       })
 
       return { get }

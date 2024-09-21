@@ -18,6 +18,7 @@ import CustomFormField from '@/components/ui/CustomForm'
 import { Form } from '@/components/ui/form'
 import { useDebounce } from 'use-debounce'
 import { Button } from '@/components/ui/button'
+import xlsx from 'json-as-xlsx'
 
 const FormSchema = z.object({
   paymentDate: z.string(),
@@ -132,6 +133,58 @@ const Page = () => {
     { label: 'Unpaid', value: 'UNPAID' },
   ]
 
+  let enabled = false
+
+  const getReportAsExcel = useApi({
+    key: ['payment-transaction-export'],
+    method: 'GET',
+    url: `reports/payment-transactions?page=${page}&limit=${5000}&${new URLSearchParams(
+      param
+    )}`,
+    enabled: enabled,
+  })?.get
+
+  const ExportToExcel = () => {
+    enabled = true
+    getReportAsExcel?.refetch()?.then(data => {
+      const result = data?.data?.data
+      console.log(result[0])
+
+      const excelDataExcel = [
+        {
+          sheet: 'Payment Transactions',
+          columns: [
+            { label: 'Roll No', value: (row: any) => row?.student?.rollNo },
+            { label: 'Student Name', value: (row: any) => row?.student?.name },
+            { label: 'Course', value: (row: any) => row?.course?.name },
+            { label: 'Shift', value: 'shift' },
+            { label: 'Semester', value: 'semester' },
+            { label: 'Discount', value: 'discount' },
+            { label: 'Amount', value: 'amount' },
+            {
+              label: 'Date',
+              value: (row: any) => new Date(row.createdAt).toLocaleDateString(),
+            },
+            { label: 'Payment Method', value: 'paymentMethod' },
+            { label: 'Payment Status', value: 'paymentStatus' },
+            { label: 'Payment Type', value: 'type' },
+          ],
+          content: result,
+        },
+      ]
+
+      const excelSettings = {
+        fileName: 'Payment Transaction Report',
+        extraLength: 3,
+        RTL: false,
+      }
+
+      xlsx(excelDataExcel, excelSettings)
+
+      enabled = false
+    })
+  }
+
   return (
     <>
       <TopLoadingBar
@@ -235,6 +288,7 @@ const Page = () => {
             limit={limit}
             caption='Payment Transaction Report'
             searchType='date'
+            exportToExcel={ExportToExcel}
           />
         </div>
       )}
