@@ -126,6 +126,20 @@ export async function PUT(req: Request, { params }: Params) {
         'Assign course already exist or shift is not available'
       )
 
+    const existSemester = await prisma.assignCourse.findFirst({
+      where: {
+        courseId,
+        studentId,
+        semester: parseInt(semester),
+        id: { not: params.id },
+      },
+    })
+
+    if (existSemester)
+      return getErrorResponse(
+        'Student already has an active semester with the same course and semester'
+      )
+
     const checkStudent = await prisma.student.findFirst({
       where: {
         id: `${studentId}`,

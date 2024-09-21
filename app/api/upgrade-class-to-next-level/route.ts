@@ -32,6 +32,19 @@ export async function POST(req: NextApiRequestExtended) {
         'Assign course, student or course does not exist or is inactive'
       )
 
+    const existSemester = await prisma.assignCourse.findFirst({
+      where: {
+        courseId: checkExistence.courseId,
+        studentId: checkExistence.studentId,
+        semester: parseInt(checkExistence.semester) + 1,
+      },
+    })
+
+    if (existSemester)
+      return getErrorResponse(
+        'Student already has an active semester with the same course and semester'
+      )
+
     // const checkExistenceInNextLevel = await prisma.course.findFirst({
     //   where: {
     //     id: `${checkExistence.courseId}`,

@@ -93,8 +93,8 @@ export async function POST(req: NextApiRequestExtended) {
     if (Number(discount) > 100 || Number(discount) < 0)
       return getErrorResponse('Discount must be between 0 and 100')
 
-    if (Number(semester) !== 1)
-      return getErrorResponse('Semester must be 1 for now')
+    // if (Number(semester) !== 1)
+    //   return getErrorResponse('Semester must be 1 for now')
 
     const checkExistence =
       shift &&
@@ -109,6 +109,19 @@ export async function POST(req: NextApiRequestExtended) {
     if (checkExistence)
       return getErrorResponse(
         'Assign course already exist or shift is not available'
+      )
+
+    const existSemester = await prisma.assignCourse.findFirst({
+      where: {
+        courseId,
+        studentId,
+        semester: parseInt(semester),
+      },
+    })
+
+    if (existSemester)
+      return getErrorResponse(
+        'Student already has an active semester with the same course and semester'
       )
 
     const checkStudent = await prisma.student.findFirst({
