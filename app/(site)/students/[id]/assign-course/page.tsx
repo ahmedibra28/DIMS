@@ -12,7 +12,6 @@ import Spinner from '@/components/Spinner'
 import type {
   AssignCourse as IAssignCourse,
   Student as IStudent,
-  Sponsor as ISponsor,
 } from '@prisma/client'
 import RTable from '@/components/RTable'
 
@@ -24,7 +23,6 @@ import { TopLoadingBar } from '@/components/TopLoadingBar'
 import useDataStore from '@/zustand/dataStore'
 import { columns } from './columns'
 import getCoursesById from '@/actions/getCoursesById'
-import getSponsorsById from '@/actions/getSponsorsById'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 

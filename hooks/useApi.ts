@@ -81,7 +81,7 @@ export default function useApi({
   method,
   scrollMethod,
   url,
-  enabled = false,
+  enabled = true,
 }: ApiHookParams) {
   const queryClient = new QueryClient()
   switch (method) {
