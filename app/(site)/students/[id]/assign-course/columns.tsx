@@ -5,6 +5,7 @@ import DateTime from '@/lib/dateTime'
 type Column = {
   editHandler: (item: any) => void
   isPending: boolean
+  generateTuitionFeeHandler: (item: any) => void
   deleteHandler: (item: any) => void
   upgradeClass: (id: string) => void
 }
@@ -12,6 +13,7 @@ type Column = {
 export const columns = ({
   editHandler,
   isPending,
+  generateTuitionFeeHandler,
   deleteHandler,
   upgradeClass,
 }: Column) => {
@@ -63,6 +65,7 @@ export const columns = ({
           deleteHandler={deleteHandler}
           original={original}
           upgradeClass={upgradeClass}
+          generateTuitionFeeHandler={generateTuitionFeeHandler}
           navigateToExam={true}
         />
       ),

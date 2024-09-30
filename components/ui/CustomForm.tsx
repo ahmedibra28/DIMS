@@ -62,7 +62,7 @@ import {
 } from '@/components/ui/select'
 
 import { Label } from '@/components/ui/label'
-import { X } from 'lucide-react'
+import { CalendarCogIcon, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Command as CommandPrimitive } from 'cmdk'
 import Link from 'next/link'
@@ -347,10 +347,12 @@ export const ActionButton = ({
   navigateToExam,
   source,
   printHandler,
+  generateTuitionFeeHandler,
 }: {
   editHandler?: (item: any) => void
   isPending?: boolean
   deleteHandler?: (item: any) => void
+  generateTuitionFeeHandler?: (item: any) => void
   modal?: string
   original?: any
   formChildren?: React.ReactNode
@@ -447,26 +449,52 @@ export const ActionButton = ({
           </DropdownMenuItem>
         )}
 
-        {deleteHandler &&
-          !['PASSED', 'GRADUATED'].includes(original.status) && (
-            <AlertDialog>
-              <AlertDialogTrigger>
-                <div className='flex h-8 w-full min-w-32 items-center justify-start gap-x-1 rounded px-2 text-sm text-red-500 hover:bg-slate-100'>
-                  {isPending ? (
-                    <>
-                      <FaSpinner className='mr-1 animate-spin' />
-                      Loading
-                    </>
-                  ) : (
-                    <>
-                      <FaTrash /> Delete
-                    </>
-                  )}
-                </div>
-              </AlertDialogTrigger>
-              <ConfirmDialog onClick={() => deleteHandler(original.id)} />
-            </AlertDialog>
-          )}
+        <div className='flex flex-col'>
+          {generateTuitionFeeHandler &&
+            ['ACTIVE'].includes(original.status) && (
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <div className='flex h-8 w-full min-w-32 items-center justify-start gap-x-1 rounded px-2 text-sm hover:bg-slate-100'>
+                    {isPending ? (
+                      <>
+                        <FaSpinner className='mr-1 animate-spin' />
+                        Loading
+                      </>
+                    ) : (
+                      <div className='flex items-center gap-x-1'>
+                        <CalendarCogIcon size={16} /> Re-generate
+                      </div>
+                    )}
+                  </div>
+                </AlertDialogTrigger>
+                <ConfirmDialog
+                  onClick={() => generateTuitionFeeHandler(original)}
+                  message='Are you sure you want to generate tuition fee for this student?'
+                />
+              </AlertDialog>
+            )}
+
+          {deleteHandler &&
+            !['PASSED', 'GRADUATED'].includes(original.status) && (
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <div className='flex h-8 w-full min-w-32 items-center justify-start gap-x-1 rounded px-2 text-sm text-red-500 hover:bg-slate-100'>
+                    {isPending ? (
+                      <>
+                        <FaSpinner className='mr-1 animate-spin' />
+                        Loading
+                      </>
+                    ) : (
+                      <>
+                        <FaTrash /> Delete
+                      </>
+                    )}
+                  </div>
+                </AlertDialogTrigger>
+                <ConfirmDialog onClick={() => deleteHandler(original.id)} />
+              </AlertDialog>
+            )}
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   )

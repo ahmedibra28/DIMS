@@ -97,6 +97,12 @@ const Page = ({ params }: { params: { id: string } }) => {
     url: `upgrade-class-to-next-level`,
   })?.post
 
+  const generateTuitionFeeApi = useApi({
+    key: ['assign-courses'],
+    method: 'POST',
+    url: `generate-tuition-fee/student`,
+  })?.post
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -158,6 +164,15 @@ const Page = ({ params }: { params: { id: string } }) => {
     form.setValue('status', item?.status)
     form.setValue('courseId', item?.courseId)
     item?.sponsorId && form.setValue('sponsorId', item?.sponsorId)
+  }
+
+  const generateTuitionFeeHandler = (item: IAssignCourse) => {
+    console.log('Generate Tuition Fee')
+    console.log(item)
+    generateTuitionFeeApi?.mutateAsync({
+      assignCourseId: item.id,
+      studentId: item.studentId,
+    })
   }
 
   const deleteHandler = (id: any) => deleteApi?.mutateAsync(id)
@@ -292,6 +307,12 @@ const Page = ({ params }: { params: { id: string } }) => {
         <Message value={upgradeClassApi?.data?.message} />
       )}
       {upgradeClassApi?.isError && <Message value={upgradeClassApi?.error} />}
+      {generateTuitionFeeApi?.isSuccess && (
+        <Message value={generateTuitionFeeApi?.data?.message} />
+      )}
+      {generateTuitionFeeApi?.isError && (
+        <Message value={generateTuitionFeeApi?.error} />
+      )}
 
       <TopLoadingBar
         isFetching={
@@ -299,7 +320,9 @@ const Page = ({ params }: { params: { id: string } }) => {
           getApi?.isPending ||
           isPending ||
           getStudent?.isPending ||
-          upgradeClassApi?.isPending
+          upgradeClassApi?.isPending ||
+          deleteApi?.isPending ||
+          generateTuitionFeeApi?.isPending
         }
       />
 
@@ -477,6 +500,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               isPending: deleteApi?.isPending || false,
               deleteHandler,
               upgradeClass,
+              generateTuitionFeeHandler,
             })}
             setPage={setPage}
             setLimit={setLimit}

@@ -808,6 +808,13 @@ const permissions = [
     name: 'Finance',
     method: 'POST',
   },
+  {
+    id: 'YTU-o6vjJk66-6uM8kgx6',
+    description: 'Generate Tuition Fee by Student',
+    route: '/api/generate-tuition-fee/student',
+    name: 'Finance',
+    method: 'POST',
+  },
   // Generate Clearance Card
   {
     id: 'YTU-o6vjJk4A-MuM8kgx4',

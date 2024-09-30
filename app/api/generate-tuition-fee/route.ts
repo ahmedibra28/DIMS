@@ -105,7 +105,7 @@ export async function POST(req: NextApiRequestExtended) {
               studentId: `${student.studentId}`,
               courseId: `${student.courseId}`,
               semester: Number(student.semester),
-              shift: student.shift,
+              // shift: student.shift,
               type: 'TUITION_PAYMENT',
               status: 'ACTIVE',
               createdAt: {
