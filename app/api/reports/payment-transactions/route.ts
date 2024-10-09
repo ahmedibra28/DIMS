@@ -28,12 +28,8 @@ export async function GET(req: NextApiRequestExtended) {
     const query = {
       ...(paymentDate && {
         createdAt: {
-          gte: DateTime(paymentDate)
-            .add(1, 'day')
-            .utc()
-            .startOf('day')
-            .toDate(),
-          lte: DateTime(paymentDate).add(1, 'day').utc().endOf('day').toDate(),
+          gte: DateTime(paymentDate).utc().startOf('month').toDate(),
+          lte: DateTime(paymentDate).utc().endOf('month').toDate(),
         },
       }),
       ...(paymentType && {
