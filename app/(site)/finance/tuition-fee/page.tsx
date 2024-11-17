@@ -126,7 +126,7 @@ const Page = () => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='mt-2 overflow-x-auto bg-white p-3'>
+        <div className='p-3 mt-2 overflow-x-auto bg-white'>
           <RTable
             data={getApi?.data}
             columns={columns({

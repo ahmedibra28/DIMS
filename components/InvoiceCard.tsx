@@ -19,6 +19,7 @@ interface TransactionProp {
   semester?: number
   shift?: 'MORNING' | 'AFTERNOON'
   createdAt: Date
+  updatedAt: Date
   student?: {
     rollNo?: string
     name?: string
@@ -59,7 +60,7 @@ export const InvoiceCard = ({ data }: { data?: TransactionProp }) => {
         <hr className='mt-2' />
       </CardHeader>
       <CardContent>
-        <div className='w-full space-y-2 rounded border p-4'>
+        <div className='w-full p-4 space-y-2 border rounded'>
           <div className='grid grid-cols-3 gap-1'>
             <span>
               Student:
@@ -73,7 +74,7 @@ export const InvoiceCard = ({ data }: { data?: TransactionProp }) => {
               Date:
               <span className='font-bold'>
                 {' '}
-                {DateTime(data?.createdAt).format('YYYY-MM-DD')}
+                {DateTime(data?.updatedAt).format('YYYY-MM-DD')}
               </span>
             </span>
           </div>

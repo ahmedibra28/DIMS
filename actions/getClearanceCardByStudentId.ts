@@ -12,7 +12,12 @@ export default async function getClearanceCardByStudentId({
 
     const subjects = await prisma.assignCourse.findMany({
       where: {
-        studentId,
+        student: {
+          id: studentId,
+          balance: {
+            lte: 0,
+          },
+        },
         course: {
           subject: {
             some: {

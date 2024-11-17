@@ -340,18 +340,18 @@ const Page = ({ params }: { params: { id: string } }) => {
       ) : getStudent?.isError ? (
         <Message value={getStudent?.error} />
       ) : (
-        <div className='mb-10 mt-2 flex flex-col flex-wrap gap-2 bg-white p-3 md:flex-row'>
+        <div className='flex flex-col flex-wrap gap-2 p-3 mt-2 mb-10 bg-white md:flex-row'>
           <div className='w-full'>
             <div className='flex items-center justify-between'>
-              <div className='relative w-44 p-2'>
+              <div className='relative p-2 w-44'>
                 <Image
                   src={getStudent?.data?.image || '/avatar.png'}
                   alt='student'
                   width={200}
                   height={200}
-                  className='m-auto w-44 rounded'
+                  className='m-auto rounded w-44'
                 />
-                <div className='absolute -top-2 right-0'>
+                <div className='absolute right-0 -top-2'>
                   {student?.status === 'ACTIVE' ? (
                     <Badge
                       className='h-[22px] w-5 rounded-full bg-green-500'
@@ -492,7 +492,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='mt-2 overflow-x-auto bg-white p-3'>
+        <div className='p-3 mt-2 overflow-x-auto bg-white'>
           <RTable
             data={getApi?.data}
             columns={columns({

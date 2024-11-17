@@ -75,7 +75,7 @@ const Page = () => {
       ) : getApi?.isError ? (
         <Message value={getApi?.error} />
       ) : (
-        <div className='mb-10 mt-2 flex flex-col flex-wrap gap-2 bg-white p-3 md:flex-row'>
+        <div className='flex flex-col flex-wrap gap-2 p-3 mt-2 mb-10 bg-white md:flex-row'>
           <Table>
             <TableCaption>A list of available classes.</TableCaption>
             <TableHeader>

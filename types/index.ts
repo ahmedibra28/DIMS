@@ -16,6 +16,7 @@ export interface TransactionProp {
   semester?: number
   shift?: 'MORNING' | 'AFTERNOON'
   createdAt: Date
+  updatedAt: Date
   student?: {
     rollNo?: string
     name?: string

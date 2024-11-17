@@ -204,13 +204,13 @@ export default function Student() {
                 </span>
               </span>
             </div>
-            <div className='borders rounded bg-gray-100 p-1'>
+            <div className='p-1 bg-gray-100 rounded borders'>
               <Image
                 src={data?.student?.image || '/avatar.png'}
                 alt='logo'
                 width={100}
                 height={100}
-                className='mx-auto h-24 w-24 rounded object-cover'
+                className='object-cover w-24 h-24 mx-auto rounded'
               />
             </div>
           </div>
@@ -243,7 +243,7 @@ export default function Student() {
             }}
             label={item.course.name}
             icon={<FaPrint />}
-            className='text-xs'
+            className='flex flex-col text-xs'
           />
         ))}
       </CardContent>
@@ -261,11 +261,11 @@ export default function Student() {
           <Fragment key={i}>
             <div>
               <span className='font-bold'>{item?.title}</span> -
-              <span className='ms-1 text-xs text-gray-500'>
+              <span className='text-xs text-gray-500 ms-1'>
                 {item?.createdBy?.name}
               </span>
               <p className='text-sm text-gray-700'>{item?.note}</p>
-              <span className='text-end text-xs text-gray-500'>
+              <span className='text-xs text-gray-500 text-end'>
                 {DateTime(item?.createdAt).format('YYYY-MM-DD hh:mm:ss')}
               </span>
             </div>
@@ -290,10 +290,10 @@ export default function Student() {
             </TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className='ps-0 text-xs'>Exam</TableHead>
-                <TableHead className='ps-0 text-xs'>Subject</TableHead>
-                <TableHead className='ps-0 text-xs'>T. Marks</TableHead>
-                <TableHead className='ps-0 text-xs'>P. Marks</TableHead>
+                <TableHead className='text-xs ps-0'>Exam</TableHead>
+                <TableHead className='text-xs ps-0'>Subject</TableHead>
+                <TableHead className='text-xs ps-0'>T. Marks</TableHead>
+                <TableHead className='text-xs ps-0'>P. Marks</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -332,11 +332,11 @@ export default function Student() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className='ps-0 text-xs'>Course</TableHead>
-              <TableHead className='ps-0 text-xs'>Amount</TableHead>
-              <TableHead className='ps-0 text-xs'>Type</TableHead>
-              <TableHead className='ps-0 text-xs'>P. Status</TableHead>
-              <TableHead className='ps-0 text-xs'>Action</TableHead>
+              <TableHead className='text-xs ps-0'>Course</TableHead>
+              <TableHead className='text-xs ps-0'>Amount</TableHead>
+              <TableHead className='text-xs ps-0'>Type</TableHead>
+              <TableHead className='text-xs ps-0'>P. Status</TableHead>
+              <TableHead className='text-xs ps-0'>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -371,7 +371,7 @@ export default function Student() {
                     <span className='text-red-500'>{item?.paymentStatus}</span>
                   )}
                 </TableCell>
-                <TableCell className='flex items-center gap-x-2 py-1 text-xs'>
+                <TableCell className='flex items-center py-1 text-xs gap-x-2'>
                   {item?.paymentStatus === 'UNPAID' ? (
                     <Badge
                       onClick={() =>
@@ -379,7 +379,7 @@ export default function Student() {
                           ? console.log('payment in progress')
                           : handleOnlinePayment(item)
                       }
-                      className='flex cursor-pointer items-center rounded text-white'
+                      className='flex items-center text-white rounded cursor-pointer'
                     >
                       {postApi?.isPending ? (
                         'loading...'
@@ -395,7 +395,7 @@ export default function Student() {
                         setPrintItem(item)
                         setDialogOpen(true)
                       }}
-                      className='flex cursor-pointer items-center gap-x-1 rounded bg-green-500 text-white'
+                      className='flex items-center text-white bg-green-500 rounded cursor-pointer gap-x-1'
                     >
                       <FaPrint className='text-lg' /> Print
                     </Badge>
@@ -421,10 +421,10 @@ export default function Student() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className='ps-0 text-xs'>Course</TableHead>
-              <TableHead className='ps-0 text-xs'>Subject</TableHead>
-              <TableHead className='ps-0 text-xs'>Semester</TableHead>
-              <TableHead className='ps-0 text-xs'>Action</TableHead>
+              <TableHead className='text-xs ps-0'>Course</TableHead>
+              <TableHead className='text-xs ps-0'>Subject</TableHead>
+              <TableHead className='text-xs ps-0'>Semester</TableHead>
+              <TableHead className='text-xs ps-0'>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -442,7 +442,7 @@ export default function Student() {
                       {item?.semester}
                     </TableCell>
 
-                    <TableCell className='flex items-center gap-x-2 py-1 text-xs'>
+                    <TableCell className='flex items-center py-1 text-xs gap-x-2'>
                       <a
                         href={res.file}
                         target='_blank'
@@ -472,10 +472,10 @@ export default function Student() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className='ps-0 text-xs'>Course</TableHead>
-              <TableHead className='ps-0 text-xs'>Subject</TableHead>
-              <TableHead className='ps-0 text-xs'>Present</TableHead>
-              <TableHead className='ps-0 text-xs'>Absent</TableHead>
+              <TableHead className='text-xs ps-0'>Course</TableHead>
+              <TableHead className='text-xs ps-0'>Subject</TableHead>
+              <TableHead className='text-xs ps-0'>Present</TableHead>
+              <TableHead className='text-xs ps-0'>Absent</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

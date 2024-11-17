@@ -25,6 +25,7 @@ export default async function getTransactionsByStudentId({
         type: true,
         shift: true,
         createdAt: true,
+        updatedAt: true,
         student: {
           select: {
             name: true,
