@@ -24,7 +24,7 @@ function Home() {
   return (
     <div>
       {userInfo.role === 'STUDENT' && <Student />}
-      {['SUPER_ADMIN', 'ADMIN', 'FINANCE'].includes(userInfo.role) && (
+      {['SUPER_ADMIN', 'ADMIN', 'FINANCE', 'EXAM'].includes(userInfo.role) && (
         <SuperAdmin />
       )}
       {userInfo.role === 'INSTRUCTOR' && <Instructor />}
