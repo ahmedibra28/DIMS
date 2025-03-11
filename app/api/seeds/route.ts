@@ -19,6 +19,9 @@ export async function GET(req: Request) {
     if (!secret || secret !== 'ts')
       return getErrorResponse('Invalid secret', 401)
 
+    if (process.env.NODE_ENV === 'production')
+      return getErrorResponse('Cannot seed in production', 403)
+
     // Check duplicate permissions
     permissions.map(p => {
       if (p.method && p.route) {

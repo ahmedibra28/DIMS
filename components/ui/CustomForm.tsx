@@ -155,10 +155,10 @@ export default function CustomFormField({
       name={name}
       render={({ field }) =>
         props?.fieldType === 'multipleCheckbox' ? (
-          <FormItem className='flex flex-col mb-3'>
+          <FormItem className='mb-3 flex flex-col'>
             {items?.map((item, i) => (
-              <div key={i} className='p-3 mb-2 gap-y-2 bg-slate-100'>
-                <FormLabel className='pb-3 mb-2 font-bold text-gray-700'>
+              <div key={i} className='mb-2 gap-y-2 bg-slate-100 p-3'>
+                <FormLabel className='mb-2 pb-3 font-bold text-gray-700'>
                   {item.label}
                 </FormLabel>
                 {item?.children?.map((child, childId) => (
@@ -200,7 +200,7 @@ export default function CustomFormField({
             <FormMessage className='text-xs' />
           </FormItem>
         ) : props?.fieldType === 'checkbox' ? (
-          <FormItem className='flex flex-row items-start p-3 mb-3 space-x-3 space-y-0 border rounded-md'>
+          <FormItem className='mb-3 flex flex-row items-start space-x-3 space-y-0 rounded-md border p-3'>
             <FormControl>
               <Checkbox
                 checked={field.value}
@@ -212,7 +212,7 @@ export default function CustomFormField({
             </div>
           </FormItem>
         ) : (
-          <FormItem className='flex flex-col mb-3'>
+          <FormItem className='mb-3 flex flex-col'>
             <FormLabel className='text-gray-700'>{label}</FormLabel>
 
             {props?.fieldType === 'command' ? (
@@ -231,7 +231,7 @@ export default function CustomFormField({
                       {field.value
                         ? data?.find(item => item.value === field.value)?.label
                         : 'Select item'}
-                      <FaSort className='w-4 h-4 ml-2 opacity-50 shrink-0' />
+                      <FaSort className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -332,7 +332,13 @@ export const FormButton = ({
         icon && <span className='mr-1'>{icon}</span>
       )}
 
-      {label}
+      {label?.includes('-')
+        ? label?.split('-')?.map((item, index) => (
+            <span key={index} className='line-clamp-1'>
+              {item}
+            </span>
+          ))
+        : label}
     </Button>
   )
 }
@@ -373,9 +379,9 @@ export const ActionButton = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' className='w-8 h-8 p-0 border-none'>
+        <Button variant='ghost' className='h-8 w-8 border-none p-0'>
           <span className='sr-only'>Open menu</span>
-          <FaEllipsis className='w-4 h-4' />
+          <FaEllipsis className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
@@ -454,7 +460,7 @@ export const ActionButton = ({
             ['ACTIVE'].includes(original.status) && (
               <AlertDialog>
                 <AlertDialogTrigger>
-                  <div className='flex items-center justify-start w-full h-8 px-2 text-sm rounded min-w-32 gap-x-1 hover:bg-slate-100'>
+                  <div className='flex h-8 w-full min-w-32 items-center justify-start gap-x-1 rounded px-2 text-sm hover:bg-slate-100'>
                     {isPending ? (
                       <>
                         <FaSpinner className='mr-1 animate-spin' />
@@ -478,7 +484,7 @@ export const ActionButton = ({
             !['PASSED', 'GRADUATED'].includes(original.status) && (
               <AlertDialog>
                 <AlertDialogTrigger>
-                  <div className='flex items-center justify-start w-full h-8 px-2 text-sm text-red-500 rounded min-w-32 gap-x-1 hover:bg-slate-100'>
+                  <div className='flex h-8 w-full min-w-32 items-center justify-start gap-x-1 rounded px-2 text-sm text-red-500 hover:bg-slate-100'>
                     {isPending ? (
                       <>
                         <FaSpinner className='mr-1 animate-spin' />
@@ -562,7 +568,7 @@ export const Upload = ({
       {uploadApi?.isPending && (
         <div className='flex items-center justify-start'>
           <span className='loading loading-spinner loading-sm'> </span>
-          <span className='text-sm text-gray-500 ms-2'>
+          <span className='ms-2 text-sm text-gray-500'>
             {fileType} is uploading
           </span>
         </div>
@@ -650,7 +656,7 @@ export const MultiSelect = ({
         onKeyDown={handleKeyDown}
         className='mb-2 overflow-visible bg-transparent'
       >
-        <div className='px-3 py-2 text-sm border rounded-md bg-whites group border-input ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2'>
+        <div className='bg-whites group rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2'>
           <div className='flex flex-wrap gap-1'>
             {selected.map(item => {
               return (
@@ -669,7 +675,7 @@ export const MultiSelect = ({
                     }}
                     onClick={() => handleUnselect(item)}
                   >
-                    <X className='w-3 h-3 text-muted-foreground hover:text-foreground' />
+                    <X className='h-3 w-3 text-muted-foreground hover:text-foreground' />
                   </button>
                 </Badge>
               )
@@ -682,13 +688,13 @@ export const MultiSelect = ({
               onBlur={() => setOpen(false)}
               onFocus={() => setOpen(true)}
               placeholder='Select items...'
-              className='flex-1 ml-2 bg-transparent outline-none placeholder:text-muted-foreground'
+              className='ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground'
             />
           </div>
         </div>
         <div className='relative mt-2'>
           {open && selectables.length > 0 ? (
-            <div className='absolute top-0 z-10 w-full border rounded-md shadow-md outline-none bg-popover text-popover-foreground animate-in'>
+            <div className='absolute top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in'>
               <CommandGroup className='h-full overflow-auto'>
                 <CommandList>
                   {selectables.map(item => {
@@ -715,7 +721,7 @@ export const MultiSelect = ({
           ) : null}
         </div>
       </Command>
-      <FormMessage className='mb-2 -mt-2 text-xs'>
+      <FormMessage className='-mt-2 mb-2 text-xs'>
         {form?.formState.errors?.[name]?.message as string}
       </FormMessage>
     </React.Fragment>

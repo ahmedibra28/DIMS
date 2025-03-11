@@ -18,10 +18,22 @@ export async function GET(req: Request) {
 
     const query = q
       ? {
-          subject: {
-            name: { contains: q, mode: QueryMode.insensitive },
-            status: 'ACTIVE' as IStatus,
-          },
+          OR: [
+            {
+              subject: {
+                course: {
+                  name: { contains: q, mode: QueryMode.insensitive },
+                  status: 'ACTIVE' as IStatus,
+                },
+              },
+            },
+            {
+              subject: {
+                name: { contains: q, mode: QueryMode.insensitive },
+                status: 'ACTIVE' as IStatus,
+              },
+            },
+          ],
           ...status,
         }
       : {

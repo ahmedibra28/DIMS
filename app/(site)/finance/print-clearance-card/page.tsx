@@ -119,6 +119,12 @@ const Page = () => {
                 Course: <span className='font-bold'>{data?.course?.name}</span>
               </span>
               <span className='text-sm'>
+                Subject:{' '}
+                <span className='font-bold'>
+                  {data?.course?.subject[0]?.name}
+                </span>
+              </span>
+              <span className='text-sm'>
                 Semester: <span className='font-bold'>{data?.semester}</span>
               </span>
               <span className='text-sm'>
@@ -128,13 +134,13 @@ const Page = () => {
                 </span>
               </span>
             </div>
-            <div className='p-1 bg-gray-100 rounded borders'>
+            <div className='borders rounded bg-gray-100 p-1'>
               <Image
                 src={data?.student?.image || '/avatar.png'}
                 alt='logo'
                 width={100}
                 height={100}
-                className='object-cover w-24 h-24 mx-auto rounded'
+                className='mx-auto h-24 w-24 rounded object-cover'
               />
             </div>
           </div>
@@ -158,24 +164,32 @@ const Page = () => {
         <CardDescription>Get clearance card for exams</CardDescription>
       </CardHeader>
       <CardContent className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3'>
-        {subject?.map((item, i: number) => (
-          <FormButton
-            key={i}
-            onClick={() => {
-              setPrintItem(item)
-              setDialogOpen(true)
-            }}
-            label={item.course.name}
-            icon={<FaPrint />}
-            className='flex flex-col text-xs'
-          />
-        ))}
+        {subject?.map((item, i: number) =>
+          item?.course?.subject?.map((sub, i) => (
+            <FormButton
+              key={i}
+              onClick={() => {
+                setPrintItem({
+                  ...item,
+                  course: {
+                    ...item.course,
+                    subject: [sub],
+                  },
+                })
+                setDialogOpen(true)
+              }}
+              label={item.course?.name + ' - ' + sub?.name}
+              icon={<FaPrint />}
+              className='flex h-auto flex-col text-xs'
+            />
+          ))
+        )}
       </CardContent>
     </Card>
   )
 
   return (
-    <div className='p-3 mt-2 overflow-x-auto bg-white'>
+    <div className='mt-2 overflow-x-auto bg-white p-3'>
       <div className='mx-auto mb-5 w-full sm:w-[80%] md:w-[50%] lg:w-[30%]'>
         <h1 className='mb-3 text-2xl font-bold'>Clearance Card</h1>
         <Search
