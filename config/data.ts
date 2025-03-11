@@ -241,6 +241,14 @@ const clientPermissions = [
     description: 'Tuition Fee page',
   },
   {
+    id: 'YTUFo6vjJk4A-6uM8kgx7',
+    name: 'Print Clearance Card',
+    path: '/finance/print-clearance-card',
+    menu: 'finance',
+    sort: sort.finance,
+    description: 'Print Clearance Card page',
+  },
+  {
     id: 'YTU-o6vjJk4A-6uM8kgx5',
     name: 'Lesson Plan',
     path: '/lesson-plans',
