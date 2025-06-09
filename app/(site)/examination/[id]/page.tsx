@@ -1,6 +1,12 @@
 'use client'
 
-import React, { useState, useEffect, FormEvent, useTransition } from 'react'
+import React, {
+  useState,
+  useEffect,
+  FormEvent,
+  useTransition,
+  use,
+} from 'react'
 import dynamic from 'next/dynamic'
 import { useForm } from 'react-hook-form'
 import useAuthorization from '@/hooks/useAuthorization'
@@ -34,7 +40,14 @@ const FormSchema = z.object({
   subjectId: z.string().min(1),
 })
 
-const Page = ({ params }: { params: { id: string } }) => {
+interface Props {
+  params: Promise<{
+    id: string
+  }>
+}
+
+const Page = (props: Props) => {
+  const params = use(props.params)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(50)
   const [id, setId] = useState<string | null>(null)

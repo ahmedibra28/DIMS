@@ -4,11 +4,12 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma.db'
 
 interface Params {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT(req: Request, props: Params) {
+  const params = await props.params;
   try {
     await isAuth(req, params)
 

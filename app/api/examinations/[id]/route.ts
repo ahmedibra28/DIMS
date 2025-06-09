@@ -6,12 +6,13 @@ import type { Status as IStatus } from '@prisma/client'
 import { getPrismaErrorCode } from '@/lib/prismaErrorCodes'
 
 interface Params {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-export async function GET(req: NextApiRequestExtended, { params }: Params) {
+export async function GET(req: NextApiRequestExtended, props: Params) {
+  const params = await props.params;
   try {
     await isAuth(req, params)
 
@@ -81,7 +82,8 @@ export async function GET(req: NextApiRequestExtended, { params }: Params) {
   }
 }
 
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT(req: Request, props: Params) {
+  const params = await props.params;
   try {
     await isAuth(req, params)
 
@@ -207,7 +209,8 @@ export async function PUT(req: Request, { params }: Params) {
   }
 }
 
-export async function DELETE(req: Request, { params }: Params) {
+export async function DELETE(req: Request, props: Params) {
+  const params = await props.params;
   try {
     await isAuth(req, params)
 

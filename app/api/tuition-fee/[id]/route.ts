@@ -4,12 +4,13 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma.db'
 
 interface Params {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT(req: Request, props: Params) {
+  const params = await props.params
   try {
     await isAuth(req, params)
 
@@ -58,7 +59,8 @@ export async function PUT(req: Request, { params }: Params) {
   }
 }
 
-export async function DELETE(req: NextApiRequestExtended, { params }: Params) {
+export async function DELETE(req: NextApiRequestExtended, props: Params) {
+  const params = await props.params
   try {
     await isAuth(req, params)
 
@@ -90,17 +92,22 @@ export async function DELETE(req: NextApiRequestExtended, { params }: Params) {
 
       transaction.id = undefined as any
 
-      const createNewTrans = await prisma.transaction.create({
-        data: {
-          ...transaction,
-          status: 'ACTIVE',
-          createdById: req.user.id,
-          type: 'REFUND_TUITION_PAYMENT',
-          createdAt: new Date(),
-        },
-      })
+      if (transactionObj.paymentStatus === 'PAID') {
+        const createNewTrans = await prisma.transaction.create({
+          data: {
+            ...transaction,
+            status: 'ACTIVE',
+            createdById: req.user.id,
+            type: 'REFUND_TUITION_PAYMENT',
+            createdAt: new Date(),
+          },
+        })
 
-      if (!createNewTrans || !transactionObj)
+        if (!createNewTrans)
+          throw { status: 404, message: 'Transaction not removed' }
+      }
+
+      if (!transactionObj)
         throw { status: 404, message: 'Transaction not removed' }
     })
 
