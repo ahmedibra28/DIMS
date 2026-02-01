@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { IUser } from './models/User'
 import { NextRequest } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from './prisma/generated/client'
 
 declare global {
   var mongoose: any
-  var prisma: PrismaClient
+  var prisma: PrismaClient | undefined
   namespace NodeJS {
     interface ProcessEnv {
       NODE_ENV: string
