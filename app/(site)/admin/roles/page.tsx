@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import type {
   Permission as IPermission,
   ClientPermission as IClientPermission,
-} from '@prisma/client'
+} from '@/prisma/generated/client'
 import Message from '@/components/Message'
 import FormView from '@/components/FormView'
 import Spinner from '@/components/Spinner'

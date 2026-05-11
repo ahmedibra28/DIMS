@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import Message from '@/components/Message'
 import FormView from '@/components/FormView'
 import Spinner from '@/components/Spinner'
-import type { Notice as INotice, Role as IRole } from '@prisma/client'
+import type { Notice as INotice, Role as IRole } from '@/prisma/generated/client'
 import RTable from '@/components/RTable'
 
 import { zodResolver } from '@hookform/resolvers/zod'

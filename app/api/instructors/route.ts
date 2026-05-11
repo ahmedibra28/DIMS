@@ -3,7 +3,7 @@ import { getErrorResponse } from '@/lib/helpers'
 import { NextResponse } from 'next/server'
 import { QueryMode, prisma } from '@/lib/prisma.db'
 
-import type { Status as IStatus } from '@prisma/client'
+import type { Status as IStatus } from '@/prisma/generated/client'
 import { rollNoGenerator } from '@/lib/rollNoGenerator'
 
 export async function GET(req: Request) {

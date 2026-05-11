@@ -8,7 +8,7 @@ import type {
   PaymentMethod as IPaymentMethod,
   PaymentStatus as IPaymentStatus,
   Shift as IShift,
-} from '@prisma/client'
+} from '@/prisma/generated/client'
 import DateTime from '@/lib/dateTime'
 
 export async function GET(req: NextApiRequestExtended) {

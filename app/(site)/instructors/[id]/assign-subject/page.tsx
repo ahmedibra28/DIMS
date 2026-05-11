@@ -18,7 +18,7 @@ import Spinner from '@/components/Spinner'
 import type {
   AssignSubject as IAssignSubject,
   Instructor as IInstructor,
-} from '@prisma/client'
+} from '@/prisma/generated/client'
 import RTable from '@/components/RTable'
 
 import { zodResolver } from '@hookform/resolvers/zod'

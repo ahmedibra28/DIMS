@@ -2,7 +2,7 @@ import { isAuth } from '@/lib/auth'
 import { getErrorResponse } from '@/lib/helpers'
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma.db'
-import type { Shift as IShift } from '@prisma/client'
+import type { Shift as IShift } from '@/prisma/generated/client'
 import DateTime from '@/lib/dateTime'
 
 export async function GET(req: NextApiRequestExtended) {

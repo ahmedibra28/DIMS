@@ -15,7 +15,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Message from '@/components/Message'
 import FormView from '@/components/FormView'
 import Spinner from '@/components/Spinner'
-import type { Examination as IExamination } from '@prisma/client'
+import type { Examination as IExamination } from '@/prisma/generated/client'
 import RTable from '@/components/RTable'
 
 import { zodResolver } from '@hookform/resolvers/zod'

@@ -2,7 +2,7 @@ import { isAuth } from '@/lib/auth'
 import { getErrorResponse } from '@/lib/helpers'
 import { NextResponse } from 'next/server'
 import { QueryMode, prisma } from '@/lib/prisma.db'
-import type { Status as IStatus } from '@prisma/client'
+import type { Status as IStatus } from '@/prisma/generated/client'
 
 interface Params {
   params: Promise<{

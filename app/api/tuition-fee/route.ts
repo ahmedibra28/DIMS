@@ -6,7 +6,7 @@ import { prisma, QueryMode } from '@/lib/prisma.db'
 import type {
   Status as IStatus,
   TransactionType as ITransactionType,
-} from '@prisma/client'
+} from '@/prisma/generated/client'
 import DateTime from '@/lib/dateTime'
 
 export async function GET(req: Request) {
