@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import crypto from 'crypto'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { join } from 'path'
 
 export function getEnvVariable(key: string): string {
   const value = process.env[key]
@@ -66,3 +67,14 @@ export async function generateToken(id: string) {
 }
 
 export const allowedRoles = ['SUPER_ADMIN', 'ADMIN']
+
+export function getBackupDirectory(): string {
+  const backupPath = process.env.BACKUP_PATH
+  if (!backupPath) {
+    console.warn(
+      'BACKUP_PATH environment variable not set. Using default ./db_backups'
+    )
+    return join(process.cwd(), 'db_backups') // Fallback, less ideal in Docker
+  }
+  return backupPath // e.g., /app/db_backups (inside container)
+}

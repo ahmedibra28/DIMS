@@ -51,4 +51,4 @@ migrations
 /public/uploads/*.doc
 
 /prisma/migrations
-/db/*.zip
+/db_backups/*.zip
