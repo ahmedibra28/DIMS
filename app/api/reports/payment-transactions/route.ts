@@ -20,6 +20,7 @@ export async function GET(req: NextApiRequestExtended) {
     const paymentType = searchParams.get('paymentType')
     const paymentMethod = searchParams.get('paymentMethod')
     const paymentStatus = searchParams.get('paymentStatus')
+    const paymentCategory = searchParams.get('paymentCategory')
     const course = searchParams.get('course')
     const sponsor = searchParams.get('sponsor')
     const location = searchParams.get('location')
@@ -42,6 +43,23 @@ export async function GET(req: NextApiRequestExtended) {
       }),
       ...(paymentStatus && {
         paymentStatus: paymentStatus as IPaymentStatus,
+      }),
+      ...(paymentCategory === 'FULL_SCHOLARSHIP' && {
+        amount: 0,
+      }),
+      ...(paymentCategory === 'FULL_PAYMENT' && {
+        discount: 0,
+        amount: {
+          gt: 0,
+        },
+      }),
+      ...(paymentCategory === 'DISCOUNT' && {
+        discount: {
+          gt: 0,
+        },
+        amount: {
+          gt: 0,
+        },
       }),
       ...(course && {
         courseId: course,

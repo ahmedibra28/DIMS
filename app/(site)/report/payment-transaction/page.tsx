@@ -25,6 +25,7 @@ const FormSchema = z.object({
   paymentType: z.string(),
   paymentMethod: z.string(),
   paymentStatus: z.string(),
+  paymentCategory: z.string(),
   course: z.string(),
   sponsor: z.string(),
   location: z.string(),
@@ -53,6 +54,7 @@ const Page = () => {
       paymentType: '',
       paymentMethod: '',
       paymentStatus: '',
+      paymentCategory: '',
       course: '',
       sponsor: '',
       location: '',
@@ -67,6 +69,7 @@ const Page = () => {
     paymentType: form.watch('paymentType'),
     paymentMethod: form.watch('paymentMethod'),
     paymentStatus: form.watch('paymentStatus'),
+    paymentCategory: form.watch('paymentCategory'),
     course: form.watch('course'),
     sponsor: form.watch('sponsor'),
     location: form.watch('location'),
@@ -99,6 +102,8 @@ const Page = () => {
     form.watch('paymentMethod'),
     // eslint-disable-next-line
     form.watch('paymentStatus'),
+    // eslint-disable-next-line
+    form.watch('paymentCategory'),
     // eslint-disable-next-line
     form.watch('course'),
     // eslint-disable-next-line
@@ -141,6 +146,12 @@ const Page = () => {
   const paymentStatus = [
     { label: 'Paid', value: 'PAID' },
     { label: 'Unpaid', value: 'UNPAID' },
+  ]
+
+  const paymentCategories = [
+    { label: 'Full Scholarship', value: 'FULL_SCHOLARSHIP' },
+    { label: 'Full Payment', value: 'FULL_PAYMENT' },
+    { label: 'Discount', value: 'DISCOUNT' },
   ]
 
   let enabled = false
@@ -282,6 +293,14 @@ const Page = () => {
                 placeholder='Payment Status'
                 fieldType='select'
                 data={paymentStatus}
+              />
+              <CustomFormField
+                form={form}
+                name='paymentCategory'
+                label='Payment Category'
+                placeholder='Payment Category'
+                fieldType='select'
+                data={paymentCategories}
               />
               <div className='flex items-center gap-2'>
                 <div className='w-full'>

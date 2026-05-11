@@ -23,6 +23,12 @@ import DateTime from '@/lib/dateTime'
 import getCounts from '@/actions/getCounts'
 import { FormatNumber } from '../FormatNumber'
 import getTop10UnpaidStudents from '@/actions/getTop10UnpaidStudents'
+import getLast6MonthsIncome from '@/actions/getLast6MonthsIncome'
+
+type IncomeChart = {
+  month: string
+  income: number
+}
 
 export default function SuperAdmin() {
   const [count, setCount] = React.useState<CountProp[]>([])
@@ -30,11 +36,13 @@ export default function SuperAdmin() {
   const [unpaidStudents, setUnpaidStudents] = React.useState<
     UnpaidStudentsProp[]
   >([])
+  const [incomeChart, setIncomeChart] = React.useState<IncomeChart[]>([])
 
   const { userInfo } = useUserInfoStore(state => state)
 
   const [isPendingNote, startTransitionNote] = React.useTransition()
   const [isPendingCount, startTransitionCount] = React.useTransition()
+  const [isPendingChart, startTransitionChart] = React.useTransition()
   const [isPendingUnpaidStudents, startTransitionUnpaidStudents] =
     React.useTransition()
 
@@ -56,6 +64,12 @@ export default function SuperAdmin() {
     startTransitionUnpaidStudents(() => {
       getTop10UnpaidStudents().then(res => {
         setUnpaidStudents(res || [])
+      })
+    })
+
+    startTransitionChart(() => {
+      getLast6MonthsIncome().then(res => {
+        setIncomeChart(res || [])
       })
     })
 
@@ -127,6 +141,36 @@ export default function SuperAdmin() {
     </Card>
   )
 
+  const incomeChartCard = () => {
+    const max = Math.max(...incomeChart.map(item => item.income), 1)
+
+    return (
+      <Card className='w-full'>
+        <CardHeader>
+          <CardTitle>Last 6 Months Income</CardTitle>
+          <CardDescription>Monthly paid income summary</CardDescription>
+        </CardHeader>
+        <CardContent className='flex h-64 items-end gap-3'>
+          {incomeChart.map(item => (
+            <div
+              key={item.month}
+              className='flex h-full flex-1 flex-col justify-end'
+            >
+              <div className='mb-2 text-center text-xs'>
+                <FormatNumber value={item.income} />
+              </div>
+              <div
+                className='min-h-1 rounded-t bg-primary'
+                style={{ height: `${(item.income / max) * 100}%` }}
+              />
+              <div className='mt-2 text-center text-xs'>{item.month}</div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+    )
+  }
+
   const getCount = (label: string, count: number, isCurrency = false) => (
     <Card className='text-center'>
       <CardHeader>
@@ -168,6 +212,7 @@ export default function SuperAdmin() {
       </div>
 
       <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+        {isPendingChart ? <Skeleton /> : incomeChartCard()}
         {isPendingNote ? <Skeleton /> : notes?.length > 0 && noticeCard()}
         {isPendingUnpaidStudents ? <Skeleton /> : unpaidStudentsCard()}
       </div>
