@@ -115,12 +115,14 @@ export async function POST(req: NextApiRequestExtended) {
         'Assign course does not exist or student is inactive or course is inactive'
       )
 
-    const subjectCheckMarks = await prisma.subject.findUnique({
+    const subjectCheckMarks = await prisma.subject.findFirst({
       where: {
         id: subjectId,
+        status: 'ACTIVE',
       },
     })
-    if (!subjectCheckMarks) return getErrorResponse('Subject does not exist')
+    if (!subjectCheckMarks)
+      return getErrorResponse('Subject does not exist or is not active')
 
     const previousExam =
       subjectId &&

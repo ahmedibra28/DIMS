@@ -29,6 +29,7 @@ export default async function getExamsByAssignCourseId({
       where: {
         courseId: assignCourse?.course?.id,
         semester: assignCourse?.semester,
+        status: 'ACTIVE',
       },
       select: {
         id: true,
