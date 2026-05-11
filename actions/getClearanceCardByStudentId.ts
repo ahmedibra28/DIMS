@@ -12,16 +12,20 @@ export default async function getClearanceCardByStudentId({
 
     const subjects = await prisma.assignCourse.findMany({
       where: {
+        status: 'ACTIVE',
         student: {
           id: studentId,
+          status: 'ACTIVE',
           balance: {
             lte: 0,
           },
         },
         course: {
+          status: 'ACTIVE',
           subject: {
             some: {
               hasActiveExam: true,
+              status: 'ACTIVE',
             },
           },
         },
@@ -33,8 +37,13 @@ export default async function getClearanceCardByStudentId({
           select: {
             name: true,
             subject: {
+              where: {
+                hasActiveExam: true,
+                status: 'ACTIVE',
+              },
               select: {
                 name: true,
+                semester: true,
                 examDescription: true,
                 examDate: true,
                 hasActiveExam: true,
@@ -55,7 +64,7 @@ export default async function getClearanceCardByStudentId({
     const newSubjects =
       subjects?.map(subject => {
         const newSubject = subject.course.subject.filter(
-          sub => sub.hasActiveExam
+          sub => sub.hasActiveExam && sub.semester === subject.semester
         )
 
         return {

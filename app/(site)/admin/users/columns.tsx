@@ -15,7 +15,7 @@ export const columns = ({ editHandler, isPending, deleteHandler }: Column) => {
     { header: 'Role', accessorKey: 'role.name', active: true },
     {
       header: 'STD/INS',
-      accessorKey: 'instructor.name' || 'student.name',
+      accessorKey: 'instructor.name',
       active: true,
       cell: ({ row: { original } }: any) => (
         <span>

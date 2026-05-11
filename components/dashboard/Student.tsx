@@ -145,6 +145,28 @@ export default function Student() {
     // eslint-disable-next-line
   }, [])
 
+  React.useEffect(() => {
+    if (postApi?.isSuccess && userInfo.studentId) {
+      startTransitionTrans(() => {
+        getTransactionsByStudentId({ studentId: userInfo.studentId! }).then(
+          res => {
+            setTransactions((res as TransactionProp[]) || [])
+          }
+        )
+      })
+
+      startTransitionSubject(() => {
+        getClearanceCardByStudentId({ studentId: userInfo.studentId! }).then(
+          res => {
+            setSubject((res as SubjectProp[]) || [])
+          }
+        )
+      })
+    }
+
+    // eslint-disable-next-line
+  }, [postApi?.isSuccess])
+
   const handleOnlinePayment = (item: TransactionProp) => {
     postApi?.mutateAsync({ transactionId: item.id })
   }

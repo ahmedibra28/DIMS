@@ -23,7 +23,7 @@ import DateTime from '@/lib/dateTime'
 
 const FormSchema = z.object({
   examDescription: z.string().min(1),
-  hasActiveExam: z.boolean().default(false),
+  hasActiveExam: z.boolean(),
   examDate: z.string(),
 })
 

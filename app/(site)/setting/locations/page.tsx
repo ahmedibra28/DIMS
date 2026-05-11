@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation'
 import Message from '@/components/Message'
 import FormView from '@/components/FormView'
 import Spinner from '@/components/Spinner'
-import type { Location as ILocation } from '@prisma/client'
 import RTable from '@/components/RTable'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -24,6 +23,12 @@ const FormSchema = z.object({
   name: z.string().min(1),
   status: z.string().min(1),
 })
+
+type ILocation = {
+  id?: string
+  name: string
+  status: string
+}
 
 const Page = () => {
   const [page, setPage] = useState(1)

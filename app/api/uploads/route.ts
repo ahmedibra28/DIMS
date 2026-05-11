@@ -70,7 +70,9 @@ export async function POST(req: Request) {
     const promises = files.map(async file => {
       const ext = file.name.split('.').pop()?.toLowerCase()
       const fileName = `${file.name.split('.')[0]}-${Date.now()}.${ext}`
-      let buffer = Buffer.from(new Uint8Array(await file.arrayBuffer()))
+      let buffer: Buffer<ArrayBufferLike> = Buffer.from(
+        new Uint8Array(await file.arrayBuffer())
+      )
 
       if (type === 'image') {
         const size = Buffer.byteLength(Buffer.from(buffer))

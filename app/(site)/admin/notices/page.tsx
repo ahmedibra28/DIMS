@@ -141,7 +141,7 @@ const Page = () => {
     setEdit(true)
     form.setValue('title', item?.title)
     form.setValue('note', item?.note)
-    const roles = item?.roles?.map(item => ({
+    const roles = item?.roles?.map((item: IRole) => ({
       label: item.name,
       value: item.id,
     }))

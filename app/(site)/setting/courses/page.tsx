@@ -131,7 +131,7 @@ const Page = () => {
     form.setValue('schoolId', item?.schoolId!)
     form.setValue('status', item?.status)
 
-    const examinations = item?.examinations?.map(item => ({
+    const examinations = item?.examinations?.map((item: string) => ({
       label: item,
       value: item,
     }))

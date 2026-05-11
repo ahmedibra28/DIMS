@@ -201,11 +201,11 @@ const Page = () => {
 
     form.setValue(
       'permissions',
-      item?.permissions?.map(item => item?.id)
+      item?.permissions?.map((item: IPermission) => item?.id)
     )
     form.setValue(
       'clientPermissions',
-      item?.clientPermissions?.map(item => item?.id)
+      item?.clientPermissions?.map((item: IClientPermission) => item?.id)
     )
   }
 

@@ -28,7 +28,7 @@ const PrintDialog = ({ data, label, height, width, size }: Props) => {
 
   const componentRef = React.useRef<HTMLDivElement>(null)
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current!,
+    contentRef: componentRef,
     documentTitle: `Clearance Card`,
     pageStyle:
       size === 'A4'

@@ -10,6 +10,11 @@ export default async function getCounts() {
       e: DateTime().utc().endOf('month').format(),
     }
 
+    const today = {
+      s: DateTime().utc().startOf('day').format(),
+      e: DateTime().utc().endOf('day').format(),
+    }
+
     const lastSixMonths = {
       s: DateTime().utc().subtract(6, 'month').startOf('month').format(),
       e: DateTime().utc().endOf('month').format(),
@@ -72,8 +77,8 @@ export default async function getCounts() {
         paymentStatus: 'PAID',
         status: 'ACTIVE',
         createdAt: {
-          gte: thisMonth.s,
-          lte: thisMonth.e,
+          gte: today.s,
+          lte: today.e,
         },
       },
       _sum: {
