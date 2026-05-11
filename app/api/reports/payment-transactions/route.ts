@@ -21,6 +21,8 @@ export async function GET(req: NextApiRequestExtended) {
     const paymentMethod = searchParams.get('paymentMethod')
     const paymentStatus = searchParams.get('paymentStatus')
     const course = searchParams.get('course')
+    const sponsor = searchParams.get('sponsor')
+    const location = searchParams.get('location')
     const student = searchParams.get('student')
     const shift = searchParams.get('shift')
     const semester = searchParams.get('semester')
@@ -43,6 +45,12 @@ export async function GET(req: NextApiRequestExtended) {
       }),
       ...(course && {
         courseId: course,
+      }),
+      ...(sponsor && {
+        sponsorId: sponsor,
+      }),
+      ...(location && {
+        locationId: location,
       }),
       ...(student && {
         student: {
@@ -72,6 +80,16 @@ export async function GET(req: NextApiRequestExtended) {
             },
           },
           course: {
+            select: {
+              name: true,
+            },
+          },
+          sponsor: {
+            select: {
+              name: true,
+            },
+          },
+          location: {
             select: {
               name: true,
             },

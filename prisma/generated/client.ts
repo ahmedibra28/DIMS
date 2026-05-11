@@ -70,6 +70,11 @@ export type School = Prisma.SchoolModel
  */
 export type Sponsor = Prisma.SponsorModel
 /**
+ * Model Location
+ * 
+ */
+export type Location = Prisma.LocationModel
+/**
  * Model Course
  * 
  */

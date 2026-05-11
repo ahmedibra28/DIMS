@@ -69,6 +69,12 @@ const sponsors = {
   status: 'ACTIVE',
 }
 
+const locations = {
+  id: 'lMXCyzI2MLXNI6tQLsU0i',
+  name: 'Main Campus',
+  status: 'ACTIVE',
+}
+
 const sort = {
   hidden: 0,
   profile: 1,
@@ -143,6 +149,14 @@ const clientPermissions = [
     menu: 'setting',
     sort: sort.setting,
     description: 'Sponsor page',
+  },
+  {
+    id: 'HnCMgsT54sLTRYlJGaOC4',
+    name: 'Location',
+    path: '/setting/locations',
+    menu: 'setting',
+    sort: sort.setting,
+    description: 'Location page',
   },
   {
     id: 'HnCMgsT54kcTRYlJGaOC3',
@@ -523,6 +537,36 @@ const permissions = [
     description: 'Sponsor',
     route: '/api/sponsors/:id',
     name: 'Sponsor',
+    method: 'DELETE',
+  },
+
+  // Location
+  {
+    id: 'tXSvE55HtkU447Cyd0oLo',
+    description: 'Location',
+    route: '/api/locations',
+    name: 'Location',
+    method: 'GET',
+  },
+  {
+    id: 'Pd7RyskbRlOC5I3kdZwLo',
+    description: 'Location',
+    route: '/api/locations',
+    name: 'Location',
+    method: 'POST',
+  },
+  {
+    id: 'Mm90OR1e-XU0gWlvmYELo',
+    description: 'Location',
+    route: '/api/locations/:id',
+    name: 'Location',
+    method: 'PUT',
+  },
+  {
+    id: 'zYVlmaD80-wy4dBElWGLo',
+    description: 'Location',
+    route: '/api/locations/:id',
+    name: 'Location',
     method: 'DELETE',
   },
 
@@ -1096,4 +1140,12 @@ const permissions = [
   },
 ]
 
-export { roles, users, profile, permissions, clientPermissions, sponsors }
+export {
+  roles,
+  users,
+  profile,
+  permissions,
+  clientPermissions,
+  sponsors,
+  locations,
+}

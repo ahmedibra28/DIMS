@@ -334,6 +334,7 @@ export type UserWhereInput = {
   resources?: Prisma.ResourceListRelationFilter
   attendances?: Prisma.AttendanceListRelationFilter
   sponsors?: Prisma.SponsorListRelationFilter
+  locations?: Prisma.LocationListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -372,6 +373,7 @@ export type UserOrderByWithRelationInput = {
   resources?: Prisma.ResourceOrderByRelationAggregateInput
   attendances?: Prisma.AttendanceOrderByRelationAggregateInput
   sponsors?: Prisma.SponsorOrderByRelationAggregateInput
+  locations?: Prisma.LocationOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -413,6 +415,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   resources?: Prisma.ResourceListRelationFilter
   attendances?: Prisma.AttendanceListRelationFilter
   sponsors?: Prisma.SponsorListRelationFilter
+  locations?: Prisma.LocationListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -496,6 +499,7 @@ export type UserCreateInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -531,6 +535,7 @@ export type UserUncheckedCreateInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -566,6 +571,7 @@ export type UserUpdateInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -601,6 +607,7 @@ export type UserUncheckedUpdateInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -845,6 +852,20 @@ export type UserUpdateOneRequiredWithoutSponsorsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutSponsorsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSponsorsInput, Prisma.UserUpdateWithoutSponsorsInput>, Prisma.UserUncheckedUpdateWithoutSponsorsInput>
+}
+
+export type UserCreateNestedOneWithoutLocationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLocationsInput, Prisma.UserUncheckedCreateWithoutLocationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLocationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutLocationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLocationsInput, Prisma.UserUncheckedCreateWithoutLocationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLocationsInput
+  upsert?: Prisma.UserUpsertWithoutLocationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLocationsInput, Prisma.UserUpdateWithoutLocationsInput>, Prisma.UserUncheckedUpdateWithoutLocationsInput>
 }
 
 export type UserCreateNestedOneWithoutCoursesInput = {
@@ -1145,6 +1166,7 @@ export type UserCreateWithoutRoleInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutRoleInput = {
@@ -1179,6 +1201,7 @@ export type UserUncheckedCreateWithoutRoleInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutRoleInput = {
@@ -1262,6 +1285,7 @@ export type UserCreateWithoutSchoolsInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutSchoolsInput = {
@@ -1296,6 +1320,7 @@ export type UserUncheckedCreateWithoutSchoolsInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutSchoolsInput = {
@@ -1346,6 +1371,7 @@ export type UserUpdateWithoutSchoolsInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSchoolsInput = {
@@ -1380,6 +1406,7 @@ export type UserUncheckedUpdateWithoutSchoolsInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutSponsorsInput = {
@@ -1414,6 +1441,7 @@ export type UserCreateWithoutSponsorsInput = {
   Suggestions?: Prisma.SuggestionCreateNestedManyWithoutCreatedByInput
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutSponsorsInput = {
@@ -1448,6 +1476,7 @@ export type UserUncheckedCreateWithoutSponsorsInput = {
   Suggestions?: Prisma.SuggestionUncheckedCreateNestedManyWithoutCreatedByInput
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutSponsorsInput = {
@@ -1498,6 +1527,7 @@ export type UserUpdateWithoutSponsorsInput = {
   Suggestions?: Prisma.SuggestionUpdateManyWithoutCreatedByNestedInput
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSponsorsInput = {
@@ -1532,6 +1562,163 @@ export type UserUncheckedUpdateWithoutSponsorsInput = {
   Suggestions?: Prisma.SuggestionUncheckedUpdateManyWithoutCreatedByNestedInput
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutLocationsInput = {
+  id?: string
+  email: string
+  name: string
+  image?: string | null
+  bio?: string | null
+  mobile?: number | null
+  address?: string | null
+  password: string
+  confirmed?: boolean
+  blocked?: boolean
+  resetPasswordToken?: string | null
+  resetPasswordExpire?: bigint | number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role: Prisma.RoleCreateNestedOneWithoutUsersInput
+  notices?: Prisma.NoticeCreateNestedManyWithoutCreatedByInput
+  schools?: Prisma.SchoolCreateNestedManyWithoutCreatedByInput
+  courses?: Prisma.CourseCreateNestedManyWithoutCreatedByInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutCreatedByInput
+  assignCourses?: Prisma.AssignCourseCreateNestedManyWithoutCreatedByInput
+  assignSubjects?: Prisma.AssignSubjectCreateNestedManyWithoutCreatedByInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutCreatedByInput
+  lessonPlans?: Prisma.LessonPlanCreateNestedManyWithoutCreatedByInput
+  studentsAsCreatedBy?: Prisma.StudentCreateNestedManyWithoutCreatedByInput
+  instructorsAsCreatedBy?: Prisma.InstructorCreateNestedManyWithoutCreatedByInput
+  student?: Prisma.StudentCreateNestedOneWithoutUserInput
+  instructor?: Prisma.InstructorCreateNestedOneWithoutUserInput
+  examinations?: Prisma.ExaminationCreateNestedManyWithoutCreatedByInput
+  Suggestions?: Prisma.SuggestionCreateNestedManyWithoutCreatedByInput
+  resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
+  sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutLocationsInput = {
+  id?: string
+  email: string
+  name: string
+  image?: string | null
+  bio?: string | null
+  mobile?: number | null
+  address?: string | null
+  password: string
+  confirmed?: boolean
+  blocked?: boolean
+  resetPasswordToken?: string | null
+  resetPasswordExpire?: bigint | number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleId: string
+  studentId?: string | null
+  instructorId?: string | null
+  notices?: Prisma.NoticeUncheckedCreateNestedManyWithoutCreatedByInput
+  schools?: Prisma.SchoolUncheckedCreateNestedManyWithoutCreatedByInput
+  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutCreatedByInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutCreatedByInput
+  assignCourses?: Prisma.AssignCourseUncheckedCreateNestedManyWithoutCreatedByInput
+  assignSubjects?: Prisma.AssignSubjectUncheckedCreateNestedManyWithoutCreatedByInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCreatedByInput
+  lessonPlans?: Prisma.LessonPlanUncheckedCreateNestedManyWithoutCreatedByInput
+  studentsAsCreatedBy?: Prisma.StudentUncheckedCreateNestedManyWithoutCreatedByInput
+  instructorsAsCreatedBy?: Prisma.InstructorUncheckedCreateNestedManyWithoutCreatedByInput
+  examinations?: Prisma.ExaminationUncheckedCreateNestedManyWithoutCreatedByInput
+  Suggestions?: Prisma.SuggestionUncheckedCreateNestedManyWithoutCreatedByInput
+  resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
+  sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutLocationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLocationsInput, Prisma.UserUncheckedCreateWithoutLocationsInput>
+}
+
+export type UserUpsertWithoutLocationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLocationsInput, Prisma.UserUncheckedUpdateWithoutLocationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLocationsInput, Prisma.UserUncheckedCreateWithoutLocationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLocationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLocationsInput, Prisma.UserUncheckedUpdateWithoutLocationsInput>
+}
+
+export type UserUpdateWithoutLocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mobile?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  confirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  blocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordExpire?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.RoleUpdateOneRequiredWithoutUsersNestedInput
+  notices?: Prisma.NoticeUpdateManyWithoutCreatedByNestedInput
+  schools?: Prisma.SchoolUpdateManyWithoutCreatedByNestedInput
+  courses?: Prisma.CourseUpdateManyWithoutCreatedByNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutCreatedByNestedInput
+  assignCourses?: Prisma.AssignCourseUpdateManyWithoutCreatedByNestedInput
+  assignSubjects?: Prisma.AssignSubjectUpdateManyWithoutCreatedByNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutCreatedByNestedInput
+  lessonPlans?: Prisma.LessonPlanUpdateManyWithoutCreatedByNestedInput
+  studentsAsCreatedBy?: Prisma.StudentUpdateManyWithoutCreatedByNestedInput
+  instructorsAsCreatedBy?: Prisma.InstructorUpdateManyWithoutCreatedByNestedInput
+  student?: Prisma.StudentUpdateOneWithoutUserNestedInput
+  instructor?: Prisma.InstructorUpdateOneWithoutUserNestedInput
+  examinations?: Prisma.ExaminationUpdateManyWithoutCreatedByNestedInput
+  Suggestions?: Prisma.SuggestionUpdateManyWithoutCreatedByNestedInput
+  resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
+  sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mobile?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  confirmed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  blocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  resetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetPasswordExpire?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instructorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notices?: Prisma.NoticeUncheckedUpdateManyWithoutCreatedByNestedInput
+  schools?: Prisma.SchoolUncheckedUpdateManyWithoutCreatedByNestedInput
+  courses?: Prisma.CourseUncheckedUpdateManyWithoutCreatedByNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignCourses?: Prisma.AssignCourseUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignSubjects?: Prisma.AssignSubjectUncheckedUpdateManyWithoutCreatedByNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
+  lessonPlans?: Prisma.LessonPlanUncheckedUpdateManyWithoutCreatedByNestedInput
+  studentsAsCreatedBy?: Prisma.StudentUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructorsAsCreatedBy?: Prisma.InstructorUncheckedUpdateManyWithoutCreatedByNestedInput
+  examinations?: Prisma.ExaminationUncheckedUpdateManyWithoutCreatedByNestedInput
+  Suggestions?: Prisma.SuggestionUncheckedUpdateManyWithoutCreatedByNestedInput
+  resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
+  sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCoursesInput = {
@@ -1566,6 +1753,7 @@ export type UserCreateWithoutCoursesInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCoursesInput = {
@@ -1600,6 +1788,7 @@ export type UserUncheckedCreateWithoutCoursesInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCoursesInput = {
@@ -1650,6 +1839,7 @@ export type UserUpdateWithoutCoursesInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCoursesInput = {
@@ -1684,6 +1874,7 @@ export type UserUncheckedUpdateWithoutCoursesInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutSubjectsInput = {
@@ -1718,6 +1909,7 @@ export type UserCreateWithoutSubjectsInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutSubjectsInput = {
@@ -1752,6 +1944,7 @@ export type UserUncheckedCreateWithoutSubjectsInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutSubjectsInput = {
@@ -1802,6 +1995,7 @@ export type UserUpdateWithoutSubjectsInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubjectsInput = {
@@ -1836,6 +2030,7 @@ export type UserUncheckedUpdateWithoutSubjectsInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutStudentsAsCreatedByInput = {
@@ -1870,6 +2065,7 @@ export type UserCreateWithoutStudentsAsCreatedByInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutStudentsAsCreatedByInput = {
@@ -1904,6 +2100,7 @@ export type UserUncheckedCreateWithoutStudentsAsCreatedByInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutStudentsAsCreatedByInput = {
@@ -1943,6 +2140,7 @@ export type UserCreateWithoutStudentInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutStudentInput = {
@@ -1977,6 +2175,7 @@ export type UserUncheckedCreateWithoutStudentInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutStudentInput = {
@@ -2032,6 +2231,7 @@ export type UserUpdateWithoutStudentsAsCreatedByInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudentsAsCreatedByInput = {
@@ -2066,6 +2266,7 @@ export type UserUncheckedUpdateWithoutStudentsAsCreatedByInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutStudentInput = {
@@ -2116,6 +2317,7 @@ export type UserCreateWithoutInstructorsAsCreatedByInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutInstructorsAsCreatedByInput = {
@@ -2150,6 +2352,7 @@ export type UserUncheckedCreateWithoutInstructorsAsCreatedByInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutInstructorsAsCreatedByInput = {
@@ -2189,6 +2392,7 @@ export type UserCreateWithoutInstructorInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutInstructorInput = {
@@ -2223,6 +2427,7 @@ export type UserUncheckedCreateWithoutInstructorInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutInstructorInput = {
@@ -2278,6 +2483,7 @@ export type UserUpdateWithoutInstructorsAsCreatedByInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInstructorsAsCreatedByInput = {
@@ -2312,6 +2518,7 @@ export type UserUncheckedUpdateWithoutInstructorsAsCreatedByInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutInstructorInput = {
@@ -2362,6 +2569,7 @@ export type UserCreateWithoutNoticesInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutNoticesInput = {
@@ -2396,6 +2604,7 @@ export type UserUncheckedCreateWithoutNoticesInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutNoticesInput = {
@@ -2446,6 +2655,7 @@ export type UserUpdateWithoutNoticesInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNoticesInput = {
@@ -2480,6 +2690,7 @@ export type UserUncheckedUpdateWithoutNoticesInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAssignCoursesInput = {
@@ -2514,6 +2725,7 @@ export type UserCreateWithoutAssignCoursesInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAssignCoursesInput = {
@@ -2548,6 +2760,7 @@ export type UserUncheckedCreateWithoutAssignCoursesInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAssignCoursesInput = {
@@ -2598,6 +2811,7 @@ export type UserUpdateWithoutAssignCoursesInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignCoursesInput = {
@@ -2632,6 +2846,7 @@ export type UserUncheckedUpdateWithoutAssignCoursesInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAssignSubjectsInput = {
@@ -2666,6 +2881,7 @@ export type UserCreateWithoutAssignSubjectsInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAssignSubjectsInput = {
@@ -2700,6 +2916,7 @@ export type UserUncheckedCreateWithoutAssignSubjectsInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAssignSubjectsInput = {
@@ -2750,6 +2967,7 @@ export type UserUpdateWithoutAssignSubjectsInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignSubjectsInput = {
@@ -2784,6 +3002,7 @@ export type UserUncheckedUpdateWithoutAssignSubjectsInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutLessonPlansInput = {
@@ -2818,6 +3037,7 @@ export type UserCreateWithoutLessonPlansInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutLessonPlansInput = {
@@ -2852,6 +3072,7 @@ export type UserUncheckedCreateWithoutLessonPlansInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutLessonPlansInput = {
@@ -2902,6 +3123,7 @@ export type UserUpdateWithoutLessonPlansInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLessonPlansInput = {
@@ -2936,6 +3158,7 @@ export type UserUncheckedUpdateWithoutLessonPlansInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutResourcesInput = {
@@ -2970,6 +3193,7 @@ export type UserCreateWithoutResourcesInput = {
   Suggestions?: Prisma.SuggestionCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutResourcesInput = {
@@ -3004,6 +3228,7 @@ export type UserUncheckedCreateWithoutResourcesInput = {
   Suggestions?: Prisma.SuggestionUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutResourcesInput = {
@@ -3054,6 +3279,7 @@ export type UserUpdateWithoutResourcesInput = {
   Suggestions?: Prisma.SuggestionUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutResourcesInput = {
@@ -3088,6 +3314,7 @@ export type UserUncheckedUpdateWithoutResourcesInput = {
   Suggestions?: Prisma.SuggestionUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutExaminationsInput = {
@@ -3122,6 +3349,7 @@ export type UserCreateWithoutExaminationsInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutExaminationsInput = {
@@ -3156,6 +3384,7 @@ export type UserUncheckedCreateWithoutExaminationsInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutExaminationsInput = {
@@ -3206,6 +3435,7 @@ export type UserUpdateWithoutExaminationsInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutExaminationsInput = {
@@ -3240,6 +3470,7 @@ export type UserUncheckedUpdateWithoutExaminationsInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutSuggestionsInput = {
@@ -3274,6 +3505,7 @@ export type UserCreateWithoutSuggestionsInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutSuggestionsInput = {
@@ -3308,6 +3540,7 @@ export type UserUncheckedCreateWithoutSuggestionsInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutSuggestionsInput = {
@@ -3358,6 +3591,7 @@ export type UserUpdateWithoutSuggestionsInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSuggestionsInput = {
@@ -3392,6 +3626,7 @@ export type UserUncheckedUpdateWithoutSuggestionsInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAttendancesInput = {
@@ -3426,6 +3661,7 @@ export type UserCreateWithoutAttendancesInput = {
   Suggestions?: Prisma.SuggestionCreateNestedManyWithoutCreatedByInput
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAttendancesInput = {
@@ -3460,6 +3696,7 @@ export type UserUncheckedCreateWithoutAttendancesInput = {
   Suggestions?: Prisma.SuggestionUncheckedCreateNestedManyWithoutCreatedByInput
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -3510,6 +3747,7 @@ export type UserUpdateWithoutAttendancesInput = {
   Suggestions?: Prisma.SuggestionUpdateManyWithoutCreatedByNestedInput
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAttendancesInput = {
@@ -3544,6 +3782,7 @@ export type UserUncheckedUpdateWithoutAttendancesInput = {
   Suggestions?: Prisma.SuggestionUncheckedUpdateManyWithoutCreatedByNestedInput
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -3578,6 +3817,7 @@ export type UserCreateWithoutTransactionsInput = {
   resources?: Prisma.ResourceCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -3612,6 +3852,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   resources?: Prisma.ResourceUncheckedCreateNestedManyWithoutCreatedByInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutCreatedByInput
   sponsors?: Prisma.SponsorUncheckedCreateNestedManyWithoutCreatedByInput
+  locations?: Prisma.LocationUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -3662,6 +3903,7 @@ export type UserUpdateWithoutTransactionsInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -3696,6 +3938,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyRoleInput = {
@@ -3749,6 +3992,7 @@ export type UserUpdateWithoutRoleInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRoleInput = {
@@ -3783,6 +4027,7 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -3855,6 +4100,7 @@ export type UserUpdateWithoutStudentInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudentInput = {
@@ -3889,6 +4135,7 @@ export type UserUncheckedUpdateWithoutStudentInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutStudentInput = {
@@ -3961,6 +4208,7 @@ export type UserUpdateWithoutInstructorInput = {
   resources?: Prisma.ResourceUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInstructorInput = {
@@ -3995,6 +4243,7 @@ export type UserUncheckedUpdateWithoutInstructorInput = {
   resources?: Prisma.ResourceUncheckedUpdateManyWithoutCreatedByNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutCreatedByNestedInput
   sponsors?: Prisma.SponsorUncheckedUpdateManyWithoutCreatedByNestedInput
+  locations?: Prisma.LocationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutInstructorInput = {
@@ -4037,6 +4286,7 @@ export type UserCountOutputType = {
   resources: number
   attendances: number
   sponsors: number
+  locations: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4055,6 +4305,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   resources?: boolean | UserCountOutputTypeCountResourcesArgs
   attendances?: boolean | UserCountOutputTypeCountAttendancesArgs
   sponsors?: boolean | UserCountOutputTypeCountSponsorsArgs
+  locations?: boolean | UserCountOutputTypeCountLocationsArgs
 }
 
 /**
@@ -4172,6 +4423,13 @@ export type UserCountOutputTypeCountSponsorsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.SponsorWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountLocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LocationWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4209,6 +4467,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   resources?: boolean | Prisma.User$resourcesArgs<ExtArgs>
   attendances?: boolean | Prisma.User$attendancesArgs<ExtArgs>
   sponsors?: boolean | Prisma.User$sponsorsArgs<ExtArgs>
+  locations?: boolean | Prisma.User$locationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -4298,6 +4557,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   resources?: boolean | Prisma.User$resourcesArgs<ExtArgs>
   attendances?: boolean | Prisma.User$attendancesArgs<ExtArgs>
   sponsors?: boolean | Prisma.User$sponsorsArgs<ExtArgs>
+  locations?: boolean | Prisma.User$locationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4332,6 +4592,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     resources: Prisma.$ResourcePayload<ExtArgs>[]
     attendances: Prisma.$AttendancePayload<ExtArgs>[]
     sponsors: Prisma.$SponsorPayload<ExtArgs>[]
+    locations: Prisma.$LocationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4763,6 +5024,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   resources<T extends Prisma.User$resourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$resourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendances<T extends Prisma.User$attendancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sponsors<T extends Prisma.User$sponsorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sponsorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SponsorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  locations<T extends Prisma.User$locationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$locationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5600,6 +5862,30 @@ export type User$sponsorsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.SponsorScalarFieldEnum | Prisma.SponsorScalarFieldEnum[]
+}
+
+/**
+ * User.locations
+ */
+export type User$locationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Location
+   */
+  select?: Prisma.LocationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Location
+   */
+  omit?: Prisma.LocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  where?: Prisma.LocationWhereInput
+  orderBy?: Prisma.LocationOrderByWithRelationInput | Prisma.LocationOrderByWithRelationInput[]
+  cursor?: Prisma.LocationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LocationScalarFieldEnum | Prisma.LocationScalarFieldEnum[]
 }
 
 /**

@@ -42,6 +42,7 @@ const FormSchema = z.object({
   status: z.string().min(1),
   courseId: z.string().min(1),
   sponsorId: z.string().optional(),
+  locationId: z.string().optional(),
 })
 
 interface Props {
@@ -126,6 +127,7 @@ const Page = (props: Props) => {
       status: '',
       courseId: '',
       sponsorId: '',
+      locationId: '',
     },
   })
 
@@ -178,6 +180,7 @@ const Page = (props: Props) => {
     form.setValue('status', item?.status)
     form.setValue('courseId', item?.courseId)
     item?.sponsorId && form.setValue('sponsorId', item?.sponsorId)
+    item?.locationId && form.setValue('locationId', item?.locationId)
   }
 
   const generateTuitionFeeHandler = (item: IAssignCourse) => {
@@ -281,6 +284,16 @@ const Page = (props: Props) => {
           data={[]}
           key='sponsors'
           url='sponsors?page=1&limit=10&status=ACTIVE'
+        />
+        <CustomFormField
+          form={form}
+          name='locationId'
+          label='Location'
+          placeholder='Location'
+          fieldType='command'
+          data={[]}
+          key='locations'
+          url='locations?page=1&limit=10&status=ACTIVE'
         />
 
         <CustomFormField

@@ -89,7 +89,7 @@ interface ListItem {
 }
 
 export interface FormProps {
-  form: UseFormReturn<any, any, undefined>
+  form: UseFormReturn<any, any, any>
   name: any
   label: string
   placeholder?: string

@@ -53,6 +53,12 @@ export async function GET(req: Request, props: Params) {
               name: true,
             },
           },
+          location: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           student: {
             select: {
               id: true,
@@ -96,6 +102,7 @@ export async function PUT(req: Request, props: Params) {
       studentId,
       courseId,
       sponsorId,
+      locationId,
     } = await req.json()
 
     if (Number(discount) > 100 || Number(discount) < 0)
@@ -174,6 +181,17 @@ export async function PUT(req: Request, props: Params) {
         return getErrorResponse('Sponsor does not exist or is not active')
     }
 
+    if (locationId) {
+      const checkLocation = await prisma.location.findFirst({
+        where: {
+          id: `${locationId}`,
+          status: 'ACTIVE',
+        },
+      })
+      if (!checkLocation)
+        return getErrorResponse('Location does not exist or is not active')
+    }
+
     const checkCourseStatus = await prisma.assignCourse.findFirst({
       where: {
         courseId: `${courseId}`,
@@ -193,7 +211,8 @@ export async function PUT(req: Request, props: Params) {
         discount: parseFloat(discount),
         status,
         courseId,
-        ...(sponsorId && { sponsorId }),
+        sponsorId: sponsorId || null,
+        locationId: locationId || null,
         studentId,
       },
     })

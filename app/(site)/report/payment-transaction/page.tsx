@@ -26,6 +26,8 @@ const FormSchema = z.object({
   paymentMethod: z.string(),
   paymentStatus: z.string(),
   course: z.string(),
+  sponsor: z.string(),
+  location: z.string(),
   student: z.string(),
   shift: z.string(),
   semester: z.string(),
@@ -52,6 +54,8 @@ const Page = () => {
       paymentMethod: '',
       paymentStatus: '',
       course: '',
+      sponsor: '',
+      location: '',
       student: '',
       shift: '',
       semester: '',
@@ -64,6 +68,8 @@ const Page = () => {
     paymentMethod: form.watch('paymentMethod'),
     paymentStatus: form.watch('paymentStatus'),
     course: form.watch('course'),
+    sponsor: form.watch('sponsor'),
+    location: form.watch('location'),
     student: form.watch('student'),
     shift: form.watch('shift'),
     semester: form.watch('semester'),
@@ -95,6 +101,10 @@ const Page = () => {
     form.watch('paymentStatus'),
     // eslint-disable-next-line
     form.watch('course'),
+    // eslint-disable-next-line
+    form.watch('sponsor'),
+    // eslint-disable-next-line
+    form.watch('location'),
     // eslint-disable-next-line
     form.watch('shift'),
     // eslint-disable-next-line
@@ -157,6 +167,8 @@ const Page = () => {
             { label: 'Roll No', value: (row: any) => row?.student?.rollNo },
             { label: 'Student Name', value: (row: any) => row?.student?.name },
             { label: 'Course', value: (row: any) => row?.course?.name },
+            { label: 'Sponsor', value: (row: any) => row?.sponsor?.name },
+            { label: 'Location', value: (row: any) => row?.location?.name },
             { label: 'Shift', value: 'shift' },
             { label: 'Semester', value: 'semester' },
             { label: 'Discount', value: 'discount' },
@@ -211,6 +223,26 @@ const Page = () => {
                 data={[]}
                 key='courses'
                 url='courses?page=1&limit=10&status=ACTIVE'
+              />
+              <CustomFormField
+                form={form}
+                name='sponsor'
+                label='Sponsor'
+                placeholder='Sponsor'
+                fieldType='command'
+                data={[]}
+                key='sponsors'
+                url='sponsors?page=1&limit=10&status=ACTIVE'
+              />
+              <CustomFormField
+                form={form}
+                name='location'
+                label='Location'
+                placeholder='Location'
+                fieldType='command'
+                data={[]}
+                key='locations'
+                url='locations?page=1&limit=10&status=ACTIVE'
               />
               <CustomFormField
                 form={form}

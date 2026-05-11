@@ -46,6 +46,12 @@ export async function GET(req: Request) {
               name: true,
             },
           },
+          location: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           student: {
             select: {
               id: true,
@@ -88,6 +94,7 @@ export async function POST(req: NextApiRequestExtended) {
       studentId,
       courseId,
       sponsorId,
+      locationId,
     } = await req.json()
 
     if (Number(discount) > 100 || Number(discount) < 0)
@@ -156,6 +163,17 @@ export async function POST(req: NextApiRequestExtended) {
         return getErrorResponse('Sponsor does not exist or is not active')
     }
 
+    if (locationId) {
+      const checkLocation = await prisma.location.findFirst({
+        where: {
+          id: `${locationId}`,
+          status: 'ACTIVE',
+        },
+      })
+      if (!checkLocation)
+        return getErrorResponse('Location does not exist or is not active')
+    }
+
     const checkCourseStatus = await prisma.assignCourse.findFirst({
       where: {
         courseId: `${courseId}`,
@@ -174,6 +192,7 @@ export async function POST(req: NextApiRequestExtended) {
         status,
         courseId,
         ...(sponsorId && { sponsorId }),
+        ...(locationId && { locationId }),
         studentId,
         createdById: req.user.id,
       },

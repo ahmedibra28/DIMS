@@ -81,6 +81,8 @@ export async function POST(req: NextApiRequestExtended) {
         shift: true,
         semester: true,
         courseId: true,
+        sponsorId: true,
+        locationId: true,
         discount: true,
         course: {
           select: {
@@ -134,6 +136,8 @@ export async function POST(req: NextApiRequestExtended) {
               discount,
               studentId: student.studentId,
               courseId: student.courseId,
+              sponsorId: student.sponsorId,
+              locationId: student.locationId,
               semester: student.semester,
               shift: student.shift,
               type: 'TUITION_PAYMENT',

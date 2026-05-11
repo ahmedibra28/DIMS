@@ -3,6 +3,33 @@ import { IUser } from './models/User'
 import { NextRequest } from 'next/server'
 import { PrismaClient } from './prisma/generated/client'
 
+type AuthenticatedUser = {
+  id: string
+  name: string
+  email: string
+  role: string
+  instructorId?: string
+  studentId?: string
+  mobile?: number
+}
+
+type RequestQuery = {
+  limit: string
+  page: string
+  q: string
+  id: string
+  secret: string
+  type: string
+  option: string
+}
+
+declare module 'next/server' {
+  interface NextRequest {
+    user: AuthenticatedUser
+    query: RequestQuery
+  }
+}
+
 declare global {
   var mongoose: any
   var prisma: PrismaClient | undefined
@@ -18,26 +45,10 @@ declare global {
     }
   }
   interface NextApiRequestExtended extends Request {
-    user: {
-      id: string
-      name: string
-      email: string
-      role: string
-      instructorId?: string
-      studentId?: string
-      mobile?: number
-    }
+    user: AuthenticatedUser
     url: string
-    method: 'GET' | 'POST' | 'DELETE' | 'PUT'
-    query: {
-      limit: string
-      page: string
-      q: string
-      id: string
-      secret: string
-      type: string
-      option: string
-    }
+    method: string
+    query: RequestQuery
   }
   interface NextApiResponseExtended extends NextRequest {
     Data: any

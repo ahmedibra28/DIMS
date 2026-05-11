@@ -57,6 +57,7 @@ export const ModelName = {
   ClientPermission: 'ClientPermission',
   School: 'School',
   Sponsor: 'Sponsor',
+  Location: 'Location',
   Course: 'Course',
   Subject: 'Subject',
   Student: 'Student',
@@ -173,6 +174,18 @@ export const SponsorScalarFieldEnum = {
 } as const
 
 export type SponsorScalarFieldEnum = (typeof SponsorScalarFieldEnum)[keyof typeof SponsorScalarFieldEnum]
+
+
+export const LocationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
+} as const
+
+export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
 
 
 export const CourseScalarFieldEnum = {
@@ -295,6 +308,7 @@ export const AssignCourseScalarFieldEnum = {
   studentId: 'studentId',
   courseId: 'courseId',
   sponsorId: 'sponsorId',
+  locationId: 'locationId',
   createdById: 'createdById'
 } as const
 
@@ -410,7 +424,8 @@ export const TransactionScalarFieldEnum = {
   createdById: 'createdById',
   studentId: 'studentId',
   courseId: 'courseId',
-  sponsorId: 'sponsorId'
+  sponsorId: 'sponsorId',
+  locationId: 'locationId'
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]

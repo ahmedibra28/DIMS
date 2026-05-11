@@ -4,6 +4,7 @@ import {
   roles,
   users,
   sponsors,
+  locations,
 } from '@/config/data'
 
 import { encryptPassword, getErrorResponse } from '@/lib/helpers'
@@ -39,11 +40,12 @@ export async function GET(req: Request) {
 
     // Delete all existing data if option is reset
     if (option === 'reset') {
+      await prisma.location.deleteMany({})
+      await prisma.sponsor.deleteMany({})
       await prisma.user.deleteMany({})
       await prisma.permission.deleteMany({})
       await prisma.clientPermission.deleteMany({})
       await prisma.role.deleteMany({})
-      await prisma.sponsor.deleteMany({})
     }
 
     // Create roles or update if exists
@@ -92,6 +94,21 @@ export async function GET(req: Request) {
       },
       update: {
         ...sponsors,
+        status: 'ACTIVE',
+        createdById: users.id,
+      },
+    })
+
+    // Create locations or update if exists
+    await prisma.location.upsert({
+      where: { id: locations.id },
+      create: {
+        ...locations,
+        status: 'ACTIVE',
+        createdById: users.id,
+      },
+      update: {
+        ...locations,
         status: 'ACTIVE',
         createdById: users.id,
       },
@@ -172,6 +189,7 @@ export async function GET(req: Request) {
       clientPermissions: await prisma.clientPermission.count({}),
       roles: await prisma.role.count({}),
       sponsors: await prisma.sponsor.count({}),
+      locations: await prisma.location.count({}),
     })
   } catch ({ status = 500, message }: any) {
     return getErrorResponse(message, status)

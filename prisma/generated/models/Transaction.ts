@@ -56,6 +56,7 @@ export type TransactionMinAggregateOutputType = {
   studentId: string | null
   courseId: string | null
   sponsorId: string | null
+  locationId: string | null
 }
 
 export type TransactionMaxAggregateOutputType = {
@@ -76,6 +77,7 @@ export type TransactionMaxAggregateOutputType = {
   studentId: string | null
   courseId: string | null
   sponsorId: string | null
+  locationId: string | null
 }
 
 export type TransactionCountAggregateOutputType = {
@@ -96,6 +98,7 @@ export type TransactionCountAggregateOutputType = {
   studentId: number
   courseId: number
   sponsorId: number
+  locationId: number
   _all: number
 }
 
@@ -130,6 +133,7 @@ export type TransactionMinAggregateInputType = {
   studentId?: true
   courseId?: true
   sponsorId?: true
+  locationId?: true
 }
 
 export type TransactionMaxAggregateInputType = {
@@ -150,6 +154,7 @@ export type TransactionMaxAggregateInputType = {
   studentId?: true
   courseId?: true
   sponsorId?: true
+  locationId?: true
 }
 
 export type TransactionCountAggregateInputType = {
@@ -170,6 +175,7 @@ export type TransactionCountAggregateInputType = {
   studentId?: true
   courseId?: true
   sponsorId?: true
+  locationId?: true
   _all?: true
 }
 
@@ -277,6 +283,7 @@ export type TransactionGroupByOutputType = {
   studentId: string
   courseId: string | null
   sponsorId: string | null
+  locationId: string | null
   _count: TransactionCountAggregateOutputType | null
   _avg: TransactionAvgAggregateOutputType | null
   _sum: TransactionSumAggregateOutputType | null
@@ -320,10 +327,12 @@ export type TransactionWhereInput = {
   studentId?: Prisma.StringFilter<"Transaction"> | string
   courseId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   sponsorId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  locationId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
   course?: Prisma.XOR<Prisma.CourseNullableScalarRelationFilter, Prisma.CourseWhereInput> | null
   sponsor?: Prisma.XOR<Prisma.SponsorNullableScalarRelationFilter, Prisma.SponsorWhereInput> | null
+  location?: Prisma.XOR<Prisma.LocationNullableScalarRelationFilter, Prisma.LocationWhereInput> | null
 }
 
 export type TransactionOrderByWithRelationInput = {
@@ -344,10 +353,12 @@ export type TransactionOrderByWithRelationInput = {
   studentId?: Prisma.SortOrder
   courseId?: Prisma.SortOrderInput | Prisma.SortOrder
   sponsorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  locationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdBy?: Prisma.UserOrderByWithRelationInput
   student?: Prisma.StudentOrderByWithRelationInput
   course?: Prisma.CourseOrderByWithRelationInput
   sponsor?: Prisma.SponsorOrderByWithRelationInput
+  location?: Prisma.LocationOrderByWithRelationInput
 }
 
 export type TransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -371,10 +382,12 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   studentId?: Prisma.StringFilter<"Transaction"> | string
   courseId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   sponsorId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  locationId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   student?: Prisma.XOR<Prisma.StudentScalarRelationFilter, Prisma.StudentWhereInput>
   course?: Prisma.XOR<Prisma.CourseNullableScalarRelationFilter, Prisma.CourseWhereInput> | null
   sponsor?: Prisma.XOR<Prisma.SponsorNullableScalarRelationFilter, Prisma.SponsorWhereInput> | null
+  location?: Prisma.XOR<Prisma.LocationNullableScalarRelationFilter, Prisma.LocationWhereInput> | null
 }, "id">
 
 export type TransactionOrderByWithAggregationInput = {
@@ -395,6 +408,7 @@ export type TransactionOrderByWithAggregationInput = {
   studentId?: Prisma.SortOrder
   courseId?: Prisma.SortOrderInput | Prisma.SortOrder
   sponsorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  locationId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TransactionCountOrderByAggregateInput
   _avg?: Prisma.TransactionAvgOrderByAggregateInput
   _max?: Prisma.TransactionMaxOrderByAggregateInput
@@ -423,6 +437,7 @@ export type TransactionScalarWhereWithAggregatesInput = {
   studentId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   courseId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
   sponsorId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  locationId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
 }
 
 export type TransactionCreateInput = {
@@ -443,6 +458,7 @@ export type TransactionCreateInput = {
   student: Prisma.StudentCreateNestedOneWithoutTransactionsInput
   course?: Prisma.CourseCreateNestedOneWithoutTransactionsInput
   sponsor?: Prisma.SponsorCreateNestedOneWithoutTransactionsInput
+  location?: Prisma.LocationCreateNestedOneWithoutTransactionsInput
 }
 
 export type TransactionUncheckedCreateInput = {
@@ -463,6 +479,7 @@ export type TransactionUncheckedCreateInput = {
   studentId: string
   courseId?: string | null
   sponsorId?: string | null
+  locationId?: string | null
 }
 
 export type TransactionUpdateInput = {
@@ -483,6 +500,7 @@ export type TransactionUpdateInput = {
   student?: Prisma.StudentUpdateOneRequiredWithoutTransactionsNestedInput
   course?: Prisma.CourseUpdateOneWithoutTransactionsNestedInput
   sponsor?: Prisma.SponsorUpdateOneWithoutTransactionsNestedInput
+  location?: Prisma.LocationUpdateOneWithoutTransactionsNestedInput
 }
 
 export type TransactionUncheckedUpdateInput = {
@@ -503,6 +521,7 @@ export type TransactionUncheckedUpdateInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TransactionCreateManyInput = {
@@ -523,6 +542,7 @@ export type TransactionCreateManyInput = {
   studentId: string
   courseId?: string | null
   sponsorId?: string | null
+  locationId?: string | null
 }
 
 export type TransactionUpdateManyMutationInput = {
@@ -559,6 +579,7 @@ export type TransactionUncheckedUpdateManyInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TransactionListRelationFilter = {
@@ -589,6 +610,7 @@ export type TransactionCountOrderByAggregateInput = {
   studentId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   sponsorId?: Prisma.SortOrder
+  locationId?: Prisma.SortOrder
 }
 
 export type TransactionAvgOrderByAggregateInput = {
@@ -615,6 +637,7 @@ export type TransactionMaxOrderByAggregateInput = {
   studentId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   sponsorId?: Prisma.SortOrder
+  locationId?: Prisma.SortOrder
 }
 
 export type TransactionMinOrderByAggregateInput = {
@@ -635,6 +658,7 @@ export type TransactionMinOrderByAggregateInput = {
   studentId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   sponsorId?: Prisma.SortOrder
+  locationId?: Prisma.SortOrder
 }
 
 export type TransactionSumOrderByAggregateInput = {
@@ -724,6 +748,48 @@ export type TransactionUncheckedUpdateManyWithoutSponsorNestedInput = {
   connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
   update?: Prisma.TransactionUpdateWithWhereUniqueWithoutSponsorInput | Prisma.TransactionUpdateWithWhereUniqueWithoutSponsorInput[]
   updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutSponsorInput | Prisma.TransactionUpdateManyWithWhereWithoutSponsorInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionCreateNestedManyWithoutLocationInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutLocationInput, Prisma.TransactionUncheckedCreateWithoutLocationInput> | Prisma.TransactionCreateWithoutLocationInput[] | Prisma.TransactionUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutLocationInput | Prisma.TransactionCreateOrConnectWithoutLocationInput[]
+  createMany?: Prisma.TransactionCreateManyLocationInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUncheckedCreateNestedManyWithoutLocationInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutLocationInput, Prisma.TransactionUncheckedCreateWithoutLocationInput> | Prisma.TransactionCreateWithoutLocationInput[] | Prisma.TransactionUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutLocationInput | Prisma.TransactionCreateOrConnectWithoutLocationInput[]
+  createMany?: Prisma.TransactionCreateManyLocationInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUpdateManyWithoutLocationNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutLocationInput, Prisma.TransactionUncheckedCreateWithoutLocationInput> | Prisma.TransactionCreateWithoutLocationInput[] | Prisma.TransactionUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutLocationInput | Prisma.TransactionCreateOrConnectWithoutLocationInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutLocationInput | Prisma.TransactionUpsertWithWhereUniqueWithoutLocationInput[]
+  createMany?: Prisma.TransactionCreateManyLocationInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutLocationInput | Prisma.TransactionUpdateWithWhereUniqueWithoutLocationInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutLocationInput | Prisma.TransactionUpdateManyWithWhereWithoutLocationInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionUncheckedUpdateManyWithoutLocationNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutLocationInput, Prisma.TransactionUncheckedCreateWithoutLocationInput> | Prisma.TransactionCreateWithoutLocationInput[] | Prisma.TransactionUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutLocationInput | Prisma.TransactionCreateOrConnectWithoutLocationInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutLocationInput | Prisma.TransactionUpsertWithWhereUniqueWithoutLocationInput[]
+  createMany?: Prisma.TransactionCreateManyLocationInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutLocationInput | Prisma.TransactionUpdateWithWhereUniqueWithoutLocationInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutLocationInput | Prisma.TransactionUpdateManyWithWhereWithoutLocationInput[]
   deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
 }
 
@@ -844,6 +910,7 @@ export type TransactionCreateWithoutCreatedByInput = {
   student: Prisma.StudentCreateNestedOneWithoutTransactionsInput
   course?: Prisma.CourseCreateNestedOneWithoutTransactionsInput
   sponsor?: Prisma.SponsorCreateNestedOneWithoutTransactionsInput
+  location?: Prisma.LocationCreateNestedOneWithoutTransactionsInput
 }
 
 export type TransactionUncheckedCreateWithoutCreatedByInput = {
@@ -863,6 +930,7 @@ export type TransactionUncheckedCreateWithoutCreatedByInput = {
   studentId: string
   courseId?: string | null
   sponsorId?: string | null
+  locationId?: string | null
 }
 
 export type TransactionCreateOrConnectWithoutCreatedByInput = {
@@ -912,6 +980,7 @@ export type TransactionScalarWhereInput = {
   studentId?: Prisma.StringFilter<"Transaction"> | string
   courseId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   sponsorId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  locationId?: Prisma.StringNullableFilter<"Transaction"> | string | null
 }
 
 export type TransactionCreateWithoutSponsorInput = {
@@ -931,6 +1000,7 @@ export type TransactionCreateWithoutSponsorInput = {
   createdBy: Prisma.UserCreateNestedOneWithoutTransactionsInput
   student: Prisma.StudentCreateNestedOneWithoutTransactionsInput
   course?: Prisma.CourseCreateNestedOneWithoutTransactionsInput
+  location?: Prisma.LocationCreateNestedOneWithoutTransactionsInput
 }
 
 export type TransactionUncheckedCreateWithoutSponsorInput = {
@@ -950,6 +1020,7 @@ export type TransactionUncheckedCreateWithoutSponsorInput = {
   createdById: string
   studentId: string
   courseId?: string | null
+  locationId?: string | null
 }
 
 export type TransactionCreateOrConnectWithoutSponsorInput = {
@@ -978,6 +1049,72 @@ export type TransactionUpdateManyWithWhereWithoutSponsorInput = {
   data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutSponsorInput>
 }
 
+export type TransactionCreateWithoutLocationInput = {
+  id?: string
+  type: $Enums.TransactionType
+  semester?: number | null
+  shift?: $Enums.Shift | null
+  amount?: number
+  discount?: number
+  reference?: string | null
+  description?: string | null
+  status?: $Enums.Status
+  paymentStatus?: $Enums.PaymentStatus | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  student: Prisma.StudentCreateNestedOneWithoutTransactionsInput
+  course?: Prisma.CourseCreateNestedOneWithoutTransactionsInput
+  sponsor?: Prisma.SponsorCreateNestedOneWithoutTransactionsInput
+}
+
+export type TransactionUncheckedCreateWithoutLocationInput = {
+  id?: string
+  type: $Enums.TransactionType
+  semester?: number | null
+  shift?: $Enums.Shift | null
+  amount?: number
+  discount?: number
+  reference?: string | null
+  description?: string | null
+  status?: $Enums.Status
+  paymentStatus?: $Enums.PaymentStatus | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdById: string
+  studentId: string
+  courseId?: string | null
+  sponsorId?: string | null
+}
+
+export type TransactionCreateOrConnectWithoutLocationInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutLocationInput, Prisma.TransactionUncheckedCreateWithoutLocationInput>
+}
+
+export type TransactionCreateManyLocationInputEnvelope = {
+  data: Prisma.TransactionCreateManyLocationInput | Prisma.TransactionCreateManyLocationInput[]
+  skipDuplicates?: boolean
+}
+
+export type TransactionUpsertWithWhereUniqueWithoutLocationInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutLocationInput, Prisma.TransactionUncheckedUpdateWithoutLocationInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutLocationInput, Prisma.TransactionUncheckedCreateWithoutLocationInput>
+}
+
+export type TransactionUpdateWithWhereUniqueWithoutLocationInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutLocationInput, Prisma.TransactionUncheckedUpdateWithoutLocationInput>
+}
+
+export type TransactionUpdateManyWithWhereWithoutLocationInput = {
+  where: Prisma.TransactionScalarWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutLocationInput>
+}
+
 export type TransactionCreateWithoutCourseInput = {
   id?: string
   type: $Enums.TransactionType
@@ -995,6 +1132,7 @@ export type TransactionCreateWithoutCourseInput = {
   createdBy: Prisma.UserCreateNestedOneWithoutTransactionsInput
   student: Prisma.StudentCreateNestedOneWithoutTransactionsInput
   sponsor?: Prisma.SponsorCreateNestedOneWithoutTransactionsInput
+  location?: Prisma.LocationCreateNestedOneWithoutTransactionsInput
 }
 
 export type TransactionUncheckedCreateWithoutCourseInput = {
@@ -1014,6 +1152,7 @@ export type TransactionUncheckedCreateWithoutCourseInput = {
   createdById: string
   studentId: string
   sponsorId?: string | null
+  locationId?: string | null
 }
 
 export type TransactionCreateOrConnectWithoutCourseInput = {
@@ -1059,6 +1198,7 @@ export type TransactionCreateWithoutStudentInput = {
   createdBy: Prisma.UserCreateNestedOneWithoutTransactionsInput
   course?: Prisma.CourseCreateNestedOneWithoutTransactionsInput
   sponsor?: Prisma.SponsorCreateNestedOneWithoutTransactionsInput
+  location?: Prisma.LocationCreateNestedOneWithoutTransactionsInput
 }
 
 export type TransactionUncheckedCreateWithoutStudentInput = {
@@ -1078,6 +1218,7 @@ export type TransactionUncheckedCreateWithoutStudentInput = {
   createdById: string
   courseId?: string | null
   sponsorId?: string | null
+  locationId?: string | null
 }
 
 export type TransactionCreateOrConnectWithoutStudentInput = {
@@ -1123,6 +1264,7 @@ export type TransactionCreateManyCreatedByInput = {
   studentId: string
   courseId?: string | null
   sponsorId?: string | null
+  locationId?: string | null
 }
 
 export type TransactionUpdateWithoutCreatedByInput = {
@@ -1142,6 +1284,7 @@ export type TransactionUpdateWithoutCreatedByInput = {
   student?: Prisma.StudentUpdateOneRequiredWithoutTransactionsNestedInput
   course?: Prisma.CourseUpdateOneWithoutTransactionsNestedInput
   sponsor?: Prisma.SponsorUpdateOneWithoutTransactionsNestedInput
+  location?: Prisma.LocationUpdateOneWithoutTransactionsNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutCreatedByInput = {
@@ -1161,6 +1304,7 @@ export type TransactionUncheckedUpdateWithoutCreatedByInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TransactionUncheckedUpdateManyWithoutCreatedByInput = {
@@ -1180,6 +1324,7 @@ export type TransactionUncheckedUpdateManyWithoutCreatedByInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TransactionCreateManySponsorInput = {
@@ -1199,6 +1344,7 @@ export type TransactionCreateManySponsorInput = {
   createdById: string
   studentId: string
   courseId?: string | null
+  locationId?: string | null
 }
 
 export type TransactionUpdateWithoutSponsorInput = {
@@ -1218,6 +1364,7 @@ export type TransactionUpdateWithoutSponsorInput = {
   createdBy?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutTransactionsNestedInput
   course?: Prisma.CourseUpdateOneWithoutTransactionsNestedInput
+  location?: Prisma.LocationUpdateOneWithoutTransactionsNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutSponsorInput = {
@@ -1237,6 +1384,7 @@ export type TransactionUncheckedUpdateWithoutSponsorInput = {
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TransactionUncheckedUpdateManyWithoutSponsorInput = {
@@ -1256,6 +1404,87 @@ export type TransactionUncheckedUpdateManyWithoutSponsorInput = {
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type TransactionCreateManyLocationInput = {
+  id?: string
+  type: $Enums.TransactionType
+  semester?: number | null
+  shift?: $Enums.Shift | null
+  amount?: number
+  discount?: number
+  reference?: string | null
+  description?: string | null
+  status?: $Enums.Status
+  paymentStatus?: $Enums.PaymentStatus | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdById: string
+  studentId: string
+  courseId?: string | null
+  sponsorId?: string | null
+}
+
+export type TransactionUpdateWithoutLocationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  shift?: Prisma.NullableEnumShiftFieldUpdateOperationsInput | $Enums.Shift | null
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
+  discount?: Prisma.IntFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  paymentStatus?: Prisma.NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  student?: Prisma.StudentUpdateOneRequiredWithoutTransactionsNestedInput
+  course?: Prisma.CourseUpdateOneWithoutTransactionsNestedInput
+  sponsor?: Prisma.SponsorUpdateOneWithoutTransactionsNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutLocationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  shift?: Prisma.NullableEnumShiftFieldUpdateOperationsInput | $Enums.Shift | null
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
+  discount?: Prisma.IntFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  paymentStatus?: Prisma.NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type TransactionUncheckedUpdateManyWithoutLocationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  shift?: Prisma.NullableEnumShiftFieldUpdateOperationsInput | $Enums.Shift | null
+  amount?: Prisma.IntFieldUpdateOperationsInput | number
+  discount?: Prisma.IntFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  paymentStatus?: Prisma.NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TransactionCreateManyCourseInput = {
@@ -1275,6 +1504,7 @@ export type TransactionCreateManyCourseInput = {
   createdById: string
   studentId: string
   sponsorId?: string | null
+  locationId?: string | null
 }
 
 export type TransactionUpdateWithoutCourseInput = {
@@ -1294,6 +1524,7 @@ export type TransactionUpdateWithoutCourseInput = {
   createdBy?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   student?: Prisma.StudentUpdateOneRequiredWithoutTransactionsNestedInput
   sponsor?: Prisma.SponsorUpdateOneWithoutTransactionsNestedInput
+  location?: Prisma.LocationUpdateOneWithoutTransactionsNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutCourseInput = {
@@ -1313,6 +1544,7 @@ export type TransactionUncheckedUpdateWithoutCourseInput = {
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TransactionUncheckedUpdateManyWithoutCourseInput = {
@@ -1332,6 +1564,7 @@ export type TransactionUncheckedUpdateManyWithoutCourseInput = {
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TransactionCreateManyStudentInput = {
@@ -1351,6 +1584,7 @@ export type TransactionCreateManyStudentInput = {
   createdById: string
   courseId?: string | null
   sponsorId?: string | null
+  locationId?: string | null
 }
 
 export type TransactionUpdateWithoutStudentInput = {
@@ -1370,6 +1604,7 @@ export type TransactionUpdateWithoutStudentInput = {
   createdBy?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   course?: Prisma.CourseUpdateOneWithoutTransactionsNestedInput
   sponsor?: Prisma.SponsorUpdateOneWithoutTransactionsNestedInput
+  location?: Prisma.LocationUpdateOneWithoutTransactionsNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutStudentInput = {
@@ -1389,6 +1624,7 @@ export type TransactionUncheckedUpdateWithoutStudentInput = {
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TransactionUncheckedUpdateManyWithoutStudentInput = {
@@ -1408,6 +1644,7 @@ export type TransactionUncheckedUpdateManyWithoutStudentInput = {
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1430,10 +1667,12 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   studentId?: boolean
   courseId?: boolean
   sponsorId?: boolean
+  locationId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   course?: boolean | Prisma.Transaction$courseArgs<ExtArgs>
   sponsor?: boolean | Prisma.Transaction$sponsorArgs<ExtArgs>
+  location?: boolean | Prisma.Transaction$locationArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1454,10 +1693,12 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   studentId?: boolean
   courseId?: boolean
   sponsorId?: boolean
+  locationId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   course?: boolean | Prisma.Transaction$courseArgs<ExtArgs>
   sponsor?: boolean | Prisma.Transaction$sponsorArgs<ExtArgs>
+  location?: boolean | Prisma.Transaction$locationArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1478,10 +1719,12 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   studentId?: boolean
   courseId?: boolean
   sponsorId?: boolean
+  locationId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   course?: boolean | Prisma.Transaction$courseArgs<ExtArgs>
   sponsor?: boolean | Prisma.Transaction$sponsorArgs<ExtArgs>
+  location?: boolean | Prisma.Transaction$locationArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectScalar = {
@@ -1502,26 +1745,30 @@ export type TransactionSelectScalar = {
   studentId?: boolean
   courseId?: boolean
   sponsorId?: boolean
+  locationId?: boolean
 }
 
-export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "semester" | "shift" | "amount" | "discount" | "reference" | "description" | "status" | "paymentStatus" | "paymentMethod" | "createdAt" | "updatedAt" | "createdById" | "studentId" | "courseId" | "sponsorId", ExtArgs["result"]["transaction"]>
+export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "semester" | "shift" | "amount" | "discount" | "reference" | "description" | "status" | "paymentStatus" | "paymentMethod" | "createdAt" | "updatedAt" | "createdById" | "studentId" | "courseId" | "sponsorId" | "locationId", ExtArgs["result"]["transaction"]>
 export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   course?: boolean | Prisma.Transaction$courseArgs<ExtArgs>
   sponsor?: boolean | Prisma.Transaction$sponsorArgs<ExtArgs>
+  location?: boolean | Prisma.Transaction$locationArgs<ExtArgs>
 }
 export type TransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   course?: boolean | Prisma.Transaction$courseArgs<ExtArgs>
   sponsor?: boolean | Prisma.Transaction$sponsorArgs<ExtArgs>
+  location?: boolean | Prisma.Transaction$locationArgs<ExtArgs>
 }
 export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   student?: boolean | Prisma.StudentDefaultArgs<ExtArgs>
   course?: boolean | Prisma.Transaction$courseArgs<ExtArgs>
   sponsor?: boolean | Prisma.Transaction$sponsorArgs<ExtArgs>
+  location?: boolean | Prisma.Transaction$locationArgs<ExtArgs>
 }
 
 export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1531,6 +1778,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     student: Prisma.$StudentPayload<ExtArgs>
     course: Prisma.$CoursePayload<ExtArgs> | null
     sponsor: Prisma.$SponsorPayload<ExtArgs> | null
+    location: Prisma.$LocationPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1550,6 +1798,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     studentId: string
     courseId: string | null
     sponsorId: string | null
+    locationId: string | null
   }, ExtArgs["result"]["transaction"]>
   composites: {}
 }
@@ -1948,6 +2197,7 @@ export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends runt
   student<T extends Prisma.StudentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentDefaultArgs<ExtArgs>>): Prisma.Prisma__StudentClient<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   course<T extends Prisma.Transaction$courseArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$courseArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   sponsor<T extends Prisma.Transaction$sponsorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$sponsorArgs<ExtArgs>>): Prisma.Prisma__SponsorClient<runtime.Types.Result.GetResult<Prisma.$SponsorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  location<T extends Prisma.Transaction$locationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$locationArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1994,6 +2244,7 @@ export interface TransactionFieldRefs {
   readonly studentId: Prisma.FieldRef<"Transaction", 'String'>
   readonly courseId: Prisma.FieldRef<"Transaction", 'String'>
   readonly sponsorId: Prisma.FieldRef<"Transaction", 'String'>
+  readonly locationId: Prisma.FieldRef<"Transaction", 'String'>
 }
     
 
@@ -2425,6 +2676,25 @@ export type Transaction$sponsorArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   include?: Prisma.SponsorInclude<ExtArgs> | null
   where?: Prisma.SponsorWhereInput
+}
+
+/**
+ * Transaction.location
+ */
+export type Transaction$locationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Location
+   */
+  select?: Prisma.LocationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Location
+   */
+  omit?: Prisma.LocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  where?: Prisma.LocationWhereInput
 }
 
 /**

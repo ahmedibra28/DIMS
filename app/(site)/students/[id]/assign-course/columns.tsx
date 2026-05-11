@@ -22,6 +22,7 @@ export const columns = ({
     { header: 'Semester', accessorKey: 'semester', active: true },
     { header: 'Shift', accessorKey: 'shift', active: true },
     { header: 'Sponsor', accessorKey: 'sponsor.name', active: true },
+    { header: 'Location', accessorKey: 'location.name', active: true },
 
     {
       header: 'Discount',

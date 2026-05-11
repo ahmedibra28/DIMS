@@ -32,6 +32,24 @@ export const columns = () => {
         ),
     },
     {
+      header: 'Sponsor',
+      accessorKey: 'sponsor.name',
+      active: false,
+      cell: ({ row: { original } }: any) =>
+        original?.sponsor?.name || (
+          <span className='text-xs text-red-500'>EMPTY!</span>
+        ),
+    },
+    {
+      header: 'Location',
+      accessorKey: 'location.name',
+      active: false,
+      cell: ({ row: { original } }: any) =>
+        original?.location?.name || (
+          <span className='text-xs text-red-500'>EMPTY!</span>
+        ),
+    },
+    {
       header: 'Semester',
       accessorKey: 'semester',
       active: true,
